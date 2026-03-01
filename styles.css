@@ -14,6 +14,7 @@
   --radius-medium: 20px;
   --radius-small: 14px;
   --container: min(1120px, calc(100% - 32px));
+  --font-display: "Sora", "Manrope", sans-serif;
 }
 
 * {
@@ -99,9 +100,9 @@ textarea {
   border-radius: 16px;
   background: linear-gradient(135deg, var(--color-primary) 0%, #ff9a49 100%);
   color: var(--color-white);
-  font-family: "Syne", sans-serif;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .brand-text {
@@ -210,21 +211,26 @@ textarea {
   grid-template-columns: 0.9fr 1.1fr;
 }
 
+.hero-copy {
+  max-width: 610px;
+}
+
 .hero-copy h1,
 .section-heading h2,
 .focus-copy h2,
 .about-copy h2,
 .contact-copy h2 {
   margin: 0;
-  font-family: "Syne", sans-serif;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-weight: 700;
   line-height: 1.02;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 .hero-copy h1 {
-  max-width: 12ch;
-  font-size: clamp(3rem, 7vw, 5.8rem);
+  max-width: 11ch;
+  font-size: clamp(2.7rem, 5.3vw, 4.7rem);
+  line-height: 1.05;
 }
 
 .hero-lead,
@@ -236,6 +242,11 @@ textarea {
   color: var(--color-muted);
   font-size: 1.08rem;
   line-height: 1.7;
+}
+
+.hero-lead {
+  max-width: 54ch;
+  font-size: 1.02rem;
 }
 
 .hero-actions {
@@ -274,7 +285,58 @@ textarea {
 
 .hero-panel {
   display: grid;
-  gap: 16px;
+  gap: 18px;
+}
+
+.hero-visual {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: clamp(260px, 34vw, 380px);
+  padding: clamp(18px, 3vw, 30px);
+  border-radius: var(--radius-large);
+  background: linear-gradient(90deg, #fc7306 0%, #ad0028 48%, #fc7306 100%);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-visual::before,
+.hero-visual::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.hero-visual::before {
+  top: 22px;
+  left: 22px;
+  width: 44%;
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.16);
+  filter: blur(8px);
+}
+
+.hero-visual::after {
+  right: -8%;
+  bottom: -18%;
+  width: 54%;
+  aspect-ratio: 1;
+  background: rgba(0, 0, 0, 0.12);
+  filter: blur(12px);
+}
+
+.hero-visual img {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 430px);
+  margin-left: auto;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
 }
 
 .impact-card,
@@ -311,9 +373,9 @@ textarea {
 
 .impact-card h2 {
   margin: 16px 0 0;
-  font-family: "Syne", sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  line-height: 1.05;
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+  line-height: 1.1;
 }
 
 .impact-card p {
@@ -344,7 +406,7 @@ textarea {
 
 .impact-metrics strong {
   color: var(--color-primary);
-  font-family: "Syne", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.3rem;
 }
 
@@ -432,7 +494,7 @@ textarea {
 .focus-card h3,
 .portfolio-copy h3 {
   margin: 0;
-  font-family: "Syne", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.35rem;
   line-height: 1.15;
 }
@@ -633,8 +695,16 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .hero-copy {
+    max-width: none;
+  }
+
   .hero-copy h1 {
     max-width: none;
+  }
+
+  .hero-visual img {
+    margin-inline: auto;
   }
 }
 
@@ -690,7 +760,11 @@ textarea {
   }
 
   .hero-copy h1 {
-    font-size: clamp(2.4rem, 14vw, 4rem);
+    font-size: clamp(2.1rem, 11vw, 3.2rem);
+  }
+
+  .hero-visual {
+    min-height: 220px;
   }
 
   .service-grid,
