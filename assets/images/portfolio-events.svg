@@ -1,0 +1,16 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="750" rx="40" fill="#111111"/>
+  <circle cx="980" cy="145" r="110" fill="#FC7306" fill-opacity="0.9"/>
+  <circle cx="1040" cy="640" r="90" fill="white" fill-opacity="0.08"/>
+  <rect x="70" y="70" width="560" height="610" rx="32" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.08" stroke-width="3"/>
+  <rect x="120" y="140" width="180" height="18" rx="9" fill="#FC7306"/>
+  <rect x="120" y="185" width="340" height="54" rx="27" fill="white" fill-opacity="0.92"/>
+  <rect x="120" y="275" width="210" height="180" rx="26" fill="#FC7306" fill-opacity="0.18"/>
+  <rect x="360" y="275" width="210" height="180" rx="26" fill="white" fill-opacity="0.08"/>
+  <rect x="700" y="180" width="380" height="360" rx="28" fill="white" fill-opacity="0.95"/>
+  <rect x="760" y="240" width="200" height="18" rx="9" fill="#FC7306"/>
+  <rect x="760" y="290" width="260" height="18" rx="9" fill="#111111" fill-opacity="0.18"/>
+  <rect x="760" y="325" width="220" height="18" rx="9" fill="#111111" fill-opacity="0.12"/>
+  <rect x="760" y="390" width="170" height="56" rx="28" fill="#111111"/>
+  <text x="120" y="620" fill="white" font-family="Arial, sans-serif" font-size="46" font-weight="700">Placeholder de case: Evento</text>
+</svg>

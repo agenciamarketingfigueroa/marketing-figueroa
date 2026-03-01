@@ -1,0 +1,9 @@
+<svg width="1000" height="1200" viewBox="0 0 1000 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="1200" rx="40" fill="#FC7306"/>
+  <rect x="60" y="60" width="880" height="1080" rx="30" fill="#111111" fill-opacity="0.14" stroke="white" stroke-opacity="0.16" stroke-width="3"/>
+  <circle cx="500" cy="360" r="150" fill="white" fill-opacity="0.18"/>
+  <path d="M240 840C240 685.324 365.324 560 520 560H480C634.676 560 760 685.324 760 840V860H240V840Z" fill="white" fill-opacity="0.18"/>
+  <rect x="170" y="930" width="660" height="18" rx="9" fill="white" fill-opacity="0.7"/>
+  <rect x="250" y="970" width="500" height="18" rx="9" fill="white" fill-opacity="0.38"/>
+  <text x="155" y="1080" fill="white" font-family="Arial, sans-serif" font-size="44" font-weight="700">Placeholder: foto da equipe / fundador</text>
+</svg>
