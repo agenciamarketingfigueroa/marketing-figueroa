@@ -1,8 +1,5 @@
-const WHATSAPP_NUMBER = "5511999999999";
-
 const navToggle = document.querySelector(".nav-toggle");
 const siteNav = document.querySelector(".site-nav");
-const contactForm = document.querySelector("#contact-form");
 const yearTarget = document.querySelector("#current-year");
 const revealItems = document.querySelectorAll(".reveal");
 
@@ -21,30 +18,6 @@ if (navToggle && siteNav) {
       siteNav.classList.remove("is-open");
       navToggle.setAttribute("aria-expanded", "false");
     });
-  });
-}
-
-if (contactForm) {
-  contactForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(contactForm);
-    const nome = String(formData.get("nome") || "").trim();
-    const empresa = String(formData.get("empresa") || "").trim();
-    const servico = String(formData.get("servico") || "").trim();
-    const objetivo = String(formData.get("objetivo") || "").trim();
-
-    const message = [
-      "Ola, Marketing Figueroa.",
-      `Meu nome e ${nome}.`,
-      `Atuo em: ${empresa}.`,
-      `Tenho interesse em: ${servico}.`,
-      `Objetivo principal: ${objetivo}`,
-      "Gostaria de receber uma proposta personalizada."
-    ].join("\n");
-
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   });
 }
 

@@ -89,33 +89,12 @@ textarea {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
 }
 
-.brand-mark {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #ff9a49 100%);
-  color: var(--color-white);
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.brand-text {
-  display: grid;
-  gap: 2px;
-}
-
-.brand-text strong {
-  font-size: 0.98rem;
-}
-
-.brand-text small {
-  color: var(--color-muted);
+.brand-logo {
+  display: block;
+  width: clamp(112px, 14vw, 168px);
+  height: auto;
 }
 
 .site-nav {
@@ -228,7 +207,7 @@ textarea {
 }
 
 .hero-copy h1 {
-  max-width: 11ch;
+  max-width: 13ch;
   font-size: clamp(2.7rem, 5.3vw, 4.7rem);
   line-height: 1.05;
 }
@@ -378,7 +357,7 @@ textarea {
   line-height: 1.1;
 }
 
-.impact-card p {
+.impact-card p:not(.impact-label) {
   position: relative;
   z-index: 1;
   margin: 18px 0 0;
@@ -437,6 +416,7 @@ textarea {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  margin-top: 36px;
 }
 
 .trust-grid div,
@@ -492,7 +472,8 @@ textarea {
 
 .service-card h3,
 .focus-card h3,
-.portfolio-copy h3 {
+.portfolio-copy h3,
+.cta-card-title {
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.35rem;
@@ -619,6 +600,12 @@ textarea {
   display: grid;
   gap: 10px;
   font-weight: 800;
+}
+
+.contact-form p:not(.impact-label) {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.7;
 }
 
 .contact-form input,
