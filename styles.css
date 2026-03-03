@@ -113,8 +113,9 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 40;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(8, 8, 8, 0.8);
+  border-bottom: 1px solid rgba(252, 115, 6, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 32px rgba(33, 14, 0, 0.08);
   backdrop-filter: blur(16px);
 }
 
@@ -136,7 +137,7 @@ textarea {
 }
 
 .brand-logo {
-  width: clamp(112px, 14vw, 170px);
+  width: clamp(91px, 11.3vw, 138px);
   height: auto;
 }
 
@@ -151,7 +152,7 @@ textarea {
 }
 
 .site-nav a:not(.button) {
-  color: var(--color-muted);
+  color: rgba(39, 26, 14, 0.76);
   transition: color 0.24s ease;
 }
 
@@ -166,7 +167,7 @@ textarea {
   display: none;
   border: 0;
   padding: 0;
-  color: var(--color-ink);
+  color: #2d2016;
   background: transparent;
   font-weight: 800;
   text-transform: uppercase;
@@ -238,7 +239,13 @@ textarea {
 }
 
 .hero {
+  position: relative;
+  overflow: clip;
   padding: 54px 0 64px;
+  background:
+    radial-gradient(circle at 16% 20%, rgba(255, 240, 226, 0.24), transparent 28%),
+    radial-gradient(circle at 84% 18%, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(140deg, rgba(252, 115, 6, 0.98) 0%, rgba(248, 113, 6, 0.95) 56%, rgba(226, 98, 4, 0.92) 100%);
 }
 
 .hero-grid,
@@ -272,9 +279,13 @@ textarea {
   text-align: center;
 }
 
+.hero .eyebrow {
+  color: rgba(255, 248, 240, 0.82);
+}
+
 .hero-kicker {
   margin: 20px 0 0;
-  color: var(--color-muted);
+  color: rgba(255, 248, 240, 0.84);
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -302,7 +313,9 @@ textarea {
 .hero-copy h1 {
   margin-top: 18px;
   max-width: none;
+  color: #fffaf3;
   font-size: var(--type-display-hero);
+  text-shadow: 0 14px 34px rgba(92, 34, 0, 0.16);
   text-wrap: balance;
 }
 
@@ -315,10 +328,10 @@ textarea {
   margin-top: 24px;
   padding: 22px 24px;
   border-radius: var(--radius-medium);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   background:
-    linear-gradient(135deg, rgba(252, 115, 6, 0.12), rgba(255, 255, 255, 0.02) 42%),
-    rgba(12, 12, 12, 0.92);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05) 42%),
+    rgba(118, 47, 0, 0.32);
   box-shadow: var(--shadow-soft);
   display: grid;
   grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
@@ -329,12 +342,13 @@ textarea {
 
 .hero-highlight .card-label {
   grid-column: 1;
+  color: rgba(255, 245, 233, 0.76);
 }
 
 .hero-highlight strong {
   grid-column: 1;
   display: block;
-  color: var(--color-ink);
+  color: #fffaf3;
   font-size: 1.18rem;
   line-height: 1.25;
   text-wrap: balance;
@@ -344,7 +358,7 @@ textarea {
   grid-column: 2;
   grid-row: 1 / span 2;
   display: block;
-  color: var(--color-muted-soft);
+  color: rgba(255, 248, 240, 0.82);
   line-height: 1.7;
   text-wrap: pretty;
 }
@@ -367,6 +381,7 @@ textarea {
 .hero-lead {
   margin-top: 24px;
   max-width: 68ch;
+  color: rgba(255, 248, 240, 0.88);
   font-size: var(--type-body-lg);
   text-wrap: pretty;
 }
@@ -377,6 +392,29 @@ textarea {
   justify-content: center;
   gap: 14px;
   margin-top: 34px;
+}
+
+.hero-actions .button-primary {
+  color: #a34700;
+  background: linear-gradient(135deg, #fffaf4 0%, #ffe9d8 100%);
+  box-shadow: 0 18px 30px rgba(119, 46, 0, 0.16);
+}
+
+.hero-actions .button-primary:hover,
+.hero-actions .button-primary:focus-visible {
+  box-shadow: 0 22px 36px rgba(119, 46, 0, 0.2);
+}
+
+.hero-actions .button-secondary {
+  color: #fffaf3;
+  border-color: rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hero-actions .button-secondary:hover,
+.hero-actions .button-secondary:focus-visible {
+  border-color: rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .hero-ribbon,
@@ -405,6 +443,12 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.hero-ribbon span {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 248, 240, 0.88);
 }
 
 .hero-stage {
@@ -843,9 +887,9 @@ textarea {
     inset: calc(100% + 10px) 16px auto;
     padding: 18px;
     border-radius: 22px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(12, 12, 12, 0.98);
-    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(252, 115, 6, 0.12);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 24px 48px rgba(33, 14, 0, 0.14);
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
