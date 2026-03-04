@@ -532,9 +532,12 @@
       const emptyState = document.querySelector("#empty-state");
       const downloadAllButton = document.querySelector("#download-all");
 
+      const HTML2CANVAS_CDN = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+
       let renderFrame = null;
       let currentSnapshots = [];
       let currentBaseName = "snapshots";
+      const html2canvasLoaders = new WeakMap();
 
       captureForm.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -898,6 +901,17 @@
             return;
           }
         }
+
+        const frameWindow = doc.defaultView;
+        if (!frameWindow || typeof frameWindow.requestAnimationFrame !== "function") {
+          return;
+        }
+
+        await new Promise(function (resolve) {
+          frameWindow.requestAnimationFrame(function () {
+            frameWindow.requestAnimationFrame(resolve);
+          });
+        });
       }
       function collectSectionCandidates(doc) {
         const roots = collectRootSections(doc);
@@ -1266,20 +1280,33 @@
       }
       async function createSnapshot(mappedTarget, baseName) {
         const measurement = measureElement(mappedTarget.element);
-        const svgBlob = buildSvgSnapshotBlob(mappedTarget.element, measurement.width, measurement.height);
-        let finalBlob = svgBlob;
-        let finalFormat = "svg";
-        let note = "fallback em SVG";
+        let finalBlob = null;
+        let finalFormat = "png";
+        let note = "png capturado da pagina renderizada";
 
         try {
-          const pngBlob = await rasterizeSvgToPng(svgBlob, measurement.width, measurement.height);
-          if (pngBlob) {
-            finalBlob = pngBlob;
-            finalFormat = "png";
-            note = "png gerado";
+          const pngBlob = await renderElementToPng(mappedTarget.element, measurement.width, measurement.height);
+          if (!pngBlob) {
+            throw new Error("PNG indisponivel.");
           }
+
+          finalBlob = pngBlob;
         } catch (error) {
-          note = "SVG mantido por limite do navegador";
+          const svgBlob = buildSvgSnapshotBlob(mappedTarget.element, measurement.width, measurement.height);
+          finalBlob = svgBlob;
+          finalFormat = "svg";
+          note = "fallback em SVG";
+
+          try {
+            const pngBlob = await rasterizeSvgToPng(svgBlob, measurement.width, measurement.height);
+            if (pngBlob) {
+              finalBlob = pngBlob;
+              finalFormat = "png";
+              note = "png gerado por fallback";
+            }
+          } catch (fallbackError) {
+            note = "SVG mantido por limite do navegador";
+          }
         }
 
         return {
@@ -1335,6 +1362,131 @@
         ].join("");
 
         return new Blob([svgMarkup], { type: "image/svg+xml;charset=utf-8" });
+      }
+
+      async function renderElementToPng(element, width, height) {
+        const elementWindow = element.ownerDocument && element.ownerDocument.defaultView;
+        if (!elementWindow) {
+          throw new Error("Janela de renderizacao indisponivel.");
+        }
+
+        const html2canvas = await ensureHtml2Canvas(elementWindow);
+        const backgroundColor = resolveSnapshotBackgroundColor(element);
+        const sourceWidth = Math.max(
+          width,
+          Math.ceil(element.scrollWidth || 0),
+          Math.ceil(element.ownerDocument.documentElement.scrollWidth || 0)
+        );
+        const sourceHeight = Math.max(
+          height,
+          Math.ceil(element.scrollHeight || 0),
+          Math.ceil(element.ownerDocument.documentElement.scrollHeight || 0)
+        );
+        const targetWidth = Math.max(360, Math.min(width, 1440));
+        const scale = Math.max(1, Math.min(2, targetWidth / Math.max(1, width)));
+        const canvas = await html2canvas(element, {
+          backgroundColor: backgroundColor,
+          foreignObjectRendering: false,
+          useCORS: true,
+          allowTaint: false,
+          logging: false,
+          imageTimeout: 2500,
+          scale: scale,
+          width: width,
+          height: height,
+          windowWidth: sourceWidth,
+          windowHeight: sourceHeight,
+          scrollX: -(elementWindow.scrollX || 0),
+          scrollY: -(elementWindow.scrollY || 0)
+        });
+
+        if (!canvas) {
+          throw new Error("Canvas indisponivel.");
+        }
+
+        return await new Promise(function (resolve, reject) {
+          try {
+            canvas.toBlob(function (result) {
+              if (!result) {
+                reject(new Error("PNG indisponivel."));
+                return;
+              }
+
+              resolve(result);
+            }, "image/png");
+          } catch (error) {
+            reject(error);
+          }
+        });
+      }
+
+      function ensureHtml2Canvas(targetWindow) {
+        if (targetWindow.html2canvas) {
+          return Promise.resolve(targetWindow.html2canvas);
+        }
+
+        if (html2canvasLoaders.has(targetWindow)) {
+          return html2canvasLoaders.get(targetWindow);
+        }
+
+        const targetDocument = targetWindow.document;
+        if (!targetDocument || !targetDocument.head) {
+          return Promise.reject(new Error("Documento de renderizacao indisponivel."));
+        }
+
+        const pending = new Promise(function (resolve, reject) {
+          const existingScript = targetDocument.querySelector('script[data-html2canvas-loader="true"]');
+
+          if (existingScript) {
+            existingScript.addEventListener("load", handleLoad, { once: true });
+            existingScript.addEventListener("error", handleError, { once: true });
+            return;
+          }
+
+          const script = targetDocument.createElement("script");
+          script.src = HTML2CANVAS_CDN;
+          script.async = true;
+          script.setAttribute("data-html2canvas-loader", "true");
+          script.addEventListener("load", handleLoad, { once: true });
+          script.addEventListener("error", handleError, { once: true });
+          targetDocument.head.appendChild(script);
+
+          function handleLoad() {
+            if (targetWindow.html2canvas) {
+              resolve(targetWindow.html2canvas);
+              return;
+            }
+
+            reject(new Error("Biblioteca de captura indisponivel."));
+          }
+
+          function handleError() {
+            reject(new Error("A biblioteca de captura nao carregou."));
+          }
+        });
+
+        const settled = pending.finally(function () {
+          html2canvasLoaders.delete(targetWindow);
+        });
+
+        html2canvasLoaders.set(targetWindow, settled);
+        return settled;
+      }
+
+      function resolveSnapshotBackgroundColor(element) {
+        let current = element;
+
+        while (current && current.nodeType === Node.ELEMENT_NODE) {
+          const backgroundColor = current.ownerDocument.defaultView.getComputedStyle(current).backgroundColor;
+
+          if (backgroundColor && backgroundColor !== "rgba(0, 0, 0, 0)" && backgroundColor !== "transparent") {
+            return backgroundColor;
+          }
+
+          current = current.parentElement;
+        }
+
+        return "#ffffff";
       }
 
       function cloneNodeWithStyles(sourceNode, maxWidth, maxHeight) {
