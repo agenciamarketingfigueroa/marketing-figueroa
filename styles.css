@@ -342,12 +342,88 @@ textarea {
   max-width: none;
   color: #fffaf3;
   font-size: var(--type-display-hero);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: none;
   text-shadow: 0 14px 34px rgba(92, 34, 0, 0.16);
-  text-wrap: balance;
+  text-wrap: nowrap;
 }
 
 .hero-copy h1 span {
   display: block;
+}
+
+.hero-service-grid {
+  width: min(100%, 1080px);
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.hero-service-card {
+  position: relative;
+  min-height: 150px;
+  padding: 20px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 248, 240, 0.44);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 55%);
+  box-shadow:
+    0 14px 28px rgba(75, 26, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  color: #fff9f1;
+  text-align: center;
+  overflow: hidden;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.hero-service-card::before {
+  content: "";
+  position: absolute;
+  inset: auto -24% -62% auto;
+  width: 64%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 70%);
+  pointer-events: none;
+}
+
+.hero-service-card:hover,
+.hero-service-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(255, 248, 240, 0.62);
+  box-shadow:
+    0 20px 34px rgba(66, 22, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.hero-service-card strong {
+  margin: 0;
+  max-width: 18ch;
+  color: #fff9f1;
+  font-family: var(--font-body);
+  font-size: clamp(1.08rem, 1.25vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  text-wrap: balance;
+}
+
+.hero-service-card strong span {
+  display: block;
+}
+
+.hero-service-card-landing strong span:last-child {
+  white-space: nowrap;
 }
 
 .hero-highlight {
@@ -418,7 +494,7 @@ textarea {
   flex-wrap: wrap;
   justify-content: center;
   gap: 14px;
-  margin-top: 34px;
+  margin-top: 28px;
 }
 
 .hero-actions .button-primary {
@@ -822,6 +898,10 @@ textarea {
   padding: 28px;
 }
 
+.offer-card[id] {
+  scroll-margin-top: 128px;
+}
+
 .offer-card-featured {
   background:
     linear-gradient(145deg, rgba(252, 115, 6, 0.18), rgba(252, 115, 6, 0.05) 38%, rgba(255, 255, 255, 0.025)),
@@ -991,8 +1071,8 @@ textarea {
     max-width: none;
   }
 
-  .hero-copy h1 {
-    max-width: none;
+  .hero-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .stage-frame {
@@ -1086,12 +1166,27 @@ textarea {
 
   .hero-copy h1 {
     max-width: none;
-    line-height: 0.96;
+    text-wrap: wrap;
+    line-height: 1.02;
   }
 
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .hero-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-service-card {
+    min-height: 128px;
+    padding: 16px;
+  }
+
+  .hero-service-card strong {
+    max-width: none;
+    font-size: clamp(1.02rem, 4.8vw, 1.22rem);
   }
 
   .audience-lead h2 {
