@@ -26,25 +26,9 @@
     };
   });
 
-  function renderEmptyState(title, body) {
-    resultsRoot.innerHTML = "";
-
-    const card = document.createElement("div");
-    card.className = "client-result-empty";
-
-    const strong = document.createElement("strong");
-    strong.textContent = title;
-    card.appendChild(strong);
-
-    const paragraph = document.createElement("p");
-    paragraph.textContent = body;
-    card.appendChild(paragraph);
-
-    resultsRoot.appendChild(card);
-  }
-
   function renderResults(matches) {
     resultsRoot.innerHTML = "";
+    resultsRoot.hidden = false;
 
     matches.forEach((client) => {
       const card = document.createElement("article");
@@ -117,10 +101,8 @@
 
     if (!query) {
       feedback.textContent = "Digite seu nome para localizar sua página.";
-      renderEmptyState(
-        "Digite seu nome",
-        "Exemplo de busca: Victor Lopes. Depois de localizar sua área, a senha é solicitada dentro da própria página."
-      );
+      resultsRoot.hidden = true;
+      resultsRoot.innerHTML = "";
       return;
     }
 
@@ -138,10 +120,8 @@
 
     if (matches.length === 0) {
       feedback.textContent = "Não encontramos uma área com esse nome. Confira a grafia e tente novamente.";
-      renderEmptyState(
-        "Nenhuma área encontrada",
-        "Se preferir, fale direto com a equipe para confirmar o nome usado no cadastro da sua página."
-      );
+      resultsRoot.hidden = true;
+      resultsRoot.innerHTML = "";
       return;
     }
 
@@ -153,9 +133,4 @@
   }
 
   form.addEventListener("submit", handleSearch);
-
-  renderEmptyState(
-    "Busque seu nome",
-    "Digite seu nome completo para localizar sua página. Quando o nome bater, você entra na área reservada e desbloqueia o conteúdo com a senha recebida."
-  );
 }());
