@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Victor Lopes | Estudo de Público-Alvo</title>
+  <meta name="robots" content="noindex, nofollow">
+  <base href="../../">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="assets/styles/internal-portal.css">
+</head>
+<body class="portal-body">
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="topbar-brand" href="clientes/victor-lopes/index.html" aria-label="Voltar para o perfil">
+          <img class="topbar-brand-logo" src="assets/images/mkt-logo-home.svg?v=2" alt="Marketing Figueroa">
+          <span class="topbar-brand-copy">
+            <span>Estudo visual</span>
+            <strong>Público-alvo | Victor Lopes</strong>
+          </span>
+        </a>
+
+        <nav class="topbar-links" aria-label="Atalhos do estudo">
+          <a class="text-link" href="clientes/victor-lopes/index.html">Perfil do cliente</a>
+          <a class="pill-button pill-button-secondary" href="#documentos-estudo">Base do estudo</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <main class="portal-main">
+        <section class="panel-card gate-layout" data-access-gate>
+          <div class="gate-copy">
+            <span class="eyebrow">Acesso Restrito</span>
+            <h1 class="display-title">Painel visual do estudo de público.</h1>
+            <p class="lead">
+              Esta página traduz o documento estratégico em uma leitura executiva, com cards,
+              linhas, gatilhos de decisão e curiosidades para navegar pelas personas do Victor
+              sem depender do arquivo bruto.
+            </p>
+
+            <div class="hero-tags">
+              <span class="tag">Personas</span>
+              <span class="tag">Linguagem</span>
+              <span class="tag">Posicionamento</span>
+            </div>
+          </div>
+
+          <div class="gate-pad">
+            <div class="section-heading compact-heading">
+              <span class="eyebrow">Senha de acesso</span>
+              <h2 class="page-title">Desbloqueie o estudo</h2>
+            </div>
+            <p class="muted-note">
+              Use a mesma senha das demais páginas internas para manter a navegação fluida.
+            </p>
+
+            <div class="password-panel">
+              <label class="password-label" for="victor-study-password">Senha</label>
+              <input
+                id="victor-study-password"
+                class="password-input"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Digite a senha"
+                data-gate-password
+              >
+            </div>
+
+            <div class="gate-actions">
+              <button class="pill-button pill-button-ghost" type="button" data-gate-clear>Limpar</button>
+              <button class="pill-button" type="button" data-gate-submit>Liberar estudo</button>
+            </div>
+
+            <p class="feedback" data-gate-feedback aria-live="polite"></p>
+          </div>
+        </section>
+
+        <div class="content-stack" data-gated-content hidden>
+          <section class="panel-card hero-grid report-overview-grid">
+            <article class="report-hero-copy">
+              <span class="eyebrow">Leitura estratégica</span>
+              <h1 class="display-title">Dashboard de público-alvo</h1>
+              <p class="lead">
+                Um único painel para entender quem compra, o que trava a decisão,
+                quais provas fazem sentido e como adaptar a comunicação para cada frente do projeto.
+              </p>
+
+              <div class="hero-tags">
+                <span class="tag">03 personas</span>
+                <span class="tag" data-study-label>Persona ativa</span>
+                <span class="tag">Base documental importada</span>
+              </div>
+
+              <div class="hero-metrics report-hero-metrics" data-study-kpis></div>
+            </article>
+
+            <article class="panel-card surface-card dashboard-pulse-card">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Prontidão comercial</span>
+                <h2 class="page-title">Pulso da persona</h2>
+              </div>
+              <div class="pulse-score" data-study-pulse-score></div>
+              <div class="pulse-grid" data-study-pulse-grid></div>
+            </article>
+          </section>
+
+          <section class="panel-card filter-shell">
+            <div class="section-heading">
+              <span class="eyebrow">Filtro do painel</span>
+              <h2 class="page-title">Escolha a persona</h2>
+            </div>
+
+            <div class="filter-grid">
+              <div class="control-group">
+                <label for="study-persona">Persona analisada</label>
+                <select id="study-persona" data-study-persona></select>
+              </div>
+            </div>
+
+            <div class="filter-note">
+              <span>Persona ativa: <strong data-study-active-label></strong></span>
+              <p data-study-active-note></p>
+            </div>
+          </section>
+
+          <section class="dashboard-grid">
+            <article class="panel-card dashboard-card dashboard-card-wide">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Essência da persona</span>
+                <h2 class="page-title">Objetivo, dor e medo central</h2>
+              </div>
+              <div class="objectives-grid" data-study-core></div>
+            </article>
+
+            <article class="panel-card dashboard-card">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Leitura por sinais</span>
+                <h2 class="page-title">Forças que movem a compra</h2>
+              </div>
+              <div class="metric-bars" data-study-signals></div>
+            </article>
+
+            <article class="panel-card dashboard-card">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Fricções</span>
+                <h2 class="page-title">Objeções mais prováveis</h2>
+              </div>
+              <div class="spotlight-list" data-study-objections></div>
+            </article>
+
+            <article class="panel-card dashboard-card">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Aceleradores</span>
+                <h2 class="page-title">Gatilhos de decisão</h2>
+              </div>
+              <div class="spotlight-list" data-study-triggers></div>
+            </article>
+
+            <article class="panel-card dashboard-card dashboard-card-wide">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Mensagens-chave</span>
+                <h2 class="page-title">Tom, promessa e prova</h2>
+              </div>
+              <div class="insight-grid" data-study-language></div>
+            </article>
+
+            <article class="panel-card dashboard-card dashboard-card-wide">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Símbolos de identidade</span>
+                <h2 class="page-title">Tribo, inimigo e referências</h2>
+              </div>
+              <div class="audience-grid" data-study-symbols></div>
+            </article>
+
+            <article class="panel-card dashboard-card">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Curiosidades</span>
+                <h2 class="page-title">Leituras rápidas</h2>
+              </div>
+              <div class="spotlight-list" data-study-curiosities></div>
+            </article>
+
+            <article class="panel-card dashboard-card dashboard-card-wide">
+              <div class="section-heading compact-heading">
+                <span class="eyebrow">Jornada mental</span>
+                <h2 class="page-title">Como a decisão amadurece</h2>
+              </div>
+              <div class="timeline-list" data-study-journey></div>
+            </article>
+          </section>
+
+          <section class="section-block" id="documentos-estudo">
+            <div class="section-heading">
+              <span class="eyebrow">Arquivos anexados</span>
+              <h2 class="page-title">Base documental do estudo</h2>
+            </div>
+            <div class="document-list" data-study-documents></div>
+          </section>
+
+          <p class="footer-note">
+            Novos estudos do Victor podem seguir este mesmo padrão visual, mantendo comparação e leitura executiva dentro do portal.
+          </p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    window.INTERNAL_PORTAL_PAGE = {
+      gate: {
+        storageKey: "marketing-figueroa-client-victor-lopes",
+        password: "Vl@1234",
+        submitLabel: "Liberar estudo",
+        successMessage: "Estudo liberado.",
+        errorMessage: "Senha incorreta. Tente novamente."
+      },
+      study: {
+        documents: [
+          {
+            href: "assets/reports/victor-lopes/estudos/victor-lopes-estudo-publico-alvo.docx",
+            title: "Documento bruto do estudo",
+            meta: "Arquivo original importado para consulta completa da estratégia de público."
+          },
+          {
+            href: "clientes/victor-lopes/index.html",
+            title: "Perfil do cliente",
+            meta: "Volte para a visão geral do projeto, biblioteca e materiais do Victor."
+          },
+          {
+            href: "clientes/victor-lopes/trafego-marco-2026.html",
+            title: "Dashboard de tráfego",
+            meta: "Cruze a leitura das personas com os resultados históricos de fevereiro e março."
+          }
+        ],
+        personas: [
+          {
+            id: "amadores",
+            label: "Jogadores Profissionais e Semi-profissionais",
+            summary: "Atletas de 18 a 35 anos que querem sequência de jogos, menos lesões e mais visibilidade para transferências ou convocações.",
+            ageRange: "18-35 anos",
+            incomeRange: "R$ 80k a 150k/mês",
+            investmentRange: "R$ 5k a 8k/mês",
+            focusValue: "Sequência de jogos",
+            focusLabel: "objetivo central",
+            readinessScore: 84,
+            readinessTitle: "Alta intenção quando a dor aperta",
+            readinessBody: "Lesão recente, perda de minutagem e chance de transferência aceleram a decisão. Ele compra melhor quando vê prova prática e linguagem de futebol.",
+            scores: {
+              urgency: 88,
+              fear: 91,
+              proof: 82,
+              social: 76,
+              investment: 74
+            },
+            primaryGoal: "Manter-se fisicamente em alto nível durante toda a temporada sem lesões, conseguindo sequência de jogos para evoluir e ganhar visibilidade.",
+            primaryPain: "Sempre que começa a ganhar espaço, uma lesão muscular o tira por semanas e faz perder posição.",
+            deepFear: "Virar o atleta de vidro do elenco e ver a carreira encolher por causa de lesões recorrentes.",
+            falseSolutions: [
+              "só fisioterapia quando machuca",
+              "trabalho genérico de academia",
+              "seguir treinos de outros jogadores",
+              "confiar apenas no departamento médico do clube"
+            ],
+            objections: [
+              {
+                title: "Já tenho preparador no clube",
+                detail: "A objeção cai quando o serviço é apresentado como gestão individual complementar, e não como treino paralelo sem contexto."
+              },
+              {
+                title: "Pode dar conflito com o clube",
+                detail: "Precisa enxergar alinhamento, prevenção e monitoramento para sentir segurança institucional."
+              },
+              {
+                title: "É caro ou toma tempo",
+                detail: "O investimento faz sentido quando ele compara com o custo real de ficar 3 ou 4 semanas fora."
+              }
+            ],
+            triggers: [
+              {
+                title: "Lesão recente",
+                detail: "A dor fica concreta e aumenta a abertura para prevenção, protocolo e acompanhamento individualizado."
+              },
+              {
+                title: "Transferência ou renovação",
+                detail: "Quando a carreira entra em jogo, o corpo vira ativo estratégico e a decisão acelera."
+              },
+              {
+                title: "Prova social do vestiário",
+                detail: "Ver resultado em colega próximo ou ouvir um ídolo falando do tema encurta a resistência."
+              }
+            ],
+            communicationStyle: "Direto, respeitoso e com linguagem do futebol, misturando exemplos práticos, histórias reais de atletas e dados concretos.",
+            verbalTriggers: [
+              "Evolução",
+              "Performance",
+              "Prevenção",
+              "Profissional",
+              "Excelência",
+              "Carreira longa"
+            ],
+            promise: "Temporada mais inteira, menos interrupções e um plano que respeita o histórico e a rotina do atleta.",
+            promiseTags: [
+              "temporada sem lesões",
+              "recuperação mais rápida",
+              "gestão individual"
+            ],
+            evidence: "Dados antes e depois, redução de lesões, comparativos físicos, depoimentos e sinais reais de evolução.",
+            evidenceTags: [
+              "comparativo físico",
+              "histórico de lesões",
+              "depoimentos"
+            ],
+            benefit: "Mais minutos em campo, confiança para render nos jogos decisivos e mais valor de mercado.",
+            resultTags: [
+              "minutagem",
+              "visibilidade",
+              "confiabilidade física"
+            ],
+            tribe: "Jogadores ambiciosos, atletas que investem na carreira, brasileiros no exterior e profissionais que querem padrão de elite.",
+            enemy: "Métodos genéricos, clubes que só reagem à lesão e a cultura de jogar machucado para provar dureza.",
+            models: [
+              "Neymar",
+              "Casemiro",
+              "Alisson"
+            ],
+            antiModels: [
+              "carreiras encurtadas por lesão",
+              "atletas de vidro",
+              "jogadores que não se cuidavam"
+            ],
+            curiosities: [
+              {
+                title: "O medo é reputacional",
+                detail: "Ele não teme só a dor física. Teme virar o jogador problemático e perder respeito no ambiente."
+              },
+              {
+                title: "A validação vem do vestiário",
+                detail: "Ídolo, colega e ex-jogador pesam mais do que marketing bonito ou promessa abstrata."
+              },
+              {
+                title: "Corpo lido como ativo",
+                detail: "Quando entende o corpo como ferramenta de trabalho, o investimento deixa de parecer luxo."
+              }
+            ],
+            journey: [
+              {
+                title: "Dor recorrente",
+                body: "O atleta convive com cansaço, microdores e medo de perder sequência quando começa a crescer."
+              },
+              {
+                title: "Estopim emocional",
+                body: "Uma nova lesão, banco, crítica ou chance de transferência faz a necessidade sair do abstrato."
+              },
+              {
+                title: "Busca por prova",
+                body: "Ele quer ver caso real, dado concreto e alguém do futebol validando a solução."
+              },
+              {
+                title: "Compra por proteção de carreira",
+                body: "A decisão acontece quando percebe que prevenção custa menos do que perder espaço e reputação."
+              }
+            ]
+          },
+          {
+            id: "atletas",
+            label: "Atletas de Elite",
+            summary: "Jogadores de primeira divisão, entre 22 e 32 anos, no auge da carreira e com medo silencioso de uma lesão que comprometa contrato, status e longevidade.",
+            ageRange: "22-32 anos",
+            incomeRange: "R$ 30k a 200k/mês",
+            investmentRange: "R$ 12k/mês",
+            focusValue: "Longevidade",
+            focusLabel: "ambição principal",
+            readinessScore: 90,
+            readinessTitle: "Perfil premium com dor silenciosa",
+            readinessBody: "Mesmo no auge, sente que o clube trata todo mundo igual. Compra quando enxerga blindagem, exclusividade e impacto direto na carreira.",
+            scores: {
+              urgency: 86,
+              fear: 95,
+              proof: 88,
+              social: 70,
+              investment: 85
+            },
+            primaryGoal: "Jogar no mais alto nível até os 38 anos sem lesões graves, sendo titular absoluto e valorizando o próximo contrato.",
+            primaryPain: "Vive com o medo de uma lesão evitável interromper a carreira e travar o auge físico.",
+            deepFear: "Acordar jovem com uma lesão séria no joelho e ver a carreira, a renda e a identidade desmoronarem.",
+            falseSolutions: [
+              "personal trainer genérico",
+              "fisioterapia reativa",
+              "suplementos milagrosos",
+              "métodos da internet sem acompanhamento"
+            ],
+            objections: [
+              {
+                title: "Já tenho o preparador do clube",
+                detail: "Ele precisa entender a proposta como blindagem premium e gestão complementar, não como repetição do CT."
+              },
+              {
+                title: "Preciso falar com empresário ou staff",
+                detail: "A decisão é mais rápida quando o serviço mostra impacto financeiro e proteção do contrato."
+              },
+              {
+                title: "Não sei se funciona mesmo",
+                detail: "Cases de atletas conhecidos, dados e histórico de longevidade tiram o serviço do campo da promessa."
+              }
+            ],
+            triggers: [
+              {
+                title: "Lesão de colega próximo",
+                detail: "Ver alguém do mesmo nível parar por lesão torna o risco imediato e pessoal."
+              },
+              {
+                title: "Contrato vencendo",
+                detail: "Renovação e valorização colocam o corpo no centro da estratégia profissional."
+              },
+              {
+                title: "Oportunidade internacional",
+                detail: "Quando surge janela para Europa ou seleção, ele busca qualquer vantagem competitiva invisível."
+              }
+            ],
+            communicationStyle: "Direto, sem rodeios, com exemplos práticos de outros atletas, tom exclusivo e foco em performance e longevidade.",
+            verbalTriggers: [
+              "Blindagem",
+              "Protocolo",
+              "Exclusivo",
+              "Personalizado",
+              "Longevidade"
+            ],
+            promise: "Blindar o corpo para competir no topo com sequência, recuperação mais rápida e sensação de controle real.",
+            promiseTags: [
+              "blindagem física",
+              "protocolo premium",
+              "carreira longa"
+            ],
+            evidence: "Cases reais, dados científicos, antes e depois visível e histórico comprovado de menos tempo fora.",
+            evidenceTags: [
+              "cases elite",
+              "dados mensuráveis",
+              "autoridade reconhecida"
+            ],
+            benefit: "Jogar leve, manter titularidade e transformar o cuidado físico em valorização de carreira.",
+            resultTags: [
+              "titularidade",
+              "Europa",
+              "valorização contratual"
+            ],
+            tribe: "Atletas profissionais que levam a carreira a sério, investem em performance e não deixam nada ao acaso.",
+            enemy: "Treino igual para todos, clube que só age na lesão e especialistas que vendem milagre sem método.",
+            models: [
+              "Cristiano Ronaldo",
+              "Thiago Silva",
+              "Daniel Alves"
+            ],
+            antiModels: [
+              "aposentadoria precoce",
+              "carreira desperdiçada",
+              "atleta cristal"
+            ],
+            curiosities: [
+              {
+                title: "O corpo é o principal ativo",
+                detail: "Ele aceita ticket alto quando a conversa liga prevenção diretamente a contrato, Europa e carreira longa."
+              },
+              {
+                title: "A prova social precisa ser do mesmo nível",
+                detail: "Ele não compra porque um influenciador falou. Compra porque um atleta ou staff respeitado validou."
+              },
+              {
+                title: "O medo também é financeiro",
+                detail: "Por trás da imagem confiante, existe receio de perder renda, status e capacidade de sustentar a família."
+              }
+            ],
+            journey: [
+              {
+                title: "Confiança com medo escondido",
+                body: "O atleta parece seguro, mas sente que a próxima lesão pode custar muito mais do que algumas partidas."
+              },
+              {
+                title: "Choque de realidade",
+                body: "Uma lesão no elenco, queda de rendimento ou conversa de renovação torna a dor impossível de ignorar."
+              },
+              {
+                title: "Busca por exclusividade",
+                body: "Ele procura algo que o tire do treino genérico e entregue sensação de blindagem personalizada."
+              },
+              {
+                title: "Adesão por vantagem competitiva",
+                body: "A compra acontece quando percebe que o cuidado extra não é luxo, mas uma vantagem invisível no topo."
+              }
+            ]
+          },
+          {
+            id: "profissionais",
+            label: "Preparadores e Fisios Esportivos",
+            summary: "Profissionais de 25 a 40 anos que querem sair do modelo por sessão e se posicionar como gestores de performance, com autoridade, método e ticket premium.",
+            ageRange: "25-40 anos",
+            incomeRange: "R$ 3k a 8k/mês",
+            investmentRange: "R$ 15k a 30k já investidos",
+            focusValue: "Autoridade + ticket",
+            focusLabel: "virada desejada",
+            readinessScore: 78,
+            readinessTitle: "Compra racional com forte dor de estagnação",
+            readinessBody: "Esse público precisa sentir acesso real a método, diferenciação e network. O conteúdo técnico pesa, mas a transformação de carreira pesa ainda mais.",
+            scores: {
+              urgency: 74,
+              fear: 82,
+              proof: 92,
+              social: 84,
+              investment: 62
+            },
+            primaryGoal: "Virar gestor de performance para atletas de alto nível, com metodologia própria, reconhecimento e mensalidades mais altas por atleta.",
+            primaryPain: "Já estudou muito, mas ainda se sente inseguro para sair do ciclo de cobrar por sessão e trabalhar com atletas de verdade.",
+            deepFear: "Passar a carreira inteira como mais um preparador comum, vendo colegas menos qualificados chegarem onde ele queria estar.",
+            falseSolutions: [
+              "acumular mais cursos",
+              "baixar preço para fechar clientes",
+              "copiar metodologia famosa",
+              "esperar ser descoberto por um clube"
+            ],
+            objections: [
+              {
+                title: "Já fiz muitos cursos e não funcionou",
+                detail: "A oferta precisa mostrar diferença entre mais conteúdo e uma transformação aplicável de posicionamento e método."
+              },
+              {
+                title: "Não tenho dinheiro para investir mais",
+                detail: "Ele compara cada real com a instabilidade do mês atual, então precisa enxergar retorno e diferenciação."
+              },
+              {
+                title: "E se eu não conseguir aplicar",
+                detail: "Garantia, cases e clareza operacional tiram o medo de ficar preso em teoria de novo."
+              }
+            ],
+            triggers: [
+              {
+                title: "Oportunidade limitada",
+                detail: "Escassez real e acesso exclusivo fazem esse perfil sair da paralisia por análise."
+              },
+              {
+                title: "Network profissional",
+                detail: "A promessa de ponte para atletas e mercado pesa tanto quanto a metodologia."
+              },
+              {
+                title: "Depoimentos e método comprovado",
+                detail: "Esse público responde muito bem a cases documentados, dados e validação de autoridade."
+              }
+            ],
+            communicationStyle: "Técnico, acessível e profissional, com dados científicos, casos práticos e explicação clara de método e posicionamento.",
+            verbalTriggers: [
+              "Metodologia exclusiva",
+              "Atletas de elite",
+              "Resultados comprovados",
+              "Network profissional",
+              "Gestão integral"
+            ],
+            promise: "Sair do modelo por sessão para uma operação premium, com metodologia clara, posicionamento forte e acesso mais estratégico ao mercado.",
+            promiseTags: [
+              "gestão integral",
+              "precificação premium",
+              "diferenciação no mercado"
+            ],
+            evidence: "Cases reais documentados, depoimentos em vídeo, resultados mensuráveis e histórico do mentor com atletas de elite.",
+            evidenceTags: [
+              "cases reais",
+              "dados científicos",
+              "histórico comprovado"
+            ],
+            benefit: "Mais renda previsível, autoridade percebida e confiança para atender atletas mais exigentes.",
+            resultTags: [
+              "ticket premium",
+              "reconhecimento",
+              "metodologia própria"
+            ],
+            tribe: "Preparadores sérios, fisios esportivos, ex-atletas e profissionais que querem alto rendimento com credibilidade técnica.",
+            enemy: "Mercado que paga pouco, marqueteiros vazios e uma formação que ensina técnica, mas não posicionamento.",
+            models: [
+              "Victor Lopes",
+              "Preparadores da seleção brasileira",
+              "Profissionais da Europa"
+            ],
+            antiModels: [
+              "marqueteiros sem conteúdo",
+              "charlatões",
+              "preparadores estagnados"
+            ],
+            curiosities: [
+              {
+                title: "A dor é financeira e identitária",
+                detail: "Ele quer ganhar mais, mas também quer provar para si e para os outros que deu certo na profissão."
+              },
+              {
+                title: "Busca mérito, mas sente o peso do marketing",
+                detail: "Existe um conflito interno entre ser técnico e precisar aprender posicionamento e venda."
+              },
+              {
+                title: "Precisa de autoridade transferível",
+                detail: "Cases, mentor reconhecido e metodologia nomeada encurtam a insegurança mais do que aulas genéricas."
+              }
+            ],
+            journey: [
+              {
+                title: "Estagnação incômoda",
+                body: "O profissional sabe que trabalha muito e ganha menos do que o esforço e a formação sugerem."
+              },
+              {
+                title: "Comparação que dói",
+                body: "Ver colegas ou influenciadores avançando acende inveja, urgência e sensação de atraso."
+              },
+              {
+                title: "Procura por método e ponte",
+                body: "Ele quer algo que una técnica, posicionamento, prova e acesso real ao mercado profissional."
+              },
+              {
+                title: "Compra por transformação de carreira",
+                body: "A decisão acontece quando percebe que o investimento pode tirá-lo da lógica de sessão e colocá-lo em outro patamar."
+              }
+            ]
+          }
+        ]
+      }
+    };
+  </script>
+  <script src="assets/scripts/internal-portal.js" defer></script>
+  <script src="assets/scripts/study-dashboard.js" defer></script>
+</body>
+</html>

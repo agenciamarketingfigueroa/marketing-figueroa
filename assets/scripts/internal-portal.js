@@ -297,7 +297,7 @@
       copy.appendChild(paragraph);
 
       const small = document.createElement("small");
-      small.textContent = "Quanto mais perto de 100, mais consistente o mês ficou nos principais objetivos.";
+      small.textContent = "Quanto mais perto de 100, mais consistente o período ficou nos principais objetivos.";
       copy.appendChild(small);
 
       scoreRoot.appendChild(copy);
@@ -636,7 +636,7 @@
     }
 
     const cards = [
-      { label: "Cliques", metric: "clicks", value: summary.clicks, detail: "gerados no mês" },
+      { label: "Cliques", metric: "clicks", value: summary.clicks, detail: "gerados no período" },
       { label: "CPC", metric: "costPerClick", value: summary.costPerClick, detail: "custo por clique" },
       { label: "CTR", metric: "ctr", value: summary.ctr, detail: "média consolidada" },
       { label: "Salvamentos", metric: "saves", value: summary.saves, detail: "sinal de intenção" }
@@ -902,11 +902,27 @@
   }
 
   function initReport(report) {
-    const reportData = enrichReport(report);
+    const reports = (Array.isArray(report.periods) && report.periods.length ? report.periods : [report])
+      .map(enrichReport)
+      .sort((left, right) => parseDate(right.coverageStart) - parseDate(left.coverageStart));
+
+    const reportEntries = reports.map((item, index) => ({
+      key: item.id || `report-${index}`,
+      data: item
+    }));
+    const reportMap = new Map(reportEntries.map((entry) => [entry.key, entry.data]));
+    const defaultEntry = reportEntries[0];
+
+    if (!defaultEntry) {
+      return;
+    }
+
+    const periodSelect = document.querySelector("[data-filter-period]");
     const startInput = document.querySelector("[data-filter-start]");
     const endInput = document.querySelector("[data-filter-end]");
     const statusSelect = document.querySelector("[data-filter-status]");
     const metricSelect = document.querySelector("[data-filter-metric]");
+    const reportPeriod = document.querySelector("[data-report-period]");
     const periodLabel = document.querySelector("[data-period-label]");
     const coverageNote = document.querySelector("[data-coverage-note]");
     const emptyState = document.querySelector("[data-empty-state]");
@@ -929,13 +945,16 @@
       return;
     }
 
-    startInput.min = reportData.coverageStart;
-    startInput.max = reportData.coverageEnd;
-    startInput.value = reportData.coverageStart;
-
-    endInput.min = reportData.coverageStart;
-    endInput.max = reportData.coverageEnd;
-    endInput.value = reportData.coverageEnd;
+    if (periodSelect) {
+      periodSelect.innerHTML = "";
+      reportEntries.forEach((entry) => {
+        const option = document.createElement("option");
+        option.value = entry.key;
+        option.textContent = entry.data.label || `${formatDate(entry.data.coverageStart)} até ${formatDate(entry.data.coverageEnd)}`;
+        periodSelect.appendChild(option);
+      });
+      periodSelect.value = defaultEntry.key;
+    }
 
     metricSelect.innerHTML = "";
     metricOptions.forEach((option) => {
@@ -945,8 +964,6 @@
       metricSelect.appendChild(element);
     });
     metricSelect.value = "profileVisits";
-
-    renderDocuments(documentList, reportData.documents || []);
 
     function clearDashboard() {
       [
@@ -976,11 +993,51 @@
       }
     }
 
+    function getCurrentReportData() {
+      if (!periodSelect) {
+        return defaultEntry.data;
+      }
+
+      return reportMap.get(periodSelect.value) || defaultEntry.data;
+    }
+
+    function syncPeriodBounds(reportData, shouldResetValues) {
+      startInput.min = reportData.coverageStart;
+      startInput.max = reportData.coverageEnd;
+      endInput.min = reportData.coverageStart;
+      endInput.max = reportData.coverageEnd;
+
+      if (
+        shouldResetValues ||
+        !startInput.value ||
+        startInput.value < reportData.coverageStart ||
+        startInput.value > reportData.coverageEnd
+      ) {
+        startInput.value = reportData.coverageStart;
+      }
+
+      if (
+        shouldResetValues ||
+        !endInput.value ||
+        endInput.value < reportData.coverageStart ||
+        endInput.value > reportData.coverageEnd
+      ) {
+        endInput.value = reportData.coverageEnd;
+      }
+    }
+
     function syncReport() {
+      const reportData = getCurrentReportData();
       const selectedMetric = metricSelect.value || "profileVisits";
       const selectedStatus = statusSelect.value || "all";
       let selectedStart = startInput.value || reportData.coverageStart;
       let selectedEnd = endInput.value || reportData.coverageEnd;
+
+      if (reportPeriod) {
+        reportPeriod.textContent = reportData.label || `${formatDate(reportData.coverageStart)} até ${formatDate(reportData.coverageEnd)}`;
+      }
+
+      renderDocuments(documentList, reportData.documents || []);
 
       if (selectedStart > selectedEnd) {
         endInput.value = selectedStart;
@@ -995,10 +1052,10 @@
 
       if (selectedStart !== reportData.coverageStart || selectedEnd !== reportData.coverageEnd) {
         coverageNote.textContent =
-          "Este arquivo foi importado em visão consolidada mensal. O painel preserva os totais do recorte completo de março.";
+          `Este arquivo foi importado em visão consolidada do período selecionado. O painel preserva os totais completos de ${reportData.label || "referência atual"}.`;
       } else {
         coverageNote.textContent =
-          "Painel consolidado de 01/03/2026 a 31/03/2026. A troca de status e métrica atualiza os cards do dashboard em tempo real.";
+          `Painel consolidado de ${formatDate(reportData.coverageStart)} a ${formatDate(reportData.coverageEnd)}. Use o filtro de período para alternar entre as janelas disponíveis.`;
       }
 
       if (!visibleAudiences.length) {
@@ -1028,6 +1085,14 @@
     statusSelect.addEventListener("change", syncReport);
     metricSelect.addEventListener("change", syncReport);
 
+    if (periodSelect) {
+      periodSelect.addEventListener("change", () => {
+        syncPeriodBounds(getCurrentReportData(), true);
+        syncReport();
+      });
+    }
+
+    syncPeriodBounds(defaultEntry.data, true);
     syncReport();
   }
 

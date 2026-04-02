@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Victor Lopes | Relatório de Tráfego - Março 2026</title>
+  <title>Victor Lopes | Relatórios de Tráfego</title>
   <meta name="robots" content="noindex, nofollow">
   <base href="../../">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
 
         <nav class="topbar-links" aria-label="Atalhos do relatório">
           <a class="text-link" href="clientes/victor-lopes/index.html">Perfil do cliente</a>
-          <a class="pill-button pill-button-secondary" href="assets/reports/victor-lopes/trafego/relatorio-anuncios-mar-2026.xls" target="_blank" rel="noopener noreferrer">Planilha bruta</a>
+          <a class="pill-button pill-button-secondary" href="#documentos-trafego">Arquivos brutos</a>
         </nav>
       </div>
     </header>
@@ -38,11 +38,11 @@
         <section class="panel-card gate-layout" data-access-gate>
           <div class="gate-copy">
             <span class="eyebrow">Acesso Restrito</span>
-            <h1 class="display-title">Resumo de tráfego de março.</h1>
+            <h1 class="display-title">Resumo visual do tráfego do projeto.</h1>
             <p class="lead">
-              Esta subpágina concentra o desempenho do mês em uma leitura mais executiva,
-              com métricas centrais, comparativos por público e base pronta para receber
-              novas janelas de tempo assim que outros arquivos forem anexados.
+              Esta subpágina concentra o desempenho dos períodos já importados em uma leitura
+              mais executiva, com métricas centrais, comparativos por público e histórico
+              organizado no mesmo painel.
             </p>
 
             <div class="hero-tags">
@@ -85,11 +85,11 @@
         <div class="content-stack" data-gated-content hidden>
           <section class="panel-card hero-grid report-overview-grid">
             <article class="report-hero-copy">
-              <span class="eyebrow">Março 2026</span>
+              <span class="eyebrow" data-report-period>Março 2026</span>
               <h1 class="display-title">Dashboard de tráfego</h1>
               <p class="lead">
-                Uma leitura de painel para bater o olho: performance, marcos de sucesso
-                e quais públicos puxaram melhor o resultado do mês.
+                Um único painel para navegar pelos períodos do projeto: performance,
+                marcos de sucesso e quais públicos puxaram melhor cada janela de tráfego.
               </p>
 
               <div class="hero-metrics report-hero-metrics" data-hero-kpis></div>
@@ -112,6 +112,10 @@
             </div>
 
             <div class="filter-grid">
+              <div class="control-group">
+                <label for="filter-period">Período do relatório</label>
+                <select id="filter-period" data-filter-period></select>
+              </div>
               <div class="control-group">
                 <label for="filter-start">Data inicial</label>
                 <input id="filter-start" type="date" data-filter-start>
@@ -166,7 +170,7 @@
                 <div class="engagement-ring" data-engagement-ring>
                   <div class="engagement-core">
                     <strong data-engagement-total></strong>
-                    <span>sinais do mês</span>
+                    <span>sinais do período</span>
                   </div>
                 </div>
                 <div class="engagement-legend" data-engagement-legend></div>
@@ -206,7 +210,7 @@
             </article>
           </section>
 
-          <section class="section-block">
+          <section class="section-block" id="documentos-trafego">
             <div class="section-heading">
               <span class="eyebrow">Performance por conjunto</span>
               <h2 class="page-title">Cards de análise</h2>
@@ -245,120 +249,169 @@
         errorMessage: "Senha incorreta. Tente novamente."
       },
       report: {
-        coverageStart: "2026-03-01",
-        coverageEnd: "2026-03-31",
-        granularity: "monthly-aggregate",
-        objectives: [
+        periods: [
           {
-            title: "Reconhecimento",
-            narrative: "A campanha ampliou distribuição e repetição da presença do Victor em audiências estratégicas, sustentando lembrança e familiaridade.",
-            metricLine: "94.124 de alcance e 114.724 impressões no mês."
+            id: "2026-03",
+            label: "Março 2026",
+            coverageStart: "2026-03-01",
+            coverageEnd: "2026-03-31",
+            granularity: "monthly-aggregate",
+            defaultMetric: "profileVisits",
+            summary: {
+              spend: 867,
+              reach: 94124,
+              impressions: 114724,
+              clicks: 7538,
+              ctr: 6.570551933335659,
+              profileVisits: 7659,
+              followers: 228,
+              frequency: 1.218860226934682,
+              costPerResult: 0.11320015667841755,
+              comments: 21,
+              shares: 144,
+              saves: 53
+            },
+            audiences: [
+              {
+                name: "[Jornalistas]",
+                status: "active",
+                startedOn: "2026-03-01",
+                endedOn: "2026-03-31",
+                spend: 291.19,
+                reach: 33920,
+                impressions: 41737,
+                clicks: 3510,
+                ctr: 8.393033,
+                followers: 56,
+                profileVisits: 3335,
+                costPerResult: 0.087313,
+                comments: 2,
+                shares: 18,
+                saves: 4,
+                accent: "#ff8d32",
+                note: "Melhor combinação de CTR e custo por visita ao perfil."
+              },
+              {
+                name: "[Jogadores]",
+                status: "active",
+                startedOn: "2026-03-04",
+                endedOn: "2026-03-31",
+                spend: 284.31,
+                reach: 38936,
+                impressions: 43533,
+                clicks: 3393,
+                ctr: 7.821653,
+                followers: 43,
+                profileVisits: 3228,
+                costPerResult: 0.088076,
+                comments: 3,
+                shares: 16,
+                saves: 4,
+                accent: "#fc7306",
+                note: "Maior alcance do período com boa estabilidade de custo."
+              },
+              {
+                name: "Jogadores de Futebol",
+                status: "not_delivering",
+                startedOn: "2026-02-28",
+                endedOn: "2026-03-31",
+                spend: 291.5,
+                reach: 21268,
+                impressions: 29454,
+                clicks: 635,
+                ctr: 7.07544,
+                followers: 129,
+                profileVisits: 1096,
+                costPerResult: 0.265967,
+                comments: 16,
+                shares: 110,
+                saves: 45,
+                accent: "#ffb26d",
+                note: "Menor volume de visitas, mas maior força em seguidores e sinais públicos de autoridade."
+              }
+            ],
+            followerOrigins: [
+              {
+                audienceName: "[Jornalistas]",
+                title: "Campanha para jornalistas",
+                label: "seguidores reportados",
+                narrative: "A campanha para jornalistas puxou um volume alto de cliques e visitas ao perfil, convertendo esse fluxo em novos seguidores.",
+                supportMetric: "3.510 cliques no link e 3.335 visitas ao perfil."
+              },
+              {
+                audienceName: "Jogadores de Futebol",
+                title: "Campanha para jogadores de futebol",
+                label: "seguidores reportados",
+                narrative: "Mesmo com menos visitas ao perfil, este público concentrou a maior resposta em seguidores e sinais públicos de autoridade.",
+                supportMetric: "635 cliques no link, 1.096 visitas ao perfil e 45 salvamentos."
+              }
+            ],
+            documents: [
+              {
+                title: "Relatório bruto de anúncios - março 2026",
+                meta: "Planilha original anexada ao repositório como base para este painel visual.",
+                href: "assets/reports/victor-lopes/trafego/relatorio-anuncios-mar-2026.xls"
+              }
+            ]
           },
           {
-            title: "Aumento de seguidores",
-            narrative: "A combinação entre visitas ao perfil e seguidores reportados mostra que o tráfego não ficou apenas em visualização, mas puxou avanço de audiência.",
-            metricLine: "7.659 visitas ao perfil e 228 seguidores reportados."
-          },
-          {
-            title: "Percepção de autoridade",
-            narrative: "Compartilhamentos, salvamentos, comentários e uma taxa de clique forte ajudaram a reforçar interesse real e sinais públicos de relevância.",
-            metricLine: "218 ações de engajamento direto e CTR médio de 6,57%."
-          }
-        ],
-        summary: {
-          spend: 867,
-          reach: 94124,
-          impressions: 114724,
-          clicks: 7538,
-          ctr: 6.570551933335659,
-          profileVisits: 7659,
-          followers: 228,
-          frequency: 1.218860226934682,
-          costPerResult: 0.11320015667841755,
-          comments: 21,
-          shares: 144,
-          saves: 53
-        },
-        audiences: [
-          {
-            name: "[Jornalistas]",
-            status: "active",
-            startedOn: "2026-03-01",
-            endedOn: "2026-03-31",
-            spend: 291.19,
-            reach: 33920,
-            impressions: 41737,
-            clicks: 3510,
-            ctr: 8.393033,
-            followers: 56,
-            profileVisits: 3335,
-            costPerResult: 0.087313,
-            comments: 2,
-            shares: 18,
-            saves: 4,
-            accent: "#7cd8c0",
-            note: "Melhor combinação de CTR e custo por visita ao perfil."
-          },
-          {
-            name: "[Jogadores]",
-            status: "active",
-            startedOn: "2026-03-04",
-            endedOn: "2026-03-31",
-            spend: 284.31,
-            reach: 38936,
-            impressions: 43533,
-            clicks: 3393,
-            ctr: 7.821653,
-            followers: 43,
-            profileVisits: 3228,
-            costPerResult: 0.088076,
-            comments: 3,
-            shares: 16,
-            saves: 4,
-            accent: "#8bb8ff",
-            note: "Maior alcance do mês com boa estabilidade de custo."
-          },
-          {
-            name: "Jogadores de Futebol",
-            status: "not_delivering",
-            startedOn: "2026-02-28",
-            endedOn: "2026-03-31",
-            spend: 291.5,
-            reach: 21268,
-            impressions: 29454,
-            clicks: 635,
-            ctr: 7.07544,
-            followers: 129,
-            profileVisits: 1096,
-            costPerResult: 0.265967,
-            comments: 16,
-            shares: 110,
-            saves: 45,
-            accent: "#ff9a57",
-            note: "Menor volume de visitas, mas maior força em seguidores e sinais públicos de autoridade."
-          }
-        ],
-        followerOrigins: [
-          {
-            audienceName: "[Jornalistas]",
-            title: "Campanha para jornalistas",
-            label: "seguidores reportados",
-            narrative: "A campanha para jornalistas puxou um volume alto de cliques e visitas ao perfil, convertendo esse fluxo em novos seguidores.",
-            supportMetric: "3.510 cliques no link e 3.335 visitas ao perfil."
-          },
-          {
-            audienceName: "Jogadores de Futebol",
-            title: "Campanha para jogadores de futebol",
-            label: "seguidores reportados",
-            narrative: "Mesmo com menos visitas ao perfil, este público concentrou a maior resposta em seguidores e sinais públicos de autoridade.",
-            supportMetric: "635 cliques no link, 1.096 visitas ao perfil e 45 salvamentos."
-          }
-        ],
-        documents: [
-          {
-            title: "Relatório bruto de anúncios - março 2026",
-            meta: "Planilha original anexada ao repositório como base para este painel visual.",
-            href: "assets/reports/victor-lopes/trafego/relatorio-anuncios-mar-2026.xls"
+            id: "2026-02",
+            label: "Fevereiro 2026",
+            coverageStart: "2026-02-22",
+            coverageEnd: "2026-02-28",
+            granularity: "monthly-aggregate",
+            defaultMetric: "reach",
+            summary: {
+              spend: 0.95,
+              reach: 159,
+              impressions: 162,
+              clicks: 2,
+              ctr: 1.234568,
+              profileVisits: 3,
+              followers: 1,
+              frequency: 1.018868,
+              costPerResult: 0.316667,
+              comments: 0,
+              shares: 0,
+              saves: 0
+            },
+            audiences: [
+              {
+                name: "Jogadores de Futebol",
+                status: "not_delivering",
+                startedOn: "2026-02-22",
+                endedOn: "2026-02-28",
+                spend: 0.95,
+                reach: 159,
+                impressions: 162,
+                clicks: 2,
+                ctr: 1.234568,
+                followers: 1,
+                profileVisits: 3,
+                costPerResult: 0.316667,
+                comments: 0,
+                shares: 0,
+                saves: 0,
+                accent: "#ff8d32",
+                note: "Primeiro movimento do período, ainda com entrega muito inicial e baixo volume."
+              }
+            ],
+            followerOrigins: [
+              {
+                audienceName: "Jogadores de Futebol",
+                title: "Campanha para jogadores de futebol",
+                label: "seguidores reportados",
+                narrative: "Fevereiro funcionou como uma janela curta de teste, com baixo investimento e pouca massa de dados para leitura mais profunda.",
+                supportMetric: "2 cliques no link, 3 visitas ao perfil e 1 seguidor reportado."
+              }
+            ],
+            documents: [
+              {
+                title: "Relatório bruto de anúncios - fevereiro 2026",
+                meta: "Planilha retroativa anexada ao repositório para leitura histórica do projeto.",
+                href: "assets/reports/victor-lopes/trafego/relatorio-anuncios-fev-2026.xls"
+              }
+            ]
           }
         ]
       }

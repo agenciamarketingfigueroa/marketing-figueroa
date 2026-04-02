@@ -442,9 +442,15 @@ select {
 }
 
 .section-block > .section-heading .eyebrow,
-.section-block > .section-heading .page-title,
-.section-block > .section-heading h2 {
+.content-stack > .panel-card.surface-card > .section-heading .eyebrow {
   color: #151515;
+}
+
+.section-block > .section-heading .page-title,
+.section-block > .section-heading h2,
+.content-stack > .panel-card.surface-card > .section-heading .page-title,
+.content-stack > .panel-card.surface-card > .section-heading h2 {
+  color: var(--portal-text);
 }
 
 .display-title,
@@ -1476,7 +1482,7 @@ select {
 
 .filter-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 14px;
 }
 
