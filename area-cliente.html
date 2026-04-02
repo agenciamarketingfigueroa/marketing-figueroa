@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Cliente | Marketing Figueroa</title>
+  <meta
+    name="description"
+    content="Localize sua área reservada, encontre sua página pelo nome e acesse os materiais do seu projeto com a senha enviada."
+  >
+  <meta name="theme-color" content="#0b0b0b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html#inicio" aria-label="Voltar para o topo">
+          <img class="brand-logo" src="assets/images/mkt-logo-home.svg?v=2" alt="Marketing Figueroa">
+        </a>
+
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          Menu
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Navegação principal">
+          <a href="index.html#narrativa">Narrativa</a>
+          <a href="index.html#solucoes">Soluções</a>
+          <a href="index.html#cases">Portfólio</a>
+          <a href="index.html#metodo">Método</a>
+          <a href="index.html#contato">Contato</a>
+          <a class="button button-secondary button-nav" href="area-cliente.html" aria-current="page" rel="nofollow">Área do cliente</a>
+          <a class="button button-primary button-nav" href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="inicio">
+      <section class="hero client-access-hero reveal">
+        <div class="container client-access-shell">
+          <div class="client-access-copy">
+            <p class="hero-kicker">Acesso reservado</p>
+            <h1>Digite seu nome,<br>encontre sua área<br>e continue o projeto.</h1>
+            <p class="hero-lead">
+              Esta entrada foi desenhada para facilitar a localização da sua página.
+              Primeiro você encontra sua área pelo nome. Depois, dentro dela, entra
+              com a senha enviada para visualizar materiais, relatórios e próximos passos.
+            </p>
+
+            <form class="client-search-form" data-client-search>
+              <label class="sr-only" for="client-search-input">Digite seu nome</label>
+              <input
+                id="client-search-input"
+                class="client-search-input"
+                type="search"
+                name="client_name"
+                autocomplete="name"
+                placeholder="Digite seu nome completo"
+                data-client-search-input
+              >
+              <button class="button button-primary" type="submit">Localizar minha área</button>
+            </form>
+
+            <p class="client-search-feedback" data-search-feedback aria-live="polite"></p>
+
+            <div class="hero-ribbon" aria-label="Informações rápidas">
+              <span>Busca por nome</span>
+              <span>Acesso reservado por senha</span>
+              <span>Navegação simples para o cliente</span>
+            </div>
+          </div>
+
+          <div class="client-search-stage">
+            <div class="client-search-card">
+              <p class="card-label">PÁGINAS DISPONÍVEIS</p>
+              <div class="client-search-results" data-search-results></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Marketing Figueroa <span id="current-year"></span>. Direção, estrutura e performance para crescer.</p>
+        <a href="#inicio">Voltar ao topo</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    window.CLIENT_ACCESS_DIRECTORY = {
+      clients: [
+        {
+          name: "Victor Lopes",
+          route: "clientes/victor-lopes/index.html",
+          status: "Disponível",
+          summary: "Perfil reservado com visão geral do projeto e relatório de tráfego de março de 2026.",
+          tags: ["Tráfego", "Relatório mensal", "Área privada"],
+          aliases: ["victor", "victor lopes"]
+        }
+      ]
+    };
+  </script>
+  <script src="script.js"></script>
+  <script src="assets/scripts/client-area.js"></script>
+</body>
+</html>
