@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" role="img" aria-labelledby="title">
+  <title id="title">Template de post Lado B Networking</title>
+  <rect width="1080" height="1350" fill="#401332"/>
+  <path d="M-80 183C118 9 292 355 490 183S862 18 1160 183" fill="none" stroke="#FF4F87" stroke-width="38" stroke-linecap="round"/>
+  <circle cx="774" cy="137" r="30" fill="#FFB547"/>
+  <circle cx="227" cy="227" r="18" fill="#FF7A21"/>
+  <text x="94" y="420" fill="#FFF7EB" font-family="Avenir Next, Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="6">RODA DE CONVERSA</text>
+  <text x="88" y="606" fill="#FFB547" font-family="Georgia, serif" font-size="150" font-weight="700" font-style="italic">Ideias que</text>
+  <text x="88" y="752" fill="#FFF7EB" font-family="Georgia, serif" font-size="150" font-weight="700" font-style="italic">não cabem</text>
+  <text x="88" y="898" fill="#FF4F87" font-family="Georgia, serif" font-size="150" font-weight="700" font-style="italic">na caixa.</text>
+  <rect x="91" y="1015" width="898" height="188" rx="94" fill="#FFF7EB"/>
+  <text x="158" y="1093" fill="#401332" font-family="Avenir Next, Arial, sans-serif" font-size="37" font-weight="800">24 OUT • 19H</text>
+  <text x="158" y="1153" fill="#401332" font-family="Avenir Next, Arial, sans-serif" font-size="29">Encontro presencial • vagas limitadas</text>
+  <circle cx="905" cy="1109" r="58" fill="#FF7A21"/>
+  <text x="884" y="1129" fill="#401332" font-family="Avenir Next, Arial, sans-serif" font-size="57" font-weight="900">↗</text>
+  <text x="92" y="1280" fill="#FFF7EB" font-family="Avenir Next, Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="4">@LADOB.NETWORKING</text>
+</svg>

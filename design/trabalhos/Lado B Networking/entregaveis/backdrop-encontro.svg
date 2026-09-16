@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Backdrop de encontro Lado B Networking</title>
+  <desc id="desc">Cenografia de evento com painel de marca e poltronas.</desc>
+  <defs>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEDAD2"/><stop offset="1" stop-color="#CBA89B"/></linearGradient>
+    <filter id="shadow"><feDropShadow dy="20" stdDeviation="18" flood-color="#401332" flood-opacity=".2"/></filter>
+  </defs>
+  <rect width="1600" height="1000" fill="#F9EEE6"/>
+  <rect y="780" width="1600" height="220" fill="url(#floor)"/>
+  <g filter="url(#shadow)">
+    <rect x="106" y="94" width="1388" height="717" rx="38" fill="#401332"/>
+    <path d="M104 232C291 72 456 393 642 232S991 72 1177 232s353 160 539 0" fill="none" stroke="#FF4F87" stroke-width="32" stroke-linecap="round"/>
+    <path d="M-35 579C151 419 316 740 502 579s349-160 535 0 353 160 539 0" fill="none" stroke="#FF7A21" stroke-width="32" stroke-linecap="round"/>
+    <circle cx="412" cy="209" r="25" fill="#FFB547"/><circle cx="1263" cy="261" r="25" fill="#FFB547"/>
+    <rect x="300" y="287" width="650" height="205" rx="48" fill="none" stroke="#FF4F87" stroke-width="23"/>
+    <text x="349" y="435" fill="#FFF7EB" font-family="Avenir Next, Arial, sans-serif" font-size="137" font-weight="900" letter-spacing="-8">LADO</text>
+    <path d="M847 361c74-3 111-30 147-81" fill="none" stroke="#FF7A21" stroke-width="14" stroke-linecap="round"/>
+    <path d="M970 282l37-18-4 41" fill="none" stroke="#FF7A21" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="979" y="450" fill="#FF7A21" font-family="Georgia, serif" font-size="214" font-weight="700" font-style="italic">B</text>
+    <text x="423" y="558" fill="#FFB547" font-family="Avenir Next, Arial, sans-serif" font-size="39" font-weight="700" letter-spacing="12">NETWORKING</text>
+    <text x="411" y="626" fill="#FFF7EB" font-family="Georgia, serif" font-size="39" font-style="italic">Conexões - Novos lados.</text>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="M242 659h246c68 0 103 39 103 108v144H139V767c0-69 35-108 103-108z" fill="#FF4F87"/>
+    <path d="M272 621h186c43 0 65 26 65 70v84H207v-84c0-44 22-70 65-70z" fill="#FFF7EB"/>
+    <path d="M1110 659h246c68 0 103 39 103 108v144h-452V767c0-69 35-108 103-108z" fill="#FF7A21"/>
+    <path d="M1140 621h186c43 0 65 26 65 70v84h-316v-84c0-44 22-70 65-70z" fill="#FFF7EB"/>
+    <ellipse cx="800" cy="887" rx="192" ry="41" fill="#401332" opacity=".16"/>
+    <rect x="648" y="739" width="304" height="162" rx="81" fill="#FFB547"/>
+    <rect x="772" y="878" width="56" height="74" rx="18" fill="#401332"/>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title">
+  <title id="title">Padrão de conexões Lado B</title>
+  <rect width="1200" height="800" fill="#FF4F87"/>
+  <g fill="none" stroke="#FFF7EB" stroke-width="18" stroke-linecap="round" opacity=".95">
+    <path d="M-75 145C85 15 221 276 381 145S676 14 835 145s301 131 460 0"/>
+    <path d="M-78 430C82 300 218 561 378 430s295-131 454 0 301 131 460 0"/>
+    <path d="M-52 715C108 585 244 846 404 715s295-131 454 0 301 131 460 0"/>
+  </g>
+  <g fill="#FFB547">
+    <circle cx="150" cy="112" r="19"/><circle cx="540" cy="179" r="19"/><circle cx="941" cy="111" r="19"/>
+    <circle cx="124" cy="458" r="19"/><circle cx="586" cy="394" r="19"/><circle cx="1024" cy="465" r="19"/>
+    <circle cx="263" cy="681" r="19"/><circle cx="721" cy="749" r="19"/>
+  </g>
+  <g fill="#401332" opacity=".9">
+    <circle cx="347" cy="155" r="11"/><circle cx="760" cy="116" r="11"/><circle cx="1120" cy="183" r="11"/>
+    <circle cx="344" cy="438" r="11"/><circle cx="806" cy="473" r="11"/><circle cx="1121" cy="408" r="11"/>
+    <circle cx="80" cy="739" r="11"/><circle cx="568" cy="683" r="11"/><circle cx="984" cy="726" r="11"/>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 460" role="img" aria-labelledby="title desc">
+  <title id="title">Símbolo minimalista Lado B</title>
+  <desc id="desc">Sobre fundo rosa, uma base creme contém uma pequena caixa da qual a letra B sai.</desc>
+  <rect width="460" height="460" fill="#FF4F87"/>
+  <rect x="34" y="34" width="392" height="392" rx="108" fill="#FFF7EB"/>
+  <rect x="91" y="150" width="184" height="184" rx="50" fill="none" stroke="#FF4F87" stroke-width="20"/>
+  <text x="248" y="321" fill="#FF7A21" font-family="Georgia, Times New Roman, serif" font-size="205" font-weight="700" font-style="italic">B</text>
+</svg>

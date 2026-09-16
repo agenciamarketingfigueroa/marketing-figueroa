@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 500" role="img" aria-labelledby="title desc">
+  <title id="title">Lado B Networking — versão negativa</title>
+  <desc id="desc">A palavra Lado está dentro de uma caixa e a letra B aparece fora dela, em versão para fundos escuros.</desc>
+  <rect x="55" y="76" width="654" height="284" rx="62" fill="none" stroke="#FF4F87" stroke-width="28"/>
+  <text x="102" y="283" fill="#FFF7EB" font-family="Avenir Next, Nunito Sans, Arial, sans-serif" font-size="190" font-weight="900" letter-spacing="-11">LADO</text>
+  <path d="M608 220c82-3 121-36 161-94" fill="none" stroke="#FF7A21" stroke-width="16" stroke-linecap="round"/>
+  <path d="M740 128l42-20-5 46" fill="none" stroke="#FF7A21" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="756" y="297" fill="#FF7A21" font-family="Georgia, Times New Roman, serif" font-size="276" font-weight="700" font-style="italic">B</text>
+  <text x="74" y="435" fill="#FFF7EB" font-family="Avenir Next, Nunito Sans, Arial, sans-serif" font-size="43" font-weight="800" letter-spacing="15">NETWORKING</text>
+  <text x="725" y="423" fill="#FFF7EB" font-family="Georgia, Times New Roman, serif" font-size="31" font-style="italic">Conexões - Novos lados.</text>
+</svg>

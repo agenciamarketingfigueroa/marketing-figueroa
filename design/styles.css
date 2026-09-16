@@ -1,0 +1,30 @@
+:root { --orange: #fc7306; --black: #0b0b0b; --paper: #f7f3ed; --line: rgba(11,11,11,.16); }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--black); background: var(--paper); font-family: "Manrope", sans-serif; }
+a { color: inherit; text-decoration: none; }
+header, footer { display: flex; align-items: center; justify-content: space-between; gap: 30px; width: min(1280px, calc(100% - 40px)); margin: auto; padding: 28px 0; font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+header { border-bottom: 1px solid var(--line); }
+.brand { font: 400 1.7rem "Bebas Neue", sans-serif; letter-spacing: .03em; }
+main { width: min(1280px, calc(100% - 40px)); margin: auto; }
+.intro { position: relative; min-height: 600px; padding: 100px 0 80px; }
+.intro > p, .section-head span, .project small { font-size: .7rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.intro h1 { margin: 35px 0; font: 400 clamp(5.2rem, 15vw, 12rem)/.72 "Bebas Neue", sans-serif; letter-spacing: -.025em; }
+.intro h1 span { color: var(--orange); }
+.intro-copy { max-width: 480px; margin-left: auto; font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.55; }
+.projects { padding: 70px 0 120px; border-top: 1px solid var(--line); }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 30px; }
+.section-head h2 { font: 400 3rem "Bebas Neue", sans-serif; }
+.project { display: block; padding: 14px; border: 1px solid var(--line); border-radius: 28px; background: #fff; transition: transform .25s ease, box-shadow .25s ease; }
+.project:hover { transform: translateY(-5px); box-shadow: 0 30px 80px rgba(11,11,11,.12); }
+.project > img { width: 100%; height: min(58vw, 610px); object-fit: cover; border-radius: 18px; }
+.project-info { display: grid; grid-template-columns: 1.2fr .8fr 60px; align-items: end; gap: 40px; padding: 30px 20px 18px; }
+.project h3 { margin: 7px 0 0; font: 400 clamp(2.5rem, 6vw, 5rem)/1 "Bebas Neue", sans-serif; }
+.project p { margin: 0; font-weight: 600; line-height: 1.5; }
+.project-info > span { display: grid; place-items: center; width: 54px; height: 54px; color: white; border-radius: 50%; background: var(--orange); font-size: 1.5rem; }
+footer { border-top: 1px solid var(--line); }
+@media (max-width: 700px) {
+  .intro { min-height: 520px; padding-top: 80px; }
+  .project-info { grid-template-columns: 1fr 50px; gap: 20px; }
+  .project-info p { display: none; }
+  footer { align-items: flex-start; flex-direction: column; }
+}
