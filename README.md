@@ -1,25 +1,58 @@
 # Marketing Figueroa
 
-Site estatico pronto para publicar no GitHub Pages.
+Site estático em HTML, CSS e JavaScript, pronto para GitHub Pages. A reformulação mantém a identidade preta e laranja e concentra a oferta em **Sites** e **Tráfego Pago**.
 
-## Estrutura
+## Páginas
 
-- `index.html`: homepage com foco em conversao
-- `styles.css`: identidade visual e responsividade
-- `script.js`: menu mobile, animacoes e envio do formulario para WhatsApp
-- `assets/images`: placeholders para trocar por imagens reais
-- `.nojekyll`: garante deploy estatico simples no GitHub Pages
+- `index.html`: Hero da Marketing Figueroa com o gradiente laranja original, composição de design e estratégia, logos oficiais dos projetos e Thainá Sampaio em destaque no portfólio.
+- `sites.html`: portfólio, processo, três planos e perguntas frequentes.
+- `trafego-pago.html`: apresentação da gestão e mockups desktop/mobile do relatório.
+- `proposta-trafego.html`: proposta **não listada**, acessível pelo endereço direto. Facebook Ads por **R$ 1.100/mês**, uma reunião mensal e relatórios semanais pelo site. Não recebe links nas páginas públicas e usa `noindex, nofollow`. Isso evita listagem; não constitui controle de acesso.
+- `demonstracao-relatorio.html`: relatório responsivo da Spark Filmes com duas semanas de **dados fictícios**, gráfico, campanhas e análise. Não está conectado a uma conta de anúncios.
+- `area-cliente.html`: busca da área interna existente; dados, relatórios e acesso de clientes foram preservados.
+
+## Conteúdo comercial a conferir
+
+- Os planos de sites usam valores iniciais sugeridos: **Landing Page R$ 1.500**, **Página de Vendas R$ 2.500** e **Site Institucional R$ 3.500**, sujeitos ao escopo. Editar em `sites.html`.
+- **O WhatsApp ainda é o exemplo herdado do site anterior: `5511999999999`.** Substituir esse número nos links de `index.html`, `sites.html`, `trafego-pago.html`, `proposta-trafego.html` e `area-cliente.html` antes de publicar.
+- Os R$ 1.100/mês são honorários de gestão. A verba de mídia é adicional e paga diretamente à plataforma.
+
+## Identidade e arquivos
+
+- `assets/styles/marketing.css`: estilos das páginas públicas, com apresentações de serviços verticais e centralizadas em desktop e mobile.
+- `assets/images/brands/`: logos oficiais copiadas dos repositórios locais; a origem de cada arquivo e a assinatura tipográfica da Dra. Patrícia estão documentadas no README dessa pasta.
+- `styles.css`: estilos existentes da área de cliente, preservados.
+- `script.js`: navegação mobile, teclado, ano e animações legadas.
+- `assets/styles/report-demo.css` e `assets/scripts/report-demo.js`: relatório demonstrativo e seus dados.
+- `assets/images/projects/`: capturas reais dos cinco sites, versão mobile da Thainá e capturas do relatório. Os dispositivos são compostos em HTML/CSS, sem distorcer os sites.
+
+Capturas dos sites realizadas em 2 de outubro de 2026. Fontes:
+
+- https://thainasampaio.com.br
+- https://borrachasrocha.com.br
+- https://drapatriciaabreu.com.br
+- https://dosim.com.br
+- https://sparkfilmes.com.br
+
+O escopo de tráfego foi redigido especificamente para a oferta informada, consultando referências públicas de [gestão de mídia da V4 Company](https://lp.v4company.com/assessoria/midia) e [gestão de tráfego da Webcompany](https://webcompany.com.br/servicos/trafego-pago/): planejamento, testes, otimização, análise e separação entre gestão e investimento em mídia. Não foram adotadas promessas de desempenho ou condições comerciais dessas empresas.
+
+## Prévia e verificação
+
+Nenhum build ou instalação de dependências é necessário para servir o site:
+
+```sh
+python3 -m http.server 4173 --bind 127.0.0.1
+```
+
+Abrir `http://127.0.0.1:4173`. Para recapturar os sites ou verificar a reformulação, os scripts usam Deno, Playwright e o Chrome instalado no macOS:
+
+```sh
+deno run -A scripts/capture-sites.mjs
+deno run -A scripts/preview-check.mjs
+```
+
+O primeiro script acessa os cinco sites públicos. O segundo requer o servidor local, atualiza as imagens do relatório e verifica seis páginas em larguras de 1440, 1024, 768, 390 e 320 px, incluindo imagens, transbordamento horizontal, menu, FAQ, alternância dos dados, links, página não listada e busca da área interna. Prévias ficam em `/private/tmp/figueroa-*.png`.
 
 ## Publicar no GitHub Pages
 
-1. Envie estes arquivos para a branch `main`.
-2. No GitHub, abra `Settings > Pages`.
-3. Em `Build and deployment`, selecione `Deploy from a branch`.
-4. Escolha a branch `main` e a pasta `/ (root)`.
-5. Salve.
-
-## Ajustes importantes
-
-1. Troque o numero placeholder em `script.js` pela linha oficial do WhatsApp.
-2. Substitua os SVGs em `assets/images` pelas imagens reais do seu portfolio e equipe.
-3. Ajuste textos, cases e chamadas conforme voce me enviar mais informacoes.
+Após conferir os valores e atualizar o WhatsApp, envie os arquivos para a branch usada pelo GitHub Pages. Em **Settings → Pages**, use a raiz do repositório. `CNAME` mantém o domínio `marketingfigueroa.com.br`; `.nojekyll` permite servir os arquivos estáticos diretamente.

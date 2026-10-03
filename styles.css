@@ -1474,3 +1474,17 @@ textarea {
     transform: none;
   }
 }
+
+/* Match the explicit internal-area button used by the public navigation. */
+.site-nav .button-internal {
+  padding: 11px 18px;
+  border: 1px solid #1b1b19;
+  border-radius: 5px;
+  background: #1b1b19;
+  color: #fffaf1;
+}
+.site-nav .button-internal:hover,
+.site-nav .button-internal:focus-visible {
+  background: #35332e;
+  color: #fff;
+}

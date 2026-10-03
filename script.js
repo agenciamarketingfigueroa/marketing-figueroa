@@ -8,6 +8,10 @@ if (yearTarget) {
 }
 
 if (navToggle && siteNav) {
+  const closeNavigation = () => {
+    siteNav.classList.remove("is-open");
+    navToggle.setAttribute("aria-expanded", "false");
+  };
   navToggle.addEventListener("click", () => {
     const isOpen = siteNav.classList.toggle("is-open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
@@ -15,10 +19,27 @@ if (navToggle && siteNav) {
 
   siteNav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-      siteNav.classList.remove("is-open");
-      navToggle.setAttribute("aria-expanded", "false");
+      closeNavigation();
     });
   });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && siteNav.classList.contains("is-open")) {
+      closeNavigation();
+      navToggle.focus();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!siteNav.contains(event.target) && !navToggle.contains(event.target)) {
+      closeNavigation();
+    }
+  });
+
+  window.matchMedia("(min-width: 801px)").addEventListener(
+    "change",
+    closeNavigation,
+  );
 }
 
 if ("IntersectionObserver" in window) {
@@ -31,7 +52,7 @@ if ("IntersectionObserver" in window) {
         }
       });
     },
-    { threshold: 0.18 }
+    { threshold: 0.18 },
   );
 
   revealItems.forEach((item) => observer.observe(item));
