@@ -6,8 +6,8 @@ Site estático em HTML, CSS e JavaScript, pronto para GitHub Pages. A reformula�
 
 - `index.html`: Hero da Marketing Figueroa com o gradiente laranja original, composição de design e estratégia, logos oficiais dos projetos e Thainá Sampaio em destaque no portfólio.
 - `sites.html`: portfólio, processo, dois planos e perguntas frequentes.
-- `trafego-pago.html`: apresentação da gestão e mockups desktop/mobile do relatório.
-- `proposta-trafego.html`: proposta **não listada**, acessível pelo endereço direto. Facebook Ads por **R$ 1.100/mês**, uma reunião mensal e relatórios semanais pelo site. Não recebe links nas páginas públicas e usa `noindex, nofollow`. Isso evita listagem; não constitui controle de acesso.
+- `trafego-pago.html`: apresentação da gestão, mockups desktop/mobile e acesso ao relatório pelo site ou pela versão instalada na tela inicial.
+- `proposta-trafego.html`: proposta **não listada**, acessível pelo endereço direto. Facebook Ads por **R$ 1.100/mês**, uma reunião mensal e relatórios semanais pelo site ou pela versão instalada na tela inicial. Não recebe links nas páginas públicas e usa `noindex, nofollow`. Isso evita listagem; não constitui controle de acesso.
 - `demonstracao-relatorio.html`: relatório responsivo da Spark Filmes com duas semanas de **dados fictícios**, gráfico, campanhas e análise. Não está conectado a uma conta de anúncios.
 - `area-cliente.html`: busca da área interna existente; dados, relatórios e acesso de clientes foram preservados.
 
@@ -25,6 +25,8 @@ Site estático em HTML, CSS e JavaScript, pronto para GitHub Pages. A reformula�
 - `script.js`: navegação mobile, teclado, ano e animações legadas.
 - `assets/styles/report-demo.css` e `assets/scripts/report-demo.js`: relatório demonstrativo e seus dados.
 - `assets/images/projects/`: capturas reais dos cinco sites, versão mobile da Thainá e capturas do relatório. Os dispositivos são compostos em HTML/CSS, sem distorcer os sites.
+- `assets/images/favicon.svg`, `assets/images/favicon-16.png`, `assets/images/favicon-32.png`, `apple-touch-icon.png` e `assets/images/app-icon-*.png`: símbolo oficial da logo adaptado aos ícones do navegador e da tela inicial. Os PNGs pequenos são alternativas para navegadores sem suporte ao favicon SVG.
+- `manifest.webmanifest`: permite abrir a área interna em modo de aplicativo a partir da tela inicial; os relatórios continuam online e exigem acesso à área do cliente.
 
 Capturas dos sites realizadas em 2 de outubro de 2026. Fontes:
 
@@ -35,6 +37,8 @@ Capturas dos sites realizadas em 2 de outubro de 2026. Fontes:
 - https://sparkfilmes.com.br
 
 O escopo de tráfego foi redigido especificamente para a oferta informada, consultando referências públicas de [gestão de mídia da V4 Company](https://lp.v4company.com/assessoria/midia) e [gestão de tráfego da Webcompany](https://webcompany.com.br/servicos/trafego-pago/): planejamento, testes, otimização, análise e separação entre gestão e investimento em mídia. Não foram adotadas promessas de desempenho ou condições comerciais dessas empresas.
+
+No iPhone, abra `area-cliente.html` no Safari e use **Compartilhar → Adicionar à Tela de Início**. O ícone instalado abre a área interna; os relatórios dependem de conexão.
 
 ## Prévia e verificação
 
