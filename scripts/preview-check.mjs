@@ -144,8 +144,8 @@ try {
       }
       if (route === "sites.html") {
         check(
-          await page.locator(".price-card").count() === 3,
-          "three site plans",
+          await page.locator(".price-card").count() === 2,
+          "two site plans",
         );
         await page.locator("details summary").first().click();
         check(

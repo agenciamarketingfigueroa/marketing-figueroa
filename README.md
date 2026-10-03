@@ -5,7 +5,7 @@ Site estático em HTML, CSS e JavaScript, pronto para GitHub Pages. A reformula�
 ## Páginas
 
 - `index.html`: Hero da Marketing Figueroa com o gradiente laranja original, composição de design e estratégia, logos oficiais dos projetos e Thainá Sampaio em destaque no portfólio.
-- `sites.html`: portfólio, processo, três planos e perguntas frequentes.
+- `sites.html`: portfólio, processo, dois planos e perguntas frequentes.
 - `trafego-pago.html`: apresentação da gestão e mockups desktop/mobile do relatório.
 - `proposta-trafego.html`: proposta **não listada**, acessível pelo endereço direto. Facebook Ads por **R$ 1.100/mês**, uma reunião mensal e relatórios semanais pelo site. Não recebe links nas páginas públicas e usa `noindex, nofollow`. Isso evita listagem; não constitui controle de acesso.
 - `demonstracao-relatorio.html`: relatório responsivo da Spark Filmes com duas semanas de **dados fictícios**, gráfico, campanhas e análise. Não está conectado a uma conta de anúncios.
@@ -13,7 +13,7 @@ Site estático em HTML, CSS e JavaScript, pronto para GitHub Pages. A reformula�
 
 ## Conteúdo comercial a conferir
 
-- Os planos de sites usam valores iniciais sugeridos: **Landing Page R$ 1.500**, **Página de Vendas R$ 2.500** e **Site Institucional R$ 3.500**, sujeitos ao escopo. Editar em `sites.html`.
+- Os planos de sites são **Landing Page ou Página de Vendas: R$ 900 à vista ou 12x de R$ 90** e **Site Institucional: R$ 1.500 à vista ou 12x de R$ 150**. Os totais parcelados são R$ 1.080 e R$ 1.800. Necessidades fora do escopo são orçadas separadamente.
 - **O WhatsApp ainda é o exemplo herdado do site anterior: `5511999999999`.** Substituir esse número nos links de `index.html`, `sites.html`, `trafego-pago.html`, `proposta-trafego.html` e `area-cliente.html` antes de publicar.
 - Os R$ 1.100/mês são honorários de gestão. A verba de mídia é adicional e paga diretamente à plataforma.
 
