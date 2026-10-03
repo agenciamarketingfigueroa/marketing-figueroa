@@ -1,0 +1,73 @@
+/* Keep the original orange entry layout and the current account login. */
+.client-login-page .client-access-shell {
+  width: min(980px, calc(100% - 40px));
+}
+.portal-login {
+  display: grid;
+  gap: 12px;
+  max-width: 480px;
+  margin-top: 28px;
+}
+.portal-login label {
+  color: #fffaf3;
+  font-size: 14px;
+  font-weight: 600;
+}
+.portal-login input {
+  font: inherit;
+}
+.portal-login button {
+  margin-top: 8px;
+}
+.portal-login button:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+@media (min-width: 861px) {
+  .portal-login {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+    column-gap: 14px;
+  }
+  .portal-login label[for="portal-username"] {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .portal-login #portal-username {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .portal-login label[for="portal-password"] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .portal-login #portal-password {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .portal-login button {
+    grid-column: 3;
+    grid-row: 2;
+    min-height: 58px;
+    margin-top: 0;
+  }
+  .portal-login .client-search-feedback {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}
+.legacy-access {
+  margin-top: 20px;
+  max-width: 760px;
+}
+.legacy-access summary {
+  color: #fffaf3;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.legacy-access summary:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 5px;
+}

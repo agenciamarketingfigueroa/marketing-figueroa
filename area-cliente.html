@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="assets/images/favicon-16.png" type="image/png" sizes="16x16">
-  <link rel="icon" href="assets/images/favicon-32.png" type="image/png" sizes="32x32">
-  <link rel="icon" href="assets/images/favicon.svg?v=2" type="image/svg+xml">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/images/favicon-16.png?v=3" type="image/png" sizes="16x16">
+  <link rel="icon" href="assets/images/favicon-32.png?v=3" type="image/png" sizes="32x32">
+  <link rel="icon" href="assets/images/favicon.svg?v=3" type="image/svg+xml">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
+  <link rel="manifest" href="manifest.webmanifest?v=3">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Figueroa">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title>Área do Cliente | Marketing Figueroa</title>
   <meta
     name="description"
-    content="Localize sua área reservada, encontre sua página pelo nome e acesse os materiais do seu projeto com a senha enviada."
+    content="Acesse os relatórios e materiais do seu projeto com seu usuário e senha."
   >
   <meta name="theme-color" content="#0b0b0b">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,13 +24,14 @@
     rel="stylesheet"
   >
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/styles/client-login.css">
 </head>
-<body>
+<body class="client-login-page">
   <div class="site-shell">
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html#inicio" aria-label="Voltar para o topo">
-          <img class="brand-logo" src="assets/images/mkt-logo-home.svg?v=2" alt="Marketing Figueroa">
+          <img class="brand-logo" src="assets/images/mkt-logo-compact.svg" alt="Marketing Figueroa">
         </a>
 
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -51,13 +52,20 @@
         <div class="container client-access-shell">
           <div class="client-access-copy">
             <p class="hero-kicker">Acesso reservado</p>
-            <h1>Digite seu nome,<br>encontre sua área<br>e continue o projeto.</h1>
+            <h1>Seus resultados,<br>seu próximo passo.<br>Tudo por aqui.</h1>
             <p class="hero-lead">
-              Esta entrada foi desenhada para facilitar a localização da sua página.
-              Primeiro você encontra sua área pelo nome. Depois, dentro dela, entra
-              com a senha enviada para visualizar materiais, relatórios e próximos passos.
+              Entre com seu usuário e senha para acompanhar os resultados e os materiais do seu projeto.
             </p>
 
+            <form class="portal-login" data-login-form>
+              <label for="portal-username">Usuário</label>
+              <input id="portal-username" class="client-search-input" name="username" autocomplete="username" placeholder="Seu usuário" required>
+              <label for="portal-password">Senha</label>
+              <input id="portal-password" class="client-search-input" name="password" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+              <button class="button button-primary" type="submit">Acessar minha área ↗</button>
+              <p class="client-search-feedback" data-login-feedback role="status"></p>
+            </form>
+            <details class="legacy-access"><summary>Localizar uma área anterior pelo nome</summary>
             <form class="client-search-form" data-client-search>
               <label class="sr-only" for="client-search-input">Digite seu nome</label>
               <input
@@ -75,9 +83,10 @@
             <p class="client-search-feedback" data-search-feedback aria-live="polite"></p>
 
             <div class="client-search-results" data-search-results hidden></div>
+            </details>
 
             <div class="hero-ribbon" aria-label="Informações rápidas">
-              <span>Busca por nome</span>
+              <span>Relatórios de performance</span>
               <span>Acesso reservado por senha</span>
               <span>Navegação simples para o cliente</span>
             </div>
@@ -95,20 +104,13 @@
   </div>
 
   <script>
-    window.CLIENT_ACCESS_DIRECTORY = {
-      clients: [
-        {
-          name: "Victor Lopes",
-          route: "clientes/victor-lopes/index.html",
-          status: "Disponível",
-          summary: "Perfil reservado com visão geral do projeto e relatório de tráfego de março de 2026.",
-          tags: ["Tráfego", "Relatório mensal", "Área privada"],
-          aliases: ["victor", "victor lopes"]
-        }
-      ]
-    };
+    window.CLIENT_ACCESS_DIRECTORY = { clients: [
+      {name:"Mvave BR",route:"clientes/mvave-br/index.html",status:"Disponível",summary:"Dashboard de Meta Ads e Hotmart.",tags:["Tráfego","Infoprodutos"],aliases:["mvave","mvave br"]},
+      {name:"Victor Lopes",route:"clientes/victor-lopes/index.html",status:"Disponível",summary:"Perfil do projeto e relatório de tráfego.",tags:["Tráfego","Materiais"],aliases:["victor","victor lopes"]}
+    ]};
   </script>
   <script src="script.js"></script>
   <script src="assets/scripts/client-area.js"></script>
+  <script type="module" src="assets/scripts/portal-entry.js"></script>
 </body>
 </html>

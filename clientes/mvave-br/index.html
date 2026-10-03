@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="../../"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#10110f">
+  <title>Mvave BR · Performance | Marketing Figueroa</title>
+  <link rel="icon" href="assets/images/favicon.svg?v=3"><link rel="manifest" href="manifest.webmanifest?v=3"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles/report-demo.css"><link rel="stylesheet" href="assets/styles/traffic-dashboard.css">
+</head>
+<body>
+  <section class="login-shell" id="access-gate">
+    <a class="report-brand" href="index.html" aria-label="Marketing Figueroa"><img class="report-brand-logo" src="assets/images/mkt-logo-compact.svg" alt="Marketing Figueroa" width="1440" height="480"></a>
+    <div class="login-card"><span class="overline">ÁREA DO CLIENTE</span><h1>Seus resultados,<br>em perspectiva.</h1><p>Acesse o relatório da Mvave BR.</p>
+      <form data-login-form><label for="username">Usuário</label><input id="username" name="username" autocomplete="username" value="Mvave Br" required>
+      <label for="password">Senha</label><input id="password" name="password" type="password" autocomplete="current-password" required>
+      <button class="action primary" type="submit">Acessar relatório ↗</button><p data-login-feedback role="status"></p></form>
+      <a class="muted-link" href="area-cliente.html">← Área do cliente</a>
+    </div>
+  </section>
+  <div id="dashboard" hidden>
+    <a class="skip-link" href="clientes/mvave-br/index.html#report-main">Pular para o relatório</a>
+    <aside class="report-sidebar">
+      <a class="report-brand" href="index.html" aria-label="Marketing Figueroa"><img class="report-brand-logo" src="assets/images/mkt-logo-compact.svg" alt="Marketing Figueroa" width="1440" height="480"></a>
+      <div class="workspace-label">ÁREA DO CLIENTE</div>
+      <div class="client-card client-card-branded"><img class="client-logo" src="assets/images/brands/mvave.png" alt="Logo Mvave BR" width="280" height="75"><div><strong>Mvave BR</strong><small>Infoprodutos · Performance</small></div></div>
+      <nav aria-label="Seções do relatório"><a class="active" href="clientes/mvave-br/index.html#report-main"><span aria-hidden="true">▦</span> Visão geral</a><a href="clientes/mvave-br/index.html#financeiro"><span aria-hidden="true">↗</span> Financeiro</a><a href="clientes/mvave-br/index.html#produtos"><span aria-hidden="true">◈</span> Produtos</a><a href="clientes/mvave-br/index.html#anuncios"><span aria-hidden="true">◎</span> Anúncios</a><a href="clientes/mvave-br/index.html#historico"><span aria-hidden="true">◷</span> Histórico semanal</a></nav>
+      <div class="sidebar-note"><span class="online-dot"></span> Meta Ads + Hotmart<p>Clareza para o próximo passo.</p></div>
+      <a class="back-link" data-master-link href="clientes/index.html" hidden>← Todos os clientes</a>
+      <button class="logout-link" data-logout>Sair da conta ↗</button>
+    </aside>
+    <div class="report-workspace">
+      <header class="report-topbar"><span class="mobile-report-logos"><img src="assets/images/mkt-logo-compact.svg" alt="Marketing Figueroa" width="1440" height="480"><img src="assets/images/brands/mvave.png" alt="Mvave BR" width="280" height="75"></span><span class="report-breadcrumb">Relatórios <span class="topbar-divider">/</span><strong>Mvave BR</strong></span><div class="top-actions"><span class="demo-badge">META ADS + HOTMART</span><a data-master-link href="clientes/index.html" hidden>Clientes</a><button data-logout class="plain-button">Sair ↗</button></div></header>
+      <main id="report-main">
+        <div class="report-heading"><div><span class="overline">MVAVE BR · RELATÓRIO DE PERFORMANCE</span><h1>O resultado é o<br>que move o próximo passo.</h1><p id="period-caption"></p></div><div class="period-control"><label for="report-period">Período de análise</label><select id="report-period"></select><div class="toolbar"><button class="action" id="export-csv">↓ Exportar CSV</button><button class="action" id="print-report">Imprimir / PDF</button></div></div></div>
+        <nav class="mobile-sections" aria-label="Atalhos do relatório"><a href="clientes/mvave-br/index.html#financeiro">Financeiro</a><a href="clientes/mvave-br/index.html#produtos">Produtos</a><a href="clientes/mvave-br/index.html#anuncios">Anúncios</a><a href="clientes/mvave-br/index.html#historico">Histórico</a></nav>
+        <p class="data-note" id="currency-note"></p><span class="sr-only" id="filter-status" role="status"></span>
+        <section class="metrics-grid" aria-label="Principais indicadores" id="main-metrics"></section>
+        <div class="charts-grid" id="financeiro">
+          <section class="report-panel"><div class="panel-heading"><div><span class="overline">EVOLUÇÃO DA OPERAÇÃO</span><h2>Receita que vira resultado.</h2><p>Histórico semanal · valores em reais</p></div><select id="chart-mode" aria-label="Métrica do gráfico"><option value="money">Receita e investimento</option><option value="profit">Lucro após mídia</option><option value="roas">ROAS geral</option></select></div><div id="trend-chart" class="chart-container"></div><div class="chart-footer"><span id="trend-legend"></span><span>1º período: 3 dias · demais: 7 dias</span></div></section>
+          <section class="report-panel"><span class="overline">COMPOSIÇÃO DO FATURAMENTO</span><h2>Para onde vai cada real.</h2><div id="finance-chart"></div><p class="small-note">Lucro após mídia = líquido Hotmart − anúncios. Antes de honorários, tributos da empresa e demais custos.</p></section>
+        </div>
+        <section id="secondary-metrics" class="secondary-grid" aria-label="Vendas e eficiência"></section>
+        <div class="charts-grid equal-grid">
+          <section class="report-panel" id="produtos"><div class="panel-heading"><div><span class="overline">PORTFÓLIO DE INFOPRODUTOS</span><h2>Produtos que geram receita.</h2><p>Participação no valor bruto em BRL</p></div></div><div id="product-chart"></div></section>
+          <section class="report-panel"><div class="panel-heading"><div><span class="overline">DA VISITA À COMPRA</span><h2>O caminho dos anúncios.</h2><p>Eventos reportados pelo Meta Ads</p></div></div><div id="funnel-chart"></div><div class="rate-row" id="funnel-rates"></div><p class="small-note">Compras do Meta seguem a atribuição da plataforma. As vendas Hotmart incluem todas as origens; não são etapas do mesmo funil.</p></section>
+        </div>
+        <section class="report-panel daily-panel"><div class="panel-heading"><div><span class="overline">RITMO DE VENDAS</span><h2>O dia a dia na Hotmart.</h2><p>Valor bruto em BRL pela data da transação · selecione uma semana para detalhar</p></div></div><div id="daily-chart" class="chart-container"></div></section>
+        <section class="analysis-grid" id="analise"><article class="report-panel"><span class="overline">LEITURA DO PERÍODO</span><h2 id="insight-title"></h2><p id="insight-body"></p></article><article class="report-panel next-panel"><span class="overline">PONTO DE ATENÇÃO</span><h2 id="attention-title"></h2><p id="attention-body"></p></article></section>
+        <section class="report-panel campaign-panel" id="anuncios"><div class="panel-heading"><div><span class="overline">DESEMPENHO CRIATIVO</span><h2>Anúncios em foco.</h2><p>Agregados por nome · apenas anúncios com investimento no período</p></div><label class="sort-label">Ordenar por <select id="ad-sort"><option value="spend">Investimento</option><option value="purchases">Compras Meta</option><option value="roas">ROAS Meta</option></select></label></div><div class="table-scroll" tabindex="0" role="region" aria-label="Tabela de anúncios, com rolagem horizontal"><table><caption class="sr-only">Desempenho dos anúncios selecionados</caption><thead><tr><th>Anúncio</th><th>Investimento</th><th>Cliques</th><th>Compras Meta</th><th>CPA Meta</th><th>Valor Meta</th><th>ROAS Meta</th></tr></thead><tbody id="ads-body"></tbody></table></div><p class="small-note">Valor e ROAS Meta usam o valor de conversão informado no export. Podem divergir do faturamento Hotmart.</p></section>
+        <section class="report-panel campaign-panel" id="historico"><div class="panel-heading"><div><span class="overline">DESDE O PRIMEIRO DIA</span><h2>Histórico da operação.</h2><p>Clique em um período para atualizar o relatório.</p></div></div><div class="table-scroll" tabindex="0" role="region" aria-label="Histórico semanal, com rolagem horizontal"><table><caption class="sr-only">Resultados semanais em BRL</caption><thead><tr><th>Período</th><th>Gasto</th><th>Bruto BRL</th><th>Líquido BRL</th><th>Lucro após mídia</th><th>ROAS geral</th><th>Vendas¹</th></tr></thead><tbody id="history-body"></tbody><tfoot id="history-total"></tfoot></table></div><p class="small-note">¹ Transações Hotmart de todas as moedas. Valores USD aparecem separadamente e não integram as colunas em BRL.</p></section>
+        <details class="report-panel methodology"><summary>Como ler os números e fontes dos dados <span>＋</span></summary><div class="method-grid"><div><h3>Receita e resultado</h3><p>Consideramos transações “Completo” e “Aprovado”. Bruto e líquido seguem a moeda de recebimento. O lucro após mídia desconta todo o investimento Meta do líquido em BRL; os recebimentos em USD ficam separados. A diferença entre bruto e líquido representa as deduções do export.</p><h3>ROAS geral × ROAS Meta</h3><p>ROAS geral = bruto Hotmart em BRL ÷ gasto Meta. É uma relação entre receita total e mídia, sem comprovar atribuição. ROAS Meta = valor de conversão Meta ÷ gasto. Taxas e custos acumulados são calculados pelos totais, nunca pela média das taxas semanais.</p></div><div><h3>Períodos e comparação</h3><p>Datas de 2026 confirmadas dentro dos arquivos. Vendas agrupadas pela data da transação, conforme os períodos enviados. Variações monetárias comparam a média por dia com o período anterior; a abertura tem apenas três dias. Não há gasto diário, impressões ou alcance nos exports, por isso esses indicadores não são estimados.</p><h3>Formato Hotmart de 14 a 20/09</h3><p>Bruto usa “Preço do Produto” e líquido usa “Faturamento líquido”. “Preço Total” pode incluir parcelamento pago pelo comprador e não é usado como receita do produtor. Todas as linhas deste arquivo têm um item e estão em BRL.</p></div></div><h3>Arquivos importados</h3><ul id="source-list"></ul><p class="small-note">Importação manual dos 12 arquivos enviados. Status conforme os exports; alterações ou reembolsos posteriores dependem de nova importação. Nenhum dado pessoal de compradores integra este relatório.</p></details>
+        <footer class="report-footer"><span>Marketing Figueroa · Mvave BR</span><span>Dados de 21/08 a 27/09/2026 · Importação manual</span></footer>
+      </main>
+    </div>
+  </div>
+  <noscript>Ative o JavaScript para acessar o relatório.</noscript>
+  <script type="module" src="assets/scripts/traffic-dashboard.js"></script>
+</body>
+</html>
