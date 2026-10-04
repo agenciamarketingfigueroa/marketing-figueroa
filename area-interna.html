@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Área Interna | Marketing Figueroa</title>
+  <link rel="icon" href="assets/images/favicon.svg?v=3" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles/report-demo.css">
+  <link rel="stylesheet" href="assets/styles/traffic-dashboard.css">
+  <link rel="stylesheet" href="assets/styles/internal-home.css">
+</head>
+<body data-internal-area>
+  <section class="login-shell" data-master-gate aria-label="Login da Área Interna">
+    <a class="report-brand" href="index.html" aria-label="Marketing Figueroa"><img class="report-brand-logo" src="assets/images/mkt-logo-compact.svg" alt="Marketing Figueroa" width="1440" height="480"></a>
+    <div class="login-card">
+      <span class="overline">ÁREA INTERNA</span>
+      <h1>Suas ferramentas.<br>Um só lugar.</h1>
+      <p>Entre com sua conta de administrador para acessar as ferramentas e os perfis dos clientes.</p>
+      <form data-login-form>
+        <label for="username">Usuário</label>
+        <input id="username" name="username" autocomplete="username" required>
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit" class="action primary">Entrar na Área Interna ↗</button>
+        <p data-login-feedback role="status"></p>
+      </form>
+      <a class="muted-link" href="area-cliente.html">Acessar a Área do Cliente ↗</a>
+      <a class="muted-link" href="index.html">← Voltar ao site</a>
+    </div>
+  </section>
+
+  <div data-master-content hidden>
+    <header class="report-topbar">
+      <a class="report-brand" href="index.html" aria-label="Marketing Figueroa"><img class="report-brand-logo" src="assets/images/mkt-logo-compact.svg" alt="Marketing Figueroa" width="1440" height="480"></a>
+      <div class="top-actions"><span data-master-name></span><button type="button" class="plain-button" data-logout>Sair ↗</button></div>
+    </header>
+    <main class="master-main">
+      <div class="master-heading">
+        <span class="overline">ÁREA INTERNA / INÍCIO</span>
+        <h1>Seu espaço de trabalho.</h1>
+        <p>Escolha uma ferramenta para começar.</p>
+      </div>
+      <section class="master-grid" aria-label="Ferramentas">
+        <a class="report-panel tool-card" href="clientes/index.html">
+          <span class="overline">GESTÃO DE CLIENTES</span>
+          <h2>Tráfego <span aria-hidden="true">↗</span></h2>
+          <p>Acesse os perfis, relatórios e materiais dos seus clientes em um clique.</p>
+          <span class="tool-link">Acessar clientes →</span>
+        </a>
+        <!-- Adicione novos links de ferramentas neste grid. -->
+        <div class="report-panel tool-placeholder">
+          <span class="overline">EM BREVE</span>
+          <h2>Mais ferramentas</h2>
+          <p>Espaço reservado para os próximos atalhos da sua operação.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="assets/scripts/portal-entry.js"></script>
+</body>
+</html>

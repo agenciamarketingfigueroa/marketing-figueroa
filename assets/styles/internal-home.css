@@ -1,0 +1,14 @@
+.tool-card { display: block; transition: border-color .2s, background .2s; }
+.tool-card:hover { border-color: #fc7306; background: #25271f; }
+.tool-card h2 { display: flex; justify-content: space-between; gap: 16px; }
+.tool-link { display: block; margin-top: 28px; color: #ff9340; font-weight: 800; }
+.tool-placeholder { border-style: dashed; background: transparent; }
+.tool-placeholder h2 { color: #b8c0ab; }
+[data-internal-area] button:focus-visible,
+[data-internal-area] input:focus-visible { outline: 3px solid #fc7306; outline-offset: 4px; }
+[data-internal-area] .report-topbar { flex-wrap: wrap; gap: 16px; }
+@media (max-width: 600px) {
+  [data-internal-area] .master-grid { grid-template-columns: 1fr; }
+  [data-internal-area] .master-heading h1 { font-size: 32px; }
+  [data-internal-area] .top-actions { flex-wrap: wrap; }
+}

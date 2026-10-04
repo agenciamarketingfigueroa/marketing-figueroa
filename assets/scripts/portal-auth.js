@@ -12,9 +12,10 @@ export function session() {
   return null;
 }
 export function logout() {
+  const internal = document.body.hasAttribute('data-internal-area') || session()?.role === 'master';
   sessionStorage.removeItem(sessionName);
   sessionStorage.removeItem('marketing-figueroa-client-victor-lopes');
-  location.href = new URL('area-cliente.html', document.baseURI).href;
+  location.href = new URL(internal ? 'area-interna.html' : 'area-cliente.html', document.baseURI).href;
 }
 async function readJson(url) {
   const response = await fetch(new URL(url, document.baseURI), {cache:'no-store'});
@@ -30,7 +31,7 @@ export async function reportData(active = session()) {
   const key = await crypto.subtle.importKey('raw',decode(active.reportKey),'AES-GCM',false,['decrypt']);
   return decrypt(await readJson('assets/reports/mvave-br/report.enc.json'),key);
 }
-export async function login(username, password) {
+export async function login(username, password, requiredRole) {
   const normalized = normalize(username);
   const id = accounts[normalized];
   if (!id) throw new Error('credentials');
@@ -39,12 +40,13 @@ export async function login(username, password) {
   const key = await crypto.subtle.deriveKey({name:'PBKDF2',salt:decode(envelope.salt),iterations:envelope.iterations,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['decrypt']);
   let payload;
   try { payload = await decrypt(envelope,key); } catch { throw new Error('credentials'); }
+  if (requiredRole && payload.role !== requiredRole) throw new Error('role');
   const active = {...payload,expires:Date.now()+8*60*60*1000};
   sessionStorage.removeItem('marketing-figueroa-client-victor-lopes');
   sessionStorage.setItem(sessionName,JSON.stringify(active));
   return active;
 }
-export function bindLogin(onSuccess) {
+export function bindLogin(onSuccess, {requiredRole} = {}) {
   document.querySelectorAll('[data-login-form]').forEach(form => {
     form.addEventListener('submit',async event => {
       event.preventDefault();
@@ -54,11 +56,11 @@ export function bindLogin(onSuccess) {
       feedback.textContent = 'Abrindo sua área…';
       try {
         if (!crypto.subtle) throw new Error('https');
-        const active = await login(form.elements.username.value,form.elements.password.value);
+        const active = await login(form.elements.username.value,form.elements.password.value,requiredRole);
         form.elements.password.value = '';
         await onSuccess(active);
       } catch (error) {
-        feedback.textContent = error.message === 'credentials' ? 'Usuário ou senha incorretos. Confira e tente novamente.' : error.message === 'https' ? 'Abra o portal por HTTPS ou pela prévia local.' : 'Não foi possível abrir o portal. Verifique a conexão e tente novamente.';
+        feedback.textContent = error.message === 'role' ? 'Use uma conta de administrador para entrar na Área Interna. Para seu projeto, acesse a Área do Cliente.' : error.message === 'credentials' ? 'Usuário ou senha incorretos. Confira e tente novamente.' : error.message === 'https' ? 'Abra o portal por HTTPS ou pela prévia local.' : 'Não foi possível abrir o portal. Verifique a conexão e tente novamente.';
       } finally { button.disabled = false; }
     });
   });

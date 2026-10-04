@@ -95,7 +95,7 @@ try {
       );
       if (route !== "demonstracao-relatorio.html") {
         const links = await page.locator(".site-nav a").allTextContents();
-        check(links.length === 4, `${route}: expected four menu items`);
+        check(links.length === 5, `${route}: expected five menu items`);
         if (width <= 768) {
           await page.locator(".nav-toggle").click();
           check(

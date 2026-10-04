@@ -2,7 +2,7 @@
 
 ## Dashboard piloto de tráfego · Mvave BR
 
-`clientes/mvave-br/index.html` aplica o visual da demonstração aos dados reais de Meta Ads e Hotmart. A entrada por usuário e senha fica em `area-cliente.html`; `clientes/index.html` é a seleção de clientes do master. Os usuários configurados são **Mvave Br** e **Felipe Figueroa**, com a senha solicitada pelo responsável. As senhas não são gravadas em texto no código. O master abre Mvave BR e o perfil existente de Victor Lopes; o acesso anterior do Victor continua funcionando.
+`clientes/mvave-br/index.html` aplica o visual da demonstração aos dados reais de Meta Ads e Hotmart. A entrada por usuário e senha fica em `area-cliente.html`; `area-interna.html` é a entrada do administrador e a tela inicial de ferramentas; o botão Tráfego abre a seleção de clientes em `clientes/index.html`. O menu público distingue Área do Cliente e Área Interna. Os usuários configurados são **Mvave Br** e **Felipe Figueroa**, com a senha solicitada pelo responsável. As senhas não são gravadas em texto no código. O master abre Mvave BR e o perfil existente de Victor Lopes; o acesso anterior do Victor continua funcionando.
 
 O relatório oferece seis períodos de 21/08 a 27/09/2026, acumulado, lucro após mídia, gasto, ROAS geral e valor bruto em destaque; evolução semanal, composição do bruto, produtos, funil Meta, receita diária, anúncios ordenáveis, histórico selecionável, CSV e impressão/PDF. Os valores são importados manualmente, sem conexão automática com as plataformas.
 
@@ -42,6 +42,7 @@ Site estático em HTML, CSS e JavaScript, pronto para GitHub Pages. A reformula�
 - `trafego-pago.html`: apresentação da gestão, mockups desktop/mobile e acesso ao relatório pelo site ou pela versão instalada na tela inicial.
 - `proposta-trafego.html`: proposta **não listada**, acessível pelo endereço direto. Facebook Ads por **R$ 1.100/mês**, uma reunião mensal e relatórios semanais pelo site ou pela versão instalada na tela inicial. Não recebe links nas páginas públicas e usa `noindex, nofollow`. Isso evita listagem; não constitui controle de acesso.
 - `demonstracao-relatorio.html`: relatório responsivo da Spark Filmes com duas semanas de **dados fictícios**, gráfico, campanhas e análise. Não está conectado a uma conta de anúncios.
+- `area-interna.html`: login do administrador existente, início com Tráfego e espaço para novas ferramentas. Adicione novos links ao grid de ferramentas dessa página.
 - `area-cliente.html`: entrada por usuário e senha do piloto, com busca dos perfis anteriores preservada.
 
 ## Conteúdo comercial a conferir
@@ -94,3 +95,7 @@ O primeiro script acessa os cinco sites públicos. O segundo requer o servidor l
 ## Publicar no GitHub Pages
 
 Após conferir os valores e atualizar o WhatsApp, envie os arquivos para a branch usada pelo GitHub Pages. Em **Settings → Pages**, use a raiz do repositório. `CNAME` mantém o domínio `marketingfigueroa.com.br`; `.nojekyll` permite servir os arquivos estáticos diretamente.
+
+### Verificar a Área Interna
+
+Com a prévia HTTP em `http://127.0.0.1:4173/`, execute `deno run -A scripts/check-internal-area.mjs`. O teste usa envelopes criptografados temporários, sem as senhas reais, para conferir login, restrição de perfil, atalhos, logout, menus e layout responsivo. Requer Google Chrome no caminho configurado no script.
