@@ -1488,3 +1488,11 @@ textarea {
   background: #35332e;
   color: #fff;
 }
+
+@media (hover: none) and (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
