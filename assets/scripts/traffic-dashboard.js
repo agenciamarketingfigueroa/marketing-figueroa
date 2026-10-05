@@ -29,7 +29,7 @@ function cards() {
     ['ROAS geral · BRL','roas',ratio,'Bruto Hotmart em BRL ÷ anúncios',false],
     ['Valor bruto · BRL','gross',money,'Faturamento Hotmart antes das deduções',false]
   ];
-  $('#main-metrics').innerHTML=fields.map(([label,key,format,description,highlight])=>`<article class="metric ${highlight?'metric-highlight':''} ${highlight&&selected.profit<0?'negative-result':''}"><div class="metric-label">${label}<span aria-hidden="true">${key==='profit'?'↗':key==='roas'?'◎':'◈'}</span></div><strong data-value="${key}">${format(selected[key])}</strong><span class="metric-detail">${description}</span><span class="metric-change">${all?`${selected.days} dias de operação · 6 períodos`:delta(selected[key],previous?{value:previous[key],days:previous.days}:null,key!=='roas')}</span></article>`).join('');
+  $('#main-metrics').innerHTML=fields.map(([label,key,format,description,highlight])=>`<article class="metric ${highlight?'metric-highlight':''} ${highlight&&selected.profit<0?'negative-result':''}"><div class="metric-label">${label}<span aria-hidden="true">${key==='profit'?'↗':key==='roas'?'◎':'◈'}</span></div><strong data-value="${key}">${format(selected[key])}</strong><span class="metric-detail">${description}</span><span class="metric-change">${all?`${selected.days} dias de operação · ${report.weeks.length} períodos`:delta(selected[key],previous?{value:previous[key],days:previous.days}:null,key!=='roas')}</span></article>`).join('');
   const secondary=[['Vendas Hotmart',number(selected.sales),`${number(selected.brlSales)} em BRL${selected.usdSales?` + ${selected.usdSales} em USD`:''} · transações`],['Líquido Hotmart · BRL',money(selected.net),'Receita após deduções do export'],['Ticket médio · BRL',money(selected.ticket),'Bruto BRL ÷ transações em BRL'],['CPA Meta',money(selected.cpa),'Investimento ÷ compras atribuídas pelo Meta']];
   $('#secondary-metrics').innerHTML=secondary.map(([label,value,note])=>`<article><span>${label}</span><strong>${value}</strong><small>${note}</small></article>`).join('');
 }
@@ -140,8 +140,9 @@ function csv() {
 async function open(active) {
   activeSession=active;
   report=await reportData(active);
-  $('#report-period').innerHTML='<option value="all">Todo o período · 21/08 a 27/09/2026</option>'+report.weeks.map(w=>`<option value="${w.id}">${period(w)}/2026${w.days===3?' · início (3 dias)':''}</option>`).reverse().join('');
+  $('#report-period').innerHTML=`<option value="all">Todo o período · ${date(report.weeks[0].start)} a ${date(report.weeks.at(-1).end)}/2026</option>`+report.weeks.map(w=>`<option value="${w.id}">${period(w)}/2026${w.days===3?' · início (3 dias)':''}</option>`).reverse().join('');
   $('#source-list').innerHTML=report.weeks.flatMap(w=>w.sources).map(s=>`<li>${escape(s.name)} · ${s.rows} registros</li>`).join('');
+  $('#source-count').textContent=report.weeks.flatMap(w=>w.sources).length;
   document.querySelectorAll('[data-master-link]').forEach(el=>el.hidden=active.role!=='master');
   render();$('#access-gate').hidden=true;$('#dashboard').hidden=false;
   clearTimeout(expiryTimer);expiryTimer=setTimeout(logout,Math.max(0,active.expires-Date.now()));
