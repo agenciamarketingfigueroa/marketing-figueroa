@@ -83,6 +83,131 @@ button:disabled {
   padding:10px;
   max-width:100%;
 }
+.period-control {
+  width:min(340px,100%);
+  flex-shrink:0;
+}
+.calendar-picker {
+  position:relative;
+}
+.period-control .period-label {
+  display:block;
+  margin-bottom:8px;
+  color:#a6a995;
+  font-size:11px;
+}
+.calendar-toggle {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  min-height:44px;
+  padding:10px 14px;
+  border:1px solid #505941;
+  border-radius:8px;
+  background:#20231b;
+  color:#e0e5d6;
+  font-size:14px;
+  text-align:left;
+}
+.calendar-toggle:hover,.calendar-toggle[aria-expanded="true"] {
+  border-color:#fc8425;
+}
+.period-control .period-hint {
+  margin-top:7px;
+  color:#a9b29a;
+  font-size:11px;
+  line-height:1.5;
+}
+.calendar-panel {
+  position:absolute;
+  top:calc(100% + 8px);
+  right:0;
+  z-index:30;
+  width:min(340px,calc(100vw - 32px));
+  padding:16px;
+  border:1px solid #505941;
+  border-radius:12px;
+  background:#1b1f17;
+  box-shadow:0 20px 50px #0009;
+}
+.calendar-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:12px;
+  text-transform:capitalize;
+}
+.calendar-header strong {
+  color:#f1f2e9;
+  font-size:14px;
+}
+.calendar-nav {
+  width:34px;
+  height:34px;
+  border:1px solid #444d39;
+  border-radius:7px;
+  background:#282e22;
+  color:#f1f2e9;
+  font-size:22px;
+}
+.calendar-weekdays,.calendar-days {
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:3px;
+  text-align:center;
+}
+.calendar-weekdays {
+  margin-bottom:6px;
+  color:#a9b29a;
+  font-size:10px;
+}
+.calendar-day,.calendar-empty {
+  display:grid;
+  place-items:center;
+  min-width:0;
+  height:36px;
+}
+.calendar-day {
+  border:0;
+  border-radius:6px;
+  background:transparent;
+  color:#e0e5d6;
+  font-size:13px;
+}
+.calendar-day:hover,.calendar-day:focus-visible {
+  background:#424c36;
+}
+.calendar-day.outside-month {
+  color:#9da98e;
+}
+.calendar-day.in-week {
+  background:#fc73062e;
+  color:#ffd3ae;
+}
+.calendar-day.picked {
+  background:#fc7306;
+  color:#19120b;
+  font-weight:800;
+}
+.calendar-panel .calendar-note {
+  margin:12px 0 0;
+  color:#b7c1a8;
+  font-size:11px;
+  line-height:1.5;
+}
+.calendar-all {
+  width:100%;
+  margin-top:12px;
+  padding:10px 12px;
+  border:1px solid #505941;
+  border-radius:7px;
+  background:#303728;
+  color:#f1f2e9;
+  font-size:12px;
+}
 .toolbar {
   display:flex;
   gap:8px;

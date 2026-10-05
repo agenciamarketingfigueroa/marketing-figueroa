@@ -7,7 +7,7 @@
   <link rel="icon" href="assets/images/favicon.svg?v=3"><link rel="manifest" href="manifest.webmanifest?v=3"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=3">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles/report-demo.css"><link rel="stylesheet" href="assets/styles/traffic-dashboard.css">
+  <link rel="stylesheet" href="assets/styles/report-demo.css"><link rel="stylesheet" href="assets/styles/traffic-dashboard.css?v=20261005-calendar">
 </head>
 <body>
   <section class="login-shell" id="access-gate">
@@ -33,7 +33,25 @@
     <div class="report-workspace">
       <header class="report-topbar"><span class="mobile-report-logos"><img src="assets/images/mkt-logo-compact.svg" alt="Marketing Figueroa" width="1440" height="480"><img src="assets/images/brands/mvave.png" alt="Mvave BR" width="280" height="75"></span><span class="report-breadcrumb">Relatórios <span class="topbar-divider">/</span><strong>Mvave BR</strong></span><div class="top-actions"><span class="demo-badge">META ADS + HOTMART</span><a data-master-link href="clientes/index.html" hidden>Clientes</a><button data-logout class="plain-button">Sair ↗</button></div></header>
       <main id="report-main">
-        <div class="report-heading"><div><span class="overline">MVAVE BR · RELATÓRIO DE PERFORMANCE</span><h1>O resultado é o<br>que move o próximo passo.</h1><p id="period-caption"></p></div><div class="period-control"><label for="report-period">Período de análise</label><select id="report-period"></select><div class="toolbar"><button class="action" id="export-csv">↓ Exportar CSV</button><button class="action" id="print-report">Imprimir / PDF</button></div></div></div>
+        <div class="report-heading">
+          <div><span class="overline">MVAVE BR · RELATÓRIO DE PERFORMANCE</span><h1>O resultado é o<br>que move o próximo passo.</h1><p id="period-caption"></p></div>
+          <div class="period-control">
+            <span class="period-label">Período de análise</span>
+            <input id="report-period" type="hidden" value="all">
+            <div class="calendar-picker">
+              <button id="calendar-toggle" class="calendar-toggle" type="button" aria-expanded="false" aria-controls="calendar-panel"><span aria-hidden="true">📅</span><span id="calendar-selection">Todo o período</span><span aria-hidden="true">⌄</span></button>
+              <div id="calendar-panel" class="calendar-panel" hidden>
+                <div class="calendar-header"><button id="calendar-prev" class="calendar-nav" type="button" aria-label="Mês anterior">‹</button><strong id="calendar-month"></strong><button id="calendar-next" class="calendar-nav" type="button" aria-label="Próximo mês">›</button></div>
+                <div class="calendar-weekdays" aria-hidden="true"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span></div>
+                <div id="calendar-days" class="calendar-days"></div>
+                <p class="calendar-note">Ao escolher um dia, o relatório mostra a semana completa.</p>
+                <button id="calendar-all" class="calendar-all" type="button">Ver todo o período</button>
+              </div>
+            </div>
+            <p class="period-hint">Selecione um dia no calendário para ver sua semana.</p>
+            <div class="toolbar"><button class="action" id="export-csv">↓ Exportar CSV</button><button class="action" id="print-report">Imprimir / PDF</button></div>
+          </div>
+        </div>
         <nav class="mobile-sections" aria-label="Atalhos do relatório"><a href="clientes/mvave-br/index.html#financeiro">Financeiro</a><a href="clientes/mvave-br/index.html#produtos">Produtos</a><a href="clientes/mvave-br/index.html#anuncios">Anúncios</a><a href="clientes/mvave-br/index.html#historico">Histórico</a></nav>
         <p class="data-note" id="currency-note"></p><span class="sr-only" id="filter-status" role="status"></span>
         <section class="metrics-grid" aria-label="Principais indicadores" id="main-metrics"></section>
@@ -56,6 +74,6 @@
     </div>
   </div>
   <noscript>Ative o JavaScript para acessar o relatório.</noscript>
-  <script type="module" src="assets/scripts/traffic-dashboard.js"></script>
+  <script type="module" src="assets/scripts/traffic-dashboard.js?v=20261005-calendar"></script>
 </body>
 </html>

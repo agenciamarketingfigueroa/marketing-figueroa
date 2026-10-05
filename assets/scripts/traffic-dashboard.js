@@ -1,5 +1,6 @@
 import {bindLogin,session,reportData,logout} from './portal-auth.js';
 import {aggregate,metrics,divide} from './traffic-metrics.js';
+import {calendarCells,monthKey,monthTitle,weekForDate} from './report-calendar.js';
 const $ = selector => document.querySelector(selector);
 const escape = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number = value => value == null ? '—' : value.toLocaleString('pt-BR',{maximumFractionDigits:0});
@@ -9,7 +10,38 @@ const percent = value => value == null ? '—' : decimal(value*100)+'%';
 const ratio = value => value == null ? '—' : decimal(value)+'x';
 const date = value => value.slice(8,10)+'/'+value.slice(5,7);
 const period = week => `${date(week.start)} a ${date(week.end)}`;
-let report, selected, activeSession, expiryTimer;
+let report, selected, activeSession, expiryTimer, calendarMonth, pickedDate;
+
+function closeCalendar() {
+  $('#calendar-panel').hidden=true;
+  $('#calendar-toggle').setAttribute('aria-expanded','false');
+}
+function drawCalendar() {
+  const first=report.weeks[0].start,last=report.weeks.at(-1).end;
+  $('#calendar-month').textContent=monthTitle(calendarMonth);
+  $('#calendar-prev').disabled=calendarMonth<=monthKey(first);
+  $('#calendar-next').disabled=calendarMonth>=monthKey(last);
+  $('#calendar-days').innerHTML=calendarCells(calendarMonth,first,last).map(cell=>{
+    if(!cell.available)return '<span class="calendar-empty" aria-hidden="true"></span>';
+    const week=weekForDate(report.weeks,cell.date);
+    const active=$('#report-period').value===week.id;
+    return `<button type="button" class="calendar-day${cell.inMonth?'':' outside-month'}${active?' in-week':''}${pickedDate===cell.date?' picked':''}" data-date="${cell.date}" aria-label="${date(cell.date)}/${cell.date.slice(0,4)} · semana de ${period(week)}" aria-pressed="${active}">${cell.day}</button>`;
+  }).join('');
+}
+function chooseWeek(week,day=week.start) {
+  $('#report-period').value=week.id;
+  pickedDate=day;
+  closeCalendar();
+  render();
+  $('#calendar-toggle').focus();
+}
+function moveCalendarMonth(offset) {
+  const [year,month]=calendarMonth.split('-').map(Number);
+  calendarMonth=new Date(Date.UTC(year,month-1+offset,1)).toISOString().slice(0,7);
+  drawCalendar();
+  const navigation=$(offset<0?'#calendar-prev':'#calendar-next');
+  if(navigation.disabled)$(offset<0?'#calendar-next':'#calendar-prev').focus();
+}
 
 function delta(value,previous,normalizeDays=false) {
   if (!previous) return 'Primeiro período da operação';
@@ -104,7 +136,7 @@ function history() {
   const row=(w,label,button=false)=>`<tr class="${$('#report-period').value===w.id?'selected':''}"><th scope="row">${button?`<button data-week="${w.id}">${label} ↗</button>`:label}</th><td>${money(w.spend)}</td><td>${money(w.gross)}</td><td>${money(w.net)}</td><td class="${w.profit<0?'negative':'positive'}">${money(w.profit)}</td><td>${ratio(w.roas)}</td><td>${number(w.sales)}</td></tr>`;
   $('#history-body').innerHTML=report.weeks.map(w=>row(metrics(w),`${period(w)}${w.days===3?' · 3 dias':''}`,true)).join('');
   $('#history-total').innerHTML=row(aggregate(report.weeks),'Acumulado');
-  document.querySelectorAll('[data-week]').forEach(button=>button.addEventListener('click',()=>{ $('#report-period').value=button.dataset.week;render();$('#report-period').focus();$('#report-main').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}); }));
+  document.querySelectorAll('[data-week]').forEach(button=>button.addEventListener('click',()=>{ chooseWeek(report.weeks.find(week=>week.id===button.dataset.week));$('#report-main').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}); }));
 }
 function insights() {
   const t=selected;
@@ -124,6 +156,7 @@ function insights() {
 function render() {
   const id=$('#report-period').value;
   selected=aggregate(id==='all'?report.weeks:report.weeks.filter(w=>w.id===id));
+  $('#calendar-selection').textContent=id==='all'?`Todo o período · ${period(selected)}`:`Semana de ${period(selected)}`;
   $('#period-caption').textContent=`${period(selected)}/2026 · ${selected.days} dias · ${id==='all'?'visão acumulada':'visão semanal'}`;
   $('#currency-note').textContent=selected.usdSales?`Valores principais em BRL. Há mais ${money(selected.usdGross,'USD')} brutos e ${money(selected.usdNet,'USD')} líquidos em ${selected.usdSales} vendas USD, sem conversão para reais. O resultado em BRL é parcial.`:'Valores em BRL · Vendas confirmadas na Hotmart e investimento reportado pelo Meta Ads.';
   cards();trend();composition();products();funnel();daily();ads();history();insights();
@@ -140,7 +173,9 @@ function csv() {
 async function open(active) {
   activeSession=active;
   report=await reportData(active);
-  $('#report-period').innerHTML=`<option value="all">Todo o período · ${date(report.weeks[0].start)} a ${date(report.weeks.at(-1).end)}/2026</option>`+report.weeks.map(w=>`<option value="${w.id}">${period(w)}/2026${w.days===3?' · início (3 dias)':''}</option>`).reverse().join('');
+  $('#report-period').value='all';
+  calendarMonth=monthKey(report.weeks.at(-1).end);
+  pickedDate=null;
   $('#source-list').innerHTML=report.weeks.flatMap(w=>w.sources).map(s=>`<li>${escape(s.name)} · ${s.rows} registros</li>`).join('');
   $('#source-count').textContent=report.weeks.flatMap(w=>w.sources).length;
   $('#report-data-range').textContent=`Dados de ${date(report.weeks[0].start)} a ${date(report.weeks.at(-1).end)}/2026 · Importação manual`;
@@ -148,7 +183,29 @@ async function open(active) {
   render();$('#access-gate').hidden=true;$('#dashboard').hidden=false;
   clearTimeout(expiryTimer);expiryTimer=setTimeout(logout,Math.max(0,active.expires-Date.now()));
 }
-$('#report-period').addEventListener('change',render);
+$('#calendar-toggle').addEventListener('click',()=>{
+  if(!$('#calendar-panel').hidden){closeCalendar();return;}
+  calendarMonth=monthKey(pickedDate||report.weeks.at(-1).end);
+  drawCalendar();
+  $('#calendar-panel').hidden=false;
+  $('#calendar-toggle').setAttribute('aria-expanded','true');
+  $(`#calendar-days [data-date="${pickedDate||report.weeks.at(-1).end}"]`)?.focus();
+});
+$('#calendar-prev').addEventListener('click',()=>moveCalendarMonth(-1));
+$('#calendar-next').addEventListener('click',()=>moveCalendarMonth(1));
+$('#calendar-days').addEventListener('click',event=>{
+  const button=event.target.closest('[data-date]');
+  if(button)chooseWeek(weekForDate(report.weeks,button.dataset.date),button.dataset.date);
+});
+$('#calendar-all').addEventListener('click',()=>{
+  $('#report-period').value='all';pickedDate=null;closeCalendar();render();$('#calendar-toggle').focus();
+});
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'&&!$('#calendar-panel').hidden){closeCalendar();$('#calendar-toggle').focus();}
+});
+document.addEventListener('click',event=>{
+  if(!$('#calendar-panel').hidden&&!event.target.closest('#calendar-panel, #calendar-toggle'))closeCalendar();
+});
 $('#chart-mode').addEventListener('change',trend);
 $('#ad-sort').addEventListener('change',ads);
 $('#export-csv').addEventListener('click',csv);
