@@ -4,7 +4,7 @@
 
 `clientes/mvave-br/index.html` aplica o visual da demonstração aos dados reais de Meta Ads e Hotmart. A entrada por usuário e senha fica em `area-cliente.html`; `area-interna.html` é a entrada do administrador e a tela inicial de ferramentas; o botão Tráfego abre a seleção de clientes em `clientes/index.html`. O menu público distingue Área do Cliente e Área Interna. Os usuários configurados são **Mvave Br** e **Felipe Figueroa**, com a senha solicitada pelo responsável. As senhas não são gravadas em texto no código. O master abre Mvave BR e o perfil existente de Victor Lopes; o acesso anterior do Victor continua funcionando.
 
-O relatório oferece seis períodos de 21/08 a 27/09/2026, acumulado, lucro após mídia, gasto, ROAS geral e valor bruto em destaque; evolução semanal, composição do bruto, produtos, funil Meta, receita diária, anúncios ordenáveis, histórico selecionável, CSV e impressão/PDF. Os valores são importados manualmente, sem conexão automática com as plataformas.
+O relatório oferece sete períodos de 21/08 a 04/10/2026, acumulado, lucro após mídia, gasto, ROAS geral e valor bruto em destaque; evolução semanal, composição do bruto, produtos, funil Meta, receita diária, anúncios ordenáveis, histórico selecionável, CSV e impressão/PDF. Os valores são importados manualmente, sem conexão automática com as plataformas.
 
 ### Critérios de cálculo
 
@@ -17,11 +17,11 @@ O relatório oferece seis períodos de 21/08 a 27/09/2026, acumulado, lucro apó
 
 ### Atualização e reutilização
 
-`scripts/import-mvave.py <pasta-dos-exports> <json-temporario-fora-do-repo>` lê os 12 arquivos XLSX/OOXML (inclusive os Hotmart com extensão `.xls`), valida os registros e gera somente agregados. Usa a biblioteca padrão Python e preserva os originais. Os nomes de arquivo, quantidades de registros e SHA-256 são conservados no pacote agregado para rastreabilidade. Esquemas, moedas ou status novos devem ser revisados, não convertidos silenciosamente.
+`scripts/import-mvave.py <pasta-dos-exports> <json-temporario-fora-do-repo>` lê os 12 arquivos originais XLSX/OOXML (inclusive os Hotmart com extensão `.xls`), valida os registros e gera somente agregados. A semana de 28/09 a 04/10 foi adicionada com `scripts/import-mvave-week.mjs` e `scripts/append-mvave-week.mjs`, mantendo os envelopes de acesso e a chave do relatório. Os 14 arquivos de origem têm nomes, quantidades de registros e SHA-256 no pacote agregado para rastreabilidade. Esquemas, moedas ou status novos devem ser revisados, não convertidos silenciosamente.
 
-Depois, invoque `sealReport({input, root, accounts})` de `scripts/seal-traffic-report.mjs` em uma sessão privada de Node. Cada conta informa `id`, `username`, `password` e `role` (`client` ou `master`). A rotina gera o pacote criptografado e os envelopes de acesso. Ao atualizar o pacote, regenere os dois envelopes na mesma execução; sessões antigas precisarão entrar novamente. Nunca salve senhas ou o JSON aberto no repositório.
+Para recriar o pacote do zero, invoque `sealReport({input, root, accounts})` de `scripts/seal-traffic-report.mjs` em uma sessão privada de Node. Cada conta informa `id`, `username`, `password` e `role` (`client` ou `master`). A rotina gera o pacote criptografado e os envelopes de acesso. Para acrescentar uma semana com `append-mvave-week.mjs`, use a senha de uma conta existente; a rotina mantém a chave e os envelopes de acesso. Nunca salve senhas ou o JSON aberto no repositório.
 
-O modelo visual fica em `assets/styles/traffic-dashboard.css`; renderização e cálculos ficam separados em `traffic-dashboard.js` e `traffic-metrics.js`. Para outro cliente, reutilize o modelo e o esquema de agregados, criando seu importador, página, pacote e contas próprios; revise moedas, custos e atribuição conforme o negócio. O importador atual é específico dos seis exports Mvave.
+O modelo visual fica em `assets/styles/traffic-dashboard.css`; renderização e cálculos ficam separados em `traffic-dashboard.js` e `traffic-metrics.js`. Para outro cliente, reutilize o modelo e o esquema de agregados, criando seu importador, página, pacote e contas próprios; revise moedas, custos e atribuição conforme o negócio. O importador Python é específico dos seis períodos originais da Mvave.
 
 ### Limites do acesso piloto
 
@@ -31,7 +31,7 @@ Isso **não equivale a autenticação e autorização em servidor**. Uma senha d
 
 ### Verificação do piloto
 
-`node --test scripts/check-traffic-metrics.mjs` verifica lucro, separação de moedas, taxas ponderadas, agrupamento, denominadores zero e prejuízo. O piloto também foi conferido no navegador em 320, 390, 768, 1024 e 1440 px, com login, alternância dos seis períodos, ordenação, seleção pelo histórico, CSV e master. Use a prévia HTTP local descrita abaixo; Web Crypto requer localhost ou HTTPS.
+`node --test scripts/check-traffic-metrics.mjs` verifica lucro, separação de moedas, taxas ponderadas, agrupamento, denominadores zero e prejuízo. O piloto também foi conferido no navegador em 320, 390, 768, 1024 e 1440 px, com login, alternância dos períodos, ordenação, seleção pelo histórico, CSV e master. Use a prévia HTTP local descrita abaixo; Web Crypto requer localhost ou HTTPS.
 
 Site estático em HTML, CSS e JavaScript, pronto para GitHub Pages. A reformulação mantém a identidade preta e laranja e concentra a oferta em **Sites** e **Tráfego Pago**.
 

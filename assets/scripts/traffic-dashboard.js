@@ -143,6 +143,7 @@ async function open(active) {
   $('#report-period').innerHTML=`<option value="all">Todo o período · ${date(report.weeks[0].start)} a ${date(report.weeks.at(-1).end)}/2026</option>`+report.weeks.map(w=>`<option value="${w.id}">${period(w)}/2026${w.days===3?' · início (3 dias)':''}</option>`).reverse().join('');
   $('#source-list').innerHTML=report.weeks.flatMap(w=>w.sources).map(s=>`<li>${escape(s.name)} · ${s.rows} registros</li>`).join('');
   $('#source-count').textContent=report.weeks.flatMap(w=>w.sources).length;
+  $('#report-data-range').textContent=`Dados de ${date(report.weeks[0].start)} a ${date(report.weeks.at(-1).end)}/2026 · Importação manual`;
   document.querySelectorAll('[data-master-link]').forEach(el=>el.hidden=active.role!=='master');
   render();$('#access-gate').hidden=true;$('#dashboard').hidden=false;
   clearTimeout(expiryTimer);expiryTimer=setTimeout(logout,Math.max(0,active.expires-Date.now()));
