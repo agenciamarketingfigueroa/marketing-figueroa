@@ -4,7 +4,7 @@
 
 `clientes/mvave-br/index.html` aplica o visual da demonstração aos dados reais de Meta Ads e Hotmart. A entrada por usuário e senha fica em `area-cliente.html`; `area-interna.html` é a entrada do administrador e a tela inicial de ferramentas; o botão Tráfego abre a seleção de clientes em `clientes/index.html`. O menu público distingue Área do Cliente e Área Interna. Os usuários configurados são **Mvave Br** e **Felipe Figueroa**, com a senha solicitada pelo responsável. As senhas não são gravadas em texto no código. O master abre Mvave BR e o perfil existente de Victor Lopes; o acesso anterior do Victor continua funcionando.
 
-O relatório oferece sete períodos de 21/08 a 04/10/2026, acumulado, lucro após mídia, gasto, ROAS geral e valor bruto em destaque; calendário para escolher a semana por data, evolução semanal, composição do bruto, produtos, funil Meta, receita diária, anúncios ordenáveis, histórico selecionável, CSV e impressão/PDF. Os valores são importados manualmente, sem conexão automática com as plataformas.
+O relatório oferece oito períodos de 21/08 a 11/10/2026, acumulado, lucro após mídia, gasto, ROAS geral e valor bruto em destaque; calendário para escolher a semana por data, evolução semanal, composição do bruto, produtos, funil Meta, receita diária, anúncios ordenáveis, histórico selecionável, CSV e impressão/PDF. Os valores são importados manualmente, sem conexão automática com as plataformas.
 
 ### Critérios de cálculo
 
@@ -13,11 +13,11 @@ O relatório oferece sete períodos de 21/08 a 04/10/2026, acumulado, lucro apó
 - Nove transações recebidas em USD aparecem separadas; não existe conversão USD/BRL nos arquivos. Os resultados em BRL dos períodos afetados são parciais.
 - Hotmart: status Completo e Aprovado; agrupamento pela data da transação; validação de duplicidades, moedas e datas. No formato de 14–20/09, bruto vem de Preço do Produto, líquido de Faturamento líquido; Preço Total pode conter parcelamento. Nas demais semanas, bruto e líquido vêm das colunas homônimas em moeda de recebimento.
 - Primeiro período tem três dias; os demais, sete. Variações monetárias usam médias por dia. ROAS, ticket e CPA acumulados usam os totais correspondentes, nunca médias das taxas.
-- Não são estimados alcance, impressões, CTR ou gasto diário ausentes nos exports. Anúncios são agrupados por nome, pois os identificadores vieram em notação científica. Compras Meta e transações Hotmart são exibidas separadamente.
+- Não são estimados alcance, impressões, CTR ou gasto diário sem série completa nos exports. O Meta de 05–11/10 traz gasto e compras, mas não cliques, visitas, checkouts ou valor de conversão; as métricas dependentes ficam indisponíveis nessa semana e no acumulado. Anúncios são agrupados por nome, pois os identificadores vieram em notação científica. Compras Meta e transações Hotmart são exibidas separadamente.
 
 ### Atualização e reutilização
 
-`scripts/import-mvave.py <pasta-dos-exports> <json-temporario-fora-do-repo>` lê os 12 arquivos originais XLSX/OOXML (inclusive os Hotmart com extensão `.xls`), valida os registros e gera somente agregados. A semana de 28/09 a 04/10 foi adicionada com `scripts/import-mvave-week.mjs` e `scripts/append-mvave-week.mjs`, mantendo os envelopes de acesso e a chave do relatório. Os 14 arquivos de origem têm nomes, quantidades de registros e SHA-256 no pacote agregado para rastreabilidade. Esquemas, moedas ou status novos devem ser revisados, não convertidos silenciosamente.
+`scripts/import-mvave.py <pasta-dos-exports> <json-temporario-fora-do-repo>` lê os 12 arquivos originais XLSX/OOXML (inclusive os Hotmart com extensão `.xls`), valida os registros e gera somente agregados. As semanas de 28/09 a 04/10 e 05 a 11/10 foram adicionadas com `scripts/import-mvave-week.mjs` e `scripts/append-mvave-week.mjs`, mantendo os envelopes de acesso e a chave do relatório. Os 16 arquivos de origem têm nomes, quantidades de registros e SHA-256 no pacote agregado para rastreabilidade. Esquemas, moedas ou status novos devem ser revisados, não convertidos silenciosamente.
 
 Para recriar o pacote do zero, invoque `sealReport({input, root, accounts})` de `scripts/seal-traffic-report.mjs` em uma sessão privada de Node. Cada conta informa `id`, `username`, `password` e `role` (`client` ou `master`). A rotina gera o pacote criptografado e os envelopes de acesso. Para acrescentar uma semana com `append-mvave-week.mjs`, use a senha de uma conta existente; a rotina mantém a chave e os envelopes de acesso. Nunca salve senhas ou o JSON aberto no repositório.
 

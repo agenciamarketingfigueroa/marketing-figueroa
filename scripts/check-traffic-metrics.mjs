@@ -31,3 +31,17 @@ test('losses remain negative and products group consistently across periods',()=
   assert.equal(result.products[0].gross,60000);
   assert.equal(result.ads[0].purchases,10);
 });
+test('missing Meta export fields stay unavailable for the week and accumulated period',()=>{
+  const partial=week({start:'2026-10-05',end:'2026-10-11',days:7,clicks:null,views:null,checkouts:null,metaRevenue:null});
+  const current=metrics(partial);
+  const all=aggregate([week(),partial]);
+  assert.equal(current.purchases,5);
+  assert.equal(current.cpa,2000);
+  assert.equal(current.metaRoas,null);
+  assert.equal(current.cpc,null);
+  assert.equal(current.conversion,null);
+  assert.equal(all.clicks,null);
+  assert.equal(all.metaRevenue,null);
+  assert.equal(all.metaRoas,null);
+  assert.equal(all.gross,60000);
+});

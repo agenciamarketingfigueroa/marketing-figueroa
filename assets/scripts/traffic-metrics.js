@@ -1,5 +1,5 @@
 export const sums = ['spend','gross','net','sales','brlSales','usdGross','usdNet','usdSales','clicks','views','checkouts','purchases','metaRevenue','days'];
-export const divide = (a,b) => b ? a/b : null;
+export const divide = (a,b) => Number.isFinite(a)&&Number.isFinite(b)&&b!==0 ? a/b : null;
 export function metrics(value) {
   return {...value, profit:value.net-value.spend, deductions:value.gross-value.net,
     roas:divide(value.gross,value.spend), metaRoas:divide(value.metaRevenue,value.spend),
@@ -8,13 +8,16 @@ export function metrics(value) {
     connect:divide(value.views,value.clicks), conversion:divide(value.purchases,value.views)};
 }
 export function aggregate(weeks) {
-  const result = Object.fromEntries(sums.map(k=>[k,weeks.reduce((s,w)=>s+(w[k]||0),0)]));
+  const result = Object.fromEntries(sums.map(k=>[k,weeks.some(w=>w[k]==null)?null:weeks.reduce((s,w)=>s+w[k],0)]));
   for (const collection of ['products','ads']) {
     const groups = new Map();
     weeks.forEach(w=>w[collection].forEach(row=>{
       if (!groups.has(row.name)) groups.set(row.name,{name:row.name});
       const group=groups.get(row.name);
-      Object.entries(row).forEach(([k,v])=>{if (typeof v==='number') group[k]=(group[k]||0)+v;});
+      Object.entries(row).forEach(([k,v])=>{
+        if(v===null) group[k]=null;
+        else if(typeof v==='number'&&group[k]!==null) group[k]=(group[k]||0)+v;
+      });
     }));
     result[collection]=[...groups.values()];
   }

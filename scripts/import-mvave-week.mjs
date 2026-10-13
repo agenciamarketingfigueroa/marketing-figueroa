@@ -20,13 +20,15 @@ function cents(value){
 }
 function integer(value){const n=Number(value||0);assert(Number.isInteger(n),'Contagem inválida');return n;}
 const adsRows=rows(adsPath),salesRows=rows(hotmartPath);
-assert(adsRows[0].G==='Valor gasto (BRL)'&&adsRows[0].U==='Compras','Esquema Meta desconhecido');
+const detailedAds=adsRows[0].G==='Valor gasto (BRL)'&&adsRows[0].U==='Compras';
+const summaryAds=adsRows[0].K==='Valor gasto (BRL)'&&adsRows[0].F==='Resultados'&&adsRows[0].G==='Indicador de resultados';
+assert(detailedAds||summaryAds,'Esquema Meta desconhecido');
 assert(salesRows[0].B==='Status da transação'&&salesRows[0].Q==='Faturamento bruto (sem impostos)','Esquema Hotmart desconhecido');
 const adsRecords=adsRows.slice(1),salesRecords=salesRows.slice(1);
 const start=adsRecords[0].A,end=adsRecords[0].B;
-assert(start==='2026-09-28'&&end==='2026-10-04','Período diferente do esperado');
+assert(start==='2026-10-05'&&end==='2026-10-11','Período diferente do esperado');
 const days=Math.round((Date.parse(end)-Date.parse(start))/86400000)+1;
-const week={id:start,start,end,days,spend:0,clicks:0,views:0,checkouts:0,purchases:0,metaRevenue:0,gross:0,net:0,sales:0,brlSales:0,usdGross:0,usdNet:0,usdSales:0,ads:[],products:[],daily:[],sources:[],statuses:{}};
+const week={id:start,start,end,days,spend:0,clicks:summaryAds?null:0,views:summaryAds?null:0,checkouts:summaryAds?null:0,purchases:0,metaRevenue:summaryAds?null:0,gross:0,net:0,sales:0,brlSales:0,usdGross:0,usdNet:0,usdSales:0,ads:[],products:[],daily:[],sources:[],statuses:{}};
 for(const [path,records] of [[adsPath,adsRecords],[hotmartPath,salesRecords]])week.sources.push({name:basename(path),sha256:createHash('sha256').update(readFileSync(path)).digest('hex'),rows:records.length});
 const ads=new Map(),products=new Map(),daily=new Map(),transactions=new Set();
 for(let offset=0;offset<days;offset++){
@@ -35,8 +37,10 @@ for(let offset=0;offset<days;offset++){
 }
 for(const r of adsRecords){
   assert(r.A===start&&r.B===end&&r.C,'Período ou anúncio inválido');
-  const ad=ads.get(r.C)||{name:r.C,spend:0,clicks:0,views:0,checkouts:0,purchases:0,metaRevenue:0};
-  for(const [key,col] of [['spend','G'],['clicks','L'],['views','N'],['checkouts','Q'],['purchases','U'],['metaRevenue','W']]){
+  const ad=ads.get(r.C)||{name:r.C,spend:0,clicks:summaryAds?null:0,views:summaryAds?null:0,checkouts:summaryAds?null:0,purchases:0,metaRevenue:summaryAds?null:0};
+  if(summaryAds)assert(!r.F||r.G==='actions:offsite_conversion.fb_pixel_purchase','Indicador Meta inesperado');
+  const columns=detailedAds?[['spend','G'],['clicks','L'],['views','N'],['checkouts','Q'],['purchases','U'],['metaRevenue','W']]:[['spend','K'],['purchases','F']];
+  for(const [key,col] of columns){
     const value=['spend','metaRevenue'].includes(key)?cents(r[col]):integer(r[col]);
     ad[key]+=value;week[key]+=value;
   }

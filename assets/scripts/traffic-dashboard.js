@@ -110,8 +110,9 @@ function products() {
 }
 function funnel() {
   const steps=[['Cliques no link',selected.clicks],['Visitas à página',selected.views],['Checkouts iniciados',selected.checkouts],['Compras Meta',selected.purchases]];
-  $('#funnel-chart').innerHTML=steps.map(([label,v],i)=>`<div class="funnel-step" style="width:${100-i*9}%"><span>${label}</span><strong>${number(v)}</strong></div>${i?`<p class="funnel-caption">${percent(divide(v,steps[i-1][1]))} da etapa anterior</p>`:''}`).join('');
+  $('#funnel-chart').innerHTML=steps.map(([label,v],i)=>`<div class="funnel-step" style="width:${100-i*9}%"><span>${label}</span><strong>${number(v)}</strong></div>${i?`<p class="funnel-caption">${divide(v,steps[i-1][1])==null?'Dado indisponível':percent(divide(v,steps[i-1][1]))+' da etapa anterior'}</p>`:''}`).join('');
   $('#funnel-rates').innerHTML=[['Custo por clique',money(selected.cpc)],['Visita → compra',percent(selected.conversion)],['ROAS Meta',ratio(selected.metaRoas)]].map(([label,v])=>`<div><span>${label}</span><strong>${v}</strong></div>`).join('');
+  $('#funnel-source-note').textContent=selected.clicks==null?'O export Meta de 05 a 11/10 não inclui cliques, visitas à página, checkouts ou valor de conversão. Essas métricas ficam indisponíveis nesta seleção. Compras Meta e vendas Hotmart seguem fontes e atribuições diferentes.':'Compras do Meta seguem a atribuição da plataforma. As vendas Hotmart incluem todas as origens; não são etapas do mesmo funil.';
 }
 function daily() {
   const values=selected.daily,W=1040,H=185,left=46,right=10,top=25,bottom=30;
@@ -129,8 +130,12 @@ function daily() {
 }
 function ads() {
   const sort=$('#ad-sort').value;
-  const value=ad=>sort==='roas'?(divide(ad.metaRevenue,ad.spend)||0):ad[sort];
-  $('#ads-body').innerHTML=[...selected.ads].filter(a=>a.spend>0).sort((a,b)=>value(b)-value(a)).map(a=>`<tr><th scope="row">${escape(a.name)}</th><td>${money(a.spend)}</td><td>${number(a.clicks)}</td><td>${number(a.purchases)}</td><td>${money(divide(a.spend,a.purchases))}</td><td>${money(a.metaRevenue)}</td><td>${ratio(divide(a.metaRevenue,a.spend))}</td></tr>`).join('');
+  const value=ad=>sort==='roas'?divide(ad.metaRevenue,ad.spend):ad[sort];
+  $('#ads-body').innerHTML=[...selected.ads].filter(a=>a.spend>0).sort((a,b)=>{
+    const left=value(a),right=value(b);
+    return left==null?(right==null?0:1):right==null?-1:right-left;
+  }).map(a=>`<tr><th scope="row">${escape(a.name)}</th><td>${money(a.spend)}</td><td>${number(a.clicks)}</td><td>${number(a.purchases)}</td><td>${money(divide(a.spend,a.purchases))}</td><td>${money(a.metaRevenue)}</td><td>${ratio(divide(a.metaRevenue,a.spend))}</td></tr>`).join('');
+  $('#ads-source-note').textContent=selected.metaRevenue==null?'Valor e ROAS Meta não constam no export de 05 a 11/10; aparecem como indisponíveis nos anúncios afetados.':'Valor e ROAS Meta usam o valor de conversão informado no export. Podem divergir do faturamento Hotmart.';
 }
 function history() {
   const row=(w,label,button=false)=>`<tr class="${$('#report-period').value===w.id?'selected':''}"><th scope="row">${button?`<button data-week="${w.id}">${label} ↗</button>`:label}</th><td>${money(w.spend)}</td><td>${money(w.gross)}</td><td>${money(w.net)}</td><td class="${w.profit<0?'negative':'positive'}">${money(w.profit)}</td><td>${ratio(w.roas)}</td><td>${number(w.sales)}</td></tr>`;
@@ -163,7 +168,7 @@ function render() {
   $('#filter-status').textContent=`Relatório atualizado: ${period(selected)}, lucro após mídia ${money(selected.profit)}.`;
 }
 function csv() {
-  const fields=[['periodo',w=>period(w)],['dias',w=>w.days],['gasto_BRL',w=>decimal(w.spend/100)],['bruto_BRL',w=>decimal(w.gross/100)],['liquido_BRL',w=>decimal(w.net/100)],['lucro_apos_midia_BRL',w=>decimal(w.profit/100)],['roas_geral_BRL',w=>decimal(w.roas)],['vendas_hotmart',w=>w.sales],['bruto_USD_separado',w=>decimal(w.usdGross/100)],['liquido_USD_separado',w=>decimal(w.usdNet/100)],['compras_meta',w=>w.purchases],['valor_conversao_meta_BRL',w=>decimal(w.metaRevenue/100)],['roas_meta',w=>decimal(w.metaRoas)]];
+  const fields=[['periodo',w=>period(w)],['dias',w=>w.days],['gasto_BRL',w=>decimal(w.spend/100)],['bruto_BRL',w=>decimal(w.gross/100)],['liquido_BRL',w=>decimal(w.net/100)],['lucro_apos_midia_BRL',w=>decimal(w.profit/100)],['roas_geral_BRL',w=>decimal(w.roas)],['vendas_hotmart',w=>w.sales],['bruto_USD_separado',w=>decimal(w.usdGross/100)],['liquido_USD_separado',w=>decimal(w.usdNet/100)],['compras_meta',w=>w.purchases],['valor_conversao_meta_BRL',w=>decimal(w.metaRevenue==null?null:w.metaRevenue/100)],['roas_meta',w=>decimal(w.metaRoas)]];
   const weeks=$('#report-period').value==='all'?report.weeks:report.weeks.filter(w=>w.id===$('#report-period').value);
   const quote=v=>'"'+String(v).replaceAll('"','""')+'"';
   const lines=[fields.map(([name])=>quote(name)).join(';'),...weeks.map(metrics).map(w=>fields.map(([,get])=>quote(get(w))).join(';'))];
