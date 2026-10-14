@@ -2,6 +2,7 @@ import {bindLogin,session,reportData,logout} from './portal-auth.js';
 import {aggregate,metrics,divide} from './traffic-metrics.js';
 import {calendarCells,monthKey,monthTitle,weekForDate} from './report-calendar.js';
 const $ = selector => document.querySelector(selector);
+const clientId = document.body.dataset.reportClient || 'mvave-br';
 const escape = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number = value => value == null ? '—' : value.toLocaleString('pt-BR',{maximumFractionDigits:0});
 const decimal = value => value == null ? '—' : value.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -22,8 +23,8 @@ function drawCalendar() {
   $('#calendar-prev').disabled=calendarMonth<=monthKey(first);
   $('#calendar-next').disabled=calendarMonth>=monthKey(last);
   $('#calendar-days').innerHTML=calendarCells(calendarMonth,first,last).map(cell=>{
-    if(!cell.available)return '<span class="calendar-empty" aria-hidden="true"></span>';
     const week=weekForDate(report.weeks,cell.date);
+    if(!cell.available||!week)return '<span class="calendar-empty" aria-hidden="true"></span>';
     const active=$('#report-period').value===week.id;
     return `<button type="button" class="calendar-day${cell.inMonth?'':' outside-month'}${active?' in-week':''}${pickedDate===cell.date?' picked':''}" data-date="${cell.date}" aria-label="${date(cell.date)}/${cell.date.slice(0,4)} · semana de ${period(week)}" aria-pressed="${active}">${cell.day}</button>`;
   }).join('');
@@ -112,7 +113,7 @@ function funnel() {
   const steps=[['Cliques no link',selected.clicks],['Visitas à página',selected.views],['Checkouts iniciados',selected.checkouts],['Compras Meta',selected.purchases]];
   $('#funnel-chart').innerHTML=steps.map(([label,v],i)=>`<div class="funnel-step" style="width:${100-i*9}%"><span>${label}</span><strong>${number(v)}</strong></div>${i?`<p class="funnel-caption">${divide(v,steps[i-1][1])==null?'Dado indisponível':percent(divide(v,steps[i-1][1]))+' da etapa anterior'}</p>`:''}`).join('');
   $('#funnel-rates').innerHTML=[['Custo por clique',money(selected.cpc)],['Visita → compra',percent(selected.conversion)],['ROAS Meta',ratio(selected.metaRoas)]].map(([label,v])=>`<div><span>${label}</span><strong>${v}</strong></div>`).join('');
-  $('#funnel-source-note').textContent=selected.clicks==null?'O export Meta de 05 a 11/10 não inclui cliques, visitas à página, checkouts ou valor de conversão. Essas métricas ficam indisponíveis nesta seleção. Compras Meta e vendas Hotmart seguem fontes e atribuições diferentes.':'Compras do Meta seguem a atribuição da plataforma. As vendas Hotmart incluem todas as origens; não são etapas do mesmo funil.';
+  $('#funnel-source-note').textContent=selected.clicks==null?'Um ou mais exports Meta selecionados não incluem cliques, visitas à página, checkouts ou valor de conversão. Essas métricas ficam indisponíveis nesta seleção. Compras Meta e vendas Hotmart seguem fontes e atribuições diferentes.':'Compras do Meta seguem a atribuição da plataforma. As vendas Hotmart incluem todas as origens; não são etapas do mesmo funil.';
 }
 function daily() {
   const values=selected.daily,W=1040,H=185,left=46,right=10,top=25,bottom=30;
@@ -135,7 +136,7 @@ function ads() {
     const left=value(a),right=value(b);
     return left==null?(right==null?0:1):right==null?-1:right-left;
   }).map(a=>`<tr><th scope="row">${escape(a.name)}</th><td>${money(a.spend)}</td><td>${number(a.clicks)}</td><td>${number(a.purchases)}</td><td>${money(divide(a.spend,a.purchases))}</td><td>${money(a.metaRevenue)}</td><td>${ratio(divide(a.metaRevenue,a.spend))}</td></tr>`).join('');
-  $('#ads-source-note').textContent=selected.metaRevenue==null?'Valor e ROAS Meta não constam no export de 05 a 11/10; aparecem como indisponíveis nos anúncios afetados.':'Valor e ROAS Meta usam o valor de conversão informado no export. Podem divergir do faturamento Hotmart.';
+  $('#ads-source-note').textContent=selected.metaRevenue==null?'Valor e ROAS Meta não constam em todos os exports selecionados; aparecem como indisponíveis nos anúncios afetados.':'Valor e ROAS Meta usam o valor de conversão informado no export. Podem divergir do faturamento Hotmart.';
 }
 function history() {
   const row=(w,label,button=false)=>`<tr class="${$('#report-period').value===w.id?'selected':''}"><th scope="row">${button?`<button data-week="${w.id}">${label} ↗</button>`:label}</th><td>${money(w.spend)}</td><td>${money(w.gross)}</td><td>${money(w.net)}</td><td class="${w.profit<0?'negative':'positive'}">${money(w.profit)}</td><td>${ratio(w.roas)}</td><td>${number(w.sales)}</td></tr>`;
@@ -149,7 +150,8 @@ function insights() {
   $('#insight-body').textContent=`No período, ${number(t.sales)} transações na Hotmart geraram ${money(t.gross)} brutos em BRL. Após as deduções e ${money(t.spend)} em anúncios, o resultado em reais foi ${money(t.profit)}, com margem de ${percent(t.margin)}.${t.usdSales?` Há ainda ${money(t.usdNet,'USD')} líquidos separados deste resultado.`:''}`;
   const index=report.weeks.findIndex(w=>w.id===$('#report-period').value);
   const last=metrics(index<0?report.weeks.at(-1):report.weeks[index]);
-  const prev=index===0?null:metrics(index<0?report.weeks.at(-2):report.weeks[index-1]);
+  const previousWeek=index===0?null:index<0?report.weeks.at(-2):report.weeks[index-1];
+  const prev=previousWeek?metrics(previousWeek):null;
   if(prev&&last.roas<prev.roas) {
     $('#attention-title').textContent='O retorno recuou no último período.';
     $('#attention-body').textContent=`De ${period(prev)} para ${period(last)}, o ROAS geral passou de ${ratio(prev.roas)} para ${ratio(last.roas)}. Revise os anúncios com maior gasto e menor retorno Meta e a participação de cada produto antes de ampliar o orçamento. A receita Hotmart não está atribuída individualmente aos anúncios.`;
@@ -162,7 +164,7 @@ function render() {
   const id=$('#report-period').value;
   selected=aggregate(id==='all'?report.weeks:report.weeks.filter(w=>w.id===id));
   $('#calendar-selection').textContent=id==='all'?`Todo o período · ${period(selected)}`:`Semana de ${period(selected)}`;
-  $('#period-caption').textContent=`${period(selected)}/2026 · ${selected.days} dias · ${id==='all'?'visão acumulada':'visão semanal'}`;
+  $('#period-caption').textContent=`${date(selected.start)}/${selected.start.slice(0,4)} a ${date(selected.end)}/${selected.end.slice(0,4)} · ${selected.days} dias · ${id==='all'?'visão acumulada':'visão semanal'}`;
   $('#currency-note').textContent=selected.usdSales?`Valores principais em BRL. Há mais ${money(selected.usdGross,'USD')} brutos e ${money(selected.usdNet,'USD')} líquidos em ${selected.usdSales} vendas USD, sem conversão para reais. O resultado em BRL é parcial.`:'Valores em BRL · Vendas confirmadas na Hotmart e investimento reportado pelo Meta Ads.';
   cards();trend();composition();products();funnel();daily();ads();history();insights();
   $('#filter-status').textContent=`Relatório atualizado: ${period(selected)}, lucro após mídia ${money(selected.profit)}.`;
@@ -173,18 +175,34 @@ function csv() {
   const quote=v=>'"'+String(v).replaceAll('"','""')+'"';
   const lines=[fields.map(([name])=>quote(name)).join(';'),...weeks.map(metrics).map(w=>fields.map(([,get])=>quote(get(w))).join(';'))];
   const url=URL.createObjectURL(new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));
-  const link=document.createElement('a');link.href=url;link.download=`mvave-br-${selected.start}-${selected.end}.csv`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const link=document.createElement('a');link.href=url;link.download=`${clientId}-${selected.start}-${selected.end}.csv`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 async function open(active) {
   activeSession=active;
-  report=await reportData(active);
+  report=await reportData(active,clientId);
+  document.querySelectorAll('[data-master-link]').forEach(el=>el.hidden=active.role!=='master');
+  const operationStatus=$('#operation-status');
+  if(operationStatus && report) {
+    const ranges=report.coverage.map(item=>`${item.name}: ${date(item.start)}/${item.start.slice(0,4)} a ${date(item.end)}/${item.end.slice(0,4)}`).join(' · ');
+    operationStatus.textContent=report.pending.length?`Consolidado parcial. ${ranges}. A Oficina do Violão entra nesta visão após o primeiro import dos arquivos Meta Ads e Hotmart.`:`Consolidado das duas marcas. ${ranges}. Períodos anteriores ao início de uma marca incluem apenas a outra.`;
+  }
+  if (!report?.weeks.length) {
+    if(clientId!=='oficina-do-violao') throw new Error('report');
+    document.body.classList.add('report-pending');
+    $('#period-caption').textContent='Relatório preparado para os primeiros arquivos Meta Ads e Hotmart.';
+    $('#report-data-range').textContent='Aguardando os primeiros dados da Oficina do Violão';
+    $('#access-gate').hidden=true;
+    $('#dashboard').hidden=false;
+    clearTimeout(expiryTimer);expiryTimer=setTimeout(logout,Math.max(0,active.expires-Date.now()));
+    return;
+  }
+  document.body.classList.remove('report-pending');
   $('#report-period').value='all';
   calendarMonth=monthKey(report.weeks.at(-1).end);
   pickedDate=null;
   $('#source-list').innerHTML=report.weeks.flatMap(w=>w.sources).map(s=>`<li>${escape(s.name)} · ${s.rows} registros</li>`).join('');
   $('#source-count').textContent=report.weeks.flatMap(w=>w.sources).length;
-  $('#report-data-range').textContent=`Dados de ${date(report.weeks[0].start)} a ${date(report.weeks.at(-1).end)}/2026 · Importação manual`;
-  document.querySelectorAll('[data-master-link]').forEach(el=>el.hidden=active.role!=='master');
+  $('#report-data-range').textContent=`Dados de ${date(report.weeks[0].start)}/${report.weeks[0].start.slice(0,4)} a ${date(report.weeks.at(-1).end)}/${report.weeks.at(-1).end.slice(0,4)} · Importação manual`;
   render();$('#access-gate').hidden=true;$('#dashboard').hidden=false;
   clearTimeout(expiryTimer);expiryTimer=setTimeout(logout,Math.max(0,active.expires-Date.now()));
 }
@@ -215,6 +233,6 @@ $('#chart-mode').addEventListener('change',trend);
 $('#ad-sort').addEventListener('change',ads);
 $('#export-csv').addEventListener('click',csv);
 $('#print-report').addEventListener('click',()=>window.print());
-bindLogin(open);
+bindLogin(open,{requiredRole:clientId==='operacao'?'master':undefined});
 if(session())open(session()).catch(()=>{$('[data-login-feedback]').textContent='Sua sessão não pôde ser restaurada. Entre novamente.';});
 window.addEventListener('pageshow',()=>{if(activeSession&&!session())logout();});

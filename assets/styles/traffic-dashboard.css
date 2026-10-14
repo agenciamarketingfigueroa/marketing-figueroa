@@ -954,6 +954,39 @@ tbody button:hover {
   max-width: 100%;
   height: auto;
 }
+.operation-logos { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+.operation-logos img { display:block; width:100px; max-width:100%; height:auto; object-fit:contain; }
+.operation-logos img:last-child { width:115px; }
+.operation-status { margin:20px 0 0; padding:13px 16px; border:1px solid #645235; border-radius:7px; background:#29241970; color:#e2c79e; line-height:1.6; }
+.related-project {
+  display:block;
+  margin-top:18px;
+  padding:10px 12px;
+  border:1px solid #414737;
+  border-radius:7px;
+  color:#d9e4c7;
+  font-size:11px;
+  line-height:1.5;
+}
+.related-project:hover,
+.related-project:focus-visible { border-color:#fc8425; color:#ffae6c; }
+.pending-panel { display:none; }
+.report-pending .pending-panel { display:block; margin-top:28px; padding:clamp(24px,5vw,52px); }
+.pending-panel h2 { margin:14px 0 12px; font-size:clamp(24px,3vw,36px); }
+.pending-panel p { max-width:660px; color:#b4baa9; line-height:1.7; }
+.pending-topics { display:flex; flex-wrap:wrap; gap:9px; margin-top:24px; }
+.pending-topics span { padding:8px 11px; border:1px solid #414737; border-radius:6px; color:#d6dccb; font-size:11px; }
+.report-pending .period-control,
+.report-pending .report-sidebar nav,
+.report-pending .mobile-sections,
+.report-pending .data-note,
+.report-pending .metrics-grid,
+.report-pending .charts-grid,
+.report-pending .secondary-grid,
+.report-pending .daily-panel,
+.report-pending .analysis-grid,
+.report-pending .campaign-panel,
+.report-pending .methodology { display:none; }
 .mobile-report-logos {
   display: none;
 }

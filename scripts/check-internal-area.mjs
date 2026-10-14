@@ -43,7 +43,7 @@ try {
   }
   await page.getByRole('link',{name:/Tráfego/}).click();
   await page.waitForURL('**/clientes/index.html');
-  assert.equal(await page.getByRole('link',{name:/Abrir perfil de/}).count(),2);
+  assert.equal(await page.getByRole('link',{name:/Abrir perfil de/}).count(),4);
   await page.getByRole('link',{name:'Abrir perfil de Victor Lopes'}).click({position:{x:12,y:12}});
   await page.waitForURL('**/clientes/victor-lopes/index.html');
   assert(!(await page.locator('[data-access-gate]').isVisible()));

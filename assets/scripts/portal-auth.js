@@ -1,4 +1,5 @@
 // Static pilot: encrypted aggregates, session-only keys. See README for security limits.
+import {combineReports} from './operation-report.js';
 const sessionName = 'figueroa-portal-v1';
 const accounts = {'mvave br':'mvave-br', 'felipe figueroa':'felipe-figueroa'};
 const decode = value => Uint8Array.from(atob(value), c => c.charCodeAt(0));
@@ -26,10 +27,23 @@ async function decrypt(envelope, key) {
   const raw = await crypto.subtle.decrypt({name:'AES-GCM',iv:decode(envelope.iv)},key,decode(envelope.data));
   return JSON.parse(new TextDecoder().decode(raw));
 }
-export async function reportData(active = session()) {
+export async function reportData(active = session(), clientId = 'mvave-br') {
   if (!active?.reportKey) throw new Error('session');
+  if (active.role !== 'master' && active.client !== 'mvave-br') throw new Error('role');
+  if (!['mvave-br','oficina-do-violao','operacao'].includes(clientId)) throw new Error('client');
+  if (clientId === 'operacao') {
+    if (active.role !== 'master') throw new Error('role');
+    const [mvave,oficina] = await Promise.all([reportData(active,'mvave-br'),reportData(active,'oficina-do-violao')]);
+    return combineReports(mvave,oficina);
+  }
   const key = await crypto.subtle.importKey('raw',decode(active.reportKey),'AES-GCM',false,['decrypt']);
-  return decrypt(await readJson('assets/reports/mvave-br/report.enc.json'),key);
+  const path = `assets/reports/${clientId}/report.enc.json`;
+  const response = await fetch(new URL(path,document.baseURI),{cache:'no-store'});
+  if (response.status === 404 && clientId === 'oficina-do-violao') return null;
+  if (!response.ok) throw new Error('network');
+  const report = await decrypt(await response.json(),key);
+  if (report.schemaVersion !== 1 || report.client?.id !== clientId || !Array.isArray(report.weeks)) throw new Error('report');
+  return report;
 }
 export async function login(username, password, requiredRole) {
   const normalized = normalize(username);

@@ -1,8 +1,18 @@
 # Marketing Figueroa
 
+## Oficina do Violão e visão Operação
+
+`clientes/oficina-do-violao/index.html` usa a logo oficial já presente em `assets/images/brands/oficina-do-violao.png` e a mesma estrutura de relatório da Mvave BR. A conta Mvave BR abre os dois relatórios individuais, pois as duas marcas pertencem ao mesmo negócio. Enquanto não houver exports da Oficina, a página mostra um aviso de preparação, sem números inventados.
+
+`clientes/operacao/index.html` aparece na lista da Área Interna e exige a conta de administrador. Soma os relatórios das duas marcas por período, separando BRL e USD, mantendo anúncios e produtos identificados pela marca. A página informa a cobertura de cada marca. Até chegar o primeiro relatório da Oficina, o consolidado exibe apenas os dados existentes da Mvave BR e é marcado como parcial. Períodos das duas marcas que se sobreponham precisam ter as mesmas datas de início e fim; se não tiverem, a junção é interrompida para evitar um gráfico semanal enganoso.
+
+Para importar uma semana da Oficina, use `scripts/import-traffic-week.mjs <Ads.xlsx> <Hotmart.xls> <semana-temporaria.json>` com um caminho temporário fora do repositório. O importador aceita os formatos Meta detalhado e resumido e os dois formatos Hotmart já usados na Mvave. Ele valida período, status, moeda, transações, produtos e totais, e grava apenas agregados. Depois use `scripts/seal-oficina-report.mjs <semana-temporaria.json>` e forneça pela entrada padrão a senha existente da conta Mvave BR ou do administrador. O script criptografa o relatório próprio da Oficina com a chave já usada por essas contas, preserva os envelopes de acesso e acrescenta novas semanas sem duplicar períodos ou arquivos. Os exports originais, o JSON temporário e a senha não devem ser versionados.
+
+`deno test scripts/check-operation-report.mjs scripts/check-traffic-metrics.mjs` verifica as somas, a separação de moedas, os campos ausentes, a cobertura parcial e os cálculos existentes.
+
 ## Dashboard piloto de tráfego · Mvave BR
 
-`clientes/mvave-br/index.html` aplica o visual da demonstração aos dados reais de Meta Ads e Hotmart. A entrada por usuário e senha fica em `area-cliente.html`; `area-interna.html` é a entrada do administrador e a tela inicial de ferramentas; o botão Tráfego abre a seleção de clientes em `clientes/index.html`. O menu público distingue Área do Cliente e Área Interna. Os usuários configurados são **Mvave Br** e **Felipe Figueroa**, com a senha solicitada pelo responsável. As senhas não são gravadas em texto no código. O master abre Mvave BR e o perfil existente de Victor Lopes; o acesso anterior do Victor continua funcionando.
+`clientes/mvave-br/index.html` aplica o visual da demonstração aos dados reais de Meta Ads e Hotmart. A entrada por usuário e senha fica em `area-cliente.html`; `area-interna.html` é a entrada do administrador e a tela inicial de ferramentas; o botão Tráfego abre a seleção de clientes em `clientes/index.html`. O menu público distingue Área do Cliente e Área Interna. Os usuários configurados são **Mvave Br** e **Felipe Figueroa**, com a senha solicitada pelo responsável. As senhas não são gravadas em texto no código. O master abre Mvave BR, Oficina do Violão, Operação e o perfil existente de Victor Lopes; o acesso anterior do Victor continua funcionando.
 
 O relatório oferece oito períodos de 21/08 a 11/10/2026, acumulado, lucro após mídia, gasto, ROAS geral e valor bruto em destaque; calendário para escolher a semana por data, evolução semanal, composição do bruto, produtos, funil Meta, receita diária, anúncios ordenáveis, histórico selecionável, CSV e impressão/PDF. Os valores são importados manualmente, sem conexão automática com as plataformas.
 
