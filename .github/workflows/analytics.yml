@@ -1,0 +1,28 @@
+name: Analytics checks
+on:
+  pull_request:
+    paths: ['analytics/**', '.github/workflows/analytics.yml']
+  push:
+    paths: ['analytics/**', '.github/workflows/analytics.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: analytics
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      ENABLE_DEMO: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: analytics/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - run: npm audit --omit=dev --audit-level=moderate

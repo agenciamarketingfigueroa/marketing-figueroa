@@ -1,2 +1,12 @@
 __pycache__/
 *.pyc
+.tools/
+node_modules/
+.next/
+.env*
+!.env.example
+.vercel/
+coverage/
+*.tsbuildinfo
+analytics/test-results/
+analytics/playwright-report/

@@ -1,0 +1,2 @@
+'use client';
+export default function ErrorPage({reset}:{reset:()=>void}) {return <main className="centered"><section className="auth-card"><h1>Não foi possível carregar os dados.</h1><p>Verifique a conexão e tente novamente. Nenhum dado demonstrativo será usado no lugar dos seus dados.</p><button className="button primary" onClick={reset}>Tentar novamente</button><a href="/login" className="text-button">Voltar ao acesso</a></section></main>;}

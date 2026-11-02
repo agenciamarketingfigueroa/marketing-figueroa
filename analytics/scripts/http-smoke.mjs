@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+const base=process.env.SMOKE_BASE_URL || 'http://127.0.0.1:3000';
+const demo=await fetch(`${base}/demo`);assert.equal(demo.status,200);
+const html=await demo.text();assert.ok(html.includes('Demonstração'));assert.ok(html.includes('Crescimento da operação'));
+assert.match(demo.headers.get('cache-control'),/no-store/);assert.match(demo.headers.get('content-security-policy'),/frame-ancestors 'none'/);
+const nonce=demo.headers.get('content-security-policy').match(/'nonce-([^']+)'/)[1];
+const scripts=[...html.matchAll(/<script\b[^>]*>/g)].map(m=>m[0]);
+assert.ok(scripts.length>0);assert.ok(scripts.every(s=>s.includes(`nonce="${nonce}"`)),'All scripts must carry the response nonce');
+for(const label of ['Connect Rate','Initiate Checkout','Criativos em perspectiva','Crescimento no Instagram','21/08/2026']) assert.ok(html.includes(label),label);
+const creative=await fetch(base+'/api/creative-image?account=1&ad=2');assert.ok([401,503].includes(creative.status));
+const instagramCron=await fetch(base+'/api/cron/sync?provider=instagram',{method:'POST'});assert.ok([401,503].includes(instagramCron.status));
+const report=await fetch(`${base}/api/report?start=2026-10-01&end=2026-10-31`);assert.ok([401,503].includes(report.status));
+const webhook=await fetch(`${base}/api/webhooks/hotmart`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});assert.ok([401,503].includes(webhook.status));
+const cron=await fetch(`${base}/api/cron/sync?provider=meta`,{method:'POST'});assert.ok([401,503].includes(cron.status));
+const dashboard=await fetch(`${base}/dashboard`);const privateHtml=await dashboard.text();assert.ok(!privateHtml.includes('Receita bruta aprovada'));
+console.log('HTTP smoke: demonstração 200, nonce CSP, no-store e 6 fronteiras privadas sem acesso anônimo aprovados.');

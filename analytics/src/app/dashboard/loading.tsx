@@ -1,0 +1,1 @@
+export default function Loading() { return <main className="loading-page" role="status" aria-label="Carregando dashboard"><div className="skeleton title-skeleton"/><div className="kpi-grid">{[0,1,2,3].map(n=><div className="skeleton card-skeleton" key={n}/>)}</div><div className="skeleton chart-skeleton"/></main>; }

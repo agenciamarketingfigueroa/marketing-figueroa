@@ -1,5 +1,11 @@
 # Marketing Figueroa
 
+## Analytics automático — aplicação independente
+
+A nova aplicação está em [`analytics/`](analytics/README.md). Ela mantém o site público e os relatórios manuais existentes intactos. Inclui demonstração identificada, dashboard Next.js, acesso Supabase com MFA/RLS, webhook Hotmart e rotinas de sincronização no servidor. **As conexões reais e os agendamentos ainda precisam ser configurados e validados; não estão ativos.**
+
+Veja a [auditoria](analytics/docs/AUDITORIA.md), as [instruções de execução e implantação](analytics/README.md) e a [matriz de validação](analytics/docs/VALIDACAO.md). Não publicar essa aplicação no GitHub Pages: preparar um deploy separado com raiz `analytics`. Nenhum acesso à conta pessoal do Facebook ou alteração do repositório Mvave BR faz parte desta implementação.
+
 ## Oficina do Violão e visão Operação
 
 `clientes/oficina-do-violao/index.html` usa a logo oficial já presente em `assets/images/brands/oficina-do-violao.png` e a mesma estrutura de relatório da Mvave BR. A conta Mvave BR abre os dois relatórios individuais, pois as duas marcas pertencem ao mesmo negócio. Enquanto não houver exports da Oficina, a página mostra um aviso de preparação, sem números inventados.
