@@ -1,8 +1,24 @@
 # Marketing Figueroa
 
-## Analytics automático — aplicação independente
+## Analytics manual — ferramenta da Área Interna
 
-A nova aplicação está em [`analytics/`](analytics/README.md). Ela mantém o site público e os relatórios manuais existentes intactos. Inclui demonstração identificada, dashboard Next.js, acesso Supabase com MFA/RLS, webhook Hotmart e rotinas de sincronização no servidor. **As conexões reais e os agendamentos ainda precisam ser configurados e validados; não estão ativos.**
+O Analytics com o layout da aplicação original está em [`clientes/analytics/`](clientes/analytics/index.html) e aparece diretamente na Área Interna e na lista de clientes. É uma versão estática para os dados manuais: funciona no Go Live local e no GitHub Pages após o push, sem servidor de dados nem conexão com Facebook, Meta ou Hotmart. O relatório anterior de Operação continua disponível no endereço próprio.
+
+Os seis exports mensais enviados de agosto, setembro e outubro de 2026 foram importados para um [pacote de agregados criptografados](assets/reports/manual-analytics.enc.json). O acesso exige a conta de administrador existente e uma chave de dados separada, gerada na importação. A chave **não** está no repositório; guarde-a fora do Git e informe-a somente na tela do Analytics. O navegador a retém apenas até o fim da sessão ou logout. Os arquivos originais, dados pessoais e identificadores de transação não são publicados.
+
+O painel mostra Mvave BR de 21/08 a 31/10/2026 e sinaliza que a Oficina do Violão ainda não tem exports. Meta veio agregado por mês e anúncio; Hotmart veio por transação diária. Por isso gasto diário Meta, cliques, visitas, checkouts, alcance consolidado, frequência, ROAS Meta e atribuição de vendas a anúncios ficam indisponíveis. BRL e USD permanecem separados. Os totais de meses diferentes são somados em centavos; taxas são calculadas a partir dos totais.
+
+Para reimportar após receber novos pares de arquivos `Meta (Rótulo).xlsx` e `Hotmart (Rótulo).xls`, execute a partir da raiz. O rótulo deve começar com o mês; para uma semana de novembro, por exemplo, use `Novembro 01-07` nos dois nomes. Os períodos internos dos arquivos precisam coincidir e não podem se sobrepor.
+
+```powershell
+Read-Host 'Chave de dados' | & .\.tools\node-v22.23.4-win-x64\node.exe scripts/import-manual-analytics.mjs 'C:\caminho\dos\exports' assets/reports/manual-analytics.enc.json
+```
+
+O comando lê a chave pela entrada padrão; ela não entra na linha de comando nem no Git. Para criar uma chave nova, acrescente `--new-key` e guarde a chave exibida. Uma chave nova invalida a anterior para o pacote recém-gerado. Confira os totais e faça o push somente do pacote criptografado e do código. Para novembro, prefira exports **semanais** de ambas as plataformas, com datas iguais e sem sobreposição; isso equilibra acompanhamento e trabalho manual. Uma conferência diária de gasto e vendas pode orientar ajustes, enquanto o fechamento mensal é uma consolidação das semanas.
+
+## Analytics automático — aplicação independente (não ativada)
+
+A aplicação que forneceu o layout está em [`analytics/`](analytics/README.md). Ela mantém o site público e os relatórios manuais existentes intactos. Inclui demonstração identificada, dashboard Next.js, acesso Supabase com MFA/RLS, webhook Hotmart e rotinas de sincronização no servidor. **As conexões reais e os agendamentos ainda precisam ser configurados e validados; não estão ativos.** A versão estática manual reutiliza as classes e os estilos desse layout, mas mostra apenas os indicadores presentes nos exports.
 
 Veja a [auditoria](analytics/docs/AUDITORIA.md), as [instruções de execução e implantação](analytics/README.md) e a [matriz de validação](analytics/docs/VALIDACAO.md). Não publicar essa aplicação no GitHub Pages: preparar um deploy separado com raiz `analytics`. Nenhum acesso à conta pessoal do Facebook ou alteração do repositório Mvave BR faz parte desta implementação.
 
@@ -10,7 +26,7 @@ Veja a [auditoria](analytics/docs/AUDITORIA.md), as [instruções de execução 
 
 `clientes/oficina-do-violao/index.html` usa a logo oficial já presente em `assets/images/brands/oficina-do-violao.png` e a mesma estrutura de relatório da Mvave BR. A conta Mvave BR abre os dois relatórios individuais, pois as duas marcas pertencem ao mesmo negócio. Enquanto não houver exports da Oficina, a página mostra um aviso de preparação, sem números inventados.
 
-`clientes/operacao/index.html` aparece na lista da Área Interna e exige a conta de administrador. Soma os relatórios das duas marcas por período, separando BRL e USD, mantendo anúncios e produtos identificados pela marca. A página informa a cobertura de cada marca. Até chegar o primeiro relatório da Oficina, o consolidado exibe apenas os dados existentes da Mvave BR e é marcado como parcial. Períodos das duas marcas que se sobreponham precisam ter as mesmas datas de início e fim; se não tiverem, a junção é interrompida para evitar um gráfico semanal enganoso.
+`clientes/operacao/index.html` mantém o relatório semanal anterior. O código de consolidação semanal permanece em `assets/scripts/operation-report.js` para preservar os relatórios individuais e permitir uma futura importação da Oficina. O Analytics manual usa os novos agregados mensais da Mvave BR e informa que a Oficina permanece pendente.
 
 Para importar uma semana da Oficina, use `scripts/import-traffic-week.mjs <Ads.xlsx> <Hotmart.xls> <semana-temporaria.json>` com um caminho temporário fora do repositório. O importador aceita os formatos Meta detalhado e resumido e os dois formatos Hotmart já usados na Mvave. Ele valida período, status, moeda, transações, produtos e totais, e grava apenas agregados. Depois use `scripts/seal-oficina-report.mjs <semana-temporaria.json>` e forneça pela entrada padrão a senha existente da conta Mvave BR ou do administrador. O script criptografa o relatório próprio da Oficina com a chave já usada por essas contas, preserva os envelopes de acesso e acrescenta novas semanas sem duplicar períodos ou arquivos. Os exports originais, o JSON temporário e a senha não devem ser versionados.
 

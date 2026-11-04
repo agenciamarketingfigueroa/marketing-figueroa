@@ -15,6 +15,7 @@ export function session() {
 export function logout() {
   const internal = document.body.hasAttribute('data-internal-area') || session()?.role === 'master';
   sessionStorage.removeItem(sessionName);
+  sessionStorage.removeItem('figueroa-analytics-key-v1');
   sessionStorage.removeItem('marketing-figueroa-client-victor-lopes');
   location.href = new URL(internal ? 'area-interna.html' : 'area-cliente.html', document.baseURI).href;
 }
