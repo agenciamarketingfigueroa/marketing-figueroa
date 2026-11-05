@@ -1,4 +1,24 @@
-﻿# Marketing Figueroa
+# Marketing Figueroa
+
+## Painel — apresentação da operação
+
+Nova ferramenta em [`clientes/painel/`](clientes/painel/index.html), com atalhos na Área Interna e no Analytics. Usa o mesmo login de administrador e o mesmo pacote criptografado do Analytics. Não altera os arquivos importados. Depois da publicação habitual do repositório, o endereço será `https://marketingfigueroa.com.br/clientes/painel/`.
+
+São cinco lâminas: visão geral, dia a dia, mídia paga, vendas e Instagram. A apresentação tem transições de opacidade e deslocamento, rodapé de indicadores, períodos completos ou personalizados, moedas separadas, navegação por botões/setas, pausa com espaço, intervalos de 10/20/30/60 segundos e tela cheia quando suportada. A preferência de movimento reduzido desativa as transições e inicia a apresentação pausada. Lâminas ocultas não recebem foco; interagir com o conteúdo pausa a apresentação. Em telas estreitas o conteúdo empilha e permite rolagem.
+
+Consulta o pacote publicado a cada cinco minutos enquanto a aba está visível, além do botão de atualização. Isso não coleta dados das plataformas: uma nova importação precisa ser publicada pelo fluxo existente. A consulta mantém a lâmina e os períodos fixos; em **Todo o histórico**, o intervalo inclui automaticamente as novas datas recebidas, e a visão diária acompanha o último dia disponível enquanto não houver um dia fixado manualmente. O relógio segue Brasília. O acesso expira com a sessão existente de oito horas.
+
+Os cálculos são os mesmos do Analytics. ROAS Meta = valor de conversão Meta ÷ gasto; MER = bruto Hotmart ÷ gasto; resultado após mídia = líquido − gasto. Novos seguidores não representam o total atual da conta. Sem Meta diária, investimento e ROAS diários ficam indisponíveis. Um período incompleto não recebe totais estimados. Oficina do Violão continua aguardando exports.
+
+Para regenerar o JavaScript após alterações, execute `npm run build:manual` em `analytics/`. O build atende Analytics e Painel. Testes de renderização e cobertura estão em `analytics/tests/board.test.ts`; a revisão visual no navegador permanece necessária quando o controle de navegador estiver disponível.
+
+### Rotina recomendada para os dados diários
+
+Para a análise diária, o ganho vem da granularidade dos registros, não da quantidade de arquivos. Na Meta, exportar por **dia e anúncio**, com data, nomes/IDs de campanha/conjunto/anúncio, gasto, impressões, cliques no link, visitas à página, checkouts, compras e valor de conversão. Manter os IDs como texto para evitar arredondamento. É possível selecionar um período maior e usar a divisão por dia no relatório: [orientação oficial sobre exportação Meta com detalhamento diário](https://support.google.com/analytics/answer/16748649?hl=en#meta).
+
+Para recuperar o histórico desde 21/08/2026, começar com um arquivo de amostra, depois exportar meses com linhas diárias. A Hotmart existente já tem datas por transação; o Instagram existente tem séries diárias. Reexportar períodos apenas quando for necessário ampliar a cobertura ou reconciliar mudanças.
+
+Para manutenção, enviar o dia anterior fechado é uma boa rotina; o dia atual deve ser identificado como parcial. Uma revisão dos últimos sete dias pode servir à reconciliação de alterações, mas **não deve ser anexada diretamente** ao importador atual: ele recusa sobreposição e espera períodos Meta uniformes por arquivo. O novo layout Meta diário ainda precisa de adaptação do importador e conferência dos totais com uma amostra real. Períodos diários devem substituir os agregados mensais correspondentes, nunca ser somados a eles. As duas telas usarão a mesma atualização após essa importação validada.
 
 ## Analytics manual — ferramenta da Área Interna
 

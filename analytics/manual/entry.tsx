@@ -1,5 +1,6 @@
 import {createRoot} from 'react-dom/client';
 import {Dashboard} from '../src/components/dashboard';
+import {OperationBoard} from '../src/components/operation-board';
 import type {Dataset,FollowerSnapshot} from '../src/lib/domain';
 import {bindLogin,session,logout,type Session} from '@portal';
 import {seal,unseal} from './crypto';
@@ -38,7 +39,10 @@ async function unlock(passphrase:string) {
   };
   const restore=async(file:File)=>{assertSession();if(file.size>5_000_000)throw Error('FILE_SIZE');return followersFrom(await unseal(JSON.parse(await file.text()),passphrase));};
   const periods=data.manualPeriods!;
-  root.render(<Dashboard initialData={data} initialStart={periods[0].start} initialEnd={periods.at(-1)!.end} manualActions={{save,download,restore}} manualNotice={manualNotice}/>);
+  assertSession();
+  root.render(document.body.hasAttribute('data-operation-board')
+    ? <OperationBoard data={data} onRefresh={()=>unlock(passphrase)} onLogout={logout}/>
+    : <Dashboard initialData={data} initialStart={periods[0].start} initialEnd={periods.at(-1)!.end} manualActions={{save,download,restore}} manualNotice={manualNotice}/>);
   element('access-gate').hidden=true;element('dashboard').hidden=false;
 }
 async function open(active:Session) {
