@@ -4,6 +4,7 @@ import {OperationBoard} from '../src/components/operation-board';
 import type {Dataset,FollowerSnapshot} from '../src/lib/domain';
 import {bindLogin,session,logout,type Session} from '@portal';
 import {seal,unseal} from './crypto';
+import {createForecastActions} from './forecasts';
 
 const element=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const supplementStorage='figueroa-analytics-followers-v1';
@@ -41,7 +42,7 @@ async function unlock(passphrase:string) {
   const periods=data.manualPeriods!;
   assertSession();
   root.render(document.body.hasAttribute('data-operation-board')
-    ? <OperationBoard data={data} onRefresh={()=>unlock(passphrase)} onLogout={logout}/>
+    ? <OperationBoard data={data} onRefresh={()=>unlock(passphrase)} onLogout={logout} forecastActions={createForecastActions(passphrase,data.organizationId,assertSession)}/>
     : <Dashboard initialData={data} initialStart={periods[0].start} initialEnd={periods.at(-1)!.end} manualActions={{save,download,restore}} manualNotice={manualNotice}/>);
   element('access-gate').hidden=true;element('dashboard').hidden=false;
 }

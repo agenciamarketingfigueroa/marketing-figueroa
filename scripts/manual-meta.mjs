@@ -35,3 +35,26 @@ export function parseManualMeta(rows,period) {
   const totals={spend:sum('spend'),impressions:sum('impressions'),clicks:sum('clicks'),views:sum('views'),checkouts:sum('checkouts'),purchases:sum('purchases'),purchaseValue:sum('purchaseValue'),instagramFollows:sum('instagramFollows')};
   return {insights,totals,roundedIds};
 }
+
+export function parseDailyMeta(rows,period) {
+  required(rows.length>1,'Export Meta diário vazio');
+  const columns=new Map(Object.entries(rows[0]).map(([col,name])=>[name,col]));
+  for(const name of ['Início dos relatórios','Encerramento dos relatórios','Nome do anúncio','Nome do conjunto de anúncios','Valor gasto (BRL)','Impressões','Resultados','Indicador de resultados'])required(columns.has(name),'Coluna diária ausente: '+name);
+  const groups=new Map(),days=new Set();
+  for(const row of rows.slice(1)) {
+    const get=name=>row[columns.get(name)];
+    const day=get('Início dos relatórios'),name=get('Nome do anúncio')?.trim(),adset=get('Nome do conjunto de anúncios')?.trim();
+    required(/^\d{4}-\d{2}-\d{2}$/.test(day)&&day===get('Encerramento dos relatórios')&&day>=period.start&&day<=period.end&&name&&adset,'Data, nome ou conjunto diário inválido');
+    const indicator=get('Indicador de resultados');
+    required(!indicator||indicator==='actions:offsite_conversion.fb_pixel_purchase','Indicador diário inesperado');
+    required(indicator||!get('Resultados'),'Resultado diário sem indicador');
+    const adId='daily-'+hash(JSON.stringify([adset,name])),key=day+'|'+adId;
+    const result=groups.get(key)??{date:day,periodEnd:day,accountId:'manual-meta',campaignId:'manual',campaign:'Campanha não informada no export',adsetId:'name-'+hash(adset),adset,adId,ad:name,status:'UNKNOWN',currency:'BRL',spend:0,impressions:0,purchases:0,clicks:null,views:null,checkouts:null,purchaseValue:null,reach:null};
+    result.spend+=cents(get('Valor gasto (BRL)'),'gasto diário');result.impressions+=count(get('Impressões'),'impressões diárias');result.purchases+=indicator?count(get('Resultados'),'compras diárias'):0;
+    for(const field of ['spend','impressions','purchases'])required(Number.isSafeInteger(result[field]),'Total fora do limite');
+    groups.set(key,result);days.add(day);
+  }
+  for(let day=period.start;day<=period.end;day=new Date(Date.parse(day+'T12:00:00Z')+86400000).toISOString().slice(0,10))required(days.has(day),'Dia ausente no export Meta: '+day);
+  const insights=[...groups.values()].sort((a,b)=>a.date.localeCompare(b.date)||a.adId.localeCompare(b.adId));
+  return {insights,totals:Object.fromEntries(['spend','impressions','purchases'].map(field=>[field,insights.reduce((sum,r)=>sum+r[field],0)])),sourceRows:rows.length-1};
+}

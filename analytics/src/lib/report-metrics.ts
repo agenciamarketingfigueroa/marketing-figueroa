@@ -4,7 +4,8 @@ import { coversPeriod,mergeCoverage,type CoverageWindow } from './coverage';
 export function reportMetrics(data:Dataset,filters:Filters,today=dateInZone(new Date().toISOString()),rows=select(data,filters)) {
   const metrics=summarize(rows.orders,rows.insights,data.mappings);
   const manualMeta=(data.manualPeriods??[]).filter(p=>p.start>=filters.start&&p.end<=filters.end).reduce<CoverageWindow[]>((windows,p)=>mergeCoverage(windows,{start:Date.parse(p.start+'T00:00:00-03:00'),end:Date.parse(p.end+'T23:59:59.999-03:00')}),[]);
-  const metaCovered=data.mode==='demo'||coversPeriod(data.mode==='manual'?(filters.currency==='BRL'&&filters.product==='all'?manualMeta:[]):data.coverage?.meta??[],filters.start,filters.end,today);
+  const manualCoverage=(data.manualMetaDailyCoverage??[]).reduce((windows,next)=>mergeCoverage(windows,next),manualMeta);
+  const metaCovered=data.mode==='demo'||coversPeriod(data.mode==='manual'?(filters.currency==='BRL'&&filters.product==='all'?manualCoverage:[]):data.coverage?.meta??[],filters.start,filters.end,today);
   const hotmartCovered=(data.mode!=='manual'||filters.account==='all')&&(data.mode==='demo'||coversPeriod(data.coverage?.hotmart??[],filters.start,filters.end,today));
   if(data.mode==='live' && metaCovered && !rows.insights.length) {
     metrics.spend=0;metrics.impressions=0;metrics.clicks=0;metrics.views=0;metrics.checkouts=0;metrics.purchases=0;

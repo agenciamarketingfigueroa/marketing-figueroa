@@ -4,21 +4,37 @@
 
 Nova ferramenta em [`clientes/painel/`](clientes/painel/index.html), com atalhos na Área Interna e no Analytics. Usa o mesmo login de administrador e o mesmo pacote criptografado do Analytics. Não altera os arquivos importados. Depois da publicação habitual do repositório, o endereço será `https://marketingfigueroa.com.br/clientes/painel/`.
 
-São cinco lâminas: visão geral, dia a dia, mídia paga, vendas e Instagram. A apresentação tem transições de opacidade e deslocamento, rodapé de indicadores, períodos completos ou personalizados, moedas separadas, navegação por botões/setas, pausa com espaço, intervalos de 10/20/30/60 segundos e tela cheia quando suportada. A preferência de movimento reduzido desativa as transições e inicia a apresentação pausada. Lâminas ocultas não recebem foco; interagir com o conteúdo pausa a apresentação. Em telas estreitas o conteúdo empilha e permite rolagem.
+A apresentação separa visão geral, dia a dia, mídia paga, vendas, Instagram, Produtos (Visão Geral), Produtos (Detalhamento), criativos e Projeções (Visão Geral, Acompanhamento e Base/Método). O detalhamento de produtos é paginado automaticamente, com até seis produtos por lâmina. Com os dados até 04/11, são 12 lâminas. Todas participam da reprodução automática.
 
-Consulta o pacote publicado a cada cinco minutos enquanto a aba está visível, além do botão de atualização. Isso não coleta dados das plataformas: uma nova importação precisa ser publicada pelo fluxo existente. A consulta mantém a lâmina e os períodos fixos; em **Todo o histórico**, o intervalo inclui automaticamente as novas datas recebidas, e a visão diária acompanha o último dia disponível enquanto não houver um dia fixado manualmente. O relógio segue Brasília. O acesso expira com a sessão existente de oito horas.
+Em monitores a partir de 900 px de largura, cabeçalho e rodapé ficam dentro da altura da janela. O conteúdo de cada lâmina é ajustado proporcionalmente ao espaço restante, recalculando ao mudar a janela, a tela cheia, a lâmina ou seu conteúdo. Não exige rolagem para assistir. Em celulares, o conteúdo mantém o fluxo responsivo. Setas, botões, pausa com espaço, intervalos de 10/20/30/60 segundos e tela cheia continuam disponíveis. Movimento reduzido desativa transições e inicia pausado; interagir com o conteúdo pausa a reprodução.
 
-Os cálculos são os mesmos do Analytics. ROAS Meta = valor de conversão Meta ÷ gasto; MER = bruto Hotmart ÷ gasto; resultado após mídia = líquido − gasto. Novos seguidores não representam o total atual da conta. Sem Meta diária, investimento e ROAS diários ficam indisponíveis. Um período incompleto não recebe totais estimados. Oficina do Violão continua aguardando exports.
+Consulta o pacote publicado a cada cinco minutos enquanto a aba está visível. Isso não coleta dados das plataformas: uma nova importação precisa ser publicada pelo fluxo existente. Todo o histórico acompanha as novas datas, e a visão diária usa o último dia disponível enquanto não houver dia fixado. O relógio segue Brasília e o acesso mantém a sessão existente de oito horas.
 
-Para regenerar o JavaScript após alterações, execute `npm run build:manual` em `analytics/`. O build atende Analytics e Painel. Testes de renderização e cobertura estão em `analytics/tests/board.test.ts`; a revisão visual no navegador permanece necessária quando o controle de navegador estiver disponível.
+Produtos mostram vendas, bruto, líquido, ticket e CPA apenas com vínculo exclusivo e verificável entre anúncios e produto. Criativos reutilizam a galeria do Analytics, com quatro destaques, ordenação e gasto mínimo. Projeções usam a média diária ponderada de até três meses calendário completos nos últimos seis meses, multiplicada pelos dias do próximo mês calendário. Cenários de ±20% mantêm o investimento e variam o resultado; não são intervalos de confiança. O realizado é comparado com o previsto até a mesma data, separadamente por provedor. **Fixar projeção** preserva a estimativa no armazenamento criptografado deste navegador; baixar/restaurar permite transportá-la sem substituir estimativas já fixadas.
+
+ROAS Meta = valor de conversão Meta ÷ gasto; MER = bruto Hotmart ÷ gasto; resultado após mídia = líquido − gasto. Sem valor de conversão no recorte, o destaque do Painel usa MER e identifica a ausência de ROAS. Oficina do Violão continua aguardando exports.
+
+Para regenerar o JavaScript, execute `npm run build:manual` em `analytics/`. Testes de lâminas, paginação, cobertura, projeções e persistência estão em `analytics/tests/board*.test.ts` e `analytics/tests/manual.test.ts`.
+
+### Atualização diária até 04/11/2026
+
+Os quatro exports Meta diários de agosto a novembro substituem o gasto, impressões e compras agregados no histórico diário. Os totais de agosto, setembro e outubro foram reconciliados exatamente com os anteriores. O arquivo Hotmart de 01 a 04/11 foi acrescentado. O pacote continua criptografado; arquivos originais, compradores e códigos de origem não são publicados. O Instagram permanece com cobertura até 31/10.
+
+Os novos exports Meta **não contêm** cliques, visitas, checkouts, valor de conversão nem IDs dos anúncios. Portanto, gasto e CPA diários estão disponíveis, mas ROAS e funil diários não. Os detalhes dos exports anteriores são preservados em `manualMetaAggregates` e substituem os registros diários somente quando um período histórico completo é selecionado. Nunca são somados aos mesmos dias. A série diária sempre usa os registros diários. Grupos diários com nome/conjunto iguais são consolidados, sem assumir um ID original ou atribuição Hotmart.
+
+O importador `scripts/import-manual-daily.mjs` recebe um manifesto JSON com listas `meta` e `hotmart`; cada entrada informa `path`, `start`, `end` e `month`. Datas devem representar a cobertura real dos arquivos. Cada dia Meta precisa estar presente; divergências históricas, sobreposições parciais e transações repetidas são recusadas. Use a chave existente pela entrada padrão:
+
+```powershell
+Read-Host 'Chave de dados' | & .\.tools\node-v22.23.4-win-x64\node.exe scripts/import-manual-daily.mjs 'C:\caminho\manifesto.json' assets/reports/manual-analytics.enc.json --dry-run
+```
+
+Depois da conciliação, execute sem `--dry-run`. O importador verifica a criptografia e substitui o pacote atomicamente. Novos períodos exigem exports Meta e Hotmart correspondentes. Não reutilize os importadores agregados para substituir este pacote diário. Verifique com `scripts/check-manual-analytics.mjs` (chave via stdin) e execute os testes `node --test scripts/check-manual-meta.mjs scripts/check-manual-daily-import.mjs`.
 
 ### Rotina recomendada para os dados diários
 
 Para a análise diária, o ganho vem da granularidade dos registros, não da quantidade de arquivos. Na Meta, exportar por **dia e anúncio**, com data, nomes/IDs de campanha/conjunto/anúncio, gasto, impressões, cliques no link, visitas à página, checkouts, compras e valor de conversão. Manter os IDs como texto para evitar arredondamento. É possível selecionar um período maior e usar a divisão por dia no relatório: [orientação oficial sobre exportação Meta com detalhamento diário](https://support.google.com/analytics/answer/16748649?hl=en#meta).
 
-Para recuperar o histórico desde 21/08/2026, começar com um arquivo de amostra, depois exportar meses com linhas diárias. A Hotmart existente já tem datas por transação; o Instagram existente tem séries diárias. Reexportar períodos apenas quando for necessário ampliar a cobertura ou reconciliar mudanças.
-
-Para manutenção, enviar o dia anterior fechado é uma boa rotina; o dia atual deve ser identificado como parcial. Uma revisão dos últimos sete dias pode servir à reconciliação de alterações, mas **não deve ser anexada diretamente** ao importador atual: ele recusa sobreposição e espera períodos Meta uniformes por arquivo. O novo layout Meta diário ainda precisa de adaptação do importador e conferência dos totais com uma amostra real. Períodos diários devem substituir os agregados mensais correspondentes, nunca ser somados a eles. As duas telas usarão a mesma atualização após essa importação validada.
+O histórico diário de gasto, impressões e compras de 21/08 a 04/11 já foi importado. Para completar ROAS e funil diários, incluir também cliques, visitas, checkouts e valor de conversão. Preservar IDs como texto para não perder precisão. Enviar períodos novos sem sobreposição, com as mesmas datas de cobertura na Meta e na Hotmart. O importador diário mantém os detalhes históricos sem duplicar os totais.
 
 ## Analytics manual — ferramenta da Área Interna
 
@@ -26,7 +42,7 @@ O Analytics com o layout da aplicação original está em [`clientes/analytics/`
 
 Os seis exports mensais enviados de agosto, setembro e outubro de 2026 foram importados para um [pacote de dados criptografados](assets/reports/manual-analytics.enc.json). O acesso usa somente o login e a senha existentes do administrador. O segredo que abre os dados fica dentro do envelope criptografado dessa conta e é recuperado após o login; não há tela de chave extra nem segredo aberto no código. Sessões antigas precisam de um novo login para receber essa configuração. Os arquivos originais, dados pessoais e identificadores de transação não são publicados.
 
-O painel mostra Mvave BR de 21/08 a 31/10/2026 e sinaliza que a Oficina do Violão ainda não tem exports. Meta veio agregado por mês e anúncio; Hotmart veio por transação diária. Por isso gasto diário Meta, alcance consolidado, frequência agregada e atribuição Hotmart por anúncio ficam indisponíveis. Funil e ROAS Meta estão preenchidos para períodos completos dos exports. BRL e USD permanecem separados. Os totais de meses diferentes são somados em centavos; taxas são calculadas a partir dos totais.
+O painel mostra Mvave BR de 21/08 a 04/11/2026 e sinaliza que a Oficina do Violão ainda não tem exports. Meta tem gasto, impressões e compras diários; Hotmart tem transações diárias. Alcance consolidado, frequência agregada e atribuição Hotmart por anúncio permanecem indisponíveis. Funil e ROAS Meta são preservados nos períodos completos dos exports detalhados anteriores, de agosto a outubro. BRL e USD permanecem separados. Os totais de meses diferentes são somados em centavos; taxas são calculadas a partir dos totais.
 
 Para reimportar após receber novos pares de arquivos `Meta (Rótulo).xlsx` e `Hotmart (Rótulo).xls`, execute a partir da raiz. O rótulo deve começar com o mês; para uma semana de novembro, por exemplo, use `Novembro 01-07` nos dois nomes. Os períodos internos dos arquivos precisam coincidir e não podem se sobrepor.
 
@@ -54,7 +70,7 @@ npm run build:manual
 
 Na aba **Instagram**, informe perfil, data e seguidores. O mesmo perfil/data substitui o registro anterior. Os complementos ficam criptografados no armazenamento local deste navegador, com o segredo interno recuperado pelo login. **Baixar registros** gera uma cópia criptografada; **Restaurar registros** permite levá-la para outro navegador. Esses registros não são enviados automaticamente pelo push. Você também pode informar as contagens e datas para incorporá-las a uma atualização futura do relatório.
 
-Os totais da Meta só são calculados para períodos completos dos exports: não rateamos o gasto mensal nos gráficos diários. Cliques, visitas à página de destino, checkouts e valor de conversão vêm dos novos exports Meta. As prévias dos criativos são vinculadas por código do material no repositório. O destaque inicial usa ROAS Meta quando o valor de conversão está disponível; MER continua no seletor. Referências anônimas e agrupamentos por nome não representam IDs originais de transações ou anúncios.
+Os gráficos diários usam os novos exports diários sem rateio. Detalhes mensais históricos substituem os dias correspondentes apenas nos recortes completos, sem dupla contagem. Cliques, visitas à página de destino, checkouts e valor de conversão vêm dos novos exports Meta. As prévias dos criativos são vinculadas por código do material no repositório. O destaque inicial usa ROAS Meta quando o valor de conversão está disponível; MER continua no seletor. Referências anônimas e agrupamentos por nome não representam IDs originais de transações ou anúncios.
 
 ## Analytics automático — aplicação independente (não ativada)
 

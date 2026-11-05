@@ -36,6 +36,8 @@ export interface Dataset {
   instagramFollowersKind?: 'new';
   instagramSources?: {name:string;rows:number;sha256:string}[];
   manualMetaIdPrecision?: 'rounded'|'exact';
+  manualMetaDailyCoverage?: import('./coverage').CoverageWindow[];
+  manualMetaAggregates?: Insight[];
   instagramAudience?: {age:{label:string;men:number;women:number}[];cities:{label:string;value:number}[];countries:{label:string;value:number}[]};
   manualPeriods?: {start:string;end:string;month:string;sources:{name:string;rows:number}[]}[];
 }
@@ -93,10 +95,14 @@ export function attribute(order: Order, mappings: Attribution[]): Attribution | 
 function optionalSum(rows: Insight[], key: 'clicks' | 'views' | 'checkouts' | 'purchases' | 'purchaseValue') {
   return rows.length && rows.every(r => r[key] !== null) ? key==='purchaseValue' ? sumMinor(rows.map(r=>r[key]!)) : rows.reduce((sum, r) => sum + r[key]!, 0) : null;
 }
-export function select(data: Dataset, f: Filters) {
+export function select(data: Dataset, f: Filters, dailyOnly=false) {
   const inPeriod = (day: string) => day >= f.start && day <= f.end;
   const orders = data.orders.filter(o => o.currency === f.currency && inPeriod(orderDay(o)) && (f.product === 'all' || o.productId === f.product) && (f.account === 'all' || attribute(o, data.mappings)?.accountId === f.account));
-  const insights = data.insights.filter(r => r.currency === f.currency && inPeriod(r.date) && (!r.periodEnd || inPeriod(r.periodEnd)) && (f.account === 'all' || r.accountId === f.account) && (f.product === 'all' || data.mappings.some(m => m.productId === f.product && m.adId === r.adId && m.accountId === r.accountId)));
+  // Reconciled historical detail replaces (never adds to) daily rows for complete exports.
+  const aggregates=!dailyOnly&&data.mode==='manual'?(data.manualMetaAggregates??[]).filter(r=>inPeriod(r.date)&&r.periodEnd&&inPeriod(r.periodEnd)):[];
+  const windows=[...new Map(aggregates.map(r=>[r.date+'|'+r.periodEnd,{start:r.date,end:r.periodEnd!,currency:r.currency,accountId:r.accountId}])).values()];
+  const source=[...data.insights.filter(r=>!windows.some(w=>r.date>=w.start&&(r.periodEnd??r.date)<=w.end&&r.currency===w.currency&&r.accountId===w.accountId)),...aggregates];
+  const insights = source.filter(r => r.currency === f.currency && inPeriod(r.date) && (!r.periodEnd || inPeriod(r.periodEnd)) && (f.account === 'all' || r.accountId === f.account) && (f.product === 'all' || data.mappings.some(m => m.productId === f.product && m.adId === r.adId && m.accountId === r.accountId)));
   return { orders, insights };
 }
 export function summarize(orders: Order[], insights: Insight[], mappings: Attribution[]) {

@@ -60,3 +60,17 @@ it('criptografa e restaura complementos e rejeita outra chave',async()=>{
   expect(await unseal(encrypted,'chave-exclusiva-do-teste')).toEqual(value);
   await expect(unseal(encrypted,'outra-chave')).rejects.toThrow();
 });
+
+it('usa mídia diária nos gráficos e detalhe reconciliado em meses completos sem dupla contagem',()=>{
+  const data=manual(),aggregate={...data.insights[0],clicks:100,views:80,checkouts:10,purchaseValue:20000};
+  data.manualMetaAggregates=[aggregate];
+  data.manualMetaDailyCoverage=[{start:Date.parse('2026-09-01T00:00:00-03:00'),end:Date.parse('2026-09-30T23:59:59.999-03:00')}];
+  data.insights=Array.from({length:30},(_,i)=>({...aggregate,date:`2026-09-${String(i+1).padStart(2,'0')}`,periodEnd:`2026-09-${String(i+1).padStart(2,'0')}`,spend:i===0?5000:0,impressions:i===0?10000:0,purchases:i===0?3:0,clicks:null,views:null,checkouts:null,purchaseValue:null}));
+  expect(reportMetrics(data,f,'2026-11-05').metrics).toMatchObject({spend:5000,purchases:3,metaRoas:4,clicks:100});
+  expect(reportMetrics(data,{...f,end:'2026-09-01'},'2026-11-05').metrics).toMatchObject({spend:5000,cpa:5000/3,purchases:3,metaRoas:null,clicks:null});
+  const daily=dailyPerformance(data,f,'2026-11-05');
+  expect(daily[0]).toMatchObject({spend:50,cpa:5000/3/100,roas:null});
+  expect(daily[1].spend).toBe(0);
+  expect(daily.at(-1)?.cumulativeSpend).toBe(50);
+  expect(reportMetrics(data,{...f,end:'2026-10-01'},'2026-11-05').metaCovered).toBe(false);
+});

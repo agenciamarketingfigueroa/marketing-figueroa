@@ -2,7 +2,7 @@ import { type Dataset,type Filters,type Order,type Insight,type FollowerSnapshot
 import { reportMetrics } from './report-metrics';
 
 export function dailyPerformance(data:Dataset,filters:Filters,today=dateInZone(new Date().toISOString())) {
-  const selected=select(data,filters);const orders=new Map<string,Order[]>();const insights=new Map<string,Insight[]>();
+  const selected=select(data,filters,true);const orders=new Map<string,Order[]>();const insights=new Map<string,Insight[]>();
   for(const o of selected.orders) {const day=orderDay(o);orders.set(day,[...(orders.get(day)??[]),o]);}
   for(const i of selected.insights) insights.set(i.date,[...(insights.get(i.date)??[]),i]);
   let cumulativeRevenue:number|null=0;let cumulativeSpend:number|null=0;let cumulativeSales:number|null=0;
