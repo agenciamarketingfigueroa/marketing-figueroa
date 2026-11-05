@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "check": "npm run lint && npm run typecheck && npm test"
+    "check": "npm run lint && npm run typecheck && npm test",
+    "build:manual": "node ../scripts/build-manual-analytics.mjs"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -34,6 +35,7 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.4",
     "typescript": "6.0.3",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "vite": "8.3.5"
   }
 }

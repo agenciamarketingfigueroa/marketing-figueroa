@@ -24,6 +24,12 @@ export function followerSummary(snapshots:FollowerSnapshot[],start:string,end:st
   const delta=latest&&baseline&&latest.date!==baseline.date?latest.followers-baseline.followers:null;
   return {points,latest,baseline,delta,percent:delta!==null&&baseline?.followers?delta/baseline.followers*100:null,partialBaseline:!before};
 }
+export function instagramPerformance(data:Dataset,start:string,end:string) {
+  const rows=(data.instagramDaily??[]).filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>a.date.localeCompare(b.date));
+  const expected=daysBetween(start,end),complete=expected>0&&rows.length===expected&&new Set(rows.map(r=>r.date)).size===expected;
+  const total=(field:'views'|'interactions'|'followers')=>complete?rows.reduce((sum,row)=>sum+row[field],0):null;
+  return {rows,complete,views:total('views'),interactions:total('interactions'),followers:data.instagramFollowersKind==='new'?total('followers'):null};
+}
 export function rankedCreatives(data:Dataset,filters:Filters,sort:'roas'|'purchases'|'spend',minSpend:number) {
   const selected=select(data,filters);const groups=new Map<string,Insight[]>();
   for(const row of selected.insights) {const key=`${row.accountId}:${row.adId}`;groups.set(key,[...(groups.get(key)??[]),row]);}

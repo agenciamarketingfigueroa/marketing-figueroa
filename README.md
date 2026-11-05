@@ -1,12 +1,12 @@
-# Marketing Figueroa
+﻿# Marketing Figueroa
 
 ## Analytics manual — ferramenta da Área Interna
 
 O Analytics com o layout da aplicação original está em [`clientes/analytics/`](clientes/analytics/index.html) e aparece diretamente na Área Interna e na lista de clientes. É uma versão estática para os dados manuais: funciona no Go Live local e no GitHub Pages após o push, sem servidor de dados nem conexão com Facebook, Meta ou Hotmart. O relatório anterior de Operação continua disponível no endereço próprio.
 
-Os seis exports mensais enviados de agosto, setembro e outubro de 2026 foram importados para um [pacote de agregados criptografados](assets/reports/manual-analytics.enc.json). O acesso exige a conta de administrador existente e uma chave de dados separada, gerada na importação. A chave **não** está no repositório; guarde-a fora do Git e informe-a somente na tela do Analytics. O navegador a retém apenas até o fim da sessão ou logout. Os arquivos originais, dados pessoais e identificadores de transação não são publicados.
+Os seis exports mensais enviados de agosto, setembro e outubro de 2026 foram importados para um [pacote de dados criptografados](assets/reports/manual-analytics.enc.json). O acesso usa somente o login e a senha existentes do administrador. O segredo que abre os dados fica dentro do envelope criptografado dessa conta e é recuperado após o login; não há tela de chave extra nem segredo aberto no código. Sessões antigas precisam de um novo login para receber essa configuração. Os arquivos originais, dados pessoais e identificadores de transação não são publicados.
 
-O painel mostra Mvave BR de 21/08 a 31/10/2026 e sinaliza que a Oficina do Violão ainda não tem exports. Meta veio agregado por mês e anúncio; Hotmart veio por transação diária. Por isso gasto diário Meta, cliques, visitas, checkouts, alcance consolidado, frequência, ROAS Meta e atribuição de vendas a anúncios ficam indisponíveis. BRL e USD permanecem separados. Os totais de meses diferentes são somados em centavos; taxas são calculadas a partir dos totais.
+O painel mostra Mvave BR de 21/08 a 31/10/2026 e sinaliza que a Oficina do Violão ainda não tem exports. Meta veio agregado por mês e anúncio; Hotmart veio por transação diária. Por isso gasto diário Meta, alcance consolidado, frequência agregada e atribuição Hotmart por anúncio ficam indisponíveis. Funil e ROAS Meta estão preenchidos para períodos completos dos exports. BRL e USD permanecem separados. Os totais de meses diferentes são somados em centavos; taxas são calculadas a partir dos totais.
 
 Para reimportar após receber novos pares de arquivos `Meta (Rótulo).xlsx` e `Hotmart (Rótulo).xls`, execute a partir da raiz. O rótulo deve começar com o mês; para uma semana de novembro, por exemplo, use `Novembro 01-07` nos dois nomes. Os períodos internos dos arquivos precisam coincidir e não podem se sobrepor.
 
@@ -14,11 +14,31 @@ Para reimportar após receber novos pares de arquivos `Meta (Rótulo).xlsx` e `H
 Read-Host 'Chave de dados' | & .\.tools\node-v22.23.4-win-x64\node.exe scripts/import-manual-analytics.mjs 'C:\caminho\dos\exports' assets/reports/manual-analytics.enc.json
 ```
 
-O comando lê a chave pela entrada padrão; ela não entra na linha de comando nem no Git. Para criar uma chave nova, acrescente `--new-key` e guarde a chave exibida. Uma chave nova invalida a anterior para o pacote recém-gerado. Confira os totais e faça o push somente do pacote criptografado e do código. Para novembro, prefira exports **semanais** de ambas as plataformas, com datas iguais e sem sobreposição; isso equilibra acompanhamento e trabalho manual. Uma conferência diária de gasto e vendas pode orientar ajustes, enquanto o fechamento mensal é uma consolidação das semanas.
+O comando lê a chave pela entrada padrão; ela não entra na linha de comando nem no Git. Para criar uma chave nova, acrescente `--new-key` e guarde a chave exibida. Uma chave nova invalida a anterior para o pacote recém-gerado e exige atualizar o vínculo do administrador com `scripts/link-analytics-login.mjs` (senha e chave via JSON na entrada padrão). Não rotacione a chave durante uma importação comum. Confira os totais e faça o push somente do pacote criptografado e do código. Para novembro, prefira exports **semanais** de ambas as plataformas, com datas iguais e sem sobreposição; isso equilibra acompanhamento e trabalho manual. Uma conferência diária de gasto e vendas pode orientar ajustes, enquanto o fechamento mensal é uma consolidação das semanas.
+
+### Atualização manual dos insights
+
+O relatório inclui os novos exports de Hotmart (inclusive status de reembolso), séries diárias dos três arquivos do Instagram e o retrato de público sem data de referência. Os valores diários de seguidores são novos seguidores, conforme confirmado pelo responsável; seguidores, visualizações e interações são somados no período selecionado e aparecem na visão geral. Tracking das vendas é definido como compras Meta ÷ vendas aprovadas Hotmart × 100, no mesmo período e moeda. Identificadores SCK numéricos foram classificados sem publicar os códigos; o cruzamento com anúncios depende dos IDs da Meta. Os exports Meta atualizados incluem cliques, visitas à página de destino, checkouts, compras e valor de conversão, preenchendo funil e ROAS Meta. Os IDs vieram arredondados em notação científica no XLSX e não são usados para atribuir vendas Hotmart por anúncio. A biblioteca apresenta 264 prévias das duas marcas. Os cards dos anúncios usam também 28 prévias das peças originais vinculadas por código/nome a 48 anúncios; versões históricas podem diferir.
+
+Para atualizar Hotmart, Instagram e os arquivos Meta detalhados, use `scripts/update-manual-insights.mjs <pasta> assets/reports/manual-analytics.enc.json` e forneça a chave interna pela entrada padrão. O script valida os períodos, elimina dados pessoais e recusa mudanças em totais aprovados que exigem reconciliação. Depois, execute `scripts/link-manual-creatives.mjs <repositorio-mvave> assets/reports/manual-analytics.enc.json` com a chave interna via stdin para regenerar os vínculos e as prévias; o repositório de origem é somente lido.
+
+### Interface original e seguidores
+
+O acesso permanece em `clientes/analytics/index.html`. A página carrega o bundle já compilado de `assets/analytics-runtime/dashboard.js`, portanto Go Live e GitHub Pages não precisam executar Node. Depois de alterar os componentes React, regenere o bundle:
+
+```sh
+cd analytics
+npm ci
+npm run build:manual
+```
+
+Na aba **Instagram**, informe perfil, data e seguidores. O mesmo perfil/data substitui o registro anterior. Os complementos ficam criptografados no armazenamento local deste navegador, com o segredo interno recuperado pelo login. **Baixar registros** gera uma cópia criptografada; **Restaurar registros** permite levá-la para outro navegador. Esses registros não são enviados automaticamente pelo push. Você também pode informar as contagens e datas para incorporá-las a uma atualização futura do relatório.
+
+Os totais da Meta só são calculados para períodos completos dos exports: não rateamos o gasto mensal nos gráficos diários. Cliques, visitas à página de destino, checkouts e valor de conversão vêm dos novos exports Meta. As prévias dos criativos são vinculadas por código do material no repositório. O destaque inicial usa ROAS Meta quando o valor de conversão está disponível; MER continua no seletor. Referências anônimas e agrupamentos por nome não representam IDs originais de transações ou anúncios.
 
 ## Analytics automático — aplicação independente (não ativada)
 
-A aplicação que forneceu o layout está em [`analytics/`](analytics/README.md). Ela mantém o site público e os relatórios manuais existentes intactos. Inclui demonstração identificada, dashboard Next.js, acesso Supabase com MFA/RLS, webhook Hotmart e rotinas de sincronização no servidor. **As conexões reais e os agendamentos ainda precisam ser configurados e validados; não estão ativos.** A versão estática manual reutiliza as classes e os estilos desse layout, mas mostra apenas os indicadores presentes nos exports.
+A aplicação que forneceu o layout está em [`analytics/`](analytics/README.md). Ela mantém o site público e os relatórios manuais existentes intactos. Inclui demonstração identificada, dashboard Next.js, acesso Supabase com MFA/RLS, webhook Hotmart e rotinas de sincronização no servidor. **As conexões reais e os agendamentos ainda precisam ser configurados e validados; não estão ativos.** A versão manual compila os próprios componentes React `Dashboard`, `HistoryChart`, `CreativeGallery` e `InstagramPanel` da aplicação automática, com os mesmos estilos, ícones e interações. O adaptador estático desativa chamadas de API e substitui somente os recursos de servidor do Next.
 
 Veja a [auditoria](analytics/docs/AUDITORIA.md), as [instruções de execução e implantação](analytics/README.md) e a [matriz de validação](analytics/docs/VALIDACAO.md). Não publicar essa aplicação no GitHub Pages: preparar um deploy separado com raiz `analytics`. Nenhum acesso à conta pessoal do Facebook ou alteração do repositório Mvave BR faz parte desta implementação.
 

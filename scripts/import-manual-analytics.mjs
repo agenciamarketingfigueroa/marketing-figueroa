@@ -3,8 +3,8 @@ import {createCipheriv,createHash,pbkdf2Sync,randomBytes} from 'node:crypto';
 import {readFileSync,readdirSync,writeFileSync} from 'node:fs';
 import {basename,join,resolve} from 'node:path';
 
-// Imports monthly exports locally. Only grouped figures are sealed; buyer data and
-// transaction identifiers never enter the published package.
+// Imports only financial fields. Buyer data and original transaction identifiers
+// never enter the published package. All report data is encrypted.
 const [sourceDir,outputPath,...flags]=process.argv.slice(2);
 if (!sourceDir || !outputPath || flags.some(flag=>flag!=='--new-key')) {
   throw Error('Use: node scripts/import-manual-analytics.mjs <pasta-dos-exports> <arquivo.enc.json> [--new-key]');
@@ -35,6 +35,8 @@ function count(value,label) {
 }
 const transactions=new Set();
 const periods=[];
+const dataset={organizationId:'mvave-br',organization:'Mvave BR',mode:'manual',accounts:[{id:'manual-meta',name:'Mvave BR · Meta'}],orders:[],insights:[],mappings:[],sync:[],followers:[]};
+const reference=value=>createHash('sha256').update(value).digest('hex').slice(0,16);
 for(const pair of pairs) {
   const metaPath=join(sourceDir,pair.meta),hotmartPath=join(sourceDir,pair.hotmart);
   const meta=rows(metaPath),sales=rows(hotmartPath);
@@ -55,6 +57,8 @@ for(const pair of pairs) {
     required(spend>=0,`${pair.month}: gasto negativo`);
     period.spend+=spend;period.impressions+=impressions;period.metaPurchases+=purchases;
     const name=row.C.trim(),ad=ads.get(name)||{name,spend:0,impressions:0,purchases:0};
+    const adset=String(row.U||'Conjunto não informado').trim();
+    dataset.insights.push({date:start,periodEnd:end,accountId:'manual-meta',campaignId:'manual',campaign:'Campanha não informada no export',adsetId:reference(adset),adset,adId:reference(adset+'|'+name),ad:name,status:'UNKNOWN',currency:'BRL',spend,impressions,purchases,clicks:null,views:null,checkouts:null,purchaseValue:null,reach:row.M?count(row.M,'Alcance'):null});
     ad.spend+=spend;ad.impressions+=impressions;ad.purchases+=purchases;ads.set(name,ad);
   }
   for(const row of sales.slice(1)) {
@@ -82,6 +86,7 @@ for(const pair of pairs) {
     }
     if(row.AC||row.AD)period.sourceSignals++;
     const payment=String(row.AE||'Não informado').trim();
+    dataset.orders.push({transaction:'ref-'+reference(transaction),accountId:'manual-hotmart',productId:String(row.F),product:productName,offer:null,status:status==='Completo'?'COMPLETE':'APPROVED',purchasedAt:day+'T12:00:00-03:00',approvedAt:null,currency,gross,net,payment,source:{},manualSourcePresent:Boolean(row.AC||row.AD),parentTransaction:null,isBump:false,isFunnel:false});
     period.payments[payment]=(period.payments[payment]||0)+1;
     products.set(productName,product);
   }
@@ -93,6 +98,11 @@ for(const pair of pairs) {
 periods.sort((a,b)=>a.start.localeCompare(b.start));
 for(let i=1;i<periods.length;i++)required(periods[i-1].end<periods[i].start,'Períodos mensais sobrepostos');
 const report={schemaVersion:1,mode:'manual',client:{id:'mvave-br',name:'Mvave BR'},coverage:{meta:'per-export',hotmart:'daily',brands:['Mvave BR'],missingBrands:['Oficina do Violão']},periods};
+dataset.manualPeriods=periods.map(({start,end,month,sources})=>({start,end,month,sources}));
+const coverage={start:Date.parse(periods[0].start+'T00:00:00-03:00'),end:Date.parse(periods[0].end+'T23:59:59.999-03:00')};
+const windows=[coverage];
+for(const p of periods.slice(1)) {const start=Date.parse(p.start+'T00:00:00-03:00'),end=Date.parse(p.end+'T23:59:59.999-03:00');const last=windows.at(-1);if(start===last.end+1)last.end=end;else windows.push({start,end});}
+dataset.coverage={meta:windows,hotmart:windows};report.dataset=dataset;
 const passphrase=flags.includes('--new-key')?randomBytes(32).toString('base64url'):await new Promise((resolve,reject)=>{
   let input='';process.stdin.setEncoding('utf8');process.stdin.on('data',chunk=>input+=chunk);process.stdin.on('end',()=>resolve(input.trim()));process.stdin.on('error',reject);
 });

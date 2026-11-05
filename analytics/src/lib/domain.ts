@@ -4,6 +4,8 @@ export interface Order {
   status: OrderStatus; purchasedAt: string; approvedAt: string | null; currency: string;
   gross: number; net: number | null; payment: string; source: Record<string, string>;
   parentTransaction: string | null; isBump: boolean; isFunnel: boolean;
+  manualSourcePresent?: boolean;
+  manualSourceCategory?: string; manualTool?: string;
 }
 export interface Insight {
   date: string; accountId: string; campaignId: string; campaign: string; adsetId: string;
@@ -11,6 +13,8 @@ export interface Insight {
   spend: number; impressions: number; clicks: number | null; views: number | null;
   checkouts: number | null; purchases: number | null; purchaseValue: number | null;
   reach: number | null;
+  periodEnd?: string;
+  instagramFollows?: number; exportAdId?: string; idPrecision?: 'rounded'|'exact';
 }
 export interface Attribution {
   sourceKey: string; sourceValue: string; hotmartAccountId: string; productId: string; offer: string | null;
@@ -21,14 +25,21 @@ export interface SyncState {
   lastSuccess: string | null; lastEvent?: string | null; message: string | null;
 }
 export interface Dataset {
-  organizationId: string; organization: string; mode: 'demo' | 'live';
+  organizationId: string; organization: string; mode: 'demo' | 'live' | 'manual';
   accounts: { id: string; name: string }[]; orders: Order[]; insights: Insight[];
   mappings: Attribution[]; sync: SyncState[];
   coverage?: { meta: import('./coverage').CoverageWindow[]; hotmart: import('./coverage').CoverageWindow[] };
   creatives?: Creative[];
   followers?: FollowerSnapshot[];
+  manualStatusComplete?: boolean;
+  instagramDaily?: {date:string;views:number;interactions:number;followers:number}[];
+  instagramFollowersKind?: 'new';
+  instagramSources?: {name:string;rows:number;sha256:string}[];
+  manualMetaIdPrecision?: 'rounded'|'exact';
+  instagramAudience?: {age:{label:string;men:number;women:number}[];cities:{label:string;value:number}[];countries:{label:string;value:number}[]};
+  manualPeriods?: {start:string;end:string;month:string;sources:{name:string;rows:number}[]}[];
 }
-export interface Creative { accountId:string;adId:string;creativeId:string;name:string;imageUrl:string|null;videoId:string|null;kind:string }
+export interface Creative { accountId:string;adId:string;creativeId:string;name:string;imageUrl:string|null;videoId:string|null;kind:string;sourcePath?:string;matchBasis?:string }
 export interface FollowerSnapshot { accountId:string;username:string;date:string;followers:number;observedAt:string }
 export interface Filters { start: string; end: string; currency: string; account: string; product: string }
 
@@ -85,7 +96,7 @@ function optionalSum(rows: Insight[], key: 'clicks' | 'views' | 'checkouts' | 'p
 export function select(data: Dataset, f: Filters) {
   const inPeriod = (day: string) => day >= f.start && day <= f.end;
   const orders = data.orders.filter(o => o.currency === f.currency && inPeriod(orderDay(o)) && (f.product === 'all' || o.productId === f.product) && (f.account === 'all' || attribute(o, data.mappings)?.accountId === f.account));
-  const insights = data.insights.filter(r => r.currency === f.currency && inPeriod(r.date) && (f.account === 'all' || r.accountId === f.account) && (f.product === 'all' || data.mappings.some(m => m.productId === f.product && m.adId === r.adId && m.accountId === r.accountId)));
+  const insights = data.insights.filter(r => r.currency === f.currency && inPeriod(r.date) && (!r.periodEnd || inPeriod(r.periodEnd)) && (f.account === 'all' || r.accountId === f.account) && (f.product === 'all' || data.mappings.some(m => m.productId === f.product && m.adId === r.adId && m.accountId === r.accountId)));
   return { orders, insights };
 }
 export function summarize(orders: Order[], insights: Insight[], mappings: Attribution[]) {
@@ -112,8 +123,8 @@ export function summarize(orders: Order[], insights: Insight[], mappings: Attrib
     costPerView:divide(spend,views),connectRate:divide(views===null?null:views*100,clicks),
     costPerCheckout:divide(spend,checkouts),pvToCheckout:divide(checkouts===null?null:checkouts*100,views),
     pvToPurchase:divide(purchases===null?null:purchases*100,views),
-    pending: orders.filter(o => pending(o.status)).length,
-    refunds: orders.filter(o => ['REFUNDED', 'CHARGEBACK', 'PARTIALLY_REFUNDED'].includes(o.status)).length,
+    pending: orders.filter(o => pending(o.status)).length as number|null,
+    refunds: orders.filter(o => ['REFUNDED', 'CHARGEBACK', 'PARTIALLY_REFUNDED'].includes(o.status)).length as number|null,
     impressions, clicks, views, checkouts, purchases,
   };
 }

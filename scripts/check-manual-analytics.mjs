@@ -12,6 +12,40 @@ const key=await webcrypto.subtle.deriveKey({name:'PBKDF2',salt:decode(sealed.sal
 const report=JSON.parse(new TextDecoder().decode(await webcrypto.subtle.decrypt({name:'AES-GCM',iv:decode(sealed.iv)},key,decode(sealed.data))));
 assert.equal(report.schemaVersion,1);assert.equal(report.mode,'manual');assert.equal(report.client.id,'mvave-br');
 assert.ok(report.periods.length>0);
+assert.equal(report.dataset.mode,'manual');
+assert.equal(report.dataset.mappings.length,0);
+for(const p of report.periods) {
+  const orders=report.dataset.orders.filter(o=>o.purchasedAt.slice(0,10)>=p.start&&o.purchasedAt.slice(0,10)<=p.end);
+  const insights=report.dataset.insights.filter(i=>i.date===p.start&&i.periodEnd===p.end);
+  const approved=orders.filter(o=>o.status==='APPROVED'||o.status==='COMPLETE');
+  assert.equal(approved.length,p.sales);
+  assert.equal(approved.filter(o=>o.currency==='BRL').reduce((s,o)=>s+o.gross,0),p.gross);
+  assert.equal(approved.filter(o=>o.currency==='BRL').reduce((s,o)=>s+o.net,0),p.net);
+  assert.equal(insights.reduce((s,i)=>s+i.spend,0),p.spend);
+  assert.equal(insights.reduce((s,i)=>s+i.purchases,0),p.metaPurchases);
+  if(report.dataset.manualMetaIdPrecision) {
+    assert.equal(new Set(insights.map(i=>i.adId)).size,insights.length);
+    for(const row of insights)for(const metric of ['spend','impressions','clicks','views','checkouts','purchases','purchaseValue','instagramFollows'])assert.ok(Number.isSafeInteger(row[metric])&&row[metric]>=0);
+    for(const row of insights)if(/[Ee]/.test(row.exportAdId))assert.equal(row.idPrecision,'rounded');
+  }
+}
+for(const o of report.dataset.orders) {assert.match(o.transaction,/^ref-[a-f0-9]{16}$/);assert.deepEqual(o.source,{});}
+if(report.dataset.manualStatusComplete) {
+  const allowed=['Código numérico SCK','Hotmart Sales Agents','Marketplace Hotmart','Outro código de origem','Sem código de origem'];
+  for(const o of report.dataset.orders)assert.ok(allowed.includes(o.manualSourceCategory));
+  for(const p of report.periods) {
+    const orders=report.dataset.orders.filter(o=>o.purchasedAt.slice(0,10)>=p.start&&o.purchasedAt.slice(0,10)<=p.end);
+    assert.equal(orders.length,Object.values(p.statuses).reduce((a,b)=>a+b,0));
+    const days=report.dataset.instagramDaily.filter(d=>d.date>=p.start&&d.date<=p.end);
+    assert.equal(days.length,p.days);assert.equal(new Set(days.map(d=>d.date)).size,p.days);
+    for(const day of days)for(const metric of ['views','interactions','followers'])assert.ok(Number.isSafeInteger(day[metric])&&day[metric]>=0);
+  }
+}
+for(const creative of report.dataset.creatives??[]) {
+  assert.ok(report.dataset.insights.some(row=>row.adId===creative.adId&&row.accountId===creative.accountId));
+  assert.match(creative.imageUrl,/^assets\/images\/analytics-creatives\/linked\/[a-f0-9]+\.webp$/);
+  assert.ok(readFileSync(creative.imageUrl).length>0);
+}
 for(const p of report.periods){
   const only=(value,allowed)=>assert.deepEqual(Object.keys(value).sort(),allowed.sort());
   only(p,['id','start','end','days','month','spend','impressions','metaPurchases','gross','net','sales','brlSales','usdGross','usdNet','usdSales','sourceSignals','ads','products','daily','statuses','payments','sources']);
