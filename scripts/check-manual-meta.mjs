@@ -37,3 +37,14 @@ test('não converte dias ausentes em zero nem aceita outro resultado como compra
  assert.throws(()=>parseDailyMeta([dailyHeader,{...dailyRow,G:'actions:link_click'}],{start:'2026-11-01',end:'2026-11-01'}),/Indicador/);
  assert.throws(()=>parseDailyMeta([dailyHeader,{...dailyRow,B:'2026-11-04'}],{start:'2026-11-01',end:'2026-11-04'}),/diário inválido/);
 });
+
+test('importa o export diário detalhado com ROAS/funil e mantém impressões ausentes nulas',()=>{
+ const header={A:'Início dos relatórios',B:'Encerramento dos relatórios',C:'Nome do anúncio',G:'Valor gasto (BRL)',U:'Compras',L:'Cliques no link',N:'Visualizações da página de destino do site',Q:'Finalizações de compra iniciadas',W:'Valor de conversão da compra',AA:'Identificação do anúncio'};
+ const row={A:'2026-11-05',B:'2026-11-05',C:'Criativo',G:'10.25',U:'2',L:'40',N:'30',Q:'4',W:'59.80',AA:'1.2025143742365E+17'};
+ const period={start:'2026-11-05',end:'2026-11-05'};
+ const result=parseDailyMeta([header,row],period);
+ assert.deepEqual(result.totals,{spend:1025,impressions:null,purchases:2});
+ assert.equal(result.insights[0].purchaseValue,5980);assert.equal(result.insights[0].views,30);assert.equal(result.insights[0].clicks,40);assert.equal(result.insights[0].checkouts,4);assert.equal(result.insights[0].idPrecision,'rounded');
+ assert.throws(()=>parseDailyMeta([header,row,row],period),/duplicado/);
+ assert.throws(()=>parseDailyMeta([header,{...row,W:''}],period),/sem valor/);
+});

@@ -39,6 +39,7 @@ export function parseManualMeta(rows,period) {
 export function parseDailyMeta(rows,period) {
   required(rows.length>1,'Export Meta diário vazio');
   const columns=new Map(Object.entries(rows[0]).map(([col,name])=>[name,col]));
+  if(columns.has('Compras')&&columns.has('Identificação do anúncio')&&!columns.has('Nome do conjunto de anúncios'))return parseDetailedDailyMeta(rows,period,columns);
   for(const name of ['Início dos relatórios','Encerramento dos relatórios','Nome do anúncio','Nome do conjunto de anúncios','Valor gasto (BRL)','Impressões','Resultados','Indicador de resultados'])required(columns.has(name),'Coluna diária ausente: '+name);
   const groups=new Map(),days=new Set();
   for(const row of rows.slice(1)) {
@@ -57,4 +58,22 @@ export function parseDailyMeta(rows,period) {
   for(let day=period.start;day<=period.end;day=new Date(Date.parse(day+'T12:00:00Z')+86400000).toISOString().slice(0,10))required(days.has(day),'Dia ausente no export Meta: '+day);
   const insights=[...groups.values()].sort((a,b)=>a.date.localeCompare(b.date)||a.adId.localeCompare(b.adId));
   return {insights,totals:Object.fromEntries(['spend','impressions','purchases'].map(field=>[field,insights.reduce((sum,r)=>sum+r[field],0)])),sourceRows:rows.length-1};
+}
+
+function parseDetailedDailyMeta(rows,period,columns) {
+  for(const name of ['Início dos relatórios','Encerramento dos relatórios','Nome do anúncio','Valor gasto (BRL)','Compras','Cliques no link','Visualizações da página de destino do site','Finalizações de compra iniciadas','Valor de conversão da compra'])required(columns.has(name),'Coluna diária ausente: '+name);
+  const days=new Set(),ids=new Set();
+  const insights=rows.slice(1).map(row=>{
+    const get=name=>row[columns.get(name)];
+    const day=get('Início dos relatórios'),name=get('Nome do anúncio')?.trim(),exportAdId=get('Identificação do anúncio');
+    required(/^\d{4}-\d{2}-\d{2}$/.test(day)&&day===get('Encerramento dos relatórios')&&day>=period.start&&day<=period.end&&name,'Data ou nome diário inválido');
+    required(/^\d+(?:\.\d+E\+\d+)?$/i.test(exportAdId??''),'Identificador Meta inválido');
+    const idPrecision=/E/i.test(exportAdId)?'rounded':'exact',adId='daily-id-'+hash(exportAdId),key=day+'|'+adId;
+    required(!ids.has(key),'ID Meta diário duplicado ou colisão de arredondamento');ids.add(key);days.add(day);
+    const purchases=count(get('Compras'),'compras diárias');
+    if(purchases>0)required(get('Valor de conversão da compra'),'Compras sem valor de conversão');
+    return {date:day,periodEnd:day,accountId:'manual-meta',campaignId:'manual',campaign:'Campanha não informada no export',adsetId:'manual',adset:'Conjunto não informado no export',adId,ad:name,status:get('Veiculação de anúncio')==='active'?'ACTIVE':get('Veiculação de anúncio')==='paused'?'PAUSED':'UNKNOWN',currency:'BRL',spend:cents(get('Valor gasto (BRL)'),'gasto diário'),impressions:columns.has('Impressões')?count(get('Impressões'),'impressões'):null,clicks:count(get('Cliques no link'),'cliques'),views:count(get('Visualizações da página de destino do site'),'visitas'),checkouts:count(get('Finalizações de compra iniciadas'),'checkouts'),purchases,purchaseValue:get('Valor de conversão da compra')?cents(get('Valor de conversão da compra'),'conversão'):0,reach:null,exportAdId,idPrecision};
+  });
+  for(let day=period.start;day<=period.end;day=new Date(Date.parse(day+'T12:00:00Z')+86400000).toISOString().slice(0,10))required(days.has(day),'Dia ausente no export Meta: '+day);
+  return {insights,totals:Object.fromEntries(['spend','impressions','purchases'].map(field=>[field,insights.every(r=>r[field]!==null)?insights.reduce((sum,r)=>sum+r[field],0):null])),sourceRows:rows.length-1};
 }

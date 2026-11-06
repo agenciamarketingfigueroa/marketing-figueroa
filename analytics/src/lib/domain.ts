@@ -10,7 +10,7 @@ export interface Order {
 export interface Insight {
   date: string; accountId: string; campaignId: string; campaign: string; adsetId: string;
   adset: string; adId: string; ad: string; status: string; currency: string;
-  spend: number; impressions: number; clicks: number | null; views: number | null;
+  spend: number; impressions: number | null; clicks: number | null; views: number | null;
   checkouts: number | null; purchases: number | null; purchaseValue: number | null;
   reach: number | null;
   periodEnd?: string;
@@ -110,7 +110,7 @@ export function summarize(orders: Order[], insights: Insight[], mappings: Attrib
   const spend = insights.length ? sumMinor(insights.map(r=>r.spend)) : null;
   const gross = orders.length ? sumMinor(sales.map(o=>o.gross)) : null;
   const net = sales.length && sales.every(o => o.net !== null) ? sumMinor(sales.map(o=>o.net!)) : null;
-  const impressions = insights.length ? insights.reduce((s, r) => s + r.impressions, 0) : null;
+  const impressions = insights.length&&insights.every(r=>r.impressions!==null) ? insights.reduce((s, r) => s + r.impressions!, 0) : null;
   const clicks = optionalSum(insights, 'clicks');
   const purchases = optionalSum(insights, 'purchases');
   const views=optionalSum(insights,'views');const checkouts=optionalSum(insights,'checkouts');

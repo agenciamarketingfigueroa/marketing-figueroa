@@ -25,8 +25,8 @@ for(const p of report.periods) {
   assert.equal(insights.reduce((s,i)=>s+i.purchases,0),p.metaPurchases);
   if(report.dataset.manualMetaIdPrecision) {
     assert.equal(new Set(insights.map(i=>i.date+'|'+i.adId)).size,insights.length);
-    for(const row of insights)for(const metric of ['spend','impressions','purchases'])assert.ok(Number.isSafeInteger(row[metric])&&row[metric]>=0);
-    for(const row of insights)for(const metric of ['clicks','views','checkouts','purchaseValue','instagramFollows'])if(row[metric]!=null)assert.ok(Number.isSafeInteger(row[metric])&&row[metric]>=0);
+    for(const row of insights)for(const metric of ['spend','purchases'])assert.ok(Number.isSafeInteger(row[metric])&&row[metric]>=0);
+    for(const row of insights)for(const metric of ['impressions','clicks','views','checkouts','purchaseValue','instagramFollows'])if(row[metric]!=null)assert.ok(Number.isSafeInteger(row[metric])&&row[metric]>=0);
     for(const row of insights)if(row.exportAdId&&/[Ee]/.test(row.exportAdId))assert.equal(row.idPrecision,'rounded');
   }
 }

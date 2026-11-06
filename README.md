@@ -4,7 +4,7 @@
 
 Nova ferramenta em [`clientes/painel/`](clientes/painel/index.html), com atalhos na Área Interna e no Analytics. Usa o mesmo login de administrador e o mesmo pacote criptografado do Analytics. Não altera os arquivos importados. Depois da publicação habitual do repositório, o endereço será `https://marketingfigueroa.com.br/clientes/painel/`.
 
-A apresentação separa visão geral, dia a dia, mídia paga, vendas, Instagram, Produtos (Visão Geral), Produtos (Detalhamento), criativos e Projeções (Visão Geral, Acompanhamento e Base/Método). O detalhamento de produtos é paginado automaticamente, com até seis produtos por lâmina. Com os dados até 04/11, são 12 lâminas. Todas participam da reprodução automática.
+A apresentação separa visão geral, dia a dia, mídia paga, vendas, Instagram, Produtos (Visão Geral), Produtos (Detalhamento), criativos e Projeções (Visão Geral, Acompanhamento e Base/Método). O detalhamento de produtos usa cards grandes em uma grade de três colunas e duas linhas no monitor, com até seis produtos por lâmina. Vendas e receita bruta são destacadas; cada card também mostra receita líquida, ticket médio e CPA quando disponível. Com os dados até 04/11, são 12 lâminas. Todas participam da reprodução automática.
 
 Em monitores a partir de 900 px de largura, cabeçalho e rodapé ficam dentro da altura da janela. O conteúdo de cada lâmina é ajustado proporcionalmente ao espaço restante, recalculando ao mudar a janela, a tela cheia, a lâmina ou seu conteúdo. Não exige rolagem para assistir. Em celulares, o conteúdo mantém o fluxo responsivo. Setas, botões, pausa com espaço, intervalos de 10/20/30/60 segundos e tela cheia continuam disponíveis. Movimento reduzido desativa transições e inicia pausado; interagir com o conteúdo pausa a reprodução.
 
@@ -15,6 +15,10 @@ Produtos mostram vendas, bruto, líquido, ticket e CPA apenas com vínculo exclu
 ROAS Meta = valor de conversão Meta ÷ gasto; MER = bruto Hotmart ÷ gasto; resultado após mídia = líquido − gasto. Sem valor de conversão no recorte, o destaque do Painel usa MER e identifica a ausência de ROAS. Oficina do Violão continua aguardando exports.
 
 Para regenerar o JavaScript, execute `npm run build:manual` em `analytics/`. Testes de lâminas, paginação, cobertura, projeções e persistência estão em `analytics/tests/board*.test.ts` e `analytics/tests/manual.test.ts`.
+
+### Atualização de 05/11/2026
+
+Meta e Hotmart de 05/11 foram acrescentados sem alterar os totais anteriores. O novo export Meta detalhado inclui cliques, visitas, checkouts, compras e valor de conversão, permitindo funil e ROAS nesse dia. Não inclui quantidade de impressões: impressões, CTR, CPM e frequência ficam indisponíveis, sem reconstrução a partir de taxas arredondadas. O importador aceita esse formato e preserva o formato resumido dos dias anteriores. Os IDs em notação científica continuam sinalizados como arredondados. O Instagram permanece até 31/10.
 
 ### Atualização diária até 04/11/2026
 

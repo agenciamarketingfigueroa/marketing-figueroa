@@ -6,6 +6,10 @@ import {dailyPerformance,instagramPerformance} from '../src/lib/performance';
 import {seal,unseal} from '../manual/crypto';
 
 const f:Filters={start:'2026-09-01',end:'2026-09-30',currency:'BRL',account:'all',product:'all'};
+it('mantém ROAS e funil disponíveis sem inventar impressões, CTR ou CPM',()=>{
+  const data=manual();data.insights[0]={...data.insights[0],impressions:null,clicks:40,views:30,checkouts:4,purchaseValue:10000};
+  expect(reportMetrics(data,f,'2026-11-06').metrics).toMatchObject({spend:5000,metaRoas:2,clicks:40,views:30,checkouts:4,impressions:null,ctr:null,cpm:null,frequency:null});
+});
 function manual():Dataset {
   const base=demoDataset();
   return {...base,mode:'manual',mappings:[],orders:[{...base.orders[0],purchasedAt:'2026-09-12T12:00:00-03:00',approvedAt:null,status:'COMPLETE',currency:'BRL',gross:12000,net:10000}],insights:[{...base.insights[0],date:f.start,periodEnd:f.end,currency:'BRL',spend:5000,impressions:10000,purchases:3,clicks:null,views:null,checkouts:null,purchaseValue:null}],manualPeriods:[{start:f.start,end:f.end,month:'Setembro',sources:[]}],coverage:{meta:[],hotmart:[{start:Date.parse(f.start+'T00:00:00-03:00'),end:Date.parse(f.end+'T23:59:59.999-03:00')}]}};

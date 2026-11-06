@@ -43,7 +43,7 @@ function summary(period,orders,insights,sources) {
   const result={id:period.start,start:period.start,end:period.end,days:daily.size,month:period.month,spend:0,impressions:0,metaPurchases:0,...totals(),sourceSignals:0};
   for(const row of insights) {
     const ad=ads.get(row.ad)??{name:row.ad,spend:0,impressions:0,purchases:0};
-    for(const key of ['spend','impressions']){result[key]+=row[key];ad[key]+=row[key];}result.metaPurchases+=row.purchases;ad.purchases+=row.purchases;ads.set(row.ad,ad);
+    for(const key of ['spend','impressions']){result[key]=result[key]===null||row[key]===null?null:result[key]+row[key];ad[key]=ad[key]===null||row[key]===null?null:ad[key]+row[key];}result.metaPurchases+=row.purchases;ad.purchases+=row.purchases;ads.set(row.ad,ad);
   }
   for(const order of orders) {
     const status=Object.keys(statusMap).find(s=>statusMap[s]===order.status);check(status,'Status histórico desconhecido');statuses[status]=(statuses[status]??0)+1;
@@ -74,14 +74,14 @@ export function importDailyReport(previous,metaBatches,hotmartBatches) {
     if(old)check(parsed.totals.spend===old.spend&&parsed.totals.purchases===old.metaPurchases&&parsed.totals.impressions===old.impressions,'Totais Meta divergentes em '+batch.month);
     data.insights=data.insights.filter(r=>!inRange(r.date,batch));data.insights.push(...parsed.insights);
     if(!old){check(hotmartBatches.some(b=>b.start===batch.start&&b.end===batch.end),'Novo período exige Hotmart correspondente');periods.push({start:batch.start,end:batch.end,month:batch.month,sources:[]});}
-    const p=periods.find(p=>p.start===batch.start&&p.end===batch.end);p.sources=[batch.source,...p.sources.filter(s=>!s.name.startsWith('Meta ('))];
+    const p=periods.find(p=>p.start===batch.start&&p.end===batch.end);p.sources=[batch.source,...p.sources.slice(1)];
   }
   for(const batch of hotmartBatches) {
     const period=periods.find(p=>p.start===batch.start&&p.end===batch.end);check(period,'Hotmart sem período Meta correspondente');
     const imported=parseDailyHotmart(batch.rows,batch),old=data.orders.filter(o=>inRange(o.purchasedAt.slice(0,10),batch));
     if(old.length)check(JSON.stringify(old.map(o=>[o.transaction,o.status,o.currency,o.gross,o.net]).sort())===JSON.stringify(imported.map(o=>[o.transaction,o.status,o.currency,o.gross,o.net]).sort()),'Hotmart existente mudou; reconciliação necessária');
     data.orders=data.orders.filter(o=>!inRange(o.purchasedAt.slice(0,10),batch));data.orders.push(...imported);
-    period.sources=[...period.sources.filter(s=>!s.name.startsWith('Hotmart (')),batch.source];
+    period.sources=[period.sources[0],batch.source];
   }
   check(new Set(data.orders.map(o=>o.accountId+'|'+o.transaction)).size===data.orders.length,'Transação duplicada entre períodos');
   data.insights.sort((a,b)=>a.date.localeCompare(b.date)||a.adId.localeCompare(b.adId));data.orders.sort((a,b)=>a.purchasedAt.localeCompare(b.purchasedAt)||a.transaction.localeCompare(b.transaction));
@@ -89,9 +89,12 @@ export function importDailyReport(previous,metaBatches,hotmartBatches) {
   // Previews use existing names/codes only. This is not transaction attribution.
   const oldCreatives=data.creatives??[],oldRows=[...(previous.dataset.manualMetaAggregates??[]),...previous.dataset.insights];
   const creatives=new Map(oldCreatives.map(c=>[c.accountId+'|'+c.adId,c]));
+  const byName=new Map();
+  for(const row of oldRows){const creative=creatives.get(row.accountId+'|'+row.adId);if(creative){const matches=byName.get(row.ad)??new Map();matches.set(creative.imageUrl,creative);byName.set(row.ad,matches);}}
   for(const row of data.insights) {
-    const candidates=oldCreatives.filter(c=>oldRows.some(r=>r.accountId===c.accountId&&r.adId===c.adId&&r.ad===row.ad));
-    if(new Set(candidates.map(c=>c.imageUrl)).size===1){const c=candidates[0];creatives.set(row.accountId+'|'+row.adId,{...c,accountId:row.accountId,adId:row.adId,name:row.ad,matchBasis:c.matchBasis+' · grupo por nome/conjunto, sem ID exportado'});}
+    const key=row.accountId+'|'+row.adId;if(creatives.has(key))continue;
+    const candidates=byName.get(row.ad);
+    if(candidates?.size===1){const c=candidates.values().next().value;creatives.set(key,{...c,accountId:row.accountId,adId:row.adId,name:row.ad,matchBasis:c.matchBasis+' · prévia vinculada por nome, sem atribuição de vendas'});}
   }
   data.creatives=[...creatives.values()];
   report.periods=periods.sort((a,b)=>a.start.localeCompare(b.start)).map(p=>summary(p,data.orders.filter(o=>inRange(o.purchasedAt.slice(0,10),p)),data.insights.filter(r=>inRange(r.date,p)),p.sources));

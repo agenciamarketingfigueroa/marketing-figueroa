@@ -78,6 +78,24 @@ body[data-operation-board]{background:#0b1010;color:#edf2ed;color-scheme:dark}
 @media(max-width:520px){.board-creatives .creative-grid{grid-template-columns:1fr}.board-creatives .creative-card-body h3{min-height:0}.board-creatives .creative-card-body dd{font-size:23px}.board-creatives .creative-preview{aspect-ratio:4/3}}
 
 .board-fit-frame{position:relative;min-width:0}
+.board-product-ranking{padding:0;background:transparent;border:0}
+.board-product-ranking .board-panel-title{margin-bottom:12px}
+.board-product-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.board-product-card{min-width:0;padding:20px 22px;border:1px solid #b9f46b24;border-radius:14px;background:linear-gradient(135deg,#1b281f,#111a16)}
+.board-product-card>header{display:flex;align-items:center;gap:14px;min-height:48px}
+.board-product-position{font-size:30px;color:#b9f46b80;letter-spacing:-1px;line-height:1}
+.board-product-card h3{font-size:18px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.board-product-primary{display:grid;grid-template-columns:.7fr 1.3fr;gap:12px;margin:17px 0}
+.board-product-primary span{display:block;font-size:12px;color:#b8c6bb;margin-bottom:7px}
+.board-product-primary strong{display:block;font-size:clamp(25px,2.1vw,36px);line-height:1.15;font-weight:600;letter-spacing:-1px;white-space:nowrap;color:var(--board-green)}
+.board-product-primary>div:last-child{text-align:right}
+.board-product-card dl{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;border-top:1px solid #ffffff16;padding-top:13px;margin:0}
+.board-product-card dt{font-size:11px;line-height:1.4;color:#a7b8ab}
+.board-product-card dd{font-size:18px;font-weight:500;white-space:nowrap;margin:6px 0 0;color:#edf2ed}
+.board-product-card dl>div:last-child{text-align:right}
+@media(min-width:900px) and (max-height:850px){.board-product-ranking.board-panel{padding:0}.board-product-cards{gap:12px}.board-product-card{padding:15px 18px}.board-product-card>header{min-height:42px}.board-product-card h3{font-size:17px}.board-product-primary{margin:12px 0}.board-product-primary strong{font-size:29px}.board-product-card dl{padding-top:10px}.board-product-card dd{font-size:17px}}
+@media(min-width:600px) and (max-width:899px){.board-product-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:599px){.board-product-cards{grid-template-columns:1fr}.board-product-ranking.board-panel{padding:0}.board-product-primary strong{font-size:32px}}
 /* A monitor gets a fixed viewport. Content is paginated, then fitted as a whole. */
 @media(min-width:900px){
   body[data-operation-board]:has(.operation-board){overflow:hidden}

@@ -27137,7 +27137,7 @@ function uz(e, t, n = !1) {
 	};
 }
 function dz(e, t, n) {
-	let r = e.filter((e) => XR(e.status)), i = t.length ? $R(t.map((e) => e.spend)) : null, a = e.length ? $R(r.map((e) => e.gross)) : null, o = r.length && r.every((e) => e.net !== null) ? $R(r.map((e) => e.net)) : null, s = t.length ? t.reduce((e, t) => e + t.impressions, 0) : null, c = lz(t, "clicks"), l = lz(t, "purchases"), u = lz(t, "views"), d = lz(t, "checkouts"), f = r.filter((e) => cz(e, n)), p = t.length === 1 ? t[0].reach : null;
+	let r = e.filter((e) => XR(e.status)), i = t.length ? $R(t.map((e) => e.spend)) : null, a = e.length ? $R(r.map((e) => e.gross)) : null, o = r.length && r.every((e) => e.net !== null) ? $R(r.map((e) => e.net)) : null, s = t.length && t.every((e) => e.impressions !== null) ? t.reduce((e, t) => e + t.impressions, 0) : null, c = lz(t, "clicks"), l = lz(t, "purchases"), u = lz(t, "views"), d = lz(t, "checkouts"), f = r.filter((e) => cz(e, n)), p = t.length === 1 ? t[0].reach : null;
 	return {
 		spend: i,
 		gross: a,
@@ -28922,7 +28922,7 @@ function nB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 						}),
 						F && c.manualMetaDailyCoverage && N.metaRoas === null && M.metaCovered && /* @__PURE__ */ (0, S.jsx)("p", {
 							className: "notice",
-							children: "Meta diária: investimento, impressões e compras disponíveis. Estes exports não incluem cliques, funil ou valor de conversão por dia. O detalhe anterior continua disponível nos períodos completos de agosto, setembro e outubro."
+							children: "Meta diária: investimento e compras disponíveis. Parte dos dias selecionados não tem cliques, funil ou valor de conversão; os totais desses campos exigem cobertura completa. Selecione um dia com export detalhado ou um período histórico completo para consultar os dados disponíveis."
 						}),
 						D && /* @__PURE__ */ (0, S.jsx)("div", {
 							className: "notice error-notice",
@@ -29852,35 +29852,30 @@ function TB({ data: e, filters: t, today: n, page: r }) {
 		className: "board-footnote",
 		children: "CPA por produto exige vínculo exclusivo com os anúncios. Sem vínculo confiável, aparece “—”."
 	})] }) : /* @__PURE__ */ (0, S.jsxs)(CB, {
+		className: "board-product-ranking",
 		title: "Ranking de produtos",
 		subtitle: `Produtos ${r * 6 + 1}–${Math.min((r + 1) * 6, i.length)} de ${i.length} · por vendas`,
 		children: [/* @__PURE__ */ (0, S.jsx)("div", {
-			className: "board-table-wrap",
-			children: /* @__PURE__ */ (0, S.jsxs)("table", {
-				className: "board-table board-product-table",
-				children: [/* @__PURE__ */ (0, S.jsx)("thead", { children: /* @__PURE__ */ (0, S.jsxs)("tr", { children: [
-					/* @__PURE__ */ (0, S.jsx)("th", { children: "Produto" }),
-					/* @__PURE__ */ (0, S.jsx)("th", { children: "Vendas" }),
-					/* @__PURE__ */ (0, S.jsx)("th", { children: "Receita bruta" }),
-					/* @__PURE__ */ (0, S.jsx)("th", { children: "Receita líquida" }),
-					/* @__PURE__ */ (0, S.jsx)("th", { children: "Ticket médio" }),
-					/* @__PURE__ */ (0, S.jsx)("th", { children: "CPA Meta vinculado" })
-				] }) }), /* @__PURE__ */ (0, S.jsx)("tbody", { children: i.slice(r * 6, (r + 1) * 6).map((e, t) => /* @__PURE__ */ (0, S.jsxs)("tr", { children: [
-					/* @__PURE__ */ (0, S.jsxs)("td", { children: [
-						/* @__PURE__ */ (0, S.jsx)("span", {
-							className: "board-rank",
-							children: String(r * 6 + t + 1).padStart(2, "0")
-						}),
-						" ",
-						e.name
-					] }),
-					/* @__PURE__ */ (0, S.jsx)("td", { children: _B(e.sales) }),
-					/* @__PURE__ */ (0, S.jsx)("td", { children: s(e.gross) }),
-					/* @__PURE__ */ (0, S.jsx)("td", { children: s(e.net) }),
-					/* @__PURE__ */ (0, S.jsx)("td", { children: s(e.gross / e.sales) }),
-					/* @__PURE__ */ (0, S.jsx)("td", { children: s(e.cpa) })
-				] }, e.key)) })]
-			})
+			className: "board-product-cards",
+			children: i.slice(r * 6, (r + 1) * 6).map((e, t) => /* @__PURE__ */ (0, S.jsxs)("article", {
+				className: "board-product-card",
+				"aria-label": `Produto ${r * 6 + t + 1}: ${e.name}`,
+				children: [
+					/* @__PURE__ */ (0, S.jsxs)("header", { children: [/* @__PURE__ */ (0, S.jsx)("span", {
+						className: "board-product-position",
+						children: String(r * 6 + t + 1).padStart(2, "0")
+					}), /* @__PURE__ */ (0, S.jsx)("h3", { children: e.name })] }),
+					/* @__PURE__ */ (0, S.jsxs)("div", {
+						className: "board-product-primary",
+						children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas aprovadas" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: _B(e.sales) })] }), /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Receita bruta" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: s(e.gross) })] })]
+					}),
+					/* @__PURE__ */ (0, S.jsxs)("dl", { children: [
+						/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Receita líquida" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: s(e.net) })] }),
+						/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Ticket médio" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: s(e.gross / e.sales) })] }),
+						/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "CPA Meta vinculado" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: s(e.cpa) })] })
+					] })
+				]
+			}, e.key))
 		}), /* @__PURE__ */ (0, S.jsxs)("p", {
 			className: "board-footnote",
 			children: ["CPA vinculado = gasto ÷ compras dos anúncios com vínculo exclusivo e verificável com o produto. Sem esse vínculo, aparece “—”. O CPA da operação não é distribuído entre os produtos.", o ? "" : " Cobertura parcial: ranking apenas dos registros recebidos."]
