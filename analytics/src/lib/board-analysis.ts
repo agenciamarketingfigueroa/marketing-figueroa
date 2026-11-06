@@ -47,7 +47,7 @@ export const forecastKey=(f:Forecast)=>JSON.stringify([f.organizationId,f.curren
 
 /** Closed, fully covered calendar months only; no partial month extrapolation in the base. */
 export function buildForecast(data:Dataset,currency:string,target:string,today:string):Forecast|null {
-  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(target)||target<=today.slice(0,7))return null;
+  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(target)||target<today.slice(0,7))return null;
   const months:ForecastMonth[]=[];
   let cursor=today.slice(0,7);
   for(let i=0;i<6&&months.length<3;i++) {
@@ -70,10 +70,10 @@ export function forecastScenario(forecast:Forecast,multiplier:number):ForecastVa
 }
 export function forecastRatios(values:ForecastValues) {return {cpa:divide(values.spend,values.purchases),mer:divide(values.gross,values.spend)};}
 
-/** Compare only a contiguous, closed prefix of the target month, separately per provider. */
+/** A contiguous covered prefix of the same month; today is explicitly partial in the UI. */
 export function forecastActual(data:Dataset,forecast:Forecast,today:string) {
   const range=monthRange(forecast.target);
-  const last=range.end<today?range.end:shiftDay(today,-1);
+  const last=range.end<today?range.end:today;
   let hotmart:({through:string;gross:number|null;net:number|null;sales:number|null})|null=null;
   let meta:({through:string;spend:number|null;purchases:number|null})|null=null;
   for(let end=last;end>=range.start;end=shiftDay(end,-1)) {
@@ -84,4 +84,14 @@ export function forecastActual(data:Dataset,forecast:Forecast,today:string) {
     if(hotmart&&meta)break;
   }
   return {hotmart,meta};
+}
+
+export function forecastProgress(projected:number|null,actual:number|null) {
+  const known=projected!==null&&actual!==null;
+  return {
+    remaining:known?Math.max(0,projected-actual):null,
+    exceeded:known?Math.max(0,actual-projected):null,
+    percent:projected!==null&&projected>0&&actual!==null?actual/projected*100:null,
+    reached:known&&projected>0&&actual>=projected,
+  };
 }

@@ -1,7 +1,7 @@
 import {afterEach,describe,expect,it,vi} from 'vitest';
 import {demoDataset} from '../src/lib/demo';
 import type {Dataset,Filters} from '../src/lib/domain';
-import {buildForecast,forecastActual,forecastScenario,monthRange,nextMonth,productPerformance} from '../src/lib/board-analysis';
+import {buildForecast,forecastActual,forecastProgress,forecastScenario,monthRange,nextMonth,productPerformance} from '../src/lib/board-analysis';
 import {createForecastActions,forecastsFrom} from '../manual/forecasts';
 
 afterEach(()=>vi.unstubAllGlobals());
@@ -49,7 +49,10 @@ describe('Projeção e realizado',()=>{
     expect(f.base).toEqual({gross:Math.round(184000/61*31),net:Math.round(150000/61*31),sales:1,spend:Math.round(92000/61*31),purchases:5});
     expect(forecastScenario(f,.8).spend).toBe(f.base.spend);
     expect(forecastScenario(f,1.2).gross).toBe(Math.round(f.base.gross!*1.2));
-    expect(buildForecast(data,'BRL','2026-11','2026-11-05')).toBeNull();
+    const current=buildForecast(data,'BRL','2026-11','2026-11-05')!;
+    expect(current.base.gross).toBe(Math.round(184000/61*30));
+    expect(current.months.map(m=>m.start)).toEqual(['2026-09-01','2026-10-01']);
+    expect(buildForecast(data,'BRL','2026-10','2026-11-05')).toBeNull();
     expect(nextMonth('2026-12-31')).toBe('2027-01');
     expect(monthRange('2028-02').end).toBe('2028-02-29');
   });
@@ -61,14 +64,14 @@ describe('Projeção e realizado',()=>{
     data.coverage!.hotmart=[windowFor('2026-10-01','2026-10-31')];data.orders=[];
     expect(buildForecast(data,'USD','2026-12','2026-11-05')!.base).toMatchObject({gross:0,sales:0,spend:null,purchases:null});
   });
-  it('compara prefixos fechados por provedor sem contar dias futuros ou recalcular a base',()=>{
+  it('compara dias importados por provedor, incluindo hoje como parcial, sem dias futuros ou recálculo da base',()=>{
     const data=fixture(),f=buildForecast(data,'BRL','2026-12','2026-11-05')!;
     const base=structuredClone(f.base);
     expect(forecastActual(data,f,'2026-11-05')).toEqual({hotmart:null,meta:null});
     data.coverage!.hotmart.push(windowFor('2026-12-01','2026-12-10'));
     data.orders.push({...data.orders[0],gross:77700,purchasedAt:'2026-12-02T12:00:00-03:00'});
     const actual=forecastActual(data,f,'2026-12-05');
-    expect(actual.hotmart).toMatchObject({through:'2026-12-04',gross:77700,sales:1});
+    expect(actual.hotmart).toMatchObject({through:'2026-12-05',gross:77700,sales:1});
     expect(actual.meta).toBeNull();
     data.manualPeriods!.push({start:'2026-12-01',end:'2026-12-31',month:'Dezembro',sources:[]});
     data.insights.push({...data.insights[0],date:'2026-12-01',periodEnd:'2026-12-31',spend:70000});
@@ -76,8 +79,33 @@ describe('Projeção e realizado',()=>{
     expect(forecastActual(data,f,'2027-01-01').meta).toMatchObject({through:'2026-12-31',spend:70000});
     expect(f.base).toEqual(base);
   });
+  it('calcula conquistado, restante e excedente sem negativos ou percentuais inventados',()=>{
+    expect(forecastProgress(10000,2500)).toEqual({remaining:7500,exceeded:0,percent:25,reached:false});
+    expect(forecastProgress(10000,12000)).toEqual({remaining:0,exceeded:2000,percent:120,reached:true});
+    expect(forecastProgress(10000,10000)).toMatchObject({remaining:0,percent:100,reached:true});
+    expect(forecastProgress(10000,null)).toEqual({remaining:null,exceeded:null,percent:null,reached:false});
+    expect(forecastProgress(0,0).percent).toBeNull();
+    expect(forecastProgress(null,0).remaining).toBeNull();
+  });
+  it('usa apenas o mês e a moeda projetados, parando no último dia com cobertura contínua',()=>{
+    const data=fixture(),f=buildForecast(data,'BRL','2026-11','2026-11-06')!;
+    data.coverage!.hotmart.push(windowFor('2026-11-01','2026-11-03'),windowFor('2026-11-05','2026-11-05'));
+    data.orders.push({...data.orders[0],gross:25000,purchasedAt:'2026-11-02T12:00:00-03:00'},
+      {...data.orders[0],gross:999999,currency:'USD',purchasedAt:'2026-11-02T12:00:00-03:00'},
+      {...data.orders[0],gross:999999,purchasedAt:'2026-11-05T12:00:00-03:00'});
+    const actual=forecastActual(data,f,'2026-11-06');
+    expect(actual.hotmart).toMatchObject({through:'2026-11-03',gross:25000,sales:1});
+    expect(forecastProgress(f.base.gross,actual.hotmart!.gross).remaining).toBe(f.base.gross!-25000);
+  });
 });
 describe('Histórico de projeções',()=>{
+  it('aceita fixar o mês atual sem permitir meses anteriores ou base do próprio mês',()=>{
+    const f=buildForecast(fixture(),'BRL','2026-11','2026-11-05')!;
+    const pack=(value:unknown)=>({type:'figueroa-board-forecasts-v1',forecasts:[value]});
+    expect(forecastsFrom(pack(f))).toEqual([f]);
+    expect(()=>forecastsFrom(pack({...f,target:'2026-10'}))).toThrow();
+    expect(()=>forecastsFrom(pack({...f,months:[{...f.months[0],start:'2026-11-01',end:'2026-11-30',days:30}]}))).toThrow();
+  });
   it('fixa, recarrega e restaura estimativas criptografadas sem sobrescrever a original',async()=>{
     const storage=new Map<string,string>();
     vi.stubGlobal('localStorage',{getItem:(key:string)=>storage.get(key)??null,setItem:(key:string,value:string)=>storage.set(key,value)});

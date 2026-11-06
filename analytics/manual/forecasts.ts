@@ -18,14 +18,14 @@ export function forecastsFrom(value:unknown):Forecast[] {
   const {forecasts}=schema.parse(value),keys=new Set<string>();
   for(const f of forecasts) {
     const key=forecastKey(f);
-    if(keys.has(key)||f.createdOn.slice(0,7)>=f.target)throw Error('INVALID_FORECAST');
+    if(keys.has(key)||f.createdOn.slice(0,7)>f.target)throw Error('INVALID_FORECAST');
     // Intl also validates the currency before it is used by the renderer.
     new Intl.NumberFormat('pt-BR',{style:'currency',currency:f.currency});
     keys.add(key);
     let previous='';
     for(const m of f.months) {
       const range=monthRange(m.start.slice(0,7));
-      if(m.start!==range.start||m.end!==range.end||m.days!==daysBetween(m.start,m.end)||m.end>=f.createdOn||m.start<=previous)throw Error('INVALID_BASELINE');
+      if(m.start!==range.start||m.end!==range.end||m.days!==daysBetween(m.start,m.end)||m.end>=f.createdOn||m.end>=f.target+'-01'||m.start<=previous)throw Error('INVALID_BASELINE');
       previous=m.end;
     }
   }
