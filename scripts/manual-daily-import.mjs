@@ -3,7 +3,7 @@ import {parseDailyMeta} from './manual-meta.mjs';
 const check=(value,message)=>{if(!value)throw Error(message);};
 const hash=value=>createHash('sha256').update(value).digest('hex').slice(0,16);
 const approved=o=>o.status==='APPROVED'||o.status==='COMPLETE';
-const statusMap={'Completo':'COMPLETE','Aprovado':'APPROVED','Reembolsado':'REFUNDED','Cancelado':'CANCELLED','Chargeback':'CHARGEBACK','Aguardando pagamento':'WAITING_PAYMENT','Boleto impresso':'PRINTED_BILLET'};
+const statusMap={'Completo':'COMPLETE','Aprovado':'APPROVED','Reembolsado':'REFUNDED','Cancelado':'CANCELLED','Chargeback':'CHARGEBACK','Aguardando pagamento':'WAITING_PAYMENT','Aguardando Pagto':'WAITING_PAYMENT','Boleto impresso':'PRINTED_BILLET'};
 const clean=value=>!value||value==='(none)'?'':String(value).trim();
 function cents(value) {
   const match=String(value??'').match(/^(\d+)(?:\.(\d+))?$/);check(match,'Valor Hotmart inválido');

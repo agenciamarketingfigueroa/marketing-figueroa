@@ -18,6 +18,8 @@ Para regenerar o JavaScript, execute `npm run build:manual` em `analytics/`. Tes
 
 ### Atualização de 05/11/2026
 
+O export Hotmart recebido em 06/11 às 11h46 complementou 05/11 com uma venda aprovada do Pack de IRs para Violão: o dia passa de 8 para 9 vendas, com R$ 264,10 brutos e R$ 215,53 líquidos. As oito transações anteriores foram reconciliadas sem alteração. Dois pagamentos pendentes do novo export ficam registrados, mas não entram nas vendas nem no faturamento. Meta, Instagram e os demais dias permanecem iguais.
+
 Meta e Hotmart de 05/11 foram acrescentados sem alterar os totais anteriores. O novo export Meta detalhado inclui cliques, visitas, checkouts, compras e valor de conversão, permitindo funil e ROAS nesse dia. Não inclui quantidade de impressões: impressões, CTR, CPM e frequência ficam indisponíveis, sem reconstrução a partir de taxas arredondadas. O importador aceita esse formato e preserva o formato resumido dos dias anteriores. Os IDs em notação científica continuam sinalizados como arredondados. O Instagram permanece até 31/10.
 
 ### Atualização diária até 04/11/2026

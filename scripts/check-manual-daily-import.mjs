@@ -19,6 +19,14 @@ test('rejeita diferenças históricas e períodos sobrepostos antes de escrever'
 });
 const hotHeader={A:'Código da transação',B:'Status da transação',C:'Data da transação',F:'Código do produto',G:'Produto',P:'Moeda de recebimento',Q:'Faturamento bruto (sem impostos)',R:'Faturamento líquido',S:'Venda feita como',AD:'Código SCK',AC:'Código SRC',AB:'Canal usado para venda',BD:'Ferramenta de Venda',BE:'Transação do Produto Principal',AE:'Método de pagamento',AN:'Email do(a) Comprador(a)'};
 const hotRow={A:'transaction-test',B:'Aprovado',C:'01/11/2026 12:00:00',F:'p1',G:'Produto',P:'BRL',Q:'29.90',R:'24.235',S:'Produtor',AD:'123456789012',BD:'Produto principal',AE:'Cartão',AN:'private@example.test'};
+test('aceita status abreviado de pagamento pendente sem contabilizar como venda',()=>{
+ const previous=importDailyReport(old(),[meta],[]);
+ const batch={...meta,rows:[hotHeader,{...hotRow,B:'Aguardando Pagto',C:'01/10/2026 12:00:00'}],source:{name:'Hotmart.xls',rows:1,sha256:'test'}};
+ const report=importDailyReport(previous,[],[batch]);
+ assert.equal(report.dataset.orders[0].status,'WAITING_PAYMENT');
+ assert.equal(report.periods[0].sales,0);assert.equal(report.periods[0].gross,0);assert.equal(report.periods[0].net,0);
+ assert.deepEqual(report.periods[0].statuses,{'Aguardando pagamento':1});
+});
 test('importa vendas com arredondamento decimal, anonimiza referências e remove dados pessoais',()=>{
  const rows=parseDailyHotmart([hotHeader,hotRow],{start:'2026-11-01',end:'2026-11-04'});
  assert.equal(rows[0].gross,2990);assert.equal(rows[0].net,2424);assert.equal(rows[0].manualSourceCategory,'Código numérico SCK');
