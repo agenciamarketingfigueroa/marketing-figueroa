@@ -10,3 +10,5 @@ coverage/
 *.tsbuildinfo
 analytics/test-results/
 analytics/playwright-report/
+analise-mvave-br/dados/
+analise-mvave-br/relatorios/

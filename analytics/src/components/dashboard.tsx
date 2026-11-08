@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback,useEffect,useMemo,useState } from 'react';
+import { useCallback,useEffect,useMemo,useState,type ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -10,6 +10,7 @@ import { type Dataset,type Filters,type Insight,type Order,approved,attribute,da
 import { browserDb } from '@/lib/supabase-browser';
 import { logout } from '@/app/session-actions';
 import { reportCsv } from '@/lib/export';
+import {ClientReportActions} from './report-actions';
 import { reportMetrics } from '@/lib/report-metrics';
 import { dailyPerformance } from '@/lib/performance';
 import { OPERATION_START,MAX_REPORT_DAYS } from '@/lib/operation';
@@ -23,7 +24,7 @@ const ratio=(n:number|null)=>n===null ? '—' : `${decimal(n)}x`;
 const number=(n:number|null)=>n===null ? '—' : n.toLocaleString('pt-BR',{maximumFractionDigits:0});
 const formatDate=(iso:string)=>new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'}).format(new Date(iso));
 
-export function Dashboard({initialData,initialStart,initialEnd,manualActions,manualNotice}:{initialData:Dataset;initialStart:string;initialEnd:string;manualActions?:ManualActions;manualNotice?:string}) {
+export function Dashboard({initialData,initialStart,initialEnd,manualActions,manualNotice,clientControl}:{initialData:Dataset;initialStart:string;initialEnd:string;manualActions?:ManualActions;manualNotice?:string;clientControl?:ReactNode}) {
   const router=useRouter();const [clock,setClock]=useState(()=>Date.now());
   const [data,setData]=useState(initialData);const [section,setSection]=useState('overview');const [mobile,setMobile]=useState(false);
   const [filters,setFilters]=useState<Filters>({start:initialStart,end:initialEnd,currency:'BRL',account:'all',product:'all'});
@@ -89,8 +90,10 @@ export function Dashboard({initialData,initialStart,initialEnd,manualActions,man
     </aside>
     <div className="main-shell"><header className="topbar"><div className="breadcrumb"><button className="mobile-toggle icon-button" onClick={()=>setMobile(true)} aria-label="Abrir menu" aria-expanded={mobile}><Menu size={20}/></button><span>Workspace</span><ChevronRight size={13}/><strong>{activeSection.label}</strong></div><div className="topbar-right">{isManual&&<a href="clientes/painel/index.html" className="text-button">Painel ↗</a>}<span className={`connection ${isDemo?'demo':''}`}><i/>{connection}</span><span className="topbar-separator"/><span className="avatar small">{isDemo?'D':'F'}</span></div></header>
     <main id="main-content" className="main-content">
+      {clientControl}
+      <ClientReportActions data={data} filters={filters}/>
       {isDemo && <div className="demo-banner"><span><Zap size={14}/><strong>Demonstração</strong> Você está explorando dados fictícios. Nenhuma plataforma está conectada.</span><Link href="/login">Acesso privado <ArrowUpRight size={14}/></Link></div>}
-      <div className="page-heading"><div><span className="eyebrow">MVAVE BR / PERFORMANCE</span><h1>{section==='overview'?'Sua operação, em perspectiva.':activeSection.label}<span className="orange-dot">.</span></h1><p>{section==='overview'?'Mídia, vendas e resultado. Cada número no seu devido lugar.':descriptions[section]}</p></div>{isManual&&<button className="button secondary" onClick={()=>navigate('instagram')}><Instagram size={15}/>Ver Instagram</button>}{!isDemo&&!isManual&&<button className="button secondary" disabled={busy} onClick={()=>void reload()}><RefreshCw size={15} className={busy?'spin':''}/>{busy?'Atualizando…':'Atualizar visão'}</button>}</div>
+      <div className="page-heading"><div><span className="eyebrow">{data.organization.toUpperCase()} / PERFORMANCE</span><h1>{section==='overview'?'Sua operação, em perspectiva.':activeSection.label}<span className="orange-dot">.</span></h1><p>{section==='overview'?'Mídia, vendas e resultado. Cada número no seu devido lugar.':descriptions[section]}</p></div>{isManual&&<button className="button secondary" onClick={()=>navigate('instagram')}><Instagram size={15}/>Ver Instagram</button>}{!isDemo&&!isManual&&<button className="button secondary" disabled={busy} onClick={()=>void reload()}><RefreshCw size={15} className={busy?'spin':''}/>{busy?'Atualizando…':'Atualizar visão'}</button>}</div>
       {!['integrations','settings'].includes(section)&&<div className="filter-panel"><div className="filter-selects"><label><span>CONTA</span><select value={filters.account} onChange={e=>setFilters({...filters,account:e.target.value})}><option value="all">Toda a operação</option>{data.accounts.map(a=><option value={a.id} key={a.id}>{a.name}</option>)}</select></label><label><span>PRODUTO</span><select value={filters.product} onChange={e=>setFilters({...filters,product:e.target.value})}><option value="all">Todos os produtos</option>{products.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label><label className="currency-filter"><span>MOEDA</span><select value={filters.currency} onChange={e=>setFilters({...filters,currency:e.target.value})}>{currencies.map(c=><option key={c}>{c}</option>)}</select></label></div><form className="date-filter" onSubmit={applyDates}><CalendarDays size={16}/><input aria-label="Data inicial" type="date" value={draft.start} onChange={e=>setDraft({...draft,start:e.target.value})} required/><span>—</span><input aria-label="Data final" type="date" value={draft.end} onChange={e=>setDraft({...draft,end:e.target.value})} required/><button className="icon-button apply-date" title="Aplicar período" aria-label="Aplicar período"><Check size={16}/></button></form><div className="filter-bottom"><div className="presets"><button onClick={()=>preset(0)} className={filters.start===OPERATION_START?'selected':''}>Desde 21/08/2026</button>{isManual&&data.manualPeriods?.map(p=><button key={p.start} className={filters.start===p.start&&filters.end===p.end?'selected':''} onClick={()=>{setDraft({start:p.start,end:p.end});setFilters({...filters,start:p.start,end:p.end});}}>{p.month}</button>)}{!isManual&&[7,14,30].map(days=><button key={days} onClick={()=>preset(days)} className={daysBetween(filters.start,filters.end)===days?'selected':''}>{days} dias</button>)}</div><label className="compare"><input type="checkbox" checked={compare} onChange={e=>setCompare(e.target.checked)}/> Comparar com período anterior</label><span>America/Sao_Paulo</span></div></div>}
       {isManual&&!isDemo&&<p className="filter-note">Dados reais de arquivos manuais · Meta disponível por período completo do export; Hotmart por dia. Campos ausentes ficam em branco. Nenhuma conta conectada.</p>}
       {manualNotice&&<div className="notice" role="status">{manualNotice}</div>}

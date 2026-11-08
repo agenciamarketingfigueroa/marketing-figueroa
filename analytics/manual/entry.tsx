@@ -5,6 +5,7 @@ import type {Dataset,FollowerSnapshot} from '../src/lib/domain';
 import {bindLogin,session,logout,type Session} from '@portal';
 import {seal,unseal} from './crypto';
 import {createForecastActions} from './forecasts';
+import {OperationWorkspace} from './workspace';
 
 const element=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const supplementStorage='figueroa-analytics-followers-v1';
@@ -24,7 +25,7 @@ async function unlock(passphrase:string) {
   if(session()?.role!=='master')throw Error('SESSION');
   const response=await fetch(new URL('assets/reports/manual-analytics.enc.json',document.baseURI),{cache:'no-store'});
   if(!response.ok)throw Error('NETWORK');
-  const report=await unseal(await response.json(),passphrase) as {dataset:Dataset};
+  const report=await unseal(await response.json(),passphrase) as {dataset:Dataset;clients?:Record<string,Dataset>};
   if(report.dataset?.mode!=='manual'||!report.dataset.manualPeriods?.length)throw Error('INVALID_REPORT');
   const data=report.dataset;
   const saved=localStorage.getItem(supplementStorage);
@@ -41,9 +42,9 @@ async function unlock(passphrase:string) {
   const restore=async(file:File)=>{assertSession();if(file.size>5_000_000)throw Error('FILE_SIZE');return followersFrom(await unseal(JSON.parse(await file.text()),passphrase));};
   const periods=data.manualPeriods!;
   assertSession();
-  root.render(document.body.hasAttribute('data-operation-board')
-    ? <OperationBoard data={data} onRefresh={()=>unlock(passphrase)} onLogout={logout} forecastActions={createForecastActions(passphrase,data.organizationId,assertSession)}/>
-    : <Dashboard initialData={data} initialStart={periods[0].start} initialEnd={periods.at(-1)!.end} manualActions={{save,download,restore}} manualNotice={manualNotice}/>);
+  root.render(<OperationWorkspace data={data} clients={report.clients} render={(selected,control)=>document.body.hasAttribute('data-operation-board')
+    ? <OperationBoard data={selected} clientControl={control} onRefresh={()=>unlock(passphrase)} onLogout={logout} forecastActions={createForecastActions(passphrase,selected.organizationId,assertSession)}/>
+    : <Dashboard initialData={selected} clientControl={control} initialStart={selected.manualPeriods?.[0].start??periods[0].start} initialEnd={selected.manualPeriods?.at(-1)?.end??periods.at(-1)!.end} manualActions={selected===data?{save,download,restore}:undefined} manualNotice={manualNotice}/>}/>);
   element('access-gate').hidden=true;element('dashboard').hidden=false;
 }
 async function open(active:Session) {

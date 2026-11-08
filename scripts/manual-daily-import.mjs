@@ -37,7 +37,7 @@ function windows(periods) {
   return result;
 }
 function totals() {return {gross:0,net:0,sales:0,brlSales:0,usdGross:0,usdNet:0,usdSales:0};}
-function summary(period,orders,insights,sources) {
+export function summary(period,orders,insights,sources) {
   const daily=new Map(),products=new Map(),ads=new Map(),statuses={},payments={};
   for(let day=period.start;day<=period.end;day=new Date(Date.parse(day+'T12:00:00Z')+86400000).toISOString().slice(0,10))daily.set(day,{date:day,...totals()});
   const result={id:period.start,start:period.start,end:period.end,days:daily.size,month:period.month,spend:0,impressions:0,metaPurchases:0,...totals(),sourceSignals:0};

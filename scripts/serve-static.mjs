@@ -7,7 +7,8 @@ const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=
 const server=http.createServer(async(request,response)=>{
   try {
     const pathname=decodeURIComponent(new URL(request.url,'http://localhost').pathname);
-    if(pathname.split('/').some(segment=>segment.startsWith('.'))) {response.writeHead(403).end();return;}
+    const protectedPath=pathname.replaceAll('\\','/').toLowerCase();
+    if(protectedPath.startsWith('/analise-mvave-br/dados/')||protectedPath.startsWith('/analise-mvave-br/relatorios/')||protectedPath.split('/').some(segment=>segment.startsWith('.'))) {response.writeHead(403).end();return;}
     const path=resolve(root,'.'+pathname,(pathname.endsWith('/')?'index.html':''));
     if(path!==root&&!path.startsWith(root+sep)) {response.writeHead(403).end();return;}
     if(!(await stat(path)).isFile()) {response.writeHead(404).end();return;}

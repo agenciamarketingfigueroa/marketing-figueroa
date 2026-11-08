@@ -1,0 +1,10 @@
+{
+  "operation": "mvave-br",
+  "timezone": "America/Sao_Paulo",
+  "strategy": "PERFORMANCE + LAB em ABO",
+  "status": "proposta/em uso; estrutura física precisa ser confirmada nos exports",
+  "metodoDel": "SUSPENSO",
+  "automaticCampaignChanges": false,
+  "groups": ["tradicional", "sorteio frio", "sorteio remarketing"],
+  "windows": [3, 7, 14, 30]
+}

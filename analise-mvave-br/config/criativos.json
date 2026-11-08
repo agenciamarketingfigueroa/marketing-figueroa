@@ -1,0 +1,1 @@
+{"description":"Registro persistente gerado a partir das fontes em dados/normalizados/base.json: ads. IDs arredondados preservam idPrecision=rounded e nunca geram atribuição exata. Metadados manuais só devem ser adicionados após confirmação; não substituem IDs originais.","manualOverrides":{}}

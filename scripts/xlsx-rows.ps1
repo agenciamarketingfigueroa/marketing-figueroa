@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Path)
+param([Parameter(Mandatory=$true)][string]$Path, [switch]$IncludeTypes)
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -29,6 +29,7 @@ try {
       if ($cell.GetAttribute('t') -eq 's') { $text = $shared[[int]$text] }
       if ($cell.GetAttribute('t') -eq 'inlineStr') { $text = ($cell.SelectNodes('.//s:t',$ns) | ForEach-Object { $_.InnerText }) -join '' }
       $values[$col] = $text
+      if ($IncludeTypes) { $values[$col + '__type'] = $cell.GetAttribute('t') }
     }
     $rows += $values
   }

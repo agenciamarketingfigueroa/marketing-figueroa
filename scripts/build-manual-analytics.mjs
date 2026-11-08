@@ -6,4 +6,4 @@ await build({configFile:false,root:path('analytics'),publicDir:false,define:{'pr
   '@/app/session-actions':path('analytics/manual/session.ts'),
   'next/link':path('analytics/manual/link.tsx'),'next/image':path('analytics/manual/image.tsx'),'next/navigation':path('analytics/manual/navigation.ts'),
   '@portal':path('assets/scripts/portal-auth.js'),'@':path('analytics/src'),
-}},build:{outDir:path('assets/analytics-runtime'),emptyOutDir:true,lib:{entry:path('analytics/manual/entry.tsx'),formats:['es'],fileName:()=> 'dashboard.js'},minify:true,sourcemap:false}});
+}},build:{outDir:path('assets/analytics-runtime'),emptyOutDir:true,lib:{entry:path('analytics/manual/entry.tsx'),formats:['es'],fileName:()=> 'dashboard.js',cssFileName:'dashboard'},minify:true,sourcemap:false}});

@@ -1,0 +1,7 @@
+{
+  "2947400": {"name":"Pack de IRs para Guitarra (Acesso Vitalício por tempo limitado)","category":"principal","segment":"Guitarra"},
+  "2947368": {"name":"Pack de IRs para Baixo (Acesso Vitalício por tempo limitado)","category":"principal","segment":"Baixo"},
+  "2947424": {"name":"Pack de IRs para Violão (Acesso Vitalício por tempo limitado)","category":"principal","segment":"Violão"},
+  "2422501": {"name":"Pack Completo + 13mil IRs (Baixo, Guitarra e Violão) (Acesso Vitalício por tempo limitado)","category":"principal","segment":"Completo"},
+  "3016657": {"name":"O Código dos timbres (Guitarra)","category":"adicional","segment":"Guitarra","requiresParent":true}
+}

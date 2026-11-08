@@ -1,5 +1,11 @@
 # Marketing Figueroa
 
+## Gestor e central MVAVE BR — 08/11/2026
+
+Nova ferramenta em `clientes/gestor/`, com seleção de operação antes das análises. Analytics e Painel também permitem selecionar o cliente; clientes sem exports mostram estado vazio. A nova cliente de 09/11 será cadastrada após a reunião. Analytics oferece **Exportar PDF** (Salvar como PDF na impressão) e **Enviar pelo WhatsApp** (resumo para confirmar destinatário/envio; PDF anexado manualmente).
+
+Dados atualizados até 07/11. A central persistente está em [analise-mvave-br/README.md](analise-mvave-br/README.md): regras, fontes originais locais, snapshots, base normalizada, relatórios e importação idempotente. Use esse novo fluxo para revisões, vendas tardias e cancelamentos. O histórico antigo foi preservado. PERFORMANCE + LAB em ABO; Método Del suspenso. Publicação segue o fluxo habitual deste repositório, sem conexão às plataformas.
+
 ## Painel — apresentação da operação
 
 Nova ferramenta em [`clientes/painel/`](clientes/painel/index.html), com atalhos na Área Interna e no Analytics. Usa o mesmo login de administrador e o mesmo pacote criptografado do Analytics. Não altera os arquivos importados. Depois da publicação habitual do repositório, o endereço será `https://marketingfigueroa.com.br/clientes/painel/`.

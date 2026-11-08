@@ -4,6 +4,7 @@ export interface Order {
   status: OrderStatus; purchasedAt: string; approvedAt: string | null; currency: string;
   gross: number; net: number | null; payment: string; source: Record<string, string>;
   parentTransaction: string | null; isBump: boolean; isFunnel: boolean;
+  mainOrderId?: string;
   manualSourcePresent?: boolean;
   manualSourceCategory?: string; manualTool?: string;
 }
@@ -25,6 +26,7 @@ export interface SyncState {
   lastSuccess: string | null; lastEvent?: string | null; message: string | null;
 }
 export interface Dataset {
+  intelligence?: {updatedAt:string;days:{start:string;end:string;currency:string;spend:number|null;gross:number|null;net:number|null;principal:number;bumps:number;upgrades:number;buyers:number|null;frontGross:number|null;frontNet:number|null;direct:number;blended:number;contribution:number|null;cpa:number|null;roas:number|null;metaPurchases:number|null;metaValue:number|null}[];limitations:string[]};
   organizationId: string; organization: string; mode: 'demo' | 'live' | 'manual';
   accounts: { id: string; name: string }[]; orders: Order[]; insights: Insight[];
   mappings: Attribution[]; sync: SyncState[];

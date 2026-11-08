@@ -54,7 +54,7 @@ for(const p of report.periods){
   assert.equal(p.daily.reduce((sum,r)=>sum+r.net,0),p.net);
   assert.equal(p.ads.reduce((sum,r)=>sum+r.spend,0),p.spend);
   assert.equal(p.daily.length,p.days);
-  assert.equal(p.sources.length,2);
+  assert.ok(p.sources.length>=2,'Período deve preservar as fontes e revisões de ambas as plataformas');
   assert.equal(Object.values(p.payments).reduce((sum,n)=>sum+n,0),p.sales);
   for(const row of p.daily)only(row,['date','gross','net','sales','brlSales','usdGross','usdNet','usdSales']);
   for(const row of p.ads)only(row,['name','spend','impressions','purchases']);
