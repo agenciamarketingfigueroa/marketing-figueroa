@@ -6,6 +6,16 @@ export const hash=x=>createHash('sha256').update(x).digest('hex');
 export const approved=o=>['APPROVED','COMPLETE'].includes(o.status);
 export const check=(x,m)=>{if(!x)throw Error(m);};
 export const clean=x=>!x||x==='(none)'?'':String(x).trim();
+export function mergeCoverageWindows(windows) {
+  const merged=[];
+  for(const window of [...windows].sort((a,b)=>a.start-b.start)){
+    check(Number.isFinite(window.start)&&Number.isFinite(window.end)&&window.end>=window.start,'Cobertura inválida');
+    const last=merged.at(-1);
+    if(last&&window.start<=last.end+1)last.end=Math.max(last.end,window.end);
+    else merged.push({...window});
+  }
+  return merged;
+}
 export function cents(x) {
   if(x===undefined||x==='')return null;
   let s=String(x).trim().replace(/\s|R\$/g,'');if(s.includes(','))s=s.replaceAll('.','').replace(',','.');
@@ -41,7 +51,7 @@ export function parseHotmart(rows,products,source) {
     const operation=product&&product.name===name&&currency==='BRL'&&country==='Brasil'&&(!product.requiresParent||parent)?'mvave-br':'REVISAR';
     const buyer=clean(r['Email do(a) Comprador(a)']).toLowerCase();const status=statusMap[r['Status da transação']]??'REVISAR';
     check(r['Venda feita como']==='Produtor','Papel de venda não suportado');
-    return {key:hash(tx+'|'+id),transaction:tx,item:id,product:name,day:day(r['Data da transação']),currency,country,operation,category,status,rawStatus:r['Status da transação'],gross:cents(r['Faturamento bruto (sem impostos)']),net:cents(r['Faturamento líquido']),buyer:buyer?hash(buyer):null,parent:parent||null,sck:clean(r['Código SCK']),source,line:r.line};
+    return {key:hash(tx+'|'+id),transaction:tx,item:id,product:name,day:day(r['Data da transação']),currency,country,operation,category,status,rawStatus:r['Status da transação'],gross:cents(r['Faturamento bruto (sem impostos)']),net:cents(r['Faturamento líquido']),buyer:buyer?hash(buyer):null,parent:parent||null,sck:clean(r['Código SCK']),payment:clean(r['Método de pagamento'])||'Não informado',manualTool:['Produto order bump','Produto principal','Hotmart Recomenda'].includes(tool)?tool:tool?'Outra ferramenta informada':'Não informada',source,line:r.line};
   });
 }
 export function parseMeta(rows,source,operation='mvave-br') {

@@ -13,5 +13,8 @@ export function coversPeriod(windows:CoverageWindow[],start:string,end:string,to
   const from=Date.parse(`${start}T00:00:00-03:00`);
   // Today is partial, through the most recent completed provider batch.
   const until=Date.parse(`${end}T${end===today?'00:00:00':'23:59:59.999'}-03:00`);
-  return windows.some(w=>w.start<=from&&w.end>=until);
+  // Imports can append adjacent days in any order. Validate their union, not
+  // whether a single original batch happens to contain the entire selection.
+  const merged=windows.reduce<CoverageWindow[]>((result,window)=>mergeCoverage(result,window),[]);
+  return merged.some(w=>w.start<=from&&w.end>=until);
 }

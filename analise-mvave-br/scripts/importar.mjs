@@ -2,7 +2,7 @@ import {readFileSync,writeFileSync,mkdirSync,existsSync,copyFileSync,renameSync}
 import {resolve,basename} from 'node:path';
 import {createCipheriv,createDecipheriv,pbkdf2Sync,randomBytes} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {hash,readRows,parseHotmart,parseMeta,reconcile,closing,check} from './core.mjs';
+import {hash,readRows,parseHotmart,parseMeta,reconcile,closing,check,mergeCoverageWindows} from './core.mjs';
 import {generateReports} from './relatorios.mjs';
 import {summary} from '../../scripts/manual-daily-import.mjs';
 const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
@@ -19,7 +19,7 @@ export function bridge(report,base) {
   d.orders=d.orders.filter(o=>!importedTransactions.has(o.transaction)&&!itemTransactions.has(o.transaction));
   const itemCount=new Map();for(const o of base.orders)itemCount.set(o.transaction,(itemCount.get(o.transaction)??0)+1);
   // Match the existing anonymous transaction convention; snapshots replace by transaction, not by sum.
-  for(const o of convertible){const id='ref-'+hash(itemCount.get(o.transaction)>1?o.transaction+'|'+o.item:o.transaction).slice(0,16);d.orders.push({transaction:id,mainOrderId:'ref-'+hash(o.transaction).slice(0,16),accountId:'manual-hotmart',productId:o.item,product:o.product,offer:null,status:o.status,purchasedAt:o.day+'T12:00:00-03:00',approvedAt:null,currency:o.currency,gross:o.gross,net:o.net,payment:'Não informado',source:{},manualSourcePresent:Boolean(o.sck),manualSourceCategory:/^\d+$/.test(o.sck)?'Código numérico SCK':o.sck?'Outro código de origem':'Sem código de origem',parentTransaction:o.parent?'ref-'+hash(o.parent).slice(0,16):null,isBump:o.category==='bump',isFunnel:o.category==='upgrade'});}
+  for(const o of convertible){const id='ref-'+hash(itemCount.get(o.transaction)>1?o.transaction+'|'+o.item:o.transaction).slice(0,16);d.orders.push({transaction:id,mainOrderId:'ref-'+hash(o.transaction).slice(0,16),accountId:'manual-hotmart',productId:o.item,product:o.product,offer:null,status:o.status,purchasedAt:o.day+'T12:00:00-03:00',approvedAt:null,currency:o.currency,gross:o.gross,net:o.net,payment:o.payment??'Não informado',manualTool:o.manualTool??'Não informada',source:{},manualSourcePresent:Boolean(o.sck),manualSourceCategory:/^\d+$/.test(o.sck)?'Código numérico SCK':o.sck?'Outro código de origem':'Sem código de origem',parentTransaction:o.parent?'ref-'+hash(o.parent).slice(0,16):null,isBump:o.category==='bump',isFunnel:o.category==='upgrade'});}
   d.insights=d.insights.filter(r=>!days.includes(r.date));
   for(const r of base.meta.filter(r=>days.includes(r.start)&&r.start===r.end&&r.level==='ad'))d.insights.push({date:r.start,periodEnd:r.end,accountId:'manual-meta',campaignId:'manual',campaign:r.campaign??'Campanha não informada no export',adsetId:'manual',adset:r.adset??'Conjunto não informado no export',adId:'daily-id-'+hash(r.id||r.key).slice(0,16),ad:r.name,status:r.status==='active'?'ACTIVE':r.status==='paused'?'PAUSED':'UNKNOWN',currency:r.currency,spend:r.spend,impressions:r.impressions,clicks:r.clicks,views:r.views,checkouts:r.checkouts,purchases:r.purchases,purchaseValue:r.purchaseValue,reach:null,exportAdId:r.id,idPrecision:r.idPrecision});
   // Remove detailed aggregates overlapping corrected dates: they must not override the new snapshots.
@@ -30,10 +30,9 @@ export function bridge(report,base) {
   for(const p of d.manualPeriods){const sources=base.snapshots.filter(s=>s.start<=p.end&&s.end>=p.start).map(s=>({name:s.name,rows:s.rows,sha256:s.hash}));if(sources.length)p.sources=[...new Map([...p.sources,...sources].map(s=>[s.sha256??s.name,s])).values()];}
   next.periods=d.manualPeriods.map(p=>summary(p,d.orders.filter(o=>o.purchasedAt.slice(0,10)>=p.start&&o.purchasedAt.slice(0,10)<=p.end),d.insights.filter(r=>r.date>=p.start&&(r.periodEnd??r.date)<=p.end),p.sources));
   const window=day=>({start:Date.parse(day+'T00:00:00-03:00'),end:Date.parse(day+'T23:59:59.999-03:00')});
-  const unique=rows=>[...new Map(rows.map(r=>[r.start+'|'+r.end,r])).values()];
-  d.manualMetaDailyCoverage=unique([...d.manualMetaDailyCoverage??[],...days.map(window)]);
+  d.manualMetaDailyCoverage=mergeCoverageWindows([...d.manualMetaDailyCoverage??[],...days.map(window)]);
   // File dates establish observed scope, not proof of account-wide completeness.
-  d.coverage={meta:unique([...d.coverage?.meta??[],...days.map(window)]),hotmart:unique([...d.coverage?.hotmart??[],...hotDays.map(window)])};
+  d.coverage={meta:mergeCoverageWindows([...d.coverage?.meta??[],...days.map(window)]),hotmart:mergeCoverageWindows([...d.coverage?.hotmart??[],...hotDays.map(window)])};
   d.insights.sort((a,b)=>a.date.localeCompare(b.date));d.orders.sort((a,b)=>a.purchasedAt.localeCompare(b.purchasedAt));
   d.intelligence={updatedAt:base.snapshots.at(-1)?.importedAt,days:[...new Set(base.orders.map(o=>o.day).concat(days))].sort().map(day=>closing(base,day,day)),limitations:['Fechamento parcial: filtros de exportação e cobertura de anúncios pausados não confirmados.','IDs Meta numéricos/arredondados não autorizam atribuição SCK exata.','Sem nomes de campanha/conjunto: estrutura física PERFORMANCE + LAB não verificável.','Histórico anterior preservado; classificação principal/bump e SCK auditáveis somente nas fontes reimportadas.']};
   return next;
