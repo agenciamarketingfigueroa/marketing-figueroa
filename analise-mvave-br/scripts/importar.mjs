@@ -2,7 +2,7 @@ import {readFileSync,writeFileSync,mkdirSync,existsSync,copyFileSync,renameSync}
 import {resolve,basename} from 'node:path';
 import {createCipheriv,createDecipheriv,pbkdf2Sync,randomBytes} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {hash,readRows,parseHotmart,parseMeta,reconcile,closing,check,mergeCoverageWindows} from './core.mjs';
+import {hash,readRows,parseHotmart,parseMeta,reconcile,closing,check,mergeCoverageWindows,classifyLinkedAdditions} from './core.mjs';
 import {generateReports} from './relatorios.mjs';
 import {summary} from '../../scripts/manual-daily-import.mjs';
 const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
@@ -20,8 +20,17 @@ export function bridge(report,base) {
   const itemCount=new Map();for(const o of base.orders)itemCount.set(o.transaction,(itemCount.get(o.transaction)??0)+1);
   // Match the existing anonymous transaction convention; snapshots replace by transaction, not by sum.
   for(const o of convertible){const id='ref-'+hash(itemCount.get(o.transaction)>1?o.transaction+'|'+o.item:o.transaction).slice(0,16);d.orders.push({transaction:id,mainOrderId:'ref-'+hash(o.transaction).slice(0,16),accountId:'manual-hotmart',productId:o.item,product:o.product,offer:null,status:o.status,purchasedAt:o.day+'T12:00:00-03:00',approvedAt:null,currency:o.currency,gross:o.gross,net:o.net,payment:o.payment??'Não informado',manualTool:o.manualTool??'Não informada',source:{},manualSourcePresent:Boolean(o.sck),manualSourceCategory:/^\d+$/.test(o.sck)?'Código numérico SCK':o.sck?'Outro código de origem':'Sem código de origem',parentTransaction:o.parent?'ref-'+hash(o.parent).slice(0,16):null,isBump:o.category==='bump',isFunnel:o.category==='upgrade'});}
+  for(const order of d.orders){
+    const raw=convertible.find(o=>'ref-'+hash(itemCount.get(o.transaction)>1?o.transaction+'|'+o.item:o.transaction).slice(0,16)===order.transaction);if(!raw)continue;
+    const ad=(base.ads??[]).find(a=>a.level==='ad'&&a.idPrecision==='exact'&&a.id===raw.sck);
+    const observed=ad?base.meta.find(a=>a.id===ad.id&&a.start<=raw.day&&a.end>=raw.day):null;
+    if(raw.buyer)order.buyerRef=raw.buyer;else delete order.buyerRef;
+    if(raw.additionalKind)order.additionalKind=raw.additionalKind;else delete order.additionalKind;
+    order.sckAttribution={status:ad?'exact':raw.sck?'unresolved':'none',adId:ad?'daily-id-'+hash(ad.id).slice(0,16):null,accountId:'manual-meta',possiblyLate:Boolean(ad&&(!observed||observed.spend===0||observed.status==='paused')),sourceHash:raw.source,sourceLine:raw.line};
+  }
+  d.analysisRevisions=base.snapshots.filter(s=>s.changes?.some(c=>c.before||c.late)).map(s=>({source:s.name,hash:s.hash,importedAt:s.importedAt,days:[...new Set(s.changes.map(c=>c.day))],changed:s.changes.length,late:s.changes.filter(c=>c.late).length}));
   d.insights=d.insights.filter(r=>!days.includes(r.date));
-  for(const r of base.meta.filter(r=>days.includes(r.start)&&r.start===r.end&&r.level==='ad'))d.insights.push({date:r.start,periodEnd:r.end,accountId:'manual-meta',campaignId:'manual',campaign:r.campaign??'Campanha não informada no export',adsetId:'manual',adset:r.adset??'Conjunto não informado no export',adId:'daily-id-'+hash(r.id||r.key).slice(0,16),ad:r.name,status:r.status==='active'?'ACTIVE':r.status==='paused'?'PAUSED':'UNKNOWN',currency:r.currency,spend:r.spend,impressions:r.impressions,clicks:r.clicks,views:r.views,checkouts:r.checkouts,purchases:r.purchases,purchaseValue:r.purchaseValue,reach:null,exportAdId:r.id,idPrecision:r.idPrecision});
+  for(const r of base.meta.filter(r=>days.includes(r.start)&&r.start===r.end&&r.level==='ad'))d.insights.push({date:r.start,periodEnd:r.end,accountId:'manual-meta',campaignId:'manual',campaign:r.campaign??'Campanha não informada no export',adsetId:'manual',adset:r.adset??'Conjunto não informado no export',adId:'daily-id-'+hash(r.id||r.key).slice(0,16),ad:r.name,status:({active:'ACTIVE',paused:'PAUSED',inactive:'INACTIVE',not_delivering:'NOT_DELIVERING'})[r.status]??'UNKNOWN',currency:r.currency,spend:r.spend,impressions:r.impressions,clicks:r.clicks,views:r.views,checkouts:r.checkouts,purchases:r.purchases,purchaseValue:r.purchaseValue,reach:null,exportAdId:r.id,idPrecision:r.idPrecision,budget:r.budget,sourceHash:r.source,sourceLine:r.line,granularity:r.level});
   // Remove detailed aggregates overlapping corrected dates: they must not override the new snapshots.
   d.manualMetaAggregates=(d.manualMetaAggregates??[]).filter(r=>!days.some(day=>day>=r.date&&day<=(r.periodEnd??r.date)));
   const allPeriods=d.manualPeriods??[];
@@ -44,6 +53,7 @@ async function main(){
   const products=JSON.parse(readFileSync(resolve(root,'config/produtos_mvave_br.json'),'utf8'));const staged=[];
   for(const f of manifest.files){check(['hotmart','meta'].includes(f.provider),'Provedor inválido');check(!f.operation||f.operation==='mvave-br','Importador especializado em MVAVE BR; cadastrar política própria para outros clientes');const raw=readFileSync(f.path),digest=hash(raw),rows=readRows(f.path),parsed=f.provider==='hotmart'?parseHotmart(rows,products,digest):parseMeta(rows,digest);const starts=parsed.map(r=>r.day??r.start).sort(),ends=parsed.map(r=>r.day??r.end).sort();check(starts.length,'Arquivo vazio');const batch={provider:f.provider,operation:'mvave-br',name:basename(f.path),hash:digest,importedAt:new Date().toISOString(),start:starts[0],end:ends.at(-1),filters:f.filters??'não informados',rows:parsed};const result=reconcile(base,batch);base=result.base;if(!result.duplicate)staged.push({f,batch,changes:result.changes});}
   let packageNext,secret,packagePath=resolve('assets/reports/manual-analytics.enc.json');
+  base=classifyLinkedAdditions(base,products);
   if(flags.includes('--site')){check(base.meta.every(r=>r.level==='ad'&&r.start===r.end),'Atualização do site requer mídia por dia e anúncio. Rode sem --site para análise local de agregados.');secret=await new Promise(r=>{let s='';process.stdin.setEncoding('utf8');process.stdin.on('data',c=>s+=c);process.stdin.on('end',()=>r(s.trim()));});check(secret.length>=20,'Chave existente necessária via stdin');const previous=unseal(JSON.parse(readFileSync(packagePath,'utf8')),secret);packageNext=seal(bridge(previous,base),secret);unseal(packageNext,secret);}
   for(const {f,batch,changes} of staged){const dest=resolve(root,'dados/originais',batch.provider,batch.hash+basename(f.path).slice(basename(f.path).lastIndexOf('.')));mkdirSync(resolve(dest,'..'),{recursive:true});if(!existsSync(dest))copyFileSync(f.path,dest);check(hash(readFileSync(dest))===batch.hash,'Hash do original divergiu');write(resolve(root,'dados/snapshots',batch.hash+'.json'),{...batch,rows:batch.rows.length,changes,original:dest});}
   if(staged.length){if(existsSync(basePath))copyFileSync(basePath,resolve(root,'dados/snapshots/base-'+Date.now()+'.json'));write(basePath,base);}

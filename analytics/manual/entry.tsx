@@ -6,6 +6,7 @@ import {bindLogin,session,logout,type Session} from '@portal';
 import {seal,unseal} from './crypto';
 import {createForecastActions} from './forecasts';
 import {OperationWorkspace} from './workspace';
+import {createAnalysisActions} from './analysis-history';
 
 const element=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const supplementStorage='figueroa-analytics-followers-v1';
@@ -43,8 +44,8 @@ async function unlock(passphrase:string) {
   const periods=data.manualPeriods!;
   assertSession();
   root.render(<OperationWorkspace data={data} clients={report.clients} render={(selected,control)=>document.body.hasAttribute('data-operation-board')
-    ? <OperationBoard data={selected} clientControl={control} onRefresh={()=>unlock(passphrase)} onLogout={logout} forecastActions={createForecastActions(passphrase,selected.organizationId,assertSession)}/>
-    : <Dashboard initialData={selected} clientControl={control} initialStart={selected.manualPeriods?.[0].start??periods[0].start} initialEnd={selected.manualPeriods?.at(-1)?.end??periods.at(-1)!.end} manualActions={selected===data?{save,download,restore}:undefined} manualNotice={manualNotice}/>}/>);
+    ? <OperationBoard data={selected} analysisActions={createAnalysisActions(passphrase,selected.organizationId,assertSession)} clientControl={control} onRefresh={()=>unlock(passphrase)} onLogout={logout} forecastActions={createForecastActions(passphrase,selected.organizationId,assertSession)}/>
+    : <Dashboard initialData={selected} analysisActions={createAnalysisActions(passphrase,selected.organizationId,assertSession)} clientControl={control} initialStart={selected.manualPeriods?.[0].start??periods[0].start} initialEnd={selected.manualPeriods?.at(-1)?.end??periods.at(-1)!.end} manualActions={selected.organizationId===data.organizationId?{save,download,restore}:undefined} manualNotice={manualNotice}/>}/>);
   element('access-gate').hidden=true;element('dashboard').hidden=false;
 }
 async function open(active:Session) {

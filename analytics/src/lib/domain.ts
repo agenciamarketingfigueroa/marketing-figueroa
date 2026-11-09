@@ -5,6 +5,9 @@ export interface Order {
   gross: number; net: number | null; payment: string; source: Record<string, string>;
   parentTransaction: string | null; isBump: boolean; isFunnel: boolean;
   mainOrderId?: string;
+  additionalKind?: 'upsell'|'upgrade';
+  buyerRef?: string;
+  sckAttribution?: {status:'exact'|'unresolved'|'none';adId:string|null;accountId:string;possiblyLate:boolean;sourceHash:string;sourceLine:number};
   manualSourcePresent?: boolean;
   manualSourceCategory?: string; manualTool?: string;
 }
@@ -16,6 +19,7 @@ export interface Insight {
   reach: number | null;
   periodEnd?: string;
   instagramFollows?: number; exportAdId?: string; idPrecision?: 'rounded'|'exact';
+  budget?: number|null; sourceHash?: string; sourceLine?: number; granularity?: 'ad'|'adset'|'campaign';
 }
 export interface Attribution {
   sourceKey: string; sourceValue: string; hotmartAccountId: string; productId: string; offer: string | null;
@@ -26,6 +30,8 @@ export interface SyncState {
   lastSuccess: string | null; lastEvent?: string | null; message: string | null;
 }
 export interface Dataset {
+  excludedOperationOrders?: Order[];
+  analysisRevisions?: {source:string;hash:string;importedAt:string;days:string[];changed:number;late:number}[];
   intelligence?: {updatedAt:string;days:{start:string;end:string;currency:string;spend:number|null;gross:number|null;net:number|null;principal:number;bumps:number;upgrades:number;buyers:number|null;frontGross:number|null;frontNet:number|null;direct:number;blended:number;contribution:number|null;cpa:number|null;roas:number|null;metaPurchases:number|null;metaValue:number|null}[];limitations:string[]};
   organizationId: string; organization: string; mode: 'demo' | 'live' | 'manual';
   accounts: { id: string; name: string }[]; orders: Order[]; insights: Insight[];
@@ -41,7 +47,7 @@ export interface Dataset {
   manualMetaDailyCoverage?: import('./coverage').CoverageWindow[];
   manualMetaAggregates?: Insight[];
   instagramAudience?: {age:{label:string;men:number;women:number}[];cities:{label:string;value:number}[];countries:{label:string;value:number}[]};
-  manualPeriods?: {start:string;end:string;month:string;sources:{name:string;rows:number}[]}[];
+  manualPeriods?: {start:string;end:string;month:string;sources:{name:string;rows:number;sha256?:string}[]}[];
 }
 export interface Creative { accountId:string;adId:string;creativeId:string;name:string;imageUrl:string|null;videoId:string|null;kind:string;sourcePath?:string;matchBasis?:string }
 export interface FollowerSnapshot { accountId:string;username:string;date:string;followers:number;observedAt:string }
@@ -72,8 +78,13 @@ export function minorUnits(value: string | number, currency: string): number {
 export function money(value: number | null, currency = 'BRL') {
   return value === null ? '—' : new Intl.NumberFormat('pt-BR', { style: 'currency', currency, maximumFractionDigits: fractionDigits(currency) }).format(value / 10 ** fractionDigits(currency));
 }
+// Reports revisit the same history for each day/window. Reuse the formatter,
+// retaining the timezone conversion rather than truncating timestamps to UTC.
+const dayFormatters=new Map<string,Intl.DateTimeFormat>();
 export function dateInZone(iso: string, timeZone = 'America/Sao_Paulo') {
-  return new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(iso));
+  let formatter=dayFormatters.get(timeZone);
+  if(!formatter){formatter=new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' });dayFormatters.set(timeZone,formatter);}
+  return formatter.format(new Date(iso));
 }
 export const orderDay = (o: Order) => dateInZone(o.approvedAt || o.purchasedAt);
 export function daysBetween(start: string, end: string) {

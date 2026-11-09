@@ -3,5 +3,8 @@
   "2947368": {"name":"Pack de IRs para Baixo (Acesso Vitalício por tempo limitado)","category":"principal","segment":"Baixo"},
   "2947424": {"name":"Pack de IRs para Violão (Acesso Vitalício por tempo limitado)","category":"principal","segment":"Violão"},
   "2422501": {"name":"Pack Completo + 13mil IRs (Baixo, Guitarra e Violão) (Acesso Vitalício por tempo limitado)","category":"principal","segment":"Completo"},
-  "3016657": {"name":"O Código dos timbres (Guitarra)","category":"adicional","segment":"Guitarra","requiresParent":true}
+  "3016657": {"name":"O Código dos timbres (Guitarra)","category":"adicional","segment":"Guitarra","requiresParent":true},
+  "3016645": {"name":"O Código dos Timbres (Violão)","category":"adicional","segment":"Violão","requiresParent":true},
+  "3016652": {"name":"O Código dos timbres (Baixo)","category":"adicional","segment":"Baixo","requiresParent":true},
+  "8582046": {"name":"Guia de Bolso do Timbre","category":"adicional","segment":"Geral","requiresParent":true}
 }

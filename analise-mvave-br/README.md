@@ -2,9 +2,15 @@
 
 As regras são as do `../AGENTS.md` e do Prompt Mestre preservado na raiz. Estratégia vigente: **PERFORMANCE + LAB em ABO; Método Del suspenso**. Recomendações nunca executam alterações nas plataformas.
 
+## Atualização vigente
+
+Veja `ATUALIZACAO_DIARIA_2026-11-09.md`: Gestor removido; Analytics com Relatórios e Ações do dia; export curto para WhatsApp/PDF; 395 arquivos diários importados, incluindo Instagram. A especificação de interface anterior foi substituída pelo pedido mais recente.
+
 ## O que está disponível
 
-- `../clientes/gestor/`: seleção prévia de operação, comparação diária/semanal, evidências, hipóteses, propostas e cobertura das janelas.
+Atualização de 08/11: **Analytics → Relatórios** e **Painel → Relatório estratégico** incluem as onze seções, narrativas por criativo, histórico de propostas e projeções estatísticas. Consulte `RELATORIOS_ESTRATEGICOS.md` para regras, escopo, valores conferidos e limitações. A especificação recebida está em `PROMPT_EVOLUCAO_RELATORIOS.md`.
+
+- `../clientes/analytics/` → **Ações do dia**: prioridades do último fechamento e somente criativos ativos no export.
 - `../clientes/analytics/`: seleção por cliente, métricas, **Exportar PDF** (impressão → Salvar como PDF) e **Enviar pelo WhatsApp** (resumo pré-preenchido, destinatário e envio escolhidos pelo usuário). O PDF pode ser anexado manualmente à conversa.
 - `../clientes/painel/`: seleção de cliente na apresentação. A seleção desmonta os dados do cliente anterior. Um cliente sem pacote mostra somente o estado vazio.
 - `config/`: produtos confirmados, registro de criativos e estratégia.
@@ -50,7 +56,7 @@ O manifesto identifica a operação Meta: só fornecer arquivos dessa operação
 1. Exportar Meta por **dia e anúncio**, incluindo ativos e pausados, nomes/IDs textuais de conta, campanha, conjunto e anúncio, gasto, orçamento, impressões, cliques, LPV, checkouts, compras e valor atribuído.
 2. Exportar Hotmart incluindo status e revisões de dias anteriores, moeda, produto/ID, transação, data, bruto, líquido, SCK e vínculo de bump/upgrade. Registrar os filtros usados.
 3. Executar a importação e revisar `status_atual.md`, integridade e snapshots. Conferir vendas tardias, cancelamentos e itens REVISAR antes das propostas.
-4. Abrir Gestor → MVAVE BR → dia desejado. Conferir comparação e janelas disponíveis, distinguindo observação, hipótese e proposta. Não fazer cortes por um único dia.
+4. Abrir Analytics → MVAVE BR → Relatórios (ou Relatório estratégico no Painel). Conferir comparação e janelas disponíveis, distinguindo observação, hipótese e proposta. Não fazer cortes por um único dia. O workspace Ações do dia substitui o Gestor.
 5. Publicar código/bundle e pacote criptografado pelo fluxo habitual GitHub Pages. A execução local não faz push nem deploy. A atualização no navegador depende da publicação.
 6. Registrar em `historico/decisoes.md` o que foi efetivamente decidido/feito pelo responsável.
 

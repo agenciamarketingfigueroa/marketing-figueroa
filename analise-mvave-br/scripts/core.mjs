@@ -38,6 +38,21 @@ export function readRows(path) {
   check(r.status===0,'Leitura falhou. XLS BIFF requer Python + xlrd 2.0.2 (MVAVE_PYTHON); XLSX requer PowerShell. '+(r.error?.message??''));return JSON.parse(r.stdout);
 }
 export function records(rows){const header=rows[0];check(header,'Arquivo vazio');return rows.slice(1).map((r,i)=>({...Object.fromEntries(Object.entries(header).filter(([k])=>!k.endsWith('__type')).flatMap(([k,v])=>[[v,r[k]??''],[v+'__type',r[k+'__type']??'']])),line:i+2}));}
+export function parseInstagram(raw,source){
+  const text=(Buffer.isBuffer(raw)?raw.toString(raw[0]===0xff&&raw[1]===0xfe?'utf16le':'utf8'):raw).replace(/^\uFEFF/,'');
+  const lines=text.split(/\r?\n/).filter(Boolean);
+  const fields={'"Visualizações"':'views','"Interações com o conteúdo"':'interactions','"Seguidores no Instagram"':'followers'};
+  check(lines[0]==='sep=,'&&lines[2]==='"Data","Primary"'&&fields[lines[1]],'Formato Instagram não reconhecido');
+  const seen=new Set();return lines.slice(3).map((line,i)=>{const m=line.match(/^"(\d{4}-\d\d-\d\d)T00:00:00","(\d+)"$/);check(m,'Linha Instagram inválida');const date=day(m[1]),value=Number(m[2]);check(Number.isSafeInteger(value)&&!seen.has(date),'Valor ou data Instagram inválido/duplicado');seen.add(date);return {date,field:fields[lines[1]],value,source,line:i+4};});
+}
+export function classifyLinkedAdditions(base,products){
+  const principals=new Set(base.orders.filter(o=>o.operation==='mvave-br'&&o.category==='principal').map(o=>o.transaction));
+  return {...base,orders:base.orders.map(o=>{
+    if(!['bump','upgrade'].includes(o.category))return o;
+    const registered=products[o.item];const valid=registered?.name===o.product&&o.currency==='BRL'&&o.country==='Brasil'&&(registered.category==='principal'||o.parent&&principals.has(o.parent));
+    return {...o,operation:valid?'mvave-br':'REVISAR'};
+  })};
+}
 export function day(value){let s=clean(value);if(/^\d{2}\/\d{2}\/\d{4}/.test(s)){const [d,m,y]=s.slice(0,10).split('/');s=`${y}-${m}-${d}`;}else s=s.slice(0,10);check(/^\d{4}-\d{2}-\d{2}$/.test(s)&&new Date(s+'T12:00:00Z').toISOString().slice(0,10)===s,'Data inválida');return s;}
 const statusMap={'Aprovado':'APPROVED','Completo':'COMPLETE','Aguardando Pagto':'WAITING_PAYMENT','Aguardando pagamento':'WAITING_PAYMENT','Cancelado':'CANCELLED','Reembolsado':'REFUNDED','Chargeback':'CHARGEBACK','Boleto impresso':'PRINTED_BILLET'};
 export function parseHotmart(rows,products,source) {
@@ -51,7 +66,7 @@ export function parseHotmart(rows,products,source) {
     const operation=product&&product.name===name&&currency==='BRL'&&country==='Brasil'&&(!product.requiresParent||parent)?'mvave-br':'REVISAR';
     const buyer=clean(r['Email do(a) Comprador(a)']).toLowerCase();const status=statusMap[r['Status da transação']]??'REVISAR';
     check(r['Venda feita como']==='Produtor','Papel de venda não suportado');
-    return {key:hash(tx+'|'+id),transaction:tx,item:id,product:name,day:day(r['Data da transação']),currency,country,operation,category,status,rawStatus:r['Status da transação'],gross:cents(r['Faturamento bruto (sem impostos)']),net:cents(r['Faturamento líquido']),buyer:buyer?hash(buyer):null,parent:parent||null,sck:clean(r['Código SCK']),payment:clean(r['Método de pagamento'])||'Não informado',manualTool:['Produto order bump','Produto principal','Hotmart Recomenda'].includes(tool)?tool:tool?'Outra ferramenta informada':'Não informada',source,line:r.line};
+    return {key:hash(tx+'|'+id),transaction:tx,item:id,product:name,day:day(r['Data da transação']),currency,country,operation,category,additionalKind:/upgrade/i.test(tool)?'upgrade':/upsell/i.test(tool)?'upsell':null,status,rawStatus:r['Status da transação'],gross:cents(r['Faturamento bruto (sem impostos)']),net:cents(r['Faturamento líquido']),buyer:buyer?hash(buyer):null,parent:parent||null,sck:clean(r['Código SCK']),payment:clean(r['Método de pagamento'])||'Não informado',manualTool:['Produto order bump','Produto principal','Hotmart Recomenda'].includes(tool)?tool:tool?'Outra ferramenta informada':'Não informada',source,line:r.line};
   });
 }
 export function parseMeta(rows,source,operation='mvave-br') {
