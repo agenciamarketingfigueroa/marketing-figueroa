@@ -32907,6 +32907,7 @@ function wV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 						className: "board-header-actions",
 						children: [
 							/* @__PURE__ */ (0, S.jsx)("button", {
+								className: "board-report-button",
 								onClick: () => {
 									E(!1), s(!0);
 								},
