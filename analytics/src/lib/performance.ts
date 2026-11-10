@@ -26,8 +26,10 @@ export function followerSummary(snapshots:FollowerSnapshot[],start:string,end:st
 }
 export function instagramPerformance(data:Dataset,start:string,end:string) {
   const rows=(data.instagramDaily??[]).filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>a.date.localeCompare(b.date));
-  const expected=daysBetween(start,end),complete=expected>0&&rows.length===expected&&new Set(rows.map(r=>r.date)).size===expected;
-  const total=(field:'views'|'interactions'|'followers')=>complete?rows.reduce((sum,row)=>sum+row[field],0):null;
+  const expected=daysBetween(start,end),datesComplete=expected>0&&rows.length===expected&&new Set(rows.map(r=>r.date)).size===expected;
+  const fieldComplete=(field:'views'|'interactions'|'followers')=>datesComplete&&rows.every(row=>row[field]!==null&&Number.isSafeInteger(row[field]));
+  const complete=fieldComplete('views')&&fieldComplete('interactions')&&fieldComplete('followers');
+  const total=(field:'views'|'interactions'|'followers')=>fieldComplete(field)?rows.reduce((sum,row)=>sum+row[field]!,0):null;
   return {rows,complete,views:total('views'),interactions:total('interactions'),followers:data.instagramFollowersKind==='new'?total('followers'):null};
 }
 export function rankedCreatives(data:Dataset,filters:Filters,sort:'roas'|'purchases'|'spend',minSpend:number) {

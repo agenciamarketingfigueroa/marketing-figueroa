@@ -23,3 +23,16 @@
 - Analytics concentra relatório e Ações do dia. Plano/leitura apenas dos ativos na última data; tracking diário; projeção somente do próximo dia; exports resumidos para cliente.
 - Importados 395 arquivos de 79 dias das três fontes. IDs Meta ainda arredondados; nenhuma atribuição ou mudança de orçamento inventada.
 - Reclassificação de adicionais exige vínculo ao principal confirmado. Originais e snapshots preservados; auditoria privada registra revisões. Nenhuma campanha alterada.
+
+## 10/11/2026 — atualização local dos dias 08 e 09/11
+
+- Importados os dez arquivos fornecidos: dois Hotmart, dois Meta e seis Instagram. Datas operacionais verificadas no conteúdo; última data disponível passou a 09/11/2026.
+- Histórico até 07/11 preservado integralmente nas linhas do pacote; fontes, hashes, snapshots e auditoria privada mantidos. Reimportação conferida sem duplicação.
+- CSV de seguidores de 09/11 contém somente o separador, sem data ou valor. Arquivado com aviso; seguidores permanecem indisponíveis, enquanto as outras métricas do dia foram importadas.
+- Ajustada a importação para aceitar métricas Instagram parciais, sem transformar ausência em zero e sem substituir o histórico normalizado pelo lote novo.
+- Atualizados a base local, relatórios e pacote criptografado. Nenhuma publicação remota ou alteração em campanhas foi executada.
+
+### Confirmação posterior do responsável — seguidores de 09/11
+
+- O responsável confirmou explicitamente que não houve novos seguidores em 09/11. Registrado valor **0** no Analytics/Painel, com fonte de confirmação manual, hash, snapshot e auditoria privados.
+- A confirmação substitui a indisponibilidade registrada acima. O CSV vazio foi preservado; a regra geral continua sendo não inferir zero de arquivos vazios. Demais dados permanecem inalterados.

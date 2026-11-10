@@ -41,9 +41,26 @@ export function records(rows){const header=rows[0];check(header,'Arquivo vazio')
 export function parseInstagram(raw,source){
   const text=(Buffer.isBuffer(raw)?raw.toString(raw[0]===0xff&&raw[1]===0xfe?'utf16le':'utf8'):raw).replace(/^\uFEFF/,'');
   const lines=text.split(/\r?\n/).filter(Boolean);
+  // An empty platform export has no date or metric evidence, including no zero.
+  if(lines.length===1&&lines[0]==='sep=,')return [];
   const fields={'"Visualizações"':'views','"Interações com o conteúdo"':'interactions','"Seguidores no Instagram"':'followers'};
   check(lines[0]==='sep=,'&&lines[2]==='"Data","Primary"'&&fields[lines[1]],'Formato Instagram não reconhecido');
   const seen=new Set();return lines.slice(3).map((line,i)=>{const m=line.match(/^"(\d{4}-\d\d-\d\d)T00:00:00","(\d+)"$/);check(m,'Linha Instagram inválida');const date=day(m[1]),value=Number(m[2]);check(Number.isSafeInteger(value)&&!seen.has(date),'Valor ou data Instagram inválido/duplicado');seen.add(date);return {date,field:fields[lines[1]],value,source,line:i+4};});
+}
+export function mergeInstagram(previous,records){
+  const days=new Map(previous.map(r=>[r.date,{...r}])),seen=new Map();
+  for(const r of records){
+    check(['views','followers','interactions'].includes(r.field),'Métrica Instagram inválida');
+    check(Number.isSafeInteger(r.value)&&r.value>=0,'Valor Instagram inválido');
+    const key=r.date+'|'+r.field;
+    if(seen.has(key))check(seen.get(key)===r.value,'Exports Instagram conflitantes para '+key);
+    seen.set(key,r.value);const row=days.get(r.date)??{date:r.date};row[r.field]=r.value;days.set(r.date,row);
+  }
+  for(const row of days.values())for(const field of ['views','followers','interactions']){
+    if(row[field]===undefined)row[field]=null;
+    check(row[field]===null||Number.isSafeInteger(row[field])&&row[field]>=0,'Valor Instagram inválido: '+row.date+' / '+field);
+  }
+  return [...days.values()].sort((a,b)=>a.date.localeCompare(b.date));
 }
 export function classifyLinkedAdditions(base,products){
   const principals=new Set(base.orders.filter(o=>o.operation==='mvave-br'&&o.category==='principal').map(o=>o.transaction));

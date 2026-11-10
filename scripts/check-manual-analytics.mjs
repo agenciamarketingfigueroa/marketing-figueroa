@@ -39,7 +39,7 @@ if(report.dataset.manualStatusComplete) {
     assert.equal(orders.length,Object.values(p.statuses).reduce((a,b)=>a+b,0));
     const days=report.dataset.instagramDaily.filter(d=>d.date>=p.start&&d.date<=p.end);
     assert.equal(new Set(days.map(d=>d.date)).size,days.length);
-    for(const day of days)for(const metric of ['views','interactions','followers'])assert.ok(Number.isSafeInteger(day[metric])&&day[metric]>=0);
+    for(const day of days)for(const metric of ['views','interactions','followers'])assert.ok(day[metric]===null||Number.isSafeInteger(day[metric])&&day[metric]>=0);
   }
 }
 for(const creative of report.dataset.creatives??[]) {

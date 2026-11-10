@@ -49,6 +49,8 @@ Use `node` no lugar do executável local quando disponível no PATH. A chave de 
 
 Datas vêm das linhas internas, nunca do nome dos arquivos. Mesmos bytes não duplicam snapshots; transação + item substituem o estado anterior e preservam a revisão. Linhas antigas ausentes de um novo export Hotmart não são apagadas nem presumidas canceladas. Cancelamento exige linha explícita. Meta substitui a janela recebida; sobreposição parcial com agregado é recusada. Um relatório por conjunto/campanha é preservado localmente, mas não vira anúncio nem é rateado para o site. Enviar export diário por anúncio para atualizar o Analytics.
 
+Na importação de pasta, exports Instagram vazios (somente `sep=,` ou cabeçalho válido sem linhas) são arquivados com hash e aviso, sem inferir data ou zero pelo nome. Cada métrica tem cobertura própria: se faltarem seguidores, visualizações e interações válidas continuam disponíveis. A auditoria registra as lacunas; reimportar um arquivo vazio não apaga valores existentes. O histórico normalizado do Instagram é preservado, com snapshot antes de cada gravação.
+
 O manifesto identifica a operação Meta: só fornecer arquivos dessa operação. O importador é especializado na MVAVE BR. Para novos clientes, cadastrar política e fontes próprias após reunião; nunca reutilizar os filtros de produto MVAVE por semelhança. Produtos desconhecidos, moeda/país incompatíveis ou categoria não comprovada ficam `REVISAR`. Revisões de cadastro exigem reclassificação explícita, não apenas reenviar o mesmo hash.
 
 ## Próxima análise diária

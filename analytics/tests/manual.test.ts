@@ -31,6 +31,14 @@ it('soma novos seguidores no período e mantém lacunas indisponíveis',()=>{
   expect(instagramPerformance(data,'2026-09-02','2026-09-02')).toMatchObject({followers:8,views:200});
   expect(instagramPerformance(data,'2026-09-01','2026-09-03')).toMatchObject({complete:false,followers:null,views:null,interactions:null});
 });
+it('mantém seguidores ausentes indisponíveis sem perder as demais métricas do dia',()=>{
+  const data=manual();data.instagramFollowersKind='new';
+  data.instagramDaily=[{date:'2026-11-08',followers:4,views:100,interactions:7},{date:'2026-11-09',followers:null,views:200,interactions:0}];
+  expect(instagramPerformance(data,'2026-11-08','2026-11-09')).toMatchObject({complete:false,followers:null,views:300,interactions:7});
+  expect(instagramPerformance(data,'2026-11-09','2026-11-09')).toMatchObject({followers:null,views:200,interactions:0});
+  data.instagramDaily[1].followers=0;
+  expect(instagramPerformance(data,'2026-11-08','2026-11-09').followers).toBe(4);
+});
 it('não atribui o gasto mensal ao primeiro dia nem rateia dias',()=>{
   const data=manual();const partial={...f,end:'2026-09-12'};
   expect(select(data,partial).insights).toEqual([]);

@@ -40,7 +40,7 @@ export interface Dataset {
   creatives?: Creative[];
   followers?: FollowerSnapshot[];
   manualStatusComplete?: boolean;
-  instagramDaily?: {date:string;views:number;interactions:number;followers:number}[];
+  instagramDaily?: {date:string;views:number|null;interactions:number|null;followers:number|null}[];
   instagramFollowersKind?: 'new';
   instagramSources?: {name:string;rows:number;sha256:string}[];
   manualMetaIdPrecision?: 'rounded'|'exact';

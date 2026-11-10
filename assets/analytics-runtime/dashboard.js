@@ -9070,7 +9070,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 function C(e) {
 	return /* @__PURE__ */ (0, S.jsx)("a", { ...e });
 }
-// analytics/manual/image.tsx
+// manual/image.tsx
 function w({ src: e, alt: t = "", priority: n, unoptimized: r, ...i }) {
 	return /* @__PURE__ */ (0, S.jsx)("img", {
 		...i,
@@ -9079,7 +9079,7 @@ function w({ src: e, alt: t = "", priority: n, unoptimized: r, ...i }) {
 		loading: n ? "eager" : "lazy"
 	});
 }
-// analytics/manual/navigation.ts
+// manual/navigation.ts
 var T = {
 	replace: () => {
 		throw Error("SERVER_NAVIGATION_DISABLED");
@@ -9088,7 +9088,7 @@ var T = {
 		throw Error("SERVER_NAVIGATION_DISABLED");
 	}
 }, E = () => T;
-// analytics/node_modules/clsx/dist/clsx.mjs
+// node_modules/clsx/dist/clsx.mjs
 function D(e) {
 	var t, n, r = "";
 	if (typeof e == "string" || typeof e == "number") r += e;
@@ -9104,12 +9104,12 @@ function O() {
 	for (var e, t, n = 0, r = "", i = arguments.length; n < i; n++) (e = arguments[n]) && (t = D(e)) && (r && (r += " "), r += t);
 	return r;
 }
-// analytics/node_modules/recharts/es6/util/excludeEventProps.js
+// node_modules/recharts/es6/util/excludeEventProps.js
 var k = /* @__PURE__ */ "dangerouslySetInnerHTML.onCopy.onCopyCapture.onCut.onCutCapture.onPaste.onPasteCapture.onCompositionEnd.onCompositionEndCapture.onCompositionStart.onCompositionStartCapture.onCompositionUpdate.onCompositionUpdateCapture.onFocus.onFocusCapture.onBlur.onBlurCapture.onChange.onChangeCapture.onBeforeInput.onBeforeInputCapture.onInput.onInputCapture.onReset.onResetCapture.onSubmit.onSubmitCapture.onInvalid.onInvalidCapture.onLoad.onLoadCapture.onError.onErrorCapture.onKeyDown.onKeyDownCapture.onKeyPress.onKeyPressCapture.onKeyUp.onKeyUpCapture.onAbort.onAbortCapture.onCanPlay.onCanPlayCapture.onCanPlayThrough.onCanPlayThroughCapture.onDurationChange.onDurationChangeCapture.onEmptied.onEmptiedCapture.onEncrypted.onEncryptedCapture.onEnded.onEndedCapture.onLoadedData.onLoadedDataCapture.onLoadedMetadata.onLoadedMetadataCapture.onLoadStart.onLoadStartCapture.onPause.onPauseCapture.onPlay.onPlayCapture.onPlaying.onPlayingCapture.onProgress.onProgressCapture.onRateChange.onRateChangeCapture.onSeeked.onSeekedCapture.onSeeking.onSeekingCapture.onStalled.onStalledCapture.onSuspend.onSuspendCapture.onTimeUpdate.onTimeUpdateCapture.onVolumeChange.onVolumeChangeCapture.onWaiting.onWaitingCapture.onAuxClick.onAuxClickCapture.onClick.onClickCapture.onContextMenu.onContextMenuCapture.onDoubleClick.onDoubleClickCapture.onDrag.onDragCapture.onDragEnd.onDragEndCapture.onDragEnter.onDragEnterCapture.onDragExit.onDragExitCapture.onDragLeave.onDragLeaveCapture.onDragOver.onDragOverCapture.onDragStart.onDragStartCapture.onDrop.onDropCapture.onMouseDown.onMouseDownCapture.onMouseEnter.onMouseLeave.onMouseMove.onMouseMoveCapture.onMouseOut.onMouseOutCapture.onMouseOver.onMouseOverCapture.onMouseUp.onMouseUpCapture.onSelect.onSelectCapture.onTouchCancel.onTouchCancelCapture.onTouchEnd.onTouchEndCapture.onTouchMove.onTouchMoveCapture.onTouchStart.onTouchStartCapture.onPointerDown.onPointerDownCapture.onPointerMove.onPointerMoveCapture.onPointerUp.onPointerUpCapture.onPointerCancel.onPointerCancelCapture.onPointerEnter.onPointerEnterCapture.onPointerLeave.onPointerLeaveCapture.onPointerOver.onPointerOverCapture.onPointerOut.onPointerOutCapture.onGotPointerCapture.onGotPointerCaptureCapture.onLostPointerCapture.onLostPointerCaptureCapture.onScroll.onScrollCapture.onWheel.onWheelCapture.onAnimationStart.onAnimationStartCapture.onAnimationEnd.onAnimationEndCapture.onAnimationIteration.onAnimationIterationCapture.onTransitionEnd.onTransitionEndCapture".split(".");
 function A(e) {
 	return typeof e == "string" && k.includes(e);
 }
-// analytics/node_modules/recharts/es6/util/svgPropertiesNoEvents.js
+// node_modules/recharts/es6/util/svgPropertiesNoEvents.js
 var j = /* @__PURE__ */ new Set(/* @__PURE__ */ "aria-activedescendant.aria-atomic.aria-autocomplete.aria-busy.aria-checked.aria-colcount.aria-colindex.aria-colspan.aria-controls.aria-current.aria-describedby.aria-details.aria-disabled.aria-errormessage.aria-expanded.aria-flowto.aria-haspopup.aria-hidden.aria-invalid.aria-keyshortcuts.aria-label.aria-labelledby.aria-level.aria-live.aria-modal.aria-multiline.aria-multiselectable.aria-orientation.aria-owns.aria-placeholder.aria-posinset.aria-pressed.aria-readonly.aria-relevant.aria-required.aria-roledescription.aria-rowcount.aria-rowindex.aria-rowspan.aria-selected.aria-setsize.aria-sort.aria-valuemax.aria-valuemin.aria-valuenow.aria-valuetext.className.color.height.id.lang.max.media.method.min.name.style.target.width.role.tabIndex.accentHeight.accumulate.additive.alignmentBaseline.allowReorder.alphabetic.amplitude.arabicForm.ascent.attributeName.attributeType.autoReverse.azimuth.baseFrequency.baselineShift.baseProfile.bbox.begin.bias.by.calcMode.capHeight.clip.clipPath.clipPathUnits.clipRule.colorInterpolation.colorInterpolationFilters.colorProfile.colorRendering.contentScriptType.contentStyleType.cursor.cx.cy.d.decelerate.descent.diffuseConstant.direction.display.divisor.dominantBaseline.dur.dx.dy.edgeMode.elevation.enableBackground.end.exponent.externalResourcesRequired.fill.fillOpacity.fillRule.filter.filterRes.filterUnits.floodColor.floodOpacity.focusable.fontFamily.fontSize.fontSizeAdjust.fontStretch.fontStyle.fontVariant.fontWeight.format.from.fx.fy.g1.g2.glyphName.glyphOrientationHorizontal.glyphOrientationVertical.glyphRef.gradientTransform.gradientUnits.hanging.horizAdvX.horizOriginX.href.ideographic.imageRendering.in2.in.intercept.k1.k2.k3.k4.k.kernelMatrix.kernelUnitLength.kerning.keyPoints.keySplines.keyTimes.lengthAdjust.letterSpacing.lightingColor.limitingConeAngle.local.markerEnd.markerHeight.markerMid.markerStart.markerUnits.markerWidth.mask.maskContentUnits.maskUnits.mathematical.mode.numOctaves.offset.opacity.operator.order.orient.orientation.origin.overflow.overlinePosition.overlineThickness.paintOrder.panose1.pathLength.patternContentUnits.patternTransform.patternUnits.pointerEvents.pointsAtX.pointsAtY.pointsAtZ.preserveAlpha.preserveAspectRatio.primitiveUnits.r.radius.refX.refY.renderingIntent.repeatCount.repeatDur.requiredExtensions.requiredFeatures.restart.result.rotate.rx.ry.seed.shapeRendering.slope.spacing.specularConstant.specularExponent.speed.spreadMethod.startOffset.stdDeviation.stemh.stemv.stitchTiles.stopColor.stopOpacity.strikethroughPosition.strikethroughThickness.string.stroke.strokeDasharray.strokeDashoffset.strokeLinecap.strokeLinejoin.strokeMiterlimit.strokeOpacity.strokeWidth.surfaceScale.systemLanguage.tableValues.targetX.targetY.textAnchor.textDecoration.textLength.textRendering.to.transform.u1.u2.underlinePosition.underlineThickness.unicode.unicodeBidi.unicodeRange.unitsPerEm.vAlphabetic.values.vectorEffect.version.vertAdvY.vertOriginX.vertOriginY.vHanging.vIdeographic.viewTarget.visibility.vMathematical.widths.wordSpacing.writingMode.x1.x2.x.xChannelSelector.xHeight.xlinkActuate.xlinkArcrole.xlinkHref.xlinkRole.xlinkShow.xlinkTitle.xlinkType.xmlBase.xmlLang.xmlns.xmlnsXlink.xmlSpace.y1.y2.y.yChannelSelector.z.zoomAndPan.ref.key.angle".split("."));
 function M(e) {
 	return typeof e == "string" && j.has(e);
@@ -9131,7 +9131,7 @@ function F(e) {
 	}
 	return typeof e == "object" && !Array.isArray(e) ? P(e) : null;
 }
-// analytics/node_modules/recharts/es6/util/svgPropertiesAndEvents.js
+// node_modules/recharts/es6/util/svgPropertiesAndEvents.js
 function I(e) {
 	var t = {};
 	for (var n in e) Object.prototype.hasOwnProperty.call(e, n) && (M(n) || N(n) || A(n)) && (t[n] = e[n]);
@@ -9140,7 +9140,7 @@ function I(e) {
 function L(e) {
 	return e == null ? null : /*#__PURE__*/ (0, b.isValidElement)(e) ? I(e.props) : typeof e == "object" && !Array.isArray(e) ? I(e) : null;
 }
-// analytics/node_modules/recharts/es6/container/Surface.js
+// node_modules/recharts/es6/container/Surface.js
 var ee = [
 	"children",
 	"width",
@@ -9225,16 +9225,16 @@ var oe = /*#__PURE__*/ b.forwardRef((e, t) => {
 	var n = e.children, r = e.className, i = ie(e, z), a = O("recharts-layer", r);
 	return /*#__PURE__*/ b.createElement("g", B({ className: a }, I(i), { ref: t }), n);
 });
-// analytics/node_modules/es-toolkit/dist/_internal/isUnsafeProperty.mjs
+// node_modules/es-toolkit/dist/_internal/isUnsafeProperty.mjs
 function V(e) {
 	return e === "__proto__";
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/hasOwn.mjs
+// node_modules/es-toolkit/dist/compat/_internal/hasOwn.mjs
 var se = Object.prototype.hasOwnProperty;
 function ce(e, t) {
 	return se.call(e, t);
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/isDeepKey.mjs
+// node_modules/es-toolkit/dist/compat/_internal/isDeepKey.mjs
 var H = /\.|(\[(?:[^[\]]*|(["'])(?:(?!\2)[^\\]|\\.)*?\2)\])/;
 function le(e) {
 	switch (typeof e) {
@@ -9244,16 +9244,16 @@ function le(e) {
 		default: return !1;
 	}
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/toKey.mjs
+// node_modules/es-toolkit/dist/compat/_internal/toKey.mjs
 function ue(e) {
 	var t;
 	return typeof e == "string" || typeof e == "symbol" ? e : Object.is(e == null || (t = e.valueOf) == null ? void 0 : t.call(e), -0) ? "-0" : String(e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isSymbol.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isSymbol.mjs
 function de(e) {
 	return typeof e == "symbol" || e instanceof Symbol;
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/baseToString.mjs
+// node_modules/es-toolkit/dist/compat/_internal/baseToString.mjs
 function fe(e) {
 	if (typeof e == "string") return e;
 	if (Array.isArray(e)) {
@@ -9265,11 +9265,11 @@ function fe(e) {
 	let t = e + "";
 	return t === "0" && Object.is(Number(e), -0) ? "-0" : t;
 }
-// analytics/node_modules/es-toolkit/dist/compat/util/toString.mjs
+// node_modules/es-toolkit/dist/compat/util/toString.mjs
 function pe(e) {
 	return e == null ? "" : fe(e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/util/toPath.mjs
+// node_modules/es-toolkit/dist/compat/util/toPath.mjs
 function me(e) {
 	if (Array.isArray(e)) return e.map(ue);
 	if (typeof e == "symbol") return [e];
@@ -9299,7 +9299,7 @@ function me(e) {
 	}
 	return i && t.push(i), t;
 }
-// analytics/node_modules/es-toolkit/dist/compat/object/get.mjs
+// node_modules/es-toolkit/dist/compat/object/get.mjs
 function he(e, t, n) {
 	if (e == null) return n;
 	switch (typeof t) {
@@ -9331,7 +9331,7 @@ function ge(e, t, n) {
 	}
 	return r === void 0 ? n : r;
 }
-// analytics/node_modules/recharts/es6/util/round.js
+// node_modules/recharts/es6/util/round.js
 var _e = 4;
 function ve(e) {
 	var t = 10 ** (arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _e), n = Math.round(e * t) / t;
@@ -9344,7 +9344,7 @@ function ye(e) {
 		return typeof i == "string" ? e + i + n : i === void 0 ? e + n : e + ve(i) + n;
 	}, "");
 }
-// analytics/node_modules/recharts/es6/util/DataUtils.js
+// node_modules/recharts/es6/util/DataUtils.js
 var be = (e) => e === 0 ? 0 : e > 0 ? 1 : -1, xe = (e) => typeof e == "number" && e != +e, Se = (e) => typeof e == "string" && e.length > 1 && e.indexOf("%") === e.length - 1, U = (e) => (typeof e == "number" || e instanceof Number) && !xe(e), Ce = (e) => U(e) || typeof e == "string", we = 0, Te = (e) => {
 	var t = ++we;
 	return `${e || ""}${t}`;
@@ -9375,7 +9375,7 @@ function Me(e) {
 	return e != null;
 }
 function Ne() {}
-// analytics/node_modules/recharts/es6/cartesian/cartesianViewBoxToTrapezoid.js
+// node_modules/recharts/es6/cartesian/cartesianViewBoxToTrapezoid.js
 function Pe(e) {
 	if (e) return {
 		x: e.x,
@@ -9386,7 +9386,7 @@ function Pe(e) {
 		height: e.height
 	};
 }
-// analytics/node_modules/recharts/es6/cartesian/getCartesianPosition.js
+// node_modules/recharts/es6/cartesian/getCartesianPosition.js
 function Fe(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -9532,15 +9532,15 @@ var Be = (e) => {
 function He(e) {
 	return e == null ? !1 : typeof e == "object" || Ve.includes(e);
 }
-// analytics/node_modules/recharts/es6/context/legendPortalContext.js
+// node_modules/recharts/es6/context/legendPortalContext.js
 var Ue = /*#__PURE__*/ (0, b.createContext)(null);
-// analytics/node_modules/d3-shape/src/constant.js
+// node_modules/d3-shape/src/constant.js
 function We(e) {
 	return function() {
 		return e;
 	};
 }
-// analytics/node_modules/d3-path/src/path.js
+// node_modules/d3-path/src/path.js
 var Ge = Math.PI, Ke = 2 * Ge, qe = 1e-6, Je = Ke - qe;
 function Ye(e) {
 	this._ += e[0];
@@ -9600,7 +9600,7 @@ var Ze = class {
 	}
 };
 Ze.prototype;
-// analytics/node_modules/d3-shape/src/path.js
+// node_modules/d3-shape/src/path.js
 function Qe(e) {
 	let t = 3;
 	return e.digits = function(n) {
@@ -9618,7 +9618,7 @@ Array.prototype.slice;
 function $e(e) {
 	return typeof e == "object" && "length" in e ? e : Array.from(e);
 }
-// analytics/node_modules/d3-shape/src/curve/linear.js
+// node_modules/d3-shape/src/curve/linear.js
 function et(e) {
 	this._context = e;
 }
@@ -9648,14 +9648,14 @@ et.prototype = {
 function tt(e) {
 	return new et(e);
 }
-// analytics/node_modules/d3-shape/src/point.js
+// node_modules/d3-shape/src/point.js
 function nt(e) {
 	return e[0];
 }
 function rt(e) {
 	return e[1];
 }
-// analytics/node_modules/d3-shape/src/line.js
+// node_modules/d3-shape/src/line.js
 function it(e, t) {
 	var n = We(!0), r = null, i = tt, a = null, o = Qe(s);
 	e = typeof e == "function" ? e : e === void 0 ? nt : We(e), t = typeof t == "function" ? t : t === void 0 ? rt : We(t);
@@ -9676,7 +9676,7 @@ function it(e, t) {
 		return arguments.length ? (e == null ? r = a = null : a = i(r = e), s) : r;
 	}, s;
 }
-// analytics/node_modules/d3-shape/src/area.js
+// node_modules/d3-shape/src/area.js
 function at(e, t, n) {
 	var r = null, i = We(!0), a = null, o = tt, s = null, c = Qe(l);
 	e = typeof e == "function" ? e : e === void 0 ? nt : We(+e), t = typeof t == "function" ? t : We(t === void 0 ? 0 : +t), n = typeof n == "function" ? n : n === void 0 ? rt : We(+n);
@@ -9723,7 +9723,7 @@ function at(e, t, n) {
 		return arguments.length ? (e == null ? a = s = null : s = o(a = e), l) : a;
 	}, l;
 }
-// analytics/node_modules/d3-shape/src/curve/bump.js
+// node_modules/d3-shape/src/curve/bump.js
 var ot = class {
 	constructor(e, t) {
 		this._context = e, this._x = t;
@@ -9757,9 +9757,9 @@ function st(e) {
 function ct(e) {
 	return new ot(e, !1);
 }
-// analytics/node_modules/d3-shape/src/noop.js
+// node_modules/d3-shape/src/noop.js
 function lt() {}
-// analytics/node_modules/d3-shape/src/curve/basis.js
+// node_modules/d3-shape/src/curve/basis.js
 function ut(e, t, n) {
 	e._context.bezierCurveTo((2 * e._x0 + e._x1) / 3, (2 * e._y0 + e._y1) / 3, (e._x0 + 2 * e._x1) / 3, (e._y0 + 2 * e._y1) / 3, (e._x0 + 4 * e._x1 + t) / 6, (e._y0 + 4 * e._y1 + n) / 6);
 }
@@ -9800,7 +9800,7 @@ dt.prototype = {
 function ft(e) {
 	return new dt(e);
 }
-// analytics/node_modules/d3-shape/src/curve/basisClosed.js
+// node_modules/d3-shape/src/curve/basisClosed.js
 function pt(e) {
 	this._context = e;
 }
@@ -9840,7 +9840,7 @@ pt.prototype = {
 function mt(e) {
 	return new pt(e);
 }
-// analytics/node_modules/d3-shape/src/curve/basisOpen.js
+// node_modules/d3-shape/src/curve/basisOpen.js
 function ht(e) {
 	this._context = e;
 }
@@ -9879,7 +9879,7 @@ ht.prototype = {
 function gt(e) {
 	return new ht(e);
 }
-// analytics/node_modules/d3-shape/src/curve/linearClosed.js
+// node_modules/d3-shape/src/curve/linearClosed.js
 function _t(e) {
 	this._context = e;
 }
@@ -9899,7 +9899,7 @@ _t.prototype = {
 function vt(e) {
 	return new _t(e);
 }
-// analytics/node_modules/d3-shape/src/curve/monotone.js
+// node_modules/d3-shape/src/curve/monotone.js
 function yt(e) {
 	return e < 0 ? -1 : 1;
 }
@@ -9985,7 +9985,7 @@ function Et(e) {
 function Dt(e) {
 	return new wt(e);
 }
-// analytics/node_modules/d3-shape/src/curve/natural.js
+// node_modules/d3-shape/src/curve/natural.js
 function Ot(e) {
 	this._context = e;
 }
@@ -10022,7 +10022,7 @@ function kt(e) {
 function At(e) {
 	return new Ot(e);
 }
-// analytics/node_modules/d3-shape/src/curve/step.js
+// node_modules/d3-shape/src/curve/step.js
 function jt(e, t) {
 	this._context = e, this._t = t;
 }
@@ -10063,16 +10063,16 @@ function Nt(e) {
 function Pt(e) {
 	return new jt(e, 1);
 }
-// analytics/node_modules/d3-shape/src/offset/none.js
+// node_modules/d3-shape/src/offset/none.js
 function Ft(e, t) {
 	if ((o = e.length) > 1) for (var n = 1, r, i, a = e[t[0]], o, s = a.length; n < o; ++n) for (i = a, a = e[t[n]], r = 0; r < s; ++r) a[r][1] += a[r][0] = isNaN(i[r][1]) ? i[r][0] : i[r][1];
 }
-// analytics/node_modules/d3-shape/src/order/none.js
+// node_modules/d3-shape/src/order/none.js
 function It(e) {
 	for (var t = e.length, n = Array(t); --t >= 0;) n[t] = t;
 	return n;
 }
-// analytics/node_modules/d3-shape/src/stack.js
+// node_modules/d3-shape/src/stack.js
 function Lt(e, t) {
 	return e[t];
 }
@@ -10098,7 +10098,7 @@ function zt() {
 		return arguments.length ? (n = e ?? Ft, i) : n;
 	}, i;
 }
-// analytics/node_modules/d3-shape/src/offset/expand.js
+// node_modules/d3-shape/src/offset/expand.js
 function Bt(e, t) {
 	if ((r = e.length) > 0) {
 		for (var n, r, i = 0, a = e[0].length, o; i < a; ++i) {
@@ -10108,7 +10108,7 @@ function Bt(e, t) {
 		Ft(e, t);
 	}
 }
-// analytics/node_modules/d3-shape/src/offset/silhouette.js
+// node_modules/d3-shape/src/offset/silhouette.js
 function Vt(e, t) {
 	if ((i = e.length) > 0) {
 		for (var n = 0, r = e[t[0]], i, a = r.length; n < a; ++n) {
@@ -10118,7 +10118,7 @@ function Vt(e, t) {
 		Ft(e, t);
 	}
 }
-// analytics/node_modules/d3-shape/src/offset/wiggle.js
+// node_modules/d3-shape/src/offset/wiggle.js
 function Ht(e, t) {
 	if ((o = e.length) > 0 && (a = (i = e[t[0]]).length) > 0) {
 		for (var n = 0, r = 1, i, a, o; r < a; ++r) {
@@ -10134,7 +10134,7 @@ function Ht(e, t) {
 		i[r - 1][1] += i[r - 1][0] = n, Ft(e, t);
 	}
 }
-// analytics/node_modules/recharts/es6/util/types.js
+// node_modules/recharts/es6/util/types.js
 var Ut = (e) => "radius" in e && "startAngle" in e && "endAngle" in e, Wt = (e, t) => {
 	if (!e || typeof e == "function" || typeof e == "boolean") return null;
 	var n = e;
@@ -10151,7 +10151,7 @@ var Ut = (e) => "radius" in e && "startAngle" in e && "endAngle" in e, Wt = (e, 
 		A(i) && typeof a == "function" && (r ||= {}, r[i] = Gt(a, t, n));
 	}), r;
 };
-// analytics/node_modules/recharts/es6/util/resolveDefaultProps.js
+// node_modules/recharts/es6/util/resolveDefaultProps.js
 function qt(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -10199,7 +10199,7 @@ function Qt(e, t) {
 	var n = Jt({}, e), r = t;
 	return Object.keys(t).reduce((e, t) => (e[t] === void 0 && r[t] !== void 0 && (e[t] = r[t]), e), n);
 }
-// analytics/node_modules/es-toolkit/dist/array/uniqBy.mjs
+// node_modules/es-toolkit/dist/array/uniqBy.mjs
 function $t(e, t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let r = 0; r < e.length; r++) {
@@ -10208,49 +10208,49 @@ function $t(e, t) {
 	}
 	return Array.from(n.values());
 }
-// analytics/node_modules/es-toolkit/dist/function/ary.mjs
+// node_modules/es-toolkit/dist/function/ary.mjs
 function en(e, t) {
 	return function(...n) {
 		return e.apply(this, n.slice(0, t));
 	};
 }
-// analytics/node_modules/es-toolkit/dist/function/identity.mjs
+// node_modules/es-toolkit/dist/function/identity.mjs
 function tn(e) {
 	return e;
 }
-// analytics/node_modules/es-toolkit/dist/predicate/isLength.mjs
+// node_modules/es-toolkit/dist/predicate/isLength.mjs
 function nn(e) {
 	return Number.isSafeInteger(e) && e >= 0;
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isArrayLike.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isArrayLike.mjs
 function rn(e) {
 	return e != null && typeof e != "function" && nn(e.length);
 }
-// analytics/node_modules/es-toolkit/dist/compat/object/property.mjs
+// node_modules/es-toolkit/dist/compat/object/property.mjs
 function an(e) {
 	return function(t) {
 		return he(t, e);
 	};
 }
-// analytics/node_modules/es-toolkit/dist/predicate/isPrimitive.mjs
+// node_modules/es-toolkit/dist/predicate/isPrimitive.mjs
 function on(e) {
 	return e == null || typeof e != "object" && typeof e != "function";
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/getTag.mjs
+// node_modules/es-toolkit/dist/compat/_internal/getTag.mjs
 function sn(e) {
 	return e == null ? e === void 0 ? "[object Undefined]" : "[object Null]" : Object.prototype.toString.call(e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/tags.mjs
+// node_modules/es-toolkit/dist/compat/_internal/tags.mjs
 var cn = "[object RegExp]", ln = "[object String]", un = "[object Number]", dn = "[object Boolean]", fn = "[object Arguments]", pn = "[object Symbol]", mn = "[object Date]", hn = "[object Map]", gn = "[object Set]", _n = "[object Array]", vn = "[object Function]", yn = "[object ArrayBuffer]", bn = "[object Object]", xn = "[object Error]", Sn = "[object DataView]", Cn = "[object Uint8Array]", wn = "[object Uint8ClampedArray]", Tn = "[object Uint16Array]", En = "[object Uint32Array]", Dn = "[object BigUint64Array]", On = "[object Int8Array]", kn = "[object Int16Array]", An = "[object Int32Array]", jn = "[object BigInt64Array]", Mn = "[object Float32Array]", Nn = "[object Float64Array]";
-// analytics/node_modules/es-toolkit/dist/compat/util/eq.mjs
+// node_modules/es-toolkit/dist/compat/util/eq.mjs
 function Pn(e, t) {
 	return e === t || Number.isNaN(e) && Number.isNaN(t);
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isObject.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isObject.mjs
 function Fn(e) {
 	return e !== null && (typeof e == "object" || typeof e == "function");
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isMatchWith.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isMatchWith.mjs
 function In(e, t, n) {
 	return typeof n == "function" ? Ln(e, t, function e(t, r, i, a, o, s) {
 		let c = n(t, r, i, a, o, s);
@@ -10318,35 +10318,35 @@ function Bn(e, t, n, r) {
 function Vn(e, t, n, r) {
 	return t.size === 0 || e instanceof Set && Bn([...e], [...t], n, r);
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isMatch.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isMatch.mjs
 function Hn(e, t) {
 	return In(e, t, () => void 0);
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/getSymbols.mjs
+// node_modules/es-toolkit/dist/compat/_internal/getSymbols.mjs
 function Un(e) {
 	return Object.getOwnPropertySymbols(e).filter((t) => Object.prototype.propertyIsEnumerable.call(e, t));
 }
-// analytics/node_modules/es-toolkit/dist/_internal/globalThis.mjs
+// node_modules/es-toolkit/dist/_internal/globalThis.mjs
 var Wn = typeof globalThis == "object" && globalThis || typeof window == "object" && window || typeof self == "object" && self || typeof global == "object" && global || (function() {
 	return this;
 })();
-// analytics/node_modules/es-toolkit/dist/predicate/isBuffer.mjs
+// node_modules/es-toolkit/dist/predicate/isBuffer.mjs
 function Gn(e) {
 	return Wn.Buffer !== void 0 && Wn.Buffer.isBuffer(e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isBuffer.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isBuffer.mjs
 function Kn(e) {
 	return Gn(e);
 }
-// analytics/node_modules/es-toolkit/dist/predicate/isTypedArray.mjs
+// node_modules/es-toolkit/dist/predicate/isTypedArray.mjs
 function qn(e) {
 	return ArrayBuffer.isView(e) && !(e instanceof DataView);
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isTypedArray.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isTypedArray.mjs
 function Jn(e) {
 	return qn(e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/object/cloneDeepWith.mjs
+// node_modules/es-toolkit/dist/compat/object/cloneDeepWith.mjs
 function Yn(e, t) {
 	return Xn(e, void 0, e, /* @__PURE__ */ new Map(), t);
 }
@@ -10454,15 +10454,15 @@ function Qn(e) {
 		default: return !1;
 	}
 }
-// analytics/node_modules/es-toolkit/dist/compat/object/cloneDeep.mjs
+// node_modules/es-toolkit/dist/compat/object/cloneDeep.mjs
 function $n(e) {
 	return Yn(e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/matches.mjs
+// node_modules/es-toolkit/dist/compat/predicate/matches.mjs
 function er(e) {
 	return e = $n(e), (t) => Hn(t, e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/isIndex.mjs
+// node_modules/es-toolkit/dist/compat/_internal/isIndex.mjs
 var tr = /^(?:0|[1-9]\d*)$/;
 function nr(e, t = 2 ** 53 - 1) {
 	switch (typeof e) {
@@ -10471,11 +10471,11 @@ function nr(e, t = 2 ** 53 - 1) {
 		case "string": return tr.test(e);
 	}
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isArguments.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isArguments.mjs
 function rr(e) {
 	return typeof e == "object" && !!e && sn(e) === "[object Arguments]";
 }
-// analytics/node_modules/es-toolkit/dist/compat/object/has.mjs
+// node_modules/es-toolkit/dist/compat/object/has.mjs
 function ir(e, t) {
 	let n;
 	if (n = Array.isArray(t) ? t : typeof t == "string" && le(t) && !(t in Object(e)) ? me(t) : [t], n.length === 0) return !1;
@@ -10487,7 +10487,7 @@ function ir(e, t) {
 	}
 	return !0;
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/matchesProperty.mjs
+// node_modules/es-toolkit/dist/compat/predicate/matchesProperty.mjs
 function ar(e, t) {
 	switch (typeof e) {
 		case "object":
@@ -10500,7 +10500,7 @@ function ar(e, t) {
 		return r === void 0 ? ir(n, e) : t === void 0 ? r === void 0 : Hn(r, t);
 	};
 }
-// analytics/node_modules/es-toolkit/dist/compat/util/iteratee.mjs
+// node_modules/es-toolkit/dist/compat/util/iteratee.mjs
 function or(e) {
 	if (e == null) return tn;
 	switch (typeof e) {
@@ -10509,19 +10509,19 @@ function or(e) {
 		default: return an(e);
 	}
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/normalizeZero.mjs
+// node_modules/es-toolkit/dist/compat/_internal/normalizeZero.mjs
 function sr(e) {
 	return e === 0 ? 0 : e;
 }
-// analytics/node_modules/es-toolkit/dist/compat/array/uniqBy.mjs
+// node_modules/es-toolkit/dist/compat/array/uniqBy.mjs
 function cr(e, t = tn) {
 	return rn(e) ? $t(Array.from(e), en(or(t), 1)).map(sr) : [];
 }
-// analytics/node_modules/recharts/es6/util/payload/getUniqPayload.js
+// node_modules/recharts/es6/util/payload/getUniqPayload.js
 function lr(e, t, n) {
 	return t === !0 ? cr(e, n) : typeof t == "function" ? cr(e, t) : e;
 }
-// analytics/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js
+// node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js
 var ur = /* @__PURE__ */ o(((e) => {
 	var t = p();
 	function n(e, t) {
@@ -10619,7 +10619,7 @@ function W(e) {
 	} : vr, [t, e]);
 	return (0, hr.useSyncExternalStoreWithSelector)(t ? t.subscription.addNestedSub : yr, t ? t.store.getState : vr, t ? t.store.getState : vr, n, br);
 }
-// analytics/node_modules/reselect/dist/reselect.mjs
+// node_modules/reselect/dist/reselect.mjs
 function xr(e, t = `expected a function, instead received ${typeof e}`) {
 	if (typeof e != "function") throw TypeError(t);
 }
@@ -10727,7 +10727,7 @@ function Nr(e, ...t) {
 	return Object.assign(r, { withTypes: () => r }), r;
 }
 var G = /* @__PURE__ */ Nr(Mr);
-// analytics/node_modules/es-toolkit/dist/array/flatten.mjs
+// node_modules/es-toolkit/dist/array/flatten.mjs
 function Pr(e, t = 1) {
 	let n = [], r = Math.floor(t), i = (e, t) => {
 		for (let a = 0; a < e.length; a++) {
@@ -10737,17 +10737,17 @@ function Pr(e, t = 1) {
 	};
 	return i(e, 0), n;
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/isIterateeCall.mjs
+// node_modules/es-toolkit/dist/compat/_internal/isIterateeCall.mjs
 function Fr(e, t, n) {
 	return Fn(n) && (typeof t == "number" && rn(n) && nr(t) && t < n.length || typeof t == "string" && t in n) ? Pn(n[t], e) : !1;
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/objectValues.mjs
+// node_modules/es-toolkit/dist/compat/_internal/objectValues.mjs
 function Ir(e) {
 	let t = Object.keys(e), n = Array(t.length);
 	for (let r = 0; r < t.length; r++) n[r] = e[t[r]];
 	return n;
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/compareValues.mjs
+// node_modules/es-toolkit/dist/compat/_internal/compareValues.mjs
 function Lr(e) {
 	return typeof e == "symbol" ? 1 : e === null ? 2 : e === void 0 ? 3 : e === e ? 0 : 4;
 }
@@ -10765,7 +10765,7 @@ var Rr = (e, t, n) => {
 function Vr(e, t) {
 	return Array.isArray(e) ? !1 : typeof e == "number" || typeof e == "boolean" || e == null || de(e) ? !0 : typeof e == "string" && (Br.test(e) || !zr.test(e)) || t != null && ce(t, e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/array/orderBy.mjs
+// node_modules/es-toolkit/dist/compat/array/orderBy.mjs
 function Hr(e, t, n, r) {
 	if (e == null) return [];
 	n = r ? void 0 : n, Array.isArray(e) || (e = rn(e) ? Array.from(e) : Ir(e)), Array.isArray(t) || (t = t == null ? [null] : [t]), t.length === 0 && (t = [null]), Array.isArray(n) || (n = n == null ? [] : [n]), n = n.map((e) => String(e));
@@ -10791,18 +10791,18 @@ function Hr(e, t, n, r) {
 		return 0;
 	}).map((e) => e.original);
 }
-// analytics/node_modules/es-toolkit/dist/compat/array/sortBy.mjs
+// node_modules/es-toolkit/dist/compat/array/sortBy.mjs
 function Ur(e, ...t) {
 	let n = t.length;
 	return n > 1 && Fr(e, t[0], t[1]) ? t = [] : n > 2 && Fr(t[0], t[1], t[2]) && (t = [t[0]]), Hr(e, Pr(t), ["asc"]);
 }
-// analytics/node_modules/recharts/es6/state/selectors/legendSelectors.js
+// node_modules/recharts/es6/state/selectors/legendSelectors.js
 var Wr = (e) => e.legend.settings, Gr = (e) => e.legend.size;
 G([(e) => e.legend.payload, Wr], (e, t) => {
 	var n = t.itemSorter, r = e.flat(1);
 	return n ? Ur(r, n) : r;
 });
-// analytics/node_modules/recharts/es6/util/useElementOffset.js
+// node_modules/recharts/es6/util/useElementOffset.js
 function Kr(e, t) {
 	return Zr(e) || Xr(e, t) || Jr(e, t) || qr();
 }
@@ -10883,7 +10883,7 @@ function ti() {
 		(e = i.current) == null || e.disconnect();
 	}, []), [n, o];
 }
-// analytics/node_modules/redux/dist/redux.mjs
+// node_modules/redux/dist/redux.mjs
 function ni(e) {
 	return `Minified Redux error #${e}; visit https://redux.js.org/Errors?code=${e} for the full message or use the non-minified dev environment for full errors. `;
 }
@@ -11020,7 +11020,7 @@ function di(...e) {
 function fi(e) {
 	return oi(e) && "type" in e && typeof e.type == "string";
 }
-// analytics/node_modules/immer/dist/immer.mjs
+// node_modules/immer/dist/immer.mjs
 var pi = Symbol.for("immer-nothing"), mi = Symbol.for("immer-draftable"), hi = Symbol.for("immer-state");
 function gi(e, ...t) {
 	throw Error(`[Immer] minified error nr: ${e}. Full error at: https://bit.ly/3cXEKWf`);
@@ -11441,7 +11441,7 @@ function Ma(e) {
 }
 globalThis.Iterator?.from;
 var Na = new ka().produce, Pa = (e) => e;
-// analytics/node_modules/redux-thunk/dist/redux-thunk.mjs
+// node_modules/redux-thunk/dist/redux-thunk.mjs
 function Fa(e) {
 	return ({ dispatch: t, getState: n }) => (r) => (i) => typeof i == "function" ? i(t, n, e) : r(i);
 }
@@ -11993,7 +11993,7 @@ var Ao = async (e, t) => {
 function Jo(e) {
 	return `Minified Redux Toolkit error #${e}; visit https://redux-toolkit.js.org/Errors?code=${e} for the full message or use the non-minified dev environment for full errors. `;
 }
-// analytics/node_modules/recharts/es6/state/layoutSlice.js
+// node_modules/recharts/es6/state/layoutSlice.js
 var Yo = so({
 	name: "chartLayout",
 	initialState: {
@@ -12023,18 +12023,18 @@ var Yo = so({
 		}
 	}
 }), Xo = Yo.actions, Zo = Xo.setMargin, Qo = Xo.setLayout, $o = Xo.setChartSize, es = Xo.setScale, ts = Yo.reducer;
-// analytics/node_modules/recharts/es6/util/getSliced.js
+// node_modules/recharts/es6/util/getSliced.js
 function ns(e, t, n) {
 	return Array.isArray(e) && e && t + n !== 0 ? e.slice(t, n + 1) : e;
 }
-// analytics/node_modules/recharts/es6/util/isWellBehavedNumber.js
+// node_modules/recharts/es6/util/isWellBehavedNumber.js
 function J(e) {
 	return Number.isFinite(e);
 }
 function rs(e) {
 	return typeof e == "number" && e > 0 && Number.isFinite(e);
 }
-// analytics/node_modules/recharts/es6/util/ChartUtils.js
+// node_modules/recharts/es6/util/ChartUtils.js
 function is(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -12258,7 +12258,7 @@ var ks = (e, t) => {
 	if (t === "horizontal") return e.relativeX;
 	if (t === "vertical") return e.relativeY;
 }, As = (e, t) => t === "centric" ? e.angle : e.radius, js = (e) => e.layout.width, Ms = (e) => e.layout.height, Ns = (e) => e.layout.scale, Ps = (e) => e.layout.margin, Fs = G((e) => e.cartesianAxis.xAxis, (e) => Object.values(e)), Is = G((e) => e.cartesianAxis.yAxis, (e) => Object.values(e)), Ls = "data-recharts-item-index";
-// analytics/node_modules/recharts/es6/state/selectors/selectChartOffsetInternal.js
+// node_modules/recharts/es6/state/selectors/selectChartOffsetInternal.js
 function Rs(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -12360,7 +12360,7 @@ var Js = G([
 	y: U(e.y) ? e.y : t.top + t.height + t.brushBottom - (n?.bottom || 0),
 	width: U(e.width) ? e.width : t.width
 }));
-// analytics/node_modules/es-toolkit/dist/function/debounce.mjs
+// node_modules/es-toolkit/dist/function/debounce.mjs
 function tc(e, t, { signal: n, edges: r } = {}) {
 	let i, a = null, o = r != null && r.includes("leading"), s = r == null || r.includes("trailing"), c = () => {
 		a !== null && (e.apply(i, a), i = void 0, a = null);
@@ -12384,7 +12384,7 @@ function tc(e, t, { signal: n, edges: r } = {}) {
 	};
 	return h.schedule = d, h.cancel = p, h.flush = m, n?.addEventListener("abort", p, { once: !0 }), h;
 }
-// analytics/node_modules/es-toolkit/dist/compat/function/debounce.mjs
+// node_modules/es-toolkit/dist/compat/function/debounce.mjs
 function nc(e, t = 0, n = {}) {
 	typeof n != "object" && (n = {});
 	let { leading: r = !1, trailing: i = !0, maxWait: a } = n, o = [, ,];
@@ -12396,7 +12396,7 @@ function nc(e, t = 0, n = {}) {
 	};
 	return u.cancel = l.cancel, u.flush = () => (l.flush(), s), u;
 }
-// analytics/node_modules/es-toolkit/dist/compat/function/throttle.mjs
+// node_modules/es-toolkit/dist/compat/function/throttle.mjs
 function rc(e, t = 0, n = {}) {
 	let { leading: r = !0, trailing: i = !0 } = n;
 	return nc(e, t, {
@@ -12405,7 +12405,7 @@ function rc(e, t = 0, n = {}) {
 		trailing: i
 	});
 }
-// analytics/node_modules/recharts/es6/util/LogUtils.js
+// node_modules/recharts/es6/util/LogUtils.js
 var ic = function(e, t) {
 	var n = [...arguments].slice(2);
 	if (typeof console < "u" && console.warn && (t === void 0 && console.warn("LogUtils requires an error message argument"), !e)) {
@@ -12451,7 +12451,7 @@ function fc(e) {
 		height: a
 	};
 }
-// analytics/node_modules/recharts/es6/component/ResponsiveContainer.js
+// node_modules/recharts/es6/component/ResponsiveContainer.js
 var pc = [
 	"aspect",
 	"initialDimension",
@@ -12873,7 +12873,7 @@ function dl(e) {
 	let s = n || ul;
 	return /* @__PURE__ */ b.createElement(s.Provider, { value: a }, t);
 }
-// analytics/node_modules/recharts/es6/util/propsAreEqual.js
+// node_modules/recharts/es6/util/propsAreEqual.js
 var fl = /* @__PURE__ */ new Set([
 	"axisLine",
 	"tickLine",
@@ -12907,7 +12907,7 @@ function ml(e, t) {
 	} else if (!pl(e[n], t[n])) return !1;
 	return !0;
 }
-// analytics/node_modules/recharts/es6/component/DefaultTooltipContent.js
+// node_modules/recharts/es6/component/DefaultTooltipContent.js
 function hl() {
 	return hl = Object.assign ? Object.assign.bind() : function(e) {
 		for (var t = 1; t < arguments.length; t++) {
@@ -13130,7 +13130,7 @@ var Ll = {
 	devToolsEnabled: !0,
 	isSsr: !(typeof window < "u" && window.document && window.document.createElement && window.setTimeout)
 };
-// analytics/node_modules/recharts/es6/util/usePrefersReducedMotion.js
+// node_modules/recharts/es6/util/usePrefersReducedMotion.js
 function Rl(e, t) {
 	return Ul(e) || Hl(e, t) || Bl(e, t) || zl();
 }
@@ -13186,7 +13186,7 @@ function Wl() {
 		}
 	}, []), t;
 }
-// analytics/node_modules/recharts/es6/component/TooltipBoundingBox.js
+// node_modules/recharts/es6/component/TooltipBoundingBox.js
 function Gl(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -13331,7 +13331,7 @@ function ru(e) {
 	}, e.children);
 }
 var iu = /*#__PURE__*/ b.memo(ru), au = () => W((e) => e.rootProps.accessibilityLayer) ?? !0;
-// analytics/node_modules/recharts/es6/shape/Curve.js
+// node_modules/recharts/es6/shape/Curve.js
 function ou() {
 	return ou = Object.assign ? Object.assign.bind() : function(e) {
 		for (var t = 1; t < arguments.length; t++) {
@@ -13524,7 +13524,7 @@ var Au = (e, t, n, r, i, a) => `M${e},${i}v${r}M${a},${t}h${n}`, ju = (e) => {
 		d: Au(n, i, u, f, o, c)
 	}));
 };
-// analytics/node_modules/recharts/es6/util/cursor/getCursorRectangle.js
+// node_modules/recharts/es6/util/cursor/getCursorRectangle.js
 function Mu(e, t, n, r) {
 	var i = r / 2;
 	return {
@@ -13651,7 +13651,7 @@ function Wu(e) {
 	var t = (0, b.useContext)(Uu);
 	return (0, b.useMemo)(() => e ?? t, [e, t]);
 }
-// analytics/node_modules/recharts/es6/animation/AnimationHandle.js
+// node_modules/recharts/es6/animation/AnimationHandle.js
 function Gu(e, t, n) {
 	return (t = Ku(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
@@ -13754,7 +13754,7 @@ var $u = class {
 		};
 	}
 };
-// analytics/node_modules/recharts/es6/animation/JavascriptAnimate.js
+// node_modules/recharts/es6/animation/JavascriptAnimate.js
 function nd(e, t) {
 	return sd(e) || od(e, t) || id(e, t) || rd();
 }
@@ -13834,12 +13834,12 @@ function dd(e) {
 		c
 	]), u(Number(h));
 }
-// analytics/node_modules/recharts/es6/util/useAnimationId.js
+// node_modules/recharts/es6/util/useAnimationId.js
 function fd(e) {
 	var t = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "animation-", n = (0, b.useRef)(Te(t)), r = (0, b.useRef)(e);
 	return r.current !== e && (n.current = Te(t), r.current = e), n.current;
 }
-// analytics/node_modules/recharts/es6/animation/util.js
+// node_modules/recharts/es6/animation/util.js
 var pd = (e) => e.replace(/([A-Z])/g, (e) => `-${e.toLowerCase()}`), md = (e, t, n) => e.map((e) => `${pd(e)} ${t}ms ${n}`).join(","), hd = ["radius"], gd = ["radius"], _d, vd, yd, bd, xd, Sd, Cd, wd, Td, Ed;
 function Dd(e, t) {
 	var n = Object.keys(e);
@@ -14100,7 +14100,7 @@ var Hd = (e, t, n, r, i) => {
 		}));
 	});
 };
-// analytics/node_modules/recharts/es6/util/PolarUtils.js
+// node_modules/recharts/es6/util/PolarUtils.js
 function Gd(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -14209,7 +14209,7 @@ var Xd = Math.PI / 180, Zd = (e) => e * 180 / Math.PI, Qd = (e, t, n, r) => ({
 		angle: rf(f, t)
 	}) : null;
 };
-// analytics/node_modules/recharts/es6/util/cursor/getRadialCursorPoints.js
+// node_modules/recharts/es6/util/cursor/getRadialCursorPoints.js
 function of(e) {
 	var t = e.cx, n = e.cy, r = e.radius, i = e.startAngle, a = e.endAngle;
 	return {
@@ -14221,7 +14221,7 @@ function of(e) {
 		endAngle: a
 	};
 }
-// analytics/node_modules/recharts/es6/shape/Sector.js
+// node_modules/recharts/es6/shape/Sector.js
 var sf, cf, lf, uf, df, ff, pf;
 function mf() {
 	return mf = Object.assign ? Object.assign.bind() : function(e) {
@@ -14415,7 +14415,7 @@ var gf = (e, t) => be(t - e) * Math.min(Math.abs(t - e), 359.999), _f = (e) => {
 		d: h
 	}));
 };
-// analytics/node_modules/recharts/es6/util/cursor/getCursorPoints.js
+// node_modules/recharts/es6/util/cursor/getCursorPoints.js
 function Sf(e, t, n) {
 	if (e === "horizontal") return [{
 		x: t.x,
@@ -14445,22 +14445,22 @@ function Sf(e, t, n) {
 		return of(t);
 	}
 }
-// analytics/node_modules/es-toolkit/dist/compat/util/toNumber.mjs
+// node_modules/es-toolkit/dist/compat/util/toNumber.mjs
 function Cf(e) {
 	return de(e) ? NaN : Number(e);
 }
-// analytics/node_modules/es-toolkit/dist/compat/util/toFinite.mjs
+// node_modules/es-toolkit/dist/compat/util/toFinite.mjs
 function wf(e) {
 	return e ? (e = Cf(e), e === Infinity || e === -Infinity ? (e < 0 ? -1 : 1) * Number.MAX_VALUE : e === e ? e : 0) : e === 0 ? e : 0;
 }
-// analytics/node_modules/es-toolkit/dist/compat/math/range.mjs
+// node_modules/es-toolkit/dist/compat/math/range.mjs
 function Tf(e, t, n) {
 	n && typeof n != "number" && Fr(e, t, n) && (t = n = void 0), e = wf(e), t === void 0 ? (t = e, e = 0) : t = wf(t), n = n === void 0 ? e < t ? 1 : -1 : wf(n);
 	let r = Math.max(Math.ceil((t - e) / (n || 1)), 0), i = Array(r);
 	for (let t = 0; t < r; t++) i[t] = e, e += n;
 	return i;
 }
-// analytics/node_modules/recharts/es6/state/selectors/dataSelectors.js
+// node_modules/recharts/es6/state/selectors/dataSelectors.js
 var Ef = (e) => e.chartData, Df = G([Ef], (e) => {
 	var t = e.chartData == null ? 0 : e.chartData.length - 1;
 	return {
@@ -14481,7 +14481,7 @@ var jf = G([Ef], (e) => {
 	var t = e.chartData, n = e.dataStartIndex, r = e.dataEndIndex;
 	return t == null ? [] : t.slice(n, r + 1);
 });
-// analytics/node_modules/recharts/es6/util/isDomainSpecifiedByUser.js
+// node_modules/recharts/es6/util/isDomainSpecifiedByUser.js
 function Mf(e, t) {
 	return Lf(e) || If(e, t) || Pf(e, t) || Nf();
 }
@@ -14584,7 +14584,7 @@ function Vf(e, t, n) {
 		}
 	}
 }
-// analytics/node_modules/recharts/es6/util/scale/util/arithmetic.js
+// node_modules/recharts/es6/util/scale/util/arithmetic.js
 var Y = /* @__PURE__ */ l((/* @__PURE__ */ o(((e, t, n) => {
 	(function(e) {
 		var n = 1e9, r = {
@@ -14967,7 +14967,7 @@ function Uf(e, t, n) {
 	for (var r = new Y.default(e), i = 0, a = []; r.lt(t) && i < 1e5;) a.push(r.toNumber()), r = r.add(n), i++;
 	return a;
 }
-// analytics/node_modules/recharts/es6/util/scale/getNiceTickValues.js
+// node_modules/recharts/es6/util/scale/getNiceTickValues.js
 function X(e, t) {
 	return Jf(e) || qf(e, t) || Gf(e, t) || Wf();
 }
@@ -15132,12 +15132,12 @@ var Yf = (e) => {
 }, gp = (e, t) => {
 	if (e && t) return e != null && e.reversed ? [t[1], t[0]] : t;
 };
-// analytics/node_modules/recharts/es6/util/getAxisTypeBasedOnLayout.js
+// node_modules/recharts/es6/util/getAxisTypeBasedOnLayout.js
 function _p(e, t, n) {
 	if (n !== "auto") return n;
 	if (e != null) return ds(e, t) ? "category" : "number";
 }
-// analytics/node_modules/recharts/es6/state/selectors/polarAxisSelectors.js
+// node_modules/recharts/es6/state/selectors/polarAxisSelectors.js
 function vp(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -15264,11 +15264,11 @@ var Np = G([
 		};
 	}
 }), Pp = (e, t) => t, Fp = (e, t, n) => n;
-// analytics/node_modules/recharts/es6/util/stacks/getStackSeriesIdentifier.js
+// node_modules/recharts/es6/util/stacks/getStackSeriesIdentifier.js
 function Ip(e) {
 	return e?.id;
 }
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineDisplayedStackedData.js
+// node_modules/recharts/es6/state/selectors/combiners/combineDisplayedStackedData.js
 function Lp(e, t, n) {
 	var r = t.chartData, i = r === void 0 ? [] : r, a = n.allowDuplicatedCategory, o = n.dataKey, s = /* @__PURE__ */ new Map();
 	return e.forEach((e) => {
@@ -15282,13 +15282,13 @@ function Lp(e, t, n) {
 		}
 	}), Array.from(s.values());
 }
-// analytics/node_modules/recharts/es6/state/types/StackedGraphicalItem.js
+// node_modules/recharts/es6/state/types/StackedGraphicalItem.js
 function Rp(e) {
 	return "stackId" in e && e.stackId != null && e.dataKey != null;
 }
-// analytics/node_modules/recharts/es6/state/selectors/numberDomainEqualityCheck.js
+// node_modules/recharts/es6/state/selectors/numberDomainEqualityCheck.js
 var zp = (e, t) => e === t ? !0 : e == null || t == null ? !1 : e[0] === t[0] && e[1] === t[1];
-// analytics/node_modules/recharts/es6/state/selectors/arrayEqualityCheck.js
+// node_modules/recharts/es6/state/selectors/arrayEqualityCheck.js
 function Bp(e, t) {
 	return Array.isArray(e) && Array.isArray(t) && e.length === 0 && t.length === 0 ? !0 : e === t;
 }
@@ -15299,12 +15299,12 @@ function Vp(e, t) {
 	}
 	return !1;
 }
-// analytics/node_modules/recharts/es6/state/selectors/selectTooltipAxisType.js
+// node_modules/recharts/es6/state/selectors/selectTooltipAxisType.js
 var Hp = (e) => {
 	var t = zc(e);
 	return t === "horizontal" ? "xAxis" : t === "vertical" ? "yAxis" : t === "centric" ? "angleAxis" : "radiusAxis";
 }, Up = (e) => e.tooltip.settings.axisId;
-// analytics/node_modules/recharts/es6/util/scale/RechartsScale.js
+// node_modules/recharts/es6/util/scale/RechartsScale.js
 function Wp(e) {
 	if (e != null) {
 		var t = e.ticks, n = e.bandwidth, r = e.range(), i = [Math.min(...r), Math.max(...r)];
@@ -15344,7 +15344,7 @@ function Wp(e) {
 		};
 	}
 }
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineCheckedDomain.js
+// node_modules/recharts/es6/state/selectors/combiners/combineCheckedDomain.js
 var Gp = (e, t) => {
 	if (t != null) switch (e) {
 		case "linear":
@@ -15359,15 +15359,15 @@ var Gp = (e, t) => {
 		default: return t;
 	}
 };
-// analytics/node_modules/d3-array/src/ascending.js
+// node_modules/d3-array/src/ascending.js
 function Kp(e, t) {
 	return e == null || t == null ? NaN : e < t ? -1 : e > t ? 1 : e >= t ? 0 : NaN;
 }
-// analytics/node_modules/d3-array/src/descending.js
+// node_modules/d3-array/src/descending.js
 function qp(e, t) {
 	return e == null || t == null ? NaN : t < e ? -1 : t > e ? 1 : t >= e ? 0 : NaN;
 }
-// analytics/node_modules/d3-array/src/bisector.js
+// node_modules/d3-array/src/bisector.js
 function Jp(e) {
 	let t, n, r;
 	e.length === 2 ? (t = e === Kp || e === qp ? e : Yp, n = e, r = e) : (t = Kp, n = (t, n) => Kp(e(t), n), r = (t, n) => e(t) - n);
@@ -15404,7 +15404,7 @@ function Jp(e) {
 function Yp() {
 	return 0;
 }
-// analytics/node_modules/d3-array/src/number.js
+// node_modules/d3-array/src/number.js
 function Xp(e) {
 	return e === null ? NaN : +e;
 }
@@ -15415,10 +15415,10 @@ function* Zp(e, t) {
 		for (let r of e) (r = t(r, ++n, e)) != null && (r = +r) >= r && (yield r);
 	}
 }
-// analytics/node_modules/d3-array/src/bisect.js
+// node_modules/d3-array/src/bisect.js
 var Qp = Jp(Kp), $p = Qp.right;
 Qp.left, Jp(Xp).center;
-// analytics/node_modules/internmap/src/index.js
+// node_modules/internmap/src/index.js
 var em = class extends Map {
 	constructor(e, t = im) {
 		if (super(), Object.defineProperties(this, {
@@ -15454,7 +15454,7 @@ function rm({ _intern: e, _key: t }, n) {
 function im(e) {
 	return typeof e == "object" && e ? e.valueOf() : e;
 }
-// analytics/node_modules/d3-array/src/sort.js
+// node_modules/d3-array/src/sort.js
 function am(e = Kp) {
 	if (e === Kp) return om;
 	if (typeof e != "function") throw TypeError("compare is not a function");
@@ -15466,7 +15466,7 @@ function am(e = Kp) {
 function om(e, t) {
 	return (e == null || !(e >= e)) - (t == null || !(t >= t)) || (e < t ? -1 : +(e > t));
 }
-// analytics/node_modules/d3-array/src/ticks.js
+// node_modules/d3-array/src/ticks.js
 var sm = Math.sqrt(50), cm = Math.sqrt(10), lm = Math.sqrt(2);
 function um(e, t, n) {
 	let r = (t - e) / Math.max(0, n), i = Math.floor(Math.log10(r)), a = r / 10 ** i, o = a >= sm ? 10 : a >= cm ? 5 : a >= lm ? 2 : 1, s, c, l;
@@ -15497,7 +15497,7 @@ function pm(e, t, n) {
 	let r = t < e, i = r ? fm(t, e, n) : fm(e, t, n);
 	return (r ? -1 : 1) * (i < 0 ? 1 / -i : i);
 }
-// analytics/node_modules/d3-array/src/max.js
+// node_modules/d3-array/src/max.js
 function mm(e, t) {
 	let n;
 	if (t === void 0) for (let t of e) t != null && (n < t || n === void 0 && t >= t) && (n = t);
@@ -15507,7 +15507,7 @@ function mm(e, t) {
 	}
 	return n;
 }
-// analytics/node_modules/d3-array/src/min.js
+// node_modules/d3-array/src/min.js
 function hm(e, t) {
 	let n;
 	if (t === void 0) for (let t of e) t != null && (n > t || n === void 0 && t >= t) && (n = t);
@@ -15517,7 +15517,7 @@ function hm(e, t) {
 	}
 	return n;
 }
-// analytics/node_modules/d3-array/src/quickselect.js
+// node_modules/d3-array/src/quickselect.js
 function gm(e, t, n = 0, r = Infinity, i) {
 	if (t = Math.floor(t), n = Math.floor(Math.max(0, n)), r = Math.floor(Math.min(e.length - 1, r)), !(n <= t && t <= r)) return e;
 	for (i = i === void 0 ? om : am(i); r > n;) {
@@ -15538,7 +15538,7 @@ function _m(e, t, n) {
 	let r = e[t];
 	e[t] = e[n], e[n] = r;
 }
-// analytics/node_modules/d3-array/src/quantile.js
+// node_modules/d3-array/src/quantile.js
 function vm(e, t, n) {
 	if (e = Float64Array.from(Zp(e, n)), (r = e.length) && !isNaN(t = +t)) {
 		if (t <= 0 || r < 2) return hm(e);
@@ -15555,13 +15555,13 @@ function ym(e, t, n = Xp) {
 		return o + (+n(e[a + 1], a + 1, e) - o) * (i - a);
 	}
 }
-// analytics/node_modules/d3-array/src/range.js
+// node_modules/d3-array/src/range.js
 function bm(e, t, n) {
 	e = +e, t = +t, n = (i = arguments.length) < 2 ? (t = e, e = 0, 1) : i < 3 ? 1 : +n;
 	for (var r = -1, i = Math.max(0, Math.ceil((t - e) / n)) | 0, a = Array(i); ++r < i;) a[r] = e + r * n;
 	return a;
 }
-// analytics/node_modules/d3-scale/src/init.js
+// node_modules/d3-scale/src/init.js
 function xm(e, t) {
 	switch (arguments.length) {
 		case 0: break;
@@ -15582,7 +15582,7 @@ function Sm(e, t) {
 	}
 	return this;
 }
-// analytics/node_modules/d3-scale/src/ordinal.js
+// node_modules/d3-scale/src/ordinal.js
 var Cm = Symbol("implicit");
 function wm() {
 	var e = new em(), t = [], n = [], r = Cm;
@@ -15607,7 +15607,7 @@ function wm() {
 		return wm(t, n).unknown(r);
 	}, xm.apply(i, arguments), i;
 }
-// analytics/node_modules/d3-scale/src/band.js
+// node_modules/d3-scale/src/band.js
 function Tm() {
 	var e = wm().unknown(void 0), t = e.domain, n = e.range, r = 0, i = 1, a, o, s = !1, c = 0, l = 0, u = .5;
 	delete e.unknown;
@@ -15652,7 +15652,7 @@ function Em(e) {
 function Dm() {
 	return Em(Tm.apply(null, arguments).paddingInner(1));
 }
-// analytics/node_modules/d3-color/src/define.js
+// node_modules/d3-color/src/define.js
 function Om(e, t, n) {
 	e.prototype = t.prototype = n, n.constructor = e;
 }
@@ -15661,7 +15661,7 @@ function km(e, t) {
 	for (var r in t) n[r] = t[r];
 	return n;
 }
-// analytics/node_modules/d3-color/src/color.js
+// node_modules/d3-color/src/color.js
 function Am() {}
 var jm = .7, Mm = 1 / jm, Nm = "\\s*([+-]?\\d+)\\s*", Pm = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?)\\s*", Fm = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?)%\\s*", Im = /^#([0-9a-f]{3,8})$/, Lm = RegExp(`^rgb\\(${Nm},${Nm},${Nm}\\)$`), Rm = RegExp(`^rgb\\(${Fm},${Fm},${Fm}\\)$`), zm = RegExp(`^rgba\\(${Nm},${Nm},${Nm},${Pm}\\)$`), Bm = RegExp(`^rgba\\(${Fm},${Fm},${Fm},${Pm}\\)$`), Vm = RegExp(`^hsl\\(${Pm},${Fm},${Fm}\\)$`), Hm = RegExp(`^hsla\\(${Pm},${Fm},${Fm},${Pm}\\)$`), Um = {
 	aliceblue: 15792383,
@@ -15947,9 +15947,9 @@ function dh(e) {
 function fh(e, t, n) {
 	return (e < 60 ? t + (n - t) * e / 60 : e < 180 ? n : e < 240 ? t + (n - t) * (240 - e) / 60 : t) * 255;
 }
-// analytics/node_modules/d3-interpolate/src/constant.js
+// node_modules/d3-interpolate/src/constant.js
 var ph = (e) => () => e;
-// analytics/node_modules/d3-interpolate/src/color.js
+// node_modules/d3-interpolate/src/color.js
 function mh(e, t) {
 	return function(n) {
 		return e + n * t;
@@ -15969,7 +15969,7 @@ function _h(e, t) {
 	var n = t - e;
 	return n ? mh(e, n) : ph(isNaN(e) ? t : e);
 }
-// analytics/node_modules/d3-interpolate/src/rgb.js
+// node_modules/d3-interpolate/src/rgb.js
 var vh = (function e(t) {
 	var n = gh(t);
 	function r(e, t) {
@@ -15980,7 +15980,7 @@ var vh = (function e(t) {
 	}
 	return r.gamma = e, r;
 })(1);
-// analytics/node_modules/d3-interpolate/src/numberArray.js
+// node_modules/d3-interpolate/src/numberArray.js
 function yh(e, t) {
 	t ||= [];
 	var n = e ? Math.min(t.length, e.length) : 0, r = t.slice(), i;
@@ -15992,7 +15992,7 @@ function yh(e, t) {
 function bh(e) {
 	return ArrayBuffer.isView(e) && !(e instanceof DataView);
 }
-// analytics/node_modules/d3-interpolate/src/array.js
+// node_modules/d3-interpolate/src/array.js
 function xh(e, t) {
 	for (var n = t ? t.length : 0, r = e ? Math.min(n, e.length) : 0, i = Array(r), a = Array(n), o = 0; o < r; ++o) i[o] = Ah(e[o], t[o]);
 	for (; o < n; ++o) a[o] = t[o];
@@ -16001,20 +16001,20 @@ function xh(e, t) {
 		return a;
 	};
 }
-// analytics/node_modules/d3-interpolate/src/date.js
+// node_modules/d3-interpolate/src/date.js
 function Sh(e, t) {
 	var n = /* @__PURE__ */ new Date();
 	return e = +e, t = +t, function(r) {
 		return n.setTime(e * (1 - r) + t * r), n;
 	};
 }
-// analytics/node_modules/d3-interpolate/src/number.js
+// node_modules/d3-interpolate/src/number.js
 function Ch(e, t) {
 	return e = +e, t = +t, function(n) {
 		return e * (1 - n) + t * n;
 	};
 }
-// analytics/node_modules/d3-interpolate/src/object.js
+// node_modules/d3-interpolate/src/object.js
 function wh(e, t) {
 	var n = {}, r = {}, i;
 	for (i in typeof e == "object" && e || (e = {}), typeof t == "object" && t || (t = {}), t) i in e ? n[i] = Ah(e[i], t[i]) : r[i] = t[i];
@@ -16023,7 +16023,7 @@ function wh(e, t) {
 		return r;
 	};
 }
-// analytics/node_modules/d3-interpolate/src/string.js
+// node_modules/d3-interpolate/src/string.js
 var Th = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g, Eh = new RegExp(Th.source, "g");
 function Dh(e) {
 	return function() {
@@ -16046,18 +16046,18 @@ function kh(e, t) {
 		return s.join("");
 	});
 }
-// analytics/node_modules/d3-interpolate/src/value.js
+// node_modules/d3-interpolate/src/value.js
 function Ah(e, t) {
 	var n = typeof t, r;
 	return t == null || n === "boolean" ? ph(t) : (n === "number" ? Ch : n === "string" ? (r = Jm(t)) ? (t = r, vh) : kh : t instanceof Jm ? vh : t instanceof Date ? Sh : bh(t) ? yh : Array.isArray(t) ? xh : typeof t.valueOf != "function" && typeof t.toString != "function" || isNaN(t) ? wh : Ch)(e, t);
 }
-// analytics/node_modules/d3-interpolate/src/round.js
+// node_modules/d3-interpolate/src/round.js
 function jh(e, t) {
 	return e = +e, t = +t, function(n) {
 		return Math.round(e * (1 - n) + t * n);
 	};
 }
-// analytics/node_modules/d3-interpolate/src/piecewise.js
+// node_modules/d3-interpolate/src/piecewise.js
 function Mh(e, t) {
 	t === void 0 && (t = e, e = Ah);
 	for (var n = 0, r = t.length - 1, i = t[0], a = Array(r < 0 ? 0 : r); n < r;) a[n] = e(i, i = t[++n]);
@@ -16066,17 +16066,17 @@ function Mh(e, t) {
 		return a[t](e - t);
 	};
 }
-// analytics/node_modules/d3-scale/src/constant.js
+// node_modules/d3-scale/src/constant.js
 function Nh(e) {
 	return function() {
 		return e;
 	};
 }
-// analytics/node_modules/d3-scale/src/number.js
+// node_modules/d3-scale/src/number.js
 function Ph(e) {
 	return +e;
 }
-// analytics/node_modules/d3-scale/src/continuous.js
+// node_modules/d3-scale/src/continuous.js
 var Fh = [0, 1];
 function Ih(e) {
 	return e;
@@ -16139,7 +16139,7 @@ function Hh() {
 function Uh() {
 	return Hh()(Ih, Ih);
 }
-// analytics/node_modules/d3-format/src/formatDecimal.js
+// node_modules/d3-format/src/formatDecimal.js
 function Wh(e) {
 	return Math.abs(e = Math.round(e)) >= 1e21 ? e.toLocaleString("en").replace(/,/g, "") : e.toString(10);
 }
@@ -16148,18 +16148,18 @@ function Gh(e, t) {
 	var n = (e = t ? e.toExponential(t - 1) : e.toExponential()).indexOf("e"), r = e.slice(0, n);
 	return [r.length > 1 ? r[0] + r.slice(2) : r, +e.slice(n + 1)];
 }
-// analytics/node_modules/d3-format/src/exponent.js
+// node_modules/d3-format/src/exponent.js
 function Kh(e) {
 	return e = Gh(Math.abs(e)), e ? e[1] : NaN;
 }
-// analytics/node_modules/d3-format/src/formatGroup.js
+// node_modules/d3-format/src/formatGroup.js
 function qh(e, t) {
 	return function(n, r) {
 		for (var i = n.length, a = [], o = 0, s = e[0], c = 0; i > 0 && s > 0 && (c + s + 1 > r && (s = Math.max(1, r - c)), a.push(n.substring(i -= s, i + s)), !((c += s + 1) > r));) s = e[o = (o + 1) % e.length];
 		return a.reverse().join(t);
 	};
 }
-// analytics/node_modules/d3-format/src/formatNumerals.js
+// node_modules/d3-format/src/formatNumerals.js
 function Jh(e) {
 	return function(t) {
 		return t.replace(/[0-9]/g, function(t) {
@@ -16167,7 +16167,7 @@ function Jh(e) {
 		});
 	};
 }
-// analytics/node_modules/d3-format/src/formatSpecifier.js
+// node_modules/d3-format/src/formatSpecifier.js
 var Yh = /^(?:(.)?([<>=^]))?([+\-( ])?([$#])?(0)?(\d+)?(,)?(\.\d+)?(~)?([a-z%])?$/i;
 function Xh(e) {
 	if (!(t = Yh.exec(e))) throw Error("invalid format: " + e);
@@ -16192,7 +16192,7 @@ function Zh(e) {
 Zh.prototype.toString = function() {
 	return this.fill + this.align + this.sign + this.symbol + (this.zero ? "0" : "") + (this.width === void 0 ? "" : Math.max(1, this.width | 0)) + (this.comma ? "," : "") + (this.precision === void 0 ? "" : "." + Math.max(0, this.precision | 0)) + (this.trim ? "~" : "") + this.type;
 };
-// analytics/node_modules/d3-format/src/formatTrim.js
+// node_modules/d3-format/src/formatTrim.js
 function Qh(e) {
 	out: for (var t = e.length, n = 1, r = -1, i; n < t; ++n) switch (e[n]) {
 		case ".":
@@ -16207,7 +16207,7 @@ function Qh(e) {
 	}
 	return r > 0 ? e.slice(0, r) + e.slice(i + 1) : e;
 }
-// analytics/node_modules/d3-format/src/formatPrefixAuto.js
+// node_modules/d3-format/src/formatPrefixAuto.js
 var $h;
 function eg(e, t) {
 	var n = Gh(e, t);
@@ -16215,14 +16215,14 @@ function eg(e, t) {
 	var r = n[0], i = n[1], a = i - ($h = Math.max(-8, Math.min(8, Math.floor(i / 3))) * 3) + 1, o = r.length;
 	return a === o ? r : a > o ? r + Array(a - o + 1).join("0") : a > 0 ? r.slice(0, a) + "." + r.slice(a) : "0." + Array(1 - a).join("0") + Gh(e, Math.max(0, t + a - 1))[0];
 }
-// analytics/node_modules/d3-format/src/formatRounded.js
+// node_modules/d3-format/src/formatRounded.js
 function tg(e, t) {
 	var n = Gh(e, t);
 	if (!n) return e + "";
 	var r = n[0], i = n[1];
 	return i < 0 ? "0." + Array(-i).join("0") + r : r.length > i + 1 ? r.slice(0, i + 1) + "." + r.slice(i + 1) : r + Array(i - r.length + 2).join("0");
 }
-// analytics/node_modules/d3-format/src/formatTypes.js
+// node_modules/d3-format/src/formatTypes.js
 var ng = {
 	"%": (e, t) => (e * 100).toFixed(t),
 	b: (e) => Math.round(e).toString(2),
@@ -16238,11 +16238,11 @@ var ng = {
 	X: (e) => Math.round(e).toString(16).toUpperCase(),
 	x: (e) => Math.round(e).toString(16)
 };
-// analytics/node_modules/d3-format/src/identity.js
+// node_modules/d3-format/src/identity.js
 function rg(e) {
 	return e;
 }
-// analytics/node_modules/d3-format/src/locale.js
+// node_modules/d3-format/src/locale.js
 var ig = Array.prototype.map, ag = [
 	"y",
 	"z",
@@ -16314,7 +16314,7 @@ function og(e) {
 		formatPrefix: u
 	};
 }
-// analytics/node_modules/d3-format/src/defaultLocale.js
+// node_modules/d3-format/src/defaultLocale.js
 var sg, cg, lg;
 ug({
 	thousands: ",",
@@ -16324,19 +16324,19 @@ ug({
 function ug(e) {
 	return sg = og(e), cg = sg.format, lg = sg.formatPrefix, sg;
 }
-// analytics/node_modules/d3-format/src/precisionFixed.js
+// node_modules/d3-format/src/precisionFixed.js
 function dg(e) {
 	return Math.max(0, -Kh(Math.abs(e)));
 }
-// analytics/node_modules/d3-format/src/precisionPrefix.js
+// node_modules/d3-format/src/precisionPrefix.js
 function fg(e, t) {
 	return Math.max(0, Math.max(-8, Math.min(8, Math.floor(Kh(t) / 3))) * 3 - Kh(Math.abs(e)));
 }
-// analytics/node_modules/d3-format/src/precisionRound.js
+// node_modules/d3-format/src/precisionRound.js
 function pg(e, t) {
 	return e = Math.abs(e), t = Math.abs(t) - e, Math.max(0, Kh(t) - Kh(e)) + 1;
 }
-// analytics/node_modules/d3-scale/src/tickFormat.js
+// node_modules/d3-scale/src/tickFormat.js
 function mg(e, t, n, r) {
 	var i = pm(e, t, n), a;
 	switch (r = Xh(r ?? ",f"), r.type) {
@@ -16355,7 +16355,7 @@ function mg(e, t, n, r) {
 	}
 	return cg(r);
 }
-// analytics/node_modules/d3-scale/src/linear.js
+// node_modules/d3-scale/src/linear.js
 function hg(e) {
 	var t = e.domain;
 	return e.ticks = function(e) {
@@ -16383,7 +16383,7 @@ function gg() {
 		return Vh(e, gg());
 	}, xm.apply(e, arguments), hg(e);
 }
-// analytics/node_modules/d3-scale/src/identity.js
+// node_modules/d3-scale/src/identity.js
 function _g(e) {
 	var t;
 	function n(e) {
@@ -16397,13 +16397,13 @@ function _g(e) {
 		return _g(e).unknown(t);
 	}, e = arguments.length ? Array.from(e, Ph) : [0, 1], hg(n);
 }
-// analytics/node_modules/d3-scale/src/nice.js
+// node_modules/d3-scale/src/nice.js
 function vg(e, t) {
 	e = e.slice();
 	var n = 0, r = e.length - 1, i = e[n], a = e[r], o;
 	return a < i && (o = n, n = r, r = o, o = i, i = a, a = o), e[n] = t.floor(i), e[r] = t.ceil(a), e;
 }
-// analytics/node_modules/d3-scale/src/log.js
+// node_modules/d3-scale/src/log.js
 function yg(e) {
 	return Math.log(e);
 }
@@ -16470,7 +16470,7 @@ function Og() {
 	let e = Dg(Hh()).domain([1, 10]);
 	return e.copy = () => Vh(e, Og()).base(e.base()), xm.apply(e, arguments), e;
 }
-// analytics/node_modules/d3-scale/src/symlog.js
+// node_modules/d3-scale/src/symlog.js
 function kg(e) {
 	return function(t) {
 		return Math.sign(t) * Math.log1p(Math.abs(t / e));
@@ -16493,7 +16493,7 @@ function Mg() {
 		return Vh(e, Mg()).constant(e.constant());
 	}, xm.apply(e, arguments);
 }
-// analytics/node_modules/d3-scale/src/pow.js
+// node_modules/d3-scale/src/pow.js
 function Ng(e) {
 	return function(t) {
 		return t < 0 ? -((-t) ** +e) : t ** +e;
@@ -16523,7 +16523,7 @@ function Lg() {
 function Rg() {
 	return Lg.apply(null, arguments).exponent(.5);
 }
-// analytics/node_modules/d3-scale/src/radial.js
+// node_modules/d3-scale/src/radial.js
 function zg(e) {
 	return Math.sign(e) * e * e;
 }
@@ -16554,7 +16554,7 @@ function Vg() {
 		return Vg(e.domain(), t).round(n).clamp(e.clamp()).unknown(r);
 	}, xm.apply(i, arguments), hg(i);
 }
-// analytics/node_modules/d3-scale/src/quantile.js
+// node_modules/d3-scale/src/quantile.js
 function Hg() {
 	var e = [], t = [], n = [], r;
 	function i() {
@@ -16583,7 +16583,7 @@ function Hg() {
 		return Hg().domain(e).range(t).unknown(r);
 	}, xm.apply(a, arguments);
 }
-// analytics/node_modules/d3-scale/src/quantize.js
+// node_modules/d3-scale/src/quantize.js
 function Ug() {
 	var e = 0, t = 1, n = 1, r = [.5], i = [0, 1], a;
 	function o(e) {
@@ -16609,7 +16609,7 @@ function Ug() {
 		return Ug().domain([e, t]).range(i).unknown(a);
 	}, xm.apply(hg(o), arguments);
 }
-// analytics/node_modules/d3-scale/src/threshold.js
+// node_modules/d3-scale/src/threshold.js
 function Wg() {
 	var e = [.5], t = [0, 1], n, r = 1;
 	function i(i) {
@@ -16628,7 +16628,7 @@ function Wg() {
 		return Wg().domain(e).range(t).unknown(n);
 	}, xm.apply(i, arguments);
 }
-// analytics/node_modules/d3-time/src/interval.js
+// node_modules/d3-time/src/interval.js
 var Gg = /* @__PURE__ */ new Date(), Kg = /* @__PURE__ */ new Date();
 function qg(e, t, n, r) {
 	function i(t) {
@@ -16654,7 +16654,7 @@ function qg(e, t, n, r) {
 		}
 	}), n && (i.count = (t, r) => (Gg.setTime(+t), Kg.setTime(+r), e(Gg), e(Kg), Math.floor(n(Gg, Kg))), i.every = (e) => (e = Math.floor(e), !isFinite(e) || !(e > 0) ? null : e > 1 ? i.filter(r ? (t) => r(t) % e === 0 : (t) => i.count(0, t) % e === 0) : i)), i;
 }
-// analytics/node_modules/d3-time/src/millisecond.js
+// node_modules/d3-time/src/millisecond.js
 var Jg = qg(() => {}, (e, t) => {
 	e.setTime(+e + t);
 }, (e, t) => t - e);
@@ -16663,14 +16663,14 @@ Jg.every = (e) => (e = Math.floor(e), !isFinite(e) || !(e > 0) ? null : e > 1 ? 
 }, (t, n) => {
 	t.setTime(+t + n * e);
 }, (t, n) => (n - t) / e) : Jg), Jg.range;
-// analytics/node_modules/d3-time/src/duration.js
+// node_modules/d3-time/src/duration.js
 var Yg = 1e3, Xg = Yg * 60, Zg = Xg * 60, Qg = Zg * 24, $g = Qg * 7, e_ = Qg * 30, t_ = Qg * 365, n_ = qg((e) => {
 	e.setTime(e - e.getMilliseconds());
 }, (e, t) => {
 	e.setTime(+e + t * Yg);
 }, (e, t) => (t - e) / Yg, (e) => e.getUTCSeconds());
 n_.range;
-// analytics/node_modules/d3-time/src/minute.js
+// node_modules/d3-time/src/minute.js
 var r_ = qg((e) => {
 	e.setTime(e - e.getMilliseconds() - e.getSeconds() * Yg);
 }, (e, t) => {
@@ -16683,7 +16683,7 @@ var i_ = qg((e) => {
 	e.setTime(+e + t * Xg);
 }, (e, t) => (t - e) / Xg, (e) => e.getUTCMinutes());
 i_.range;
-// analytics/node_modules/d3-time/src/hour.js
+// node_modules/d3-time/src/hour.js
 var a_ = qg((e) => {
 	e.setTime(e - e.getMilliseconds() - e.getSeconds() * Yg - e.getMinutes() * Xg);
 }, (e, t) => {
@@ -16696,7 +16696,7 @@ var o_ = qg((e) => {
 	e.setTime(+e + t * Zg);
 }, (e, t) => (t - e) / Zg, (e) => e.getUTCHours());
 o_.range;
-// analytics/node_modules/d3-time/src/day.js
+// node_modules/d3-time/src/day.js
 var s_ = qg((e) => e.setHours(0, 0, 0, 0), (e, t) => e.setDate(e.getDate() + t), (e, t) => (t - e - (t.getTimezoneOffset() - e.getTimezoneOffset()) * Xg) / Qg, (e) => e.getDate() - 1);
 s_.range;
 var c_ = qg((e) => {
@@ -16711,7 +16711,7 @@ var l_ = qg((e) => {
 	e.setUTCDate(e.getUTCDate() + t);
 }, (e, t) => (t - e) / Qg, (e) => Math.floor(e / Qg));
 l_.range;
-// analytics/node_modules/d3-time/src/week.js
+// node_modules/d3-time/src/week.js
 function u_(e) {
 	return qg((t) => {
 		t.setDate(t.getDate() - (t.getDay() + 7 - e) % 7), t.setHours(0, 0, 0, 0);
@@ -16730,7 +16730,7 @@ function v_(e) {
 }
 var y_ = v_(0), b_ = v_(1), x_ = v_(2), S_ = v_(3), C_ = v_(4), w_ = v_(5), T_ = v_(6);
 y_.range, b_.range, x_.range, S_.range, C_.range, w_.range, T_.range;
-// analytics/node_modules/d3-time/src/month.js
+// node_modules/d3-time/src/month.js
 var E_ = qg((e) => {
 	e.setDate(1), e.setHours(0, 0, 0, 0);
 }, (e, t) => {
@@ -16743,7 +16743,7 @@ var D_ = qg((e) => {
 	e.setUTCMonth(e.getUTCMonth() + t);
 }, (e, t) => t.getUTCMonth() - e.getUTCMonth() + (t.getUTCFullYear() - e.getUTCFullYear()) * 12, (e) => e.getUTCMonth());
 D_.range;
-// analytics/node_modules/d3-time/src/year.js
+// node_modules/d3-time/src/year.js
 var O_ = qg((e) => {
 	e.setMonth(0, 1), e.setHours(0, 0, 0, 0);
 }, (e, t) => {
@@ -16764,7 +16764,7 @@ k_.every = (e) => !isFinite(e = Math.floor(e)) || !(e > 0) ? null : qg((t) => {
 }, (t, n) => {
 	t.setUTCFullYear(t.getUTCFullYear() + n * e);
 }), k_.range;
-// analytics/node_modules/d3-time/src/ticks.js
+// node_modules/d3-time/src/ticks.js
 function A_(e, t, n, r, i, a) {
 	let o = [
 		[
@@ -16874,7 +16874,7 @@ function A_(e, t, n, r, i, a) {
 	return [s, c];
 }
 var [j_, M_] = A_(k_, D_, y_, l_, o_, i_), [N_, P_] = A_(O_, E_, d_, s_, a_, r_);
-// analytics/node_modules/d3-time-format/src/locale.js
+// node_modules/d3-time-format/src/locale.js
 function F_(e) {
 	if (0 <= e.y && e.y < 100) {
 		var t = new Date(-1, e.m, e.d, e.H, e.M, e.S, e.L);
@@ -17357,7 +17357,7 @@ function ey(e) {
 function ty(e) {
 	return Math.floor(e / 1e3);
 }
-// analytics/node_modules/d3-time-format/src/defaultLocale.js
+// node_modules/d3-time-format/src/defaultLocale.js
 var ny, ry, iy;
 ay({
 	dateTime: "%x, %X",
@@ -17414,7 +17414,7 @@ ay({
 function ay(e) {
 	return ny = R_(e), ry = ny.format, ny.parse, iy = ny.utcFormat, ny.utcParse, ny;
 }
-// analytics/node_modules/d3-scale/src/time.js
+// node_modules/d3-scale/src/time.js
 function oy(e) {
 	return new Date(e);
 }
@@ -17445,11 +17445,11 @@ function cy(e, t, n, r, i, a, o, s, c, l) {
 function ly() {
 	return xm.apply(cy(N_, P_, O_, E_, d_, s_, a_, r_, n_, ry).domain([new Date(2e3, 0, 1), new Date(2e3, 0, 2)]), arguments);
 }
-// analytics/node_modules/d3-scale/src/utcTime.js
+// node_modules/d3-scale/src/utcTime.js
 function uy() {
 	return xm.apply(cy(j_, M_, k_, D_, y_, c_, o_, i_, n_, iy).domain([Date.UTC(2e3, 0, 1), Date.UTC(2e3, 0, 2)]), arguments);
 }
-// analytics/node_modules/d3-scale/src/sequential.js
+// node_modules/d3-scale/src/sequential.js
 function dy() {
 	var e = 0, t = 1, n, r, i, a, o = Ih, s = !1, c;
 	function l(e) {
@@ -17504,7 +17504,7 @@ function gy() {
 function _y() {
 	return gy.apply(null, arguments).exponent(.5);
 }
-// analytics/node_modules/d3-scale/src/sequentialQuantile.js
+// node_modules/d3-scale/src/sequentialQuantile.js
 function vy() {
 	var e = [], t = Ih;
 	function n(n) {
@@ -17525,7 +17525,7 @@ function vy() {
 		return vy(t).domain(e);
 	}, Sm.apply(n, arguments);
 }
-// analytics/node_modules/d3-scale/src/diverging.js
+// node_modules/d3-scale/src/diverging.js
 function yy() {
 	var e = 0, t = .5, n = 1, r = 1, i, a, o, s, c, l = Ih, u, d = !1, f;
 	function p(e) {
@@ -17593,7 +17593,7 @@ function Cy() {
 function wy() {
 	return Cy.apply(null, arguments).exponent(.5);
 }
-// analytics/node_modules/victory-vendor/es/d3-scale.js
+// node_modules/victory-vendor/es/d3-scale.js
 var Ty = /* @__PURE__ */ s({
 	scaleBand: () => Tm,
 	scaleDiverging: () => by,
@@ -17624,7 +17624,7 @@ var Ty = /* @__PURE__ */ s({
 	scaleUtc: () => uy,
 	tickFormat: () => mg
 });
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineConfiguredScale.js
+// node_modules/recharts/es6/state/selectors/combiners/combineConfiguredScale.js
 function Ey(e) {
 	var t = Ty;
 	if (e in t && typeof t[e] == "function") return t[e]();
@@ -17641,7 +17641,7 @@ function Dy(e, t, n) {
 function Oy(e, t, n, r) {
 	if (n != null && r != null) return typeof e.scale == "function" ? Dy(e.scale, n, r) : Dy(t, n, r);
 }
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineRealScaleType.js
+// node_modules/recharts/es6/state/selectors/combiners/combineRealScaleType.js
 function ky(e) {
 	return `scale${je(e)}`;
 }
@@ -17655,7 +17655,7 @@ var jy = (e, t, n) => {
 		if (typeof r == "string") return Ay(r) ? r : "point";
 	}
 };
-// analytics/node_modules/recharts/es6/util/scale/createCategoricalInverse.js
+// node_modules/recharts/es6/util/scale/createCategoricalInverse.js
 function My(e, t) {
 	for (var n = 0, r = e.length, i = e[0] < e[e.length - 1]; n < r;) {
 		var a = Math.floor((n + r) / 2);
@@ -17675,11 +17675,11 @@ function Ny(e, t) {
 		};
 	}
 }
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineInverseScaleFunction.js
+// node_modules/recharts/es6/state/selectors/combiners/combineInverseScaleFunction.js
 function Py(e) {
 	if (e != null) return "invert" in e && typeof e.invert == "function" ? e.invert.bind(e) : Ny(e, void 0);
 }
-// analytics/node_modules/recharts/es6/state/selectors/axisSelectors.js
+// node_modules/recharts/es6/state/selectors/axisSelectors.js
 function Fy(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -18473,7 +18473,7 @@ G([(e, t, n) => e.renderedTicks[t]?.[n]], (e) => {
 		return r?.value;
 	};
 });
-// analytics/node_modules/recharts/es6/state/selectors/selectTooltipEventType.js
+// node_modules/recharts/es6/state/selectors/selectTooltipEventType.js
 var $x = (e) => e.options.defaultTooltipEventType, eS = (e) => e.options.validateTooltipEventTypes;
 function tS(e, t, n) {
 	if (e == null) return t;
@@ -18486,7 +18486,7 @@ function nS(e, t) {
 function rS(e) {
 	return W((t) => nS(t, e));
 }
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineActiveLabel.js
+// node_modules/recharts/es6/state/selectors/combiners/combineActiveLabel.js
 var iS = (e, t) => {
 	var n, r = Number(t);
 	if (!(xe(r) || t == null)) return r >= 0 ? e == null || (n = e[r]) == null ? void 0 : n.value : void 0;
@@ -18576,7 +18576,7 @@ var iS = (e, t) => {
 		}
 	}
 }), cS = sS.actions, lS = cS.addTooltipEntrySettings, uS = cS.replaceTooltipEntrySettings, dS = cS.removeTooltipEntrySettings, fS = cS.setTooltipSettingsState, pS = cS.setActiveMouseOverItemIndex, mS = cS.mouseLeaveItem, hS = cS.mouseLeaveChart, gS = cS.setActiveClickItemIndex, _S = cS.setMouseOverAxisIndex, vS = cS.setMouseClickAxisIndex, yS = cS.setSyncInteraction, bS = cS.setKeyboardInteraction, xS = sS.reducer;
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineTooltipInteractionState.js
+// node_modules/recharts/es6/state/selectors/combiners/combineTooltipInteractionState.js
 function SS(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -18645,7 +18645,7 @@ var kS = (e, t, n, r) => {
 	};
 	return CS(CS({}, oS), {}, { coordinate: i.coordinate });
 };
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineActiveTooltipIndex.js
+// node_modules/recharts/es6/state/selectors/combiners/combineActiveTooltipIndex.js
 function AS(e) {
 	if (typeof e == "number") return Number.isFinite(e) ? e : void 0;
 	if (e instanceof Date) {
@@ -18700,7 +18700,7 @@ var NS = (e, t, n, r) => {
 	}
 	return e.tooltipItemPayloads.filter((e) => e.settings?.graphicalItemId === i);
 }, IS = (e) => e.options.tooltipPayloadSearcher, LS = (e) => e.tooltip;
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineTooltipPayload.js
+// node_modules/recharts/es6/state/selectors/combiners/combineTooltipPayload.js
 function RS(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -18969,7 +18969,7 @@ var YS = (e, t, n, r, i, a, o) => {
 		return Array.from(new Set(t));
 	}
 });
-// analytics/node_modules/recharts/es6/context/useTooltipAxis.js
+// node_modules/recharts/es6/context/useTooltipAxis.js
 function OC(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -19017,7 +19017,7 @@ var NC = () => W(Ob), PC = () => {
 	var e = NC(), t = W(hC), n = W(mC);
 	return Es(!e || !n ? void 0 : kC(kC({}, e), {}, { scale: n }), t);
 };
-// analytics/node_modules/recharts/es6/util/getActiveCoordinate.js
+// node_modules/recharts/es6/util/getActiveCoordinate.js
 function FC(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -19217,7 +19217,7 @@ var UC = (e, t, n, r, i) => {
 	var t = Object.keys(e).map((e) => parseInt(e, 10)).concat(Object.values(pp));
 	return Array.from(new Set(t)).sort((e, t) => e - t);
 }, { memoizeOptions: { resultEqualityCheck: Vp } });
-// analytics/node_modules/recharts/es6/state/zIndexSlice.js
+// node_modules/recharts/es6/state/zIndexSlice.js
 function lw(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -19342,7 +19342,7 @@ function Tw(e) {
 	var l = c ?? a.current;
 	return l ? /*#__PURE__*/ (0, ww.createPortal)(n, l) : null;
 }
-// analytics/node_modules/recharts/es6/component/Cursor.js
+// node_modules/recharts/es6/component/Cursor.js
 function Ew() {
 	return Ew = Object.assign ? Object.assign.bind() : function(e) {
 		for (var t = 1; t < arguments.length; t++) {
@@ -19439,7 +19439,7 @@ function Pw(e) {
 		chartName: i
 	}));
 }
-// analytics/node_modules/recharts/es6/context/tooltipPortalContext.js
+// node_modules/recharts/es6/context/tooltipPortalContext.js
 var Fw = /*#__PURE__*/ (0, b.createContext)(null), Iw = () => (0, b.useContext)(Fw), Lw = (/* @__PURE__ */ l((/* @__PURE__ */ o(((e, t) => {
 	var n = Object.prototype.hasOwnProperty, r = "~";
 	function i() {}
@@ -19544,7 +19544,7 @@ var Fw = /*#__PURE__*/ (0, b.createContext)(null), Iw = () => (0, b.useContext)(
 		e.eventEmitter ??= Symbol("rechartsEventEmitter");
 	} }
 }), Uw = Hw.reducer, Ww = Hw.actions.createEventEmitter;
-// analytics/node_modules/recharts/es6/synchronisation/syncSelectors.js
+// node_modules/recharts/es6/synchronisation/syncSelectors.js
 function Gw(e) {
 	return e.tooltip.syncInteraction;
 }
@@ -19768,7 +19768,7 @@ function cT(e, t, n, r, i, a) {
 		f
 	]);
 }
-// analytics/node_modules/recharts/es6/component/Tooltip.js
+// node_modules/recharts/es6/component/Tooltip.js
 function lT(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -19943,10 +19943,10 @@ function wT(e) {
 		index: O
 	}));
 }
-// analytics/node_modules/recharts/es6/component/Cell.js
+// node_modules/recharts/es6/component/Cell.js
 var TT = (e) => null;
 TT.displayName = "Cell";
-// analytics/node_modules/recharts/es6/util/LRUCache.js
+// node_modules/recharts/es6/util/LRUCache.js
 function ET(e, t, n) {
 	return (t = DT(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
@@ -19992,7 +19992,7 @@ var kT = class {
 		return this.cache.size;
 	}
 };
-// analytics/node_modules/recharts/es6/util/DOMUtils.js
+// node_modules/recharts/es6/util/DOMUtils.js
 function AT(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -20231,7 +20231,7 @@ function pE(e) {
 	var t = fE(e.slice(5, -1));
 	return t === aE ? "" : t;
 }
-// analytics/node_modules/recharts/es6/component/Text.js
+// node_modules/recharts/es6/component/Text.js
 var mE = [
 	"x",
 	"y",
@@ -20455,7 +20455,7 @@ var kE = (e, t, n, r) => e.reduce((e, i) => {
 	}));
 });
 RE.displayName = "Text";
-// analytics/node_modules/recharts/es6/component/Label.js
+// node_modules/recharts/es6/component/Label.js
 var zE = ["labelRef"], BE = ["content"];
 function VE(e, t) {
 	if (e == null) return {};
@@ -20695,7 +20695,7 @@ function uD(e) {
 	var t = e.label, n = e.labelRef;
 	return lD(t, ZE(), n) || null;
 }
-// analytics/node_modules/recharts/es6/component/LabelList.js
+// node_modules/recharts/es6/component/LabelList.js
 var dD = ["valueAccessor"], fD = [
 	"dataKey",
 	"clockWise",
@@ -20766,7 +20766,7 @@ function CD(e) {
 		content: t
 	}) : typeof t == "object" ? /*#__PURE__*/ b.createElement(SD, pD({ key: "labelList-implicit" }, t, { type: String(t.type) })) : null : null;
 }
-// analytics/node_modules/recharts/es6/shape/Dot.js
+// node_modules/recharts/es6/shape/Dot.js
 function wD() {
 	return wD = Object.assign ? Object.assign.bind() : function(e) {
 		for (var t = 1; t < arguments.length; t++) {
@@ -20807,11 +20807,11 @@ var TD = (e) => {
 }), DD = ED.actions;
 DD.addRadiusAxis, DD.removeRadiusAxis, DD.addAngleAxis, DD.removeAngleAxis;
 var OD = ED.reducer;
-// analytics/node_modules/recharts/es6/util/getClassNameFromUnknown.js
+// node_modules/recharts/es6/util/getClassNameFromUnknown.js
 function kD(e) {
 	return e && typeof e == "object" && "className" in e && typeof e.className == "string" ? e.className : "";
 }
-// analytics/node_modules/react-is/cjs/react-is.production.js
+// node_modules/react-is/cjs/react-is.production.js
 var AD = /* @__PURE__ */ o(((e) => {
 	var t = Symbol.for("react.transitional.element"), n = Symbol.for("react.portal"), r = Symbol.for("react.fragment"), i = Symbol.for("react.strict_mode"), a = Symbol.for("react.profiler"), o = Symbol.for("react.consumer"), s = Symbol.for("react.context"), c = Symbol.for("react.forward_ref"), l = Symbol.for("react.suspense"), u = Symbol.for("react.suspense_list"), d = Symbol.for("react.memo"), f = Symbol.for("react.lazy"), p = Symbol.for("react.view_transition");
 	function m(e) {
@@ -20858,7 +20858,7 @@ function ID(e, t) {
 	}), n;
 }
 var LD = (e) => e && typeof e == "object" && "clipDot" in e ? !!e.clipDot : !0;
-// analytics/node_modules/recharts/es6/util/ActiveShapeUtils.js
+// node_modules/recharts/es6/util/ActiveShapeUtils.js
 function RD(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -20924,7 +20924,7 @@ function JD(e) {
 	var t = e.option, n = e.DefaultShape, r = e.shapeProps, i = e.activeClassName, a = i === void 0 ? "recharts-active-shape" : i, o = e.inActiveClassName, s = o === void 0 ? "recharts-shape" : o, c = KD(r), l = /*#__PURE__*/ (0, b.isValidElement)(t) ? GD(t, r) : t === n ? /*#__PURE__*/ b.createElement(n, r) : typeof t == "function" ? t(r, c) : typeof t == "object" ? /*#__PURE__*/ b.createElement(n, UD(t, r)) : /*#__PURE__*/ b.createElement(n, r);
 	return qD(r) ? /*#__PURE__*/ b.createElement(oe, { className: a }, l) : /*#__PURE__*/ b.createElement(oe, { className: s }, l);
 }
-// analytics/node_modules/recharts/es6/context/tooltipContext.js
+// node_modules/recharts/es6/context/tooltipContext.js
 var YD = (e, t, n) => {
 	var r = _r();
 	return (i, a) => (o) => {
@@ -20951,7 +20951,7 @@ var YD = (e, t, n) => {
 		}));
 	};
 };
-// analytics/node_modules/recharts/es6/state/SetTooltipEntrySettings.js
+// node_modules/recharts/es6/state/SetTooltipEntrySettings.js
 function QD(e) {
 	var t = e.tooltipEntrySettings, n = _r(), r = Qs(), i = (0, b.useRef)(null);
 	return (0, b.useLayoutEffect)(() => {
@@ -20967,7 +20967,7 @@ function QD(e) {
 		i.current &&= (n(dS(i.current)), null);
 	}, [n]), null;
 }
-// analytics/node_modules/recharts/es6/state/SetLegendPayload.js
+// node_modules/recharts/es6/state/SetLegendPayload.js
 function $D(e) {
 	var t = e.legendPayload, n = _r(), r = Qs(), i = (0, b.useRef)(null);
 	return (0, b.useLayoutEffect)(() => {
@@ -20983,7 +20983,7 @@ function $D(e) {
 		i.current &&= (n(Yc(i.current)), null);
 	}, [n]), null;
 }
-// analytics/node_modules/recharts/es6/animation/matchBy.js
+// node_modules/recharts/es6/animation/matchBy.js
 function eO(e, t) {
 	return aO(e) || iO(e, t) || nO(e, t) || tO();
 }
@@ -21083,7 +21083,7 @@ function pO(e, t, n) {
 		next: e
 	})) : n === "index" ? lO(e, t) : n === "append" ? uO(e, t) : fO(e, t, n);
 }
-// analytics/node_modules/recharts/es6/animation/useAnimationStartSnapshot.js
+// node_modules/recharts/es6/animation/useAnimationStartSnapshot.js
 function mO(e, t) {
 	var n = (0, b.useRef)(e), r = (0, b.useRef)(t.current), i = (0, b.useRef)(!0);
 	n.current !== e && (n.current = e, r.current = t.current, i.current = !1);
@@ -21096,7 +21096,7 @@ function mO(e, t) {
 		syncStepValue: a
 	};
 }
-// analytics/node_modules/recharts/es6/animation/AnimatedItems.js
+// node_modules/recharts/es6/animation/AnimatedItems.js
 function hO(e, t) {
 	return bO(e) || yO(e, t) || _O(e, t) || gO();
 }
@@ -21210,12 +21210,12 @@ function OO(e) {
 	if (Array.isArray(e)) return e;
 }
 var kO = b.useId ?? (() => CO(b.useState(() => Te("uid-")), 1)[0]);
-// analytics/node_modules/recharts/es6/util/useUniqueId.js
+// node_modules/recharts/es6/util/useUniqueId.js
 function AO(e, t) {
 	var n = kO();
 	return t || (e ? `${e}-${n}` : n);
 }
-// analytics/node_modules/recharts/es6/context/RegisterGraphicalItemId.js
+// node_modules/recharts/es6/context/RegisterGraphicalItemId.js
 var jO = /*#__PURE__*/ (0, b.createContext)(void 0), MO = (e) => {
 	var t = e.id, n = e.type, r = e.children, i = AO(`recharts-${n}`, t);
 	return /*#__PURE__*/ b.createElement(jO.Provider, { value: i }, r(i));
@@ -21384,7 +21384,7 @@ function ZO(e) {
 	}), m = {};
 	return s && c != null && (m.clipPath = `url(#clipPath-${d ? "" : "dots-"}${c})`), /*#__PURE__*/ b.createElement(Tw, { zIndex: u }, /*#__PURE__*/ b.createElement(oe, KO({ className: r }, m), p));
 }
-// analytics/node_modules/recharts/es6/state/cartesianAxisSlice.js
+// node_modules/recharts/es6/state/cartesianAxisSlice.js
 function QO(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -21537,7 +21537,7 @@ var dk = ik.updateYAxisWidth, fk = ik.updateXAxisHeight, pk = rk.reducer, mk = G
 		height: Math.max(0, n - e.top - e.bottom)
 	};
 }), hk = () => W(mk), gk = () => W(DC);
-// analytics/node_modules/recharts/es6/component/ActivePoints.js
+// node_modules/recharts/es6/component/ActivePoints.js
 function _k(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -21614,7 +21614,7 @@ function Ck(e) {
 		clipPath: a
 	}));
 }
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineBarSizeList.js
+// node_modules/recharts/es6/state/selectors/combiners/combineBarSizeList.js
 function wk(e, t) {
 	return kk(e) || Ok(e, t) || Ek(e, t) || Tk();
 }
@@ -21678,7 +21678,7 @@ var Ak = (e, t, n) => {
 	}));
 	return [...s, ...c];
 };
-// analytics/node_modules/recharts/es6/state/selectors/combiners/combineAllBarPositions.js
+// node_modules/recharts/es6/state/selectors/combiners/combineAllBarPositions.js
 function Mk(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -21783,11 +21783,11 @@ var Rk = (e, t, n, r, i, a, o) => {
 		if (n != null) return n.position;
 	}
 };
-// analytics/node_modules/recharts/es6/zIndex/getZIndexFromUnknown.js
+// node_modules/recharts/es6/zIndex/getZIndexFromUnknown.js
 function Vk(e, t) {
 	return e && typeof e == "object" && "zIndex" in e && typeof e.zIndex == "number" && J(e.zIndex) ? e.zIndex : t;
 }
-// analytics/node_modules/recharts/es6/context/chartDataContext.js
+// node_modules/recharts/es6/context/chartDataContext.js
 var Hk = (e) => {
 	var t = e.chartData, n = _r(), r = Qs();
 	return (0, b.useEffect)(() => r ? () => {} : (n(Jw(t)), () => {
@@ -21817,7 +21817,7 @@ var Hk = (e) => {
 });
 Wk.actions.setBrushSettings;
 var Gk = Wk.reducer;
-// analytics/node_modules/recharts/es6/util/CartesianUtils.js
+// node_modules/recharts/es6/util/CartesianUtils.js
 function Kk(e) {
 	return (e % 180 + 180) % 180;
 }
@@ -21857,7 +21857,7 @@ var qk = function(e) {
 }), Yk = Jk.actions;
 Yk.addDot, Yk.removeDot, Yk.addArea, Yk.removeArea, Yk.addLine, Yk.removeLine;
 var Xk = Jk.reducer;
-// analytics/node_modules/recharts/es6/container/ClipPathProvider.js
+// node_modules/recharts/es6/container/ClipPathProvider.js
 function Zk(e, t) {
 	return nA(e) || tA(e, t) || $k(e, t) || Qk();
 }
@@ -21911,15 +21911,15 @@ var rA = /*#__PURE__*/ (0, b.createContext)(void 0), iA = (e) => {
 		width: o
 	}))), t);
 };
-// analytics/node_modules/es-toolkit/dist/function/noop.mjs
+// node_modules/es-toolkit/dist/function/noop.mjs
 function aA() {}
-// analytics/node_modules/es-toolkit/dist/predicate/isPlainObject.mjs
+// node_modules/es-toolkit/dist/predicate/isPlainObject.mjs
 function oA(e) {
 	if (!e || typeof e != "object") return !1;
 	let t = Object.getPrototypeOf(e);
 	return t !== null && t !== Object.prototype && Object.getPrototypeOf(t) !== null ? !1 : Object.prototype.toString.call(e) === "[object Object]";
 }
-// analytics/node_modules/es-toolkit/dist/compat/_internal/baseIsEqualWith.mjs
+// node_modules/es-toolkit/dist/compat/_internal/baseIsEqualWith.mjs
 function sA(e, t, n) {
 	return cA(e, t, void 0, void 0, void 0, void 0, n);
 }
@@ -22007,11 +22007,11 @@ function lA(e, t, n, r) {
 		n.delete(e), n.delete(t);
 	}
 }
-// analytics/node_modules/es-toolkit/dist/compat/predicate/isEqual.mjs
+// node_modules/es-toolkit/dist/compat/predicate/isEqual.mjs
 function uA(e, t) {
 	return sA(e, t, aA);
 }
-// analytics/node_modules/recharts/es6/util/getEveryNth.js
+// node_modules/recharts/es6/util/getEveryNth.js
 function dA(e, t) {
 	if (t < 1) return [];
 	if (t === 1) return e;
@@ -22021,7 +22021,7 @@ function dA(e, t) {
 	}
 	return n;
 }
-// analytics/node_modules/recharts/es6/util/TickUtils.js
+// node_modules/recharts/es6/util/TickUtils.js
 function fA(e, t, n) {
 	return qk({
 		width: e.width + t.width,
@@ -22046,7 +22046,7 @@ function mA(e, t, n, r, i) {
 function hA(e, t) {
 	return dA(e, t + 1);
 }
-// analytics/node_modules/recharts/es6/cartesian/getEquidistantTicks.js
+// node_modules/recharts/es6/cartesian/getEquidistantTicks.js
 function gA(e, t, n, r, i) {
 	for (var a = (r || []).slice(), o = t.start, s = t.end, c = 0, l = 1, u = o, d = function() {
 		var t = r?.[c];
@@ -22077,7 +22077,7 @@ function _A(e, t, n, r, i) {
 	}
 	return [];
 }
-// analytics/node_modules/recharts/es6/cartesian/getTicks.js
+// node_modules/recharts/es6/cartesian/getTicks.js
 function vA(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -22177,7 +22177,7 @@ function TA(e, t, n) {
 	}, g = i[0], _ = i[1], v = i.length >= 2 && g != null && _ != null ? be(_.coordinate - g.coordinate) : 1, y = pA(a, v, p);
 	return c === "equidistantPreserveStart" ? gA(v, y, h, i, o) : c === "equidistantPreserveEnd" ? _A(v, y, h, i, o) : (f = c === "preserveStart" || c === "preserveStartEnd" ? wA(v, y, h, i, o, c === "preserveStartEnd") : CA(v, y, h, i, o), f.filter((e) => e.isShow));
 }
-// analytics/node_modules/recharts/es6/util/YAxisUtils.js
+// node_modules/recharts/es6/util/YAxisUtils.js
 var EA = (e) => {
 	var t = e.ticks, n = e.label, r = e.labelGapWithTick, i = r === void 0 ? 5 : r, a = e.tickSize, o = a === void 0 ? 0 : a, s = e.tickMargin, c = s === void 0 ? 0 : s, l = 0;
 	if (t) {
@@ -22593,7 +22593,7 @@ var tj = /*#__PURE__*/ (0, b.forwardRef)((e, t) => {
 	return /*#__PURE__*/ b.createElement(nj, HA({}, n, { ref: t }));
 });
 rj.displayName = "CartesianAxis";
-// analytics/node_modules/recharts/es6/theme/RechartsThemeContext.js
+// node_modules/recharts/es6/theme/RechartsThemeContext.js
 var ij = /*#__PURE__*/ (0, b.createContext)({ grid: {
 	stroke: "#ccc",
 	fill: "none"
@@ -22887,7 +22887,7 @@ function Dj(e) {
 	}))));
 }
 Dj.displayName = "CartesianGrid";
-// analytics/node_modules/recharts/es6/cartesian/LineDrawShape.js
+// node_modules/recharts/es6/cartesian/LineDrawShape.js
 var Oj = [
 	"animationElapsedTime",
 	"isAnimating",
@@ -22972,7 +22972,7 @@ function Rj(e) {
 		strokeDasharray: o
 	}));
 }
-// analytics/node_modules/recharts/es6/cartesian/useAnimatedLineLength.js
+// node_modules/recharts/es6/cartesian/useAnimatedLineLength.js
 function zj(e) {
 	var t = (0, b.useRef)(0), n = (0, b.useRef)(0), r = (0, b.useRef)(!1), i = (0, b.useRef)(e);
 	return i.current !== e && (t.current = n.current, i.current = e), (0, b.useCallback)((e, i) => {
@@ -22981,7 +22981,7 @@ function zj(e) {
 		return e > 0 && i > 0 && (n.current = Math.max(n.current, a), a >= i) ? (r.current = !0, null) : a;
 	}, []);
 }
-// analytics/node_modules/recharts/es6/state/errorBarSlice.js
+// node_modules/recharts/es6/state/errorBarSlice.js
 var Bj = so({
 	name: "errorBars",
 	initialState: {},
@@ -23035,7 +23035,7 @@ function qj(e) {
 	var t = e.children, n = Wj(e, Uj);
 	return /*#__PURE__*/ b.createElement(Kj.Provider, { value: n }, t);
 }
-// analytics/node_modules/recharts/es6/cartesian/GraphicalItemClipPath.js
+// node_modules/recharts/es6/cartesian/GraphicalItemClipPath.js
 function Jj(e, t) {
 	var n = W((t) => Yy(t, e)), r = W((e) => Qy(e, t)), i = n?.allowDataOverflow ?? qy.allowDataOverflow, a = r?.allowDataOverflow ?? Xy.allowDataOverflow;
 	return {
@@ -23055,7 +23055,7 @@ function Yj(e) {
 		height: v
 	}));
 }
-// analytics/node_modules/recharts/es6/state/selectors/lineSelectors.js
+// node_modules/recharts/es6/state/selectors/lineSelectors.js
 var Xj = (e, t, n, r) => Zx(e, "xAxis", t, r), Zj = (e, t, n, r) => Xx(e, "xAxis", t, r), Qj = (e, t, n, r) => Zx(e, "yAxis", n, r), $j = (e, t, n, r) => Xx(e, "yAxis", n, r), eM = G([
 	zc,
 	Xj,
@@ -23091,7 +23091,7 @@ var rM = G([
 		});
 	}
 });
-// analytics/node_modules/recharts/es6/util/getRadiusAndStrokeWidthFromDot.js
+// node_modules/recharts/es6/util/getRadiusAndStrokeWidthFromDot.js
 function iM(e) {
 	var t = F(e), n = 3, r = 2;
 	if (t != null) {
@@ -23106,7 +23106,7 @@ function iM(e) {
 		strokeWidth: r
 	};
 }
-// analytics/node_modules/recharts/es6/cartesian/Line.js
+// node_modules/recharts/es6/cartesian/Line.js
 var aM = ["id"], oM = [
 	"type",
 	"layout",
@@ -23520,14 +23520,14 @@ function AM(e) {
 }
 var jM = /*#__PURE__*/ b.memo(AM, ml);
 jM.displayName = "Line";
-// analytics/node_modules/recharts/es6/state/selectors/graphicalItemSelectors.js
+// node_modules/recharts/es6/state/selectors/graphicalItemSelectors.js
 function MM(e, t) {
 	return e.graphicalItems.cartesianItems.find((e) => e.id === t)?.xAxisId ?? 0;
 }
 function NM(e, t) {
 	return e.graphicalItems.cartesianItems.find((e) => e.id === t)?.yAxisId ?? 0;
 }
-// analytics/node_modules/recharts/es6/state/selectors/areaSelectors.js
+// node_modules/recharts/es6/state/selectors/areaSelectors.js
 var PM = (e, t, n) => Zx(e, "xAxis", MM(e, t), n), FM = (e, t, n) => Xx(e, "xAxis", MM(e, t), n), IM = (e, t, n) => Zx(e, "yAxis", NM(e, t), n), LM = (e, t, n) => Xx(e, "yAxis", NM(e, t), n), RM = G([
 	zc,
 	PM,
@@ -23683,7 +23683,7 @@ function QM(e) {
 		strokeWidth: d.strokeWidth
 	}))), /*#__PURE__*/ b.createElement(oe, { clipPath: `url(#${m})` }, v, y, x)) : /*#__PURE__*/ b.createElement(b.Fragment, null, v, y, x);
 }
-// analytics/node_modules/recharts/es6/cartesian/Area.js
+// node_modules/recharts/es6/cartesian/Area.js
 var $M = ["id"], eN = [
 	"activeDot",
 	"animationBegin",
@@ -24096,12 +24096,12 @@ function CN(e) {
 }
 var wN = /*#__PURE__*/ b.memo(CN, ml);
 wN.displayName = "Area";
-// analytics/node_modules/tiny-invariant/dist/esm/tiny-invariant.js
+// node_modules/tiny-invariant/dist/esm/tiny-invariant.js
 var TN = "Invariant failed";
 function EN(e, t) {
 	if (!e) throw Error(TN);
 }
-// analytics/node_modules/recharts/es6/util/BarUtils.js
+// node_modules/recharts/es6/util/BarUtils.js
 var DN = ["option"];
 function ON(e, t) {
 	if (e == null) return {};
@@ -24766,7 +24766,7 @@ function MP(e) {
 }
 var NP = /*#__PURE__*/ b.memo(MP, ml);
 NP.displayName = "Bar";
-// analytics/node_modules/recharts/es6/util/axisPropsAreEqual.js
+// node_modules/recharts/es6/util/axisPropsAreEqual.js
 var PP = ["domain", "range"], FP = ["domain", "range"];
 function IP(e, t) {
 	if (e == null) return {};
@@ -24794,7 +24794,7 @@ function zP(e, t) {
 	var n = e.domain, r = e.range, i = IP(e, PP), a = t.domain, o = t.range, s = IP(t, FP);
 	return !RP(n, a) || !RP(r, o) ? !1 : ml(i, s);
 }
-// analytics/node_modules/recharts/es6/cartesian/XAxis.js
+// node_modules/recharts/es6/cartesian/XAxis.js
 var BP = ["type"], VP = [
 	"dangerouslySetInnerHTML",
 	"ticks",
@@ -24977,7 +24977,7 @@ var QP = (e) => {
 	}), /*#__PURE__*/ b.createElement(QP, t));
 }, zP);
 eF.displayName = "XAxis";
-// analytics/node_modules/recharts/es6/cartesian/YAxis.js
+// node_modules/recharts/es6/cartesian/YAxis.js
 var tF = ["type"], nF = [
 	"dangerouslySetInnerHTML",
 	"ticks",
@@ -25172,7 +25172,7 @@ var gF = G([
 	JC,
 	Js
 ], ow);
-// analytics/node_modules/recharts/es6/util/getRelativeCoordinate.js
+// node_modules/recharts/es6/util/getRelativeCoordinate.js
 function _F(e) {
 	return "getBBox" in e.currentTarget && typeof e.currentTarget.getBBox == "function";
 }
@@ -25191,7 +25191,7 @@ function vF(e) {
 	});
 	return "touches" in e ? Array.from(e.touches).map((e) => o(e.clientX, e.clientY)) : o(e.clientX, e.clientY);
 }
-// analytics/node_modules/recharts/es6/state/mouseEventsMiddleware.js
+// node_modules/recharts/es6/state/mouseEventsMiddleware.js
 var yF = za("mouseClick"), bF = qo();
 bF.startListening({
 	actionCreator: yF,
@@ -25228,11 +25228,11 @@ SF.startListening({
 		o ? i === "raf" ? CF = requestAnimationFrame(s) : typeof i == "number" && wF === null && (wF = setTimeout(s, i)) : s();
 	}
 });
-// analytics/node_modules/recharts/es6/state/reduxDevtoolsJsonStringifyReplacer.js
+// node_modules/recharts/es6/state/reduxDevtoolsJsonStringifyReplacer.js
 function EF(e, t) {
 	return t instanceof HTMLElement ? `HTMLElement <${t.tagName} class="${t.className}">` : t === window ? "global.window" : e === "children" && typeof t == "object" && t ? "<<CHILDREN>>" : t;
 }
-// analytics/node_modules/recharts/es6/state/rootPropsSlice.js
+// node_modules/recharts/es6/state/rootPropsSlice.js
 var DF = {
 	accessibilityLayer: !0,
 	barCategoryGap: "10%",
@@ -25349,7 +25349,7 @@ IF.startListening({
 		}
 	}
 });
-// analytics/node_modules/recharts/es6/util/createEventProxy.js
+// node_modules/recharts/es6/util/createEventProxy.js
 function BF(e) {
 	e.persist();
 	var t = e.currentTarget;
@@ -25359,7 +25359,7 @@ function BF(e) {
 		return typeof r == "function" ? r.bind(e) : r;
 	} });
 }
-// analytics/node_modules/recharts/es6/state/externalEventsMiddleware.js
+// node_modules/recharts/es6/state/externalEventsMiddleware.js
 var VF = za("externalEvent"), HF = qo(), UF = /* @__PURE__ */ new Map(), WF = /* @__PURE__ */ new Map(), GF = /* @__PURE__ */ new Map();
 HF.startListening({
 	actionCreator: VF,
@@ -25470,7 +25470,7 @@ JF.startListening({
 		}
 	}
 });
-// analytics/node_modules/recharts/es6/state/eventSettingsSlice.js
+// node_modules/recharts/es6/state/eventSettingsSlice.js
 var $F = {
 	throttleDelay: "raf",
 	throttledEvents: [
@@ -25532,7 +25532,7 @@ var $F = {
 		}
 	});
 };
-// analytics/node_modules/recharts/es6/state/RechartsStoreProvider.js
+// node_modules/recharts/es6/state/RechartsStoreProvider.js
 function aI(e) {
 	var t = e.preloadedState, n = e.children, r = e.reduxStoreName, i = Qs(), a = (0, b.useRef)(null);
 	if (i) return n;
@@ -25543,7 +25543,7 @@ function aI(e) {
 		store: a.current
 	}, n);
 }
-// analytics/node_modules/recharts/es6/state/ReportMainChartProps.js
+// node_modules/recharts/es6/state/ReportMainChartProps.js
 function oI(e) {
 	var t = e.layout, n = e.margin, r = _r(), i = Qs();
 	return (0, b.useEffect)(() => {
@@ -25556,7 +25556,7 @@ function oI(e) {
 	]), null;
 }
 var sI = /*#__PURE__*/ (0, b.memo)(oI, ml);
-// analytics/node_modules/recharts/es6/state/ReportChartProps.js
+// node_modules/recharts/es6/state/ReportChartProps.js
 function cI(e) {
 	var t = _r();
 	return (0, b.useEffect)(() => {
@@ -25569,7 +25569,7 @@ var lI = /*#__PURE__*/ (0, b.memo)((e) => {
 		t(tI(e));
 	}, [t, e]), null;
 }, ml);
-// analytics/node_modules/recharts/es6/zIndex/ZIndexPortal.js
+// node_modules/recharts/es6/zIndex/ZIndexPortal.js
 function uI(e) {
 	var t = e.zIndex, n = e.isPanorama, r = (0, b.useRef)(null), i = _r();
 	return (0, b.useLayoutEffect)(() => (r.current && i(xw({
@@ -25605,7 +25605,7 @@ function dI(e) {
 		isPanorama: n
 	})));
 }
-// analytics/node_modules/recharts/es6/container/RootSurface.js
+// node_modules/recharts/es6/container/RootSurface.js
 var fI = ["children"];
 function pI(e, t) {
 	if (e == null) return {};
@@ -25666,7 +25666,7 @@ var gI = {
 	var n = e.children, r = pI(e, fI);
 	return Qs() ? /*#__PURE__*/ b.createElement(vI, null, /*#__PURE__*/ b.createElement(dI, { isPanorama: !0 }, n)) : /*#__PURE__*/ b.createElement(_I, hI({ ref: t }, r), /*#__PURE__*/ b.createElement(dI, { isPanorama: !1 }, n));
 });
-// analytics/node_modules/recharts/es6/util/useReportScale.js
+// node_modules/recharts/es6/util/useReportScale.js
 function bI(e, t) {
 	return TI(e) || wI(e, t) || SI(e, t) || xI();
 }
@@ -25722,7 +25722,7 @@ function EI() {
 		i
 	]), r;
 }
-// analytics/node_modules/recharts/es6/chart/RechartsWrapper.js
+// node_modules/recharts/es6/chart/RechartsWrapper.js
 function DI(e, t) {
 	var n = Object.keys(e);
 	if (Object.getOwnPropertySymbols) {
@@ -26062,7 +26062,7 @@ var XI = /*#__PURE__*/ (0, b.forwardRef)((e, t) => {
 		ref: t
 	}, /*#__PURE__*/ b.createElement(iA, null, a)));
 });
-// analytics/node_modules/recharts/es6/chart/CartesianChart.js
+// node_modules/recharts/es6/chart/CartesianChart.js
 function ZI() {
 	return ZI = Object.assign ? Object.assign.bind() : function(e) {
 		for (var t = 1; t < arguments.length; t++) {
@@ -26189,7 +26189,7 @@ var rL = $I({
 	categoricalChartProps: e,
 	ref: t
 })), pL = (e) => e?.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-// analytics/node_modules/lucide-react/dist/esm/shared/src/utils/toLucideIconData.mjs
+// node_modules/lucide-react/dist/esm/shared/src/utils/toLucideIconData.mjs
 function mL(e, t, n = []) {
 	if (t == null) throw Error("[lucide]: iconNode is required when icon name is used");
 	return {
@@ -26199,7 +26199,7 @@ function mL(e, t, n = []) {
 		...n.length > 0 ? { aliases: n } : {}
 	};
 }
-// analytics/node_modules/lucide-react/dist/esm/shared/src/utils/toCamelCase.mjs
+// node_modules/lucide-react/dist/esm/shared/src/utils/toCamelCase.mjs
 var hL = (e) => {
 	let t = "", n = !1;
 	for (let r of e) r === "-" || r === "_" || r <= " " ? n = t.length > 0 : (t.length === 0 ? t += r.toLowerCase() : t += n ? r.toUpperCase() : r, n = !1);
@@ -26218,7 +26218,7 @@ var hL = (e) => {
 	"stroke-linecap": "round",
 	"stroke-linejoin": "round"
 };
-// analytics/node_modules/lucide-react/dist/esm/shared/src/build/buildLucideIconNode.mjs
+// node_modules/lucide-react/dist/esm/shared/src/build/buildLucideIconNode.mjs
 function yL(e) {
 	return e != null;
 }
@@ -26254,7 +26254,7 @@ function bL(e, t = {}) {
 		})
 	];
 }
-// analytics/node_modules/lucide-react/dist/esm/shared/src/build/buildLucideIconForReact.mjs
+// node_modules/lucide-react/dist/esm/shared/src/build/buildLucideIconForReact.mjs
 function xL(e, t = {}) {
 	return bL(e, {
 		...t,
@@ -26268,7 +26268,7 @@ function xL(e, t = {}) {
 		}
 	});
 }
-// analytics/node_modules/lucide-react/dist/esm/shared/src/utils/hasA11yProp.mjs
+// node_modules/lucide-react/dist/esm/shared/src/utils/hasA11yProp.mjs
 var SL = (e) => {
 	for (let t in e) if (t.startsWith("aria-") || t === "role" || t === "title") return !0;
 	return !1;
@@ -26293,7 +26293,7 @@ var SL = (e) => {
 		...S
 	}, [...C.map(([e, t]) => (0, b.createElement)(e, t)), ...Array.isArray(c) ? c : [c]]);
 });
-// analytics/node_modules/lucide-react/dist/esm/createLucideIcon.mjs
+// node_modules/lucide-react/dist/esm/createLucideIcon.mjs
 function EL(e, t = [], n = []) {
 	let r = typeof e == "string" ? mL(e, t, n) : e, i = (0, b.forwardRef)(({ className: e, ...t }, n) => (0, b.createElement)(TL, {
 		ref: n,
@@ -26303,7 +26303,7 @@ function EL(e, t = [], n = []) {
 	}));
 	return r.name && (i.displayName = gL(r.name)), i;
 }
-// analytics/node_modules/lucide-react/dist/esm/icons/arrow-down-right.mjs
+// node_modules/lucide-react/dist/esm/icons/arrow-down-right.mjs
 var DL = {
 	name: "arrow-down-right",
 	size: 24,
@@ -27157,11 +27157,11 @@ function uz(e, t, n) {
 		purchases: l
 	};
 }
-// analytics/manual/supabase.ts
+// manual/supabase.ts
 function dz() {
 	throw Error("MANUAL_MODE_NO_CONNECTION");
 }
-// assets/scripts/portal-auth.js
+// ../assets/scripts/portal-auth.js
 var fz = "figueroa-portal-v1", pz = {
 	"mvave br": "mvave-br",
 	"felipe figueroa": "felipe-figueroa"
@@ -27232,13 +27232,13 @@ function xz(e, { requiredRole: t } = {}) {
 	});
 }
 document.querySelectorAll("[data-logout]").forEach((e) => e.addEventListener("click", _z));
-// analytics/manual/session.ts
+// manual/session.ts
 async function Sz() {
 	_z();
 }
-// analytics/src/lib/brand-data.ts
+// src/lib/brand-data.ts
 var Cz = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTQ0MCIgem9vbUFuZFBhbj0ibWFnbmlmeSIgdmlld0JveD0iLTYgMTY2IDE0NDIgNDgwIiBoZWlnaHQ9IjQ4MCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCIgdmVyc2lvbj0iMS4wIj48ZGVmcz48Zy8+PGNsaXBQYXRoIGlkPSI1MDBkY2ExMjc2Ij48cGF0aCBkPSJNIDAgMjE1IEwgMzEwLjUgMjE1IEwgMzEwLjUgNTUwIEwgMCA1NTAgWiBNIDAgMjE1ICIgY2xpcC1ydWxlPSJub256ZXJvIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggaWQ9Ijc5MGU1ZGM0ODMiPjxyZWN0IHg9IjAiIHdpZHRoPSI5NTAiIHk9IjAiIGhlaWdodD0iMjQ2Ii8+PC9jbGlwUGF0aD48Y2xpcFBhdGggaWQ9ImE4Zjk2Yjk1YzEiPjxyZWN0IHg9IjAiIHdpZHRoPSI2MzciIHk9IjAiIGhlaWdodD0iMTk2Ii8+PC9jbGlwUGF0aD48L2RlZnM+PGcgY2xpcC1wYXRoPSJ1cmwoIzUwMGRjYTEyNzYpIj48cGF0aCBmaWxsPSIjZmM3MzA2IiBkPSJNIDEwLjU1MDc4MSAzMDMuMTM2NzE5IEMgMTAuNTUwNzgxIDMwNC44MzIwMzEgMTAuNTUwNzgxIDMwNi41MjczNDQgMTAuNTUwNzgxIDMwOC4yMTg3NSBDIDEwLjU1MDc4MSAzODUuMDY2NDA2IDEwLjU1ODU5NCA0NjEuOTE0MDYyIDEwLjU1ODU5NCA1MzguNzYxNzE5IEMgMTAuNTU4NTk0IDU0MC4zNzEwOTQgMTAuNjMyODEyIDU0MS45OTIxODggMTAuNTE5NTMxIDU0My41OTM3NSBDIDEwLjMwMDc4MSA1NDYuNjY3OTY5IDguOTY4NzUgNTQ5LjA4OTg0NCA1LjU3MDMxMiA1NDguOTI1NzgxIEMgMi4zMzk4NDQgNTQ4Ljc2OTUzMSAwLjg2MzI4MSA1NDYuNDgwNDY5IDAuNzgxMjUgNTQzLjMyNDIxOSBDIDAuNzUgNTQyLjAzNTE1NiAwLjc1NzgxMiA1NDAuNzQ2MDk0IDAuNzU3ODEyIDUzOS40NTcwMzEgQyAwLjc1NzgxMiA0NTYuMzMyMDMxIDAuNzY5NTMxIDM3My4xOTkyMTkgMC43NTc4MTIgMjkwLjA3NDIxOSBDIDAuNzU3ODEyIDI4OC40NjA5MzggMC4xNTYyNSAyODYuNjk1MzEyIDAuNjQ0NTMxIDI4NS4yOTI5NjkgQyAxLjMwODU5NCAyODMuMzc4OTA2IDIuNDAyMzQ0IDI4MC44NTU0NjkgMy45Njg3NSAyODAuMjMwNDY5IEMgNS41MTk1MzEgMjc5LjYwOTM3NSA4LjY0ODQzOCAyODAuMzY3MTg4IDkuNzU3ODEyIDI4MS42NTYyNSBDIDEzLjQyOTY4OCAyODUuOTA2MjUgMTYuNTE1NjI1IDI5MC42NTYyNSAxOS43ODkwNjIgMjk1LjI1IEMgNTYuODUxNTYyIDM0Ny4xNjQwNjIgOTMuOTAyMzQ0IDM5OS4wODU5MzggMTMwLjk2NDg0NCA0NTEgQyAxMzEuNjkxNDA2IDQ1Mi4wMTk1MzEgMTMyLjU2MjUgNDUyLjkxNDA2MiAxMzMuNjg3NSA0NTQuMjQyMTg4IEMgMTM1LjA1ODU5NCA0NTIuNDAyMzQ0IDEzNi4yMjI2NTYgNDUwLjg5ODQzOCAxMzcuMzI0MjE5IDQ0OS4zNDc2NTYgQyAxOTEuNDUzMTI1IDM3Mi44MDA3ODEgMjQ1LjU3MDMxMiAyOTYuMjU3ODEyIDI5OS42ODM1OTQgMjE5LjcxMDkzOCBDIDI5OS45NjQ4NDQgMjE5LjMxNjQwNiAzMDAuMjM0Mzc1IDIxOC45MjE4NzUgMzAwLjUxNTYyNSAyMTguNTI3MzQ0IEMgMzAyLjMyNDIxOSAyMTUuOTI5Njg4IDMwNC43NDYwOTQgMjE0Ljc3NzM0NCAzMDcuNTU0Njg4IDIxNi41NzQyMTkgQyAzMTAuNTE1NjI1IDIxOC40NzY1NjIgMzEwLjY5MTQwNiAyMjEuNDY4NzUgMzA4Ljg3MTA5NCAyMjQuMTkxNDA2IEMgMzA1LjAzOTA2MiAyMjkuOTYwOTM4IDMwMC45NjQ4NDQgMjM1LjU2MjUgMjk2Ljk1MzEyNSAyNDEuMjA3MDMxIEMgMjI1LjUzOTA2MiAzNDEuODIwMzEyIDE1NC4xMjg5MDYgNDQyLjQzNzUgODIuNzA3MDMxIDU0My4wNTA3ODEgQyA4MS44NjcxODggNTQ0LjIzODI4MSA4MS4wMzUxNTYgNTQ1LjQyMTg3NSA4MC4xNTIzNDQgNTQ2LjU2NjQwNiBDIDc4LjIwNzAzMSA1NDkuMDg5ODQ0IDc1Ljc4NTE1NiA1NDkuOTEwMTU2IDcyLjk5MjE4OCA1NDguMTAxNTYyIEMgNjkuOTc2NTYyIDU0Ni4xNjAxNTYgNjkuNjk1MzEyIDU0My40ODgyODEgNzEuNjYwMTU2IDU0MC42MjEwOTQgQyA3Ny45NDkyMTkgNTMxLjQ1MzEyNSA4NC4xMTMyODEgNTIyLjIwMzEyNSA5MC42MzY3MTkgNTEzLjIxNDg0NCBDIDEwMS43MTg3NSA0OTcuOTY4NzUgMTEyLjk1MzEyNSA0ODIuODM1OTM4IDEyNC4zMDA3ODEgNDY3Ljc5Njg3NSBDIDEyNi42MjEwOTQgNDY0LjczMDQ2OSAxMjYuNjcxODc1IDQ2Mi42ODM1OTQgMTI0LjM0Mzc1IDQ1OS40NDE0MDYgQyA4OC4wMTk1MzEgNDA4Ljk5MjE4OCA1MS44NTE1NjIgMzU4LjQxNzk2OSAxNS42NDA2MjUgMzA3Ljg2NzE4OCBDIDE0LjQzNzUgMzA2LjE5MTQwNiAxMy4xODc1IDMwNC41MzkwNjIgMTEuOTYwOTM4IDMwMi44ODY3MTkgQyAxMS40OTYwOTQgMzAyLjk3MjY1NiAxMS4wMTU2MjUgMzAzLjA1NDY4OCAxMC41NTA3ODEgMzAzLjEzNjcxOSBaIE0gMTAuNTUwNzgxIDMwMy4xMzY3MTkgIiBmaWxsLW9wYWNpdHk9IjEiIGZpbGwtcnVsZT0ibm9uemVybyIvPjwvZz48cGF0aCBmaWxsPSIjZmM3MzA2IiBkPSJNIDI2MC4zOTg0MzggMzQ3LjQ3NjU2MiBDIDI1OS4yNzczNDQgMzQ4Ljk3MjY1NiAyNTguMTEzMjgxIDM1MC40NDUzMTIgMjU3LjAzMTI1IDM1MS45NzY1NjIgQyAyMTAuNzQyMTg4IDQxNy4wODU5MzggMTY0LjQ2MDkzOCA0ODIuMTk5MjE5IDExOC4xNjAxNTYgNTQ3LjMxMjUgQyA5Ny44MDg1OTQgNTc1LjkyNTc4MSA3Ny40MTc5NjkgNjA0LjUwNzgxMiA1Ny4wNDY4NzUgNjMzLjA5NzY1NiBDIDU2LjQ4ODI4MSA2MzMuODg2NzE5IDU2LjAzMTI1IDYzNS4xNTYyNSA1NS4zMTI1IDYzNS4zNDM3NSBDIDUzLjA2NjQwNiA2MzUuOTE0MDYyIDUwLjQwNjI1IDYzNi45MDIzNDQgNDguNDY0ODQ0IDYzNi4yMDcwMzEgQyA0NS41MTE3MTkgNjM1LjE0NDUzMSA0NS40ODA0NjkgNjMyLjI2NTYyNSA0Ny4xNjQwNjIgNjI5Ljc0MjE4OCBDIDUyLjQyMTg3NSA2MjEuODMyMDMxIDU3LjU1ODU5NCA2MTMuODI4MTI1IDYzLjA3NDIxOSA2MDYuMDk3NjU2IEMgMTI5LjA4MjAzMSA1MTMuNTAzOTA2IDE5NS4xNTIzNDQgNDIwLjk1MzEyNSAyNjEuMTk5MjE5IDMyOC4zOTQ1MzEgQyAyNjIuOTY0ODQ0IDMyNS45MTc5NjkgMjY0LjQ1MzEyNSAzMjIuNzE4NzUgMjY4LjMyODEyNSAzMjQuMDc4MTI1IEMgMjcyLjEzMjgxMiAzMjUuNDIxODc1IDI3Mi4wODk4NDQgMzI4Ljk1MzEyNSAyNzIuMTAxNTYyIDMzMi4xODc1IEMgMjcyLjE1MjM0NCAzNTMuNjE3MTg4IDI3Mi4xNzU3ODEgMzc1LjAzOTA2MiAyNzIuMTY0MDYyIDM5Ni40Njg3NSBDIDI3Mi4xNjQwNjIgNDM5LjgwODU5NCAyNzIuMTQ0NTMxIDQ4My4xMzY3MTkgMjcyLjEyMTA5NCA1MjYuNDc2NTYyIEMgMjcyLjEyMTA5NCA1MzMuMzA0Njg4IDI3MC41NjI1IDUzNS45NjQ4NDQgMjY2LjYyNSA1MzUuOTAyMzQ0IEMgMjYyLjgyMDMxMiA1MzUuODM5ODQ0IDI2MS41NDI5NjkgNTMzLjU0Mjk2OSAyNjEuNTQyOTY5IDUyNi43MDMxMjUgQyAyNjEuNTQyOTY5IDQ2OS4xODc1IDI2MS41NDI5NjkgNDExLjY4MzU5NCAyNjEuNTQyOTY5IDM1NC4xNjc5NjkgQyAyNjEuNTQyOTY5IDM1Mi4xMDkzNzUgMjYxLjU0Mjk2OSAzNTAuMDUwNzgxIDI2MS41NDI5NjkgMzQ3Ljk4NDM3NSBDIDI2MS4xNTYyNSAzNDcuODI4MTI1IDI2MC43NzM0MzggMzQ3LjY1MjM0NCAyNjAuMzk4NDM4IDM0Ny40NzY1NjIgWiBNIDI2MC4zOTg0MzggMzQ3LjQ3NjU2MiAiIGZpbGwtb3BhY2l0eT0iMSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PGcgdHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgMSwgNDkwLCAyMzEpIj48ZyBjbGlwLXBhdGg9InVybCgjNzkwZTVkYzQ4MykiPjxnIGZpbGw9IiNmYzczMDYiIGZpbGwtb3BhY2l0eT0iMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC45MjkwNjQsIDE4My4yMjI2OTkpIj48Zz48cGF0aCBkPSJNIDE1My42ODc1IC0xMjMuMjY1NjI1IEwgMTUzLjY4NzUgMCBMIDExOS40MjE4NzUgMCBMIDExOS40MjE4NzUgLTY4LjAxNTYyNSBMIDk2LjE3MTg3NSAwIEwgNjcuNDg0Mzc1IDAgTCA0NC4wNjI1IC02OC41MzEyNSBMIDQ0LjA2MjUgMCBMIDkuNzk2ODc1IDAgTCA5Ljc5Njg3NSAtMTIzLjI2NTYyNSBMIDUxLjIzNDM3NSAtMTIzLjI2NTYyNSBMIDgyLjE3MTg3NSAtNDMuMTg3NSBMIDExMi40MjE4NzUgLTEyMy4yNjU2MjUgWiBNIDE1My42ODc1IC0xMjMuMjY1NjI1ICIvPjwvZz48L2c+PC9nPjxnIGZpbGw9IiNmYzczMDYiIGZpbGwtb3BhY2l0eT0iMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTY0LjM5OTkzNSwgMTgzLjIyMjY5OSkiPjxnPjxwYXRoIGQ9Ik0gNC4yMDMxMjUgLTQ5LjEyNSBDIDQuMjAzMTI1IC01OS4yNjk1MzEgNi4wMzUxNTYgLTY4LjEyODkwNiA5LjcwMzEyNSAtNzUuNzAzMTI1IEMgMTMuMzc4OTA2IC04My4yODUxNTYgMTguMzkwNjI1IC04OS4xMTMyODEgMjQuNzM0Mzc1IC05My4xODc1IEMgMzEuMDg1OTM4IC05Ny4yNjk1MzEgMzguMTcxODc1IC05OS4zMTI1IDQ1Ljk4NDM3NSAtOTkuMzEyNSBDIDUyLjc0MjE4OCAtOTkuMzEyNSA1OC41NzAzMTIgLTk3Ljk2ODc1IDYzLjQ2ODc1IC05NS4yODEyNSBDIDY4LjM2MzI4MSAtOTIuNjAxNTYyIDcyLjE0ODQzOCAtODguOTkyMTg4IDc0LjgyODEyNSAtODQuNDUzMTI1IEwgNzQuODI4MTI1IC05OC4wOTM3NSBMIDEwOS4xMDkzNzUgLTk4LjA5Mzc1IEwgMTA5LjEwOTM3NSAwIEwgNzQuODI4MTI1IDAgTCA3NC44MjgxMjUgLTEzLjY0MDYyNSBDIDcyLjE0ODQzOCAtOS4wODU5MzggNjguMzMyMDMxIC01LjQ3MjY1NiA2My4zNzUgLTIuNzk2ODc1IEMgNTguNDI1NzgxIC0wLjExNzE4OCA1Mi42Mjg5MDYgMS4yMTg3NSA0NS45ODQzNzUgMS4yMTg3NSBDIDM4LjE3MTg3NSAxLjIxODc1IDMxLjA4NTkzOCAtMC44MTY0MDYgMjQuNzM0Mzc1IC00Ljg5MDYyNSBDIDE4LjM5MDYyNSAtOC45NzI2NTYgMTMuMzc4OTA2IC0xNC44MzIwMzEgOS43MDMxMjUgLTIyLjQ2ODc1IEMgNi4wMzUxNTYgLTMwLjEwMTU2MiA0LjIwMzEyNSAtMzguOTg4MjgxIDQuMjAzMTI1IC00OS4xMjUgWiBNIDc0LjgyODEyNSAtNDkuMTI1IEMgNzQuODI4MTI1IC01NS40MjU3ODEgNzMuMTA5Mzc1IC02MC4zNzg5MDYgNjkuNjcxODc1IC02My45ODQzNzUgQyA2Ni4yMzQzNzUgLTY3LjU5NzY1NiA2Mi4wMDc4MTIgLTY5LjQwNjI1IDU3IC02OS40MDYyNSBDIDUxLjg3NSAtNjkuNDA2MjUgNDcuNjE3MTg4IC02Ny42Mjg5MDYgNDQuMjM0Mzc1IC02NC4wNzgxMjUgQyA0MC44NTkzNzUgLTYwLjUyMzQzOCAzOS4xNzE4NzUgLTU1LjUzOTA2MiAzOS4xNzE4NzUgLTQ5LjEyNSBDIDM5LjE3MTg3NSAtNDIuODMyMDMxIDQwLjg1OTM3NSAtMzcuODQ3NjU2IDQ0LjIzNDM3NSAtMzQuMTcxODc1IEMgNDcuNjE3MTg4IC0zMC41MDM5MDYgNTEuODc1IC0yOC42NzE4NzUgNTcgLTI4LjY3MTg3NSBDIDYyLjAwNzgxMiAtMjguNjcxODc1IDY2LjIzNDM3NSAtMzAuNDc2NTYyIDY5LjY3MTg3NSAtMzQuMDkzNzUgQyA3My4xMDkzNzUgLTM3LjcwNzAzMSA3NC44MjgxMjUgLTQyLjcxODc1IDc0LjgyODEyNSAtNDkuMTI1IFogTSA3NC44MjgxMjUgLTQ5LjEyNSAiLz48L2c+PC9nPjwvZz48ZyBmaWxsPSIjZmM3MzA2IiBmaWxsLW9wYWNpdHk9IjEiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4My4yODc4NTIsIDE4My4yMjI2OTkpIj48Zz48cGF0aCBkPSJNIDQ0LjA2MjUgLTgwLjc4MTI1IEMgNDcuOTA2MjUgLTg2LjM3NSA1Mi41NjY0MDYgLTkwLjgwMDc4MSA1OC4wNDY4NzUgLTk0LjA2MjUgQyA2My41MjM0MzggLTk3LjMzMjAzMSA2OS40MTAxNTYgLTk4Ljk2ODc1IDc1LjcwMzEyNSAtOTguOTY4NzUgTCA3NS43MDMxMjUgLTYyLjQyMTg3NSBMIDY2LjA5Mzc1IC02Mi40MjE4NzUgQyA1OC42MzI4MTIgLTYyLjQyMTg3NSA1My4wOTc2NTYgLTYwLjk2MDkzOCA0OS40ODQzNzUgLTU4LjA0Njg3NSBDIDQ1Ljg2NzE4OCAtNTUuMTI4OTA2IDQ0LjA2MjUgLTUwLjA2MjUgNDQuMDYyNSAtNDIuODQzNzUgTCA0NC4wNjI1IDAgTCA5Ljc5Njg3NSAwIEwgOS43OTY4NzUgLTk4LjA5Mzc1IEwgNDQuMDYyNSAtOTguMDkzNzUgWiBNIDQ0LjA2MjUgLTgwLjc4MTI1ICIvPjwvZz48L2c+PC9nPjxnIGZpbGw9IiNmYzczMDYiIGZpbGwtb3BhY2l0eT0iMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzYxLjQzOTE1NCwgMTgzLjIyMjY5OSkiPjxnPjxwYXRoIGQ9Ik0gNzEuMTU2MjUgMCBMIDQ0LjA2MjUgLTQwLjIxODc1IEwgNDQuMDYyNSAwIEwgOS43OTY4NzUgMCBMIDkuNzk2ODc1IC0xMjkuMzkwNjI1IEwgNDQuMDYyNSAtMTI5LjM5MDYyNSBMIDQ0LjA2MjUgLTU5LjYyNSBMIDcxLjE1NjI1IC05OC4wOTM3NSBMIDExMi4yNSAtOTguMDkzNzUgTCA3My42MDkzNzUgLTQ4Ljc4MTI1IEwgMTEyLjk1MzEyNSAwIFogTSA3MS4xNTYyNSAwICIvPjwvZz48L2c+PC9nPjxnIGZpbGw9IiNmYzczMDYiIGZpbGwtb3BhY2l0eT0iMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDc0LjU1NzUwMSwgMTgzLjIyMjY5OSkiPjxnPjxwYXRoIGQ9Ik0gMTAzLjUgLTUwLjE4NzUgQyAxMDMuNSAtNDcuNSAxMDMuMzI4MTI1IC00NC44MTY0MDYgMTAyLjk4NDM3NSAtNDIuMTQwNjI1IEwgMzguMTA5Mzc1IC00Mi4xNDA2MjUgQyAzOC40NjA5MzggLTM2Ljc3MzQzOCAzOS45NTMxMjUgLTMyLjc4MTI1IDQyLjU3ODEyNSAtMzAuMTU2MjUgQyA0NS4yMDMxMjUgLTI3LjUzOTA2MiA0OC41NTA3ODEgLTI2LjIzNDM3NSA1Mi42MjUgLTI2LjIzNDM3NSBDIDU4LjM0Mzc1IC0yNi4yMzQzNzUgNjIuNDIxODc1IC0yOC43OTY4NzUgNjQuODU5Mzc1IC0zMy45MjE4NzUgTCAxMDEuNDA2MjUgLTMzLjkyMTg3NSBDIDk5Ljg5NDUzMSAtMjcuMTYwMTU2IDk2Ljk1MzEyNSAtMjEuMTI4OTA2IDkyLjU3ODEyNSAtMTUuODI4MTI1IEMgODguMjAzMTI1IC0xMC41MjM0MzggODIuNjkxNDA2IC02LjM1OTM3NSA3Ni4wNDY4NzUgLTMuMzI4MTI1IEMgNjkuNDEwMTU2IC0wLjI5Njg3NSA2Mi4wNzAzMTIgMS4yMTg3NSA1NC4wMzEyNSAxLjIxODc1IEMgNDQuMzUxNTYyIDEuMjE4NzUgMzUuNzUzOTA2IC0wLjgxNjQwNiAyOC4yMzQzNzUgLTQuODkwNjI1IEMgMjAuNzEwOTM4IC04Ljk3MjY1NiAxNC44MjgxMjUgLTE0LjgwMDc4MSAxMC41NzgxMjUgLTIyLjM3NSBDIDYuMzI4MTI1IC0yOS45NTcwMzEgNC4yMDMxMjUgLTM4Ljg3NSA0LjIwMzEyNSAtNDkuMTI1IEMgNC4yMDMxMjUgLTU5LjM4MjgxMiA2LjI5Njg3NSAtNjguMjczNDM4IDEwLjQ4NDM3NSAtNzUuNzk2ODc1IEMgMTQuNjc5Njg4IC04My4zMTY0MDYgMjAuNTM5MDYyIC04OS4xMTMyODEgMjguMDYyNSAtOTMuMTg3NSBDIDM1LjU4MjAzMSAtOTcuMjY5NTMxIDQ0LjIzODI4MSAtOTkuMzEyNSA1NC4wMzEyNSAtOTkuMzEyNSBDIDYzLjY5NTMxMiAtOTkuMzEyNSA3Mi4yNTc4MTIgLTk3LjMyODEyNSA3OS43MTg3NSAtOTMuMzU5Mzc1IEMgODcuMTg3NSAtODkuMzk4NDM4IDkzLjAxNTYyNSAtODMuNzE4NzUgOTcuMjAzMTI1IC03Ni4zMTI1IEMgMTAxLjM5ODQzOCAtNjguOTE0MDYyIDEwMy41IC02MC4yMDcwMzEgMTAzLjUgLTUwLjE4NzUgWiBNIDY4LjUzMTI1IC01OC43NSBDIDY4LjUzMTI1IC02Mi45NDUzMTIgNjcuMTI4OTA2IC02Ni4yMzgyODEgNjQuMzI4MTI1IC02OC42MjUgQyA2MS41MzUxNTYgLTcxLjAwNzgxMiA1OC4wNDY4NzUgLTcyLjIwMzEyNSA1My44NTkzNzUgLTcyLjIwMzEyNSBDIDQ5LjY2MDE1NiAtNzIuMjAzMTI1IDQ2LjIxODc1IC03MS4wNjY0MDYgNDMuNTMxMjUgLTY4Ljc5Njg3NSBDIDQwLjg1MTU2MiAtNjYuNTIzNDM4IDM5LjEwOTM3NSAtNjMuMTc1NzgxIDM4LjI5Njg3NSAtNTguNzUgWiBNIDY4LjUzMTI1IC01OC43NSAiLz48L2c+PC9nPjwvZz48ZyBmaWxsPSIjZmM3MzA2IiBmaWxsLW9wYWNpdHk9IjEiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU4Mi4yNTU5OCwgMTgzLjIyMjY5OSkiPjxnPjxwYXRoIGQ9Ik0gNjcuNjcxODc1IC0yOS4yMDMxMjUgTCA2Ny42NzE4NzUgMCBMIDUyLjc5Njg3NSAwIEMgMjcuNzQyMTg4IDAgMTUuMjE4NzUgLTEyLjQxMDE1NiAxNS4yMTg3NSAtMzcuMjM0Mzc1IEwgMTUuMjE4NzUgLTY5LjU5Mzc1IEwgMy4xNDA2MjUgLTY5LjU5Mzc1IEwgMy4xNDA2MjUgLTk4LjA5Mzc1IEwgMTUuMjE4NzUgLTk4LjA5Mzc1IEwgMTUuMjE4NzUgLTEyMS44NTkzNzUgTCA0OS42NTYyNSAtMTIxLjg1OTM3NSBMIDQ5LjY1NjI1IC05OC4wOTM3NSBMIDY3LjQ4NDM3NSAtOTguMDkzNzUgTCA2Ny40ODQzNzUgLTY5LjU5Mzc1IEwgNDkuNjU2MjUgLTY5LjU5Mzc1IEwgNDkuNjU2MjUgLTM2LjcxODc1IEMgNDkuNjU2MjUgLTM0LjAzOTA2MiA1MC4yNjU2MjUgLTMyLjExNzE4OCA1MS40ODQzNzUgLTMwLjk1MzEyNSBDIDUyLjcxMDkzOCAtMjkuNzg1MTU2IDU0Ljc4NTE1NiAtMjkuMjAzMTI1IDU3LjcwMzEyNSAtMjkuMjAzMTI1IFogTSA2Ny42NzE4NzUgLTI5LjIwMzEyNSAiLz48L2c+PC9nPjwvZz48ZyBmaWxsPSIjZmM3MzA2IiBmaWxsLW9wYWNpdHk9IjEiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY1NS44NjE1MjYsIDE4My4yMjI2OTkpIj48Zz48cGF0aCBkPSJNIDI3LjA5Mzc1IC0xMDcuMTcxODc1IEMgMjEuMDM5MDYyIC0xMDcuMTcxODc1IDE2LjE3NTc4MSAtMTA4LjgzMjAzMSAxMi41IC0xMTIuMTU2MjUgQyA4LjgzMjAzMSAtMTE1LjQ3NjU2MiA3IC0xMTkuNjQ0NTMxIDcgLTEyNC42NTYyNSBDIDcgLTEyOS43ODkwNjIgOC44MzIwMzEgLTEzNC4wNDY4NzUgMTIuNSAtMTM3LjQyMTg3NSBDIDE2LjE3NTc4MSAtMTQwLjgwNDY4OCAyMS4wMzkwNjIgLTE0Mi41IDI3LjA5Mzc1IC0xNDIuNSBDIDMzLjAzOTA2MiAtMTQyLjUgMzcuODQ3NjU2IC0xNDAuODA0Njg4IDQxLjUxNTYyNSAtMTM3LjQyMTg3NSBDIDQ1LjE5MTQwNiAtMTM0LjA0Njg3NSA0Ny4wMzEyNSAtMTI5Ljc4OTA2MiA0Ny4wMzEyNSAtMTI0LjY1NjI1IEMgNDcuMDMxMjUgLTExOS42NDQ1MzEgNDUuMTkxNDA2IC0xMTUuNDc2NTYyIDQxLjUxNTYyNSAtMTEyLjE1NjI1IEMgMzcuODQ3NjU2IC0xMDguODMyMDMxIDMzLjAzOTA2MiAtMTA3LjE3MTg3NSAyNy4wOTM3NSAtMTA3LjE3MTg3NSBaIE0gNDQuMDYyNSAtOTguMDkzNzUgTCA0NC4wNjI1IDAgTCA5Ljc5Njg3NSAwIEwgOS43OTY4NzUgLTk4LjA5Mzc1IFogTSA0NC4wNjI1IC05OC4wOTM3NSAiLz48L2c+PC9nPjwvZz48ZyBmaWxsPSIjZmM3MzA2IiBmaWxsLW9wYWNpdHk9IjEiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDcwOS43MTA3ODksIDE4My4yMjI2OTkpIj48Zz48cGF0aCBkPSJNIDczLjk1MzEyNSAtOTguOTY4NzUgQyA4NS4yNjU2MjUgLTk4Ljk2ODc1IDk0LjIzODI4MSAtOTUuMjA3MDMxIDEwMC44NzUgLTg3LjY4NzUgQyAxMDcuNTE5NTMxIC04MC4xNjQwNjIgMTEwLjg0Mzc1IC02OS45OTIxODggMTEwLjg0Mzc1IC01Ny4xNzE4NzUgTCAxMTAuODQzNzUgMCBMIDc2LjU3ODEyNSAwIEwgNzYuNTc4MTI1IC01Mi42MjUgQyA3Ni41NzgxMjUgLTU4LjIxODc1IDc1LjExNzE4OCAtNjIuNjE3MTg4IDcyLjIwMzEyNSAtNjUuODI4MTI1IEMgNjkuMjk2ODc1IC02OS4wMzUxNTYgNjUuMzk0NTMxIC03MC42NDA2MjUgNjAuNSAtNzAuNjQwNjI1IEMgNTUuMzYzMjgxIC03MC42NDA2MjUgNTEuMzM1OTM4IC02OS4wMzUxNTYgNDguNDIxODc1IC02NS44MjgxMjUgQyA0NS41MTU2MjUgLTYyLjYxNzE4OCA0NC4wNjI1IC01OC4yMTg3NSA0NC4wNjI1IC01Mi42MjUgTCA0NC4wNjI1IDAgTCA5Ljc5Njg3NSAwIEwgOS43OTY4NzUgLTk4LjA5Mzc1IEwgNDQuMDYyNSAtOTguMDkzNzUgTCA0NC4wNjI1IC04NC4wOTM3NSBDIDQ3LjA5Mzc1IC04OC41MzEyNSA1MS4xNzE4NzUgLTkyLjExNzE4OCA1Ni4yOTY4NzUgLTk0Ljg1OTM3NSBDIDYxLjQyOTY4OCAtOTcuNTk3NjU2IDY3LjMxNjQwNiAtOTguOTY4NzUgNzMuOTUzMTI1IC05OC45Njg3NSBaIE0gNzMuOTUzMTI1IC05OC45Njg3NSAiLz48L2c+PC9nPjwvZz48ZyBmaWxsPSIjZmM3MzA2IiBmaWxsLW9wYWNpdHk9IjEiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDgyOS42NDc2NzUsIDE4My4yMjI2OTkpIj48Zz48cGF0aCBkPSJNIDQ1Ljk4NDM3NSAtOTkuMzEyNSBDIDUyLjYyODkwNiAtOTkuMzEyNSA1OC40MjU3ODEgLTk3Ljk2ODc1IDYzLjM3NSAtOTUuMjgxMjUgQyA2OC4zMzIwMzEgLTkyLjYwMTU2MiA3Mi4xNDg0MzggLTg4Ljk5MjE4OCA3NC44MjgxMjUgLTg0LjQ1MzEyNSBMIDc0LjgyODEyNSAtOTguMDkzNzUgTCAxMDkuMTA5Mzc1IC05OC4wOTM3NSBMIDEwOS4xMDkzNzUgLTEuMDQ2ODc1IEMgMTA5LjEwOTM3NSA4LjE2MDE1NiAxMDcuMzU5Mzc1IDE2LjQ2MDkzOCAxMDMuODU5Mzc1IDIzLjg1OTM3NSBDIDEwMC4zNTkzNzUgMzEuMjY1NjI1IDk0LjkwNjI1IDM3LjE3OTY4OCA4Ny41IDQxLjYwOTM3NSBDIDgwLjEwMTU2MiA0Ni4wMzUxNTYgNzAuNzUzOTA2IDQ4LjI1IDU5LjQ1MzEyNSA0OC4yNSBDIDQ0LjI5Njg3NSA0OC4yNSAzMi4xNzE4NzUgNDQuNjkxNDA2IDIzLjA3ODEyNSAzNy41NzgxMjUgQyAxMy45ODQzNzUgMzAuNDcyNjU2IDguNzk2ODc1IDIwLjgwMDc4MSA3LjUxNTYyNSA4LjU2MjUgTCA0MS4yNjU2MjUgOC41NjI1IEMgNDEuOTYwOTM4IDExLjcwNzAzMSA0My43MDcwMzEgMTQuMTU2MjUgNDYuNSAxNS45MDYyNSBDIDQ5LjMwMDc4MSAxNy42NTYyNSA1Mi45MTQwNjIgMTguNTMxMjUgNTcuMzQzNzUgMTguNTMxMjUgQyA2OSAxOC41MzEyNSA3NC44MjgxMjUgMTIuMDAzOTA2IDc0LjgyODEyNSAtMS4wNDY4NzUgTCA3NC44MjgxMjUgLTEzLjY0MDYyNSBDIDcyLjE0ODQzOCAtOS4wODU5MzggNjguMzMyMDMxIC01LjQ3MjY1NiA2My4zNzUgLTIuNzk2ODc1IEMgNTguNDI1NzgxIC0wLjExNzE4OCA1Mi42Mjg5MDYgMS4yMTg3NSA0NS45ODQzNzUgMS4yMTg3NSBDIDM4LjE3MTg3NSAxLjIxODc1IDMxLjA4NTkzOCAtMC44MTY0MDYgMjQuNzM0Mzc1IC00Ljg5MDYyNSBDIDE4LjM5MDYyNSAtOC45NzI2NTYgMTMuMzc4OTA2IC0xNC44MzIwMzEgOS43MDMxMjUgLTIyLjQ2ODc1IEMgNi4wMzUxNTYgLTMwLjEwMTU2MiA0LjIwMzEyNSAtMzguOTg4MjgxIDQuMjAzMTI1IC00OS4xMjUgQyA0LjIwMzEyNSAtNTkuMjY5NTMxIDYuMDM1MTU2IC02OC4xMjg5MDYgOS43MDMxMjUgLTc1LjcwMzEyNSBDIDEzLjM3ODkwNiAtODMuMjg1MTU2IDE4LjM5MDYyNSAtODkuMTEzMjgxIDI0LjczNDM3NSAtOTMuMTg3NSBDIDMxLjA4NTkzOCAtOTcuMjY5NTMxIDM4LjE3MTg3NSAtOTkuMzEyNSA0NS45ODQzNzUgLTk5LjMxMjUgWiBNIDc0LjgyODEyNSAtNDkuMTI1IEMgNzQuODI4MTI1IC01NS40MjU3ODEgNzMuMTA5Mzc1IC02MC4zNzg5MDYgNjkuNjcxODc1IC02My45ODQzNzUgQyA2Ni4yMzQzNzUgLTY3LjU5NzY1NiA2Mi4wMDc4MTIgLTY5LjQwNjI1IDU3IC02OS40MDYyNSBDIDUxLjg3NSAtNjkuNDA2MjUgNDcuNjE3MTg4IC02Ny42Mjg5MDYgNDQuMjM0Mzc1IC02NC4wNzgxMjUgQyA0MC44NTkzNzUgLTYwLjUyMzQzOCAzOS4xNzE4NzUgLTU1LjUzOTA2MiAzOS4xNzE4NzUgLTQ5LjEyNSBDIDM5LjE3MTg3NSAtNDIuODMyMDMxIDQwLjg1OTM3NSAtMzcuODQ3NjU2IDQ0LjIzNDM3NSAtMzQuMTcxODc1IEMgNDcuNjE3MTg4IC0zMC41MDM5MDYgNTEuODc1IC0yOC42NzE4NzUgNTcgLTI4LjY3MTg3NSBDIDYyLjAwNzgxMiAtMjguNjcxODc1IDY2LjIzNDM3NSAtMzAuNDc2NTYyIDY5LjY3MTg3NSAtMzQuMDkzNzUgQyA3My4xMDkzNzUgLTM3LjcwNzAzMSA3NC44MjgxMjUgLTQyLjcxODc1IDc0LjgyODEyNSAtNDkuMTI1IFogTSA3NC44MjgxMjUgLTQ5LjEyNSAiLz48L2c+PC9nPjwvZz48L2c+PC9nPjxnIHRyYW5zZm9ybT0ibWF0cml4KDEsIDAsIDAsIDEsIDQ5MiwgNDIxKSI+PGcgY2xpcC1wYXRoPSJ1cmwoI2E4Zjk2Yjk1YzEpIj48ZyBmaWxsPSIjZmM3MzA2IiBmaWxsLW9wYWNpdHk9IjEiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuODEwODI0LCAxNDYuNTAwMjE5KSI+PGc+PHBhdGggZD0iTSA2Ny4yNSAtOTYuNTYyNSBMIDY3LjI1IC04My42NDA2MjUgTCAyNi4yNjU2MjUgLTgzLjY0MDYyNSBMIDI2LjI2NTYyNSAtNTUuMTU2MjUgTCA1OC4yMTg3NSAtNTUuMTU2MjUgTCA1OC4yMTg3NSAtNDIuMjM0Mzc1IEwgMjYuMjY1NjI1IC00Mi4yMzQzNzUgTCAyNi4yNjU2MjUgMCBMIDEwLjQyMTg3NSAwIEwgMTAuNDIxODc1IC05Ni41NjI1IFogTSA2Ny4yNSAtOTYuNTYyNSAiLz48L2c+PC9nPjwvZz48ZyBmaWxsPSIjZmM3MzA2IiBmaWxsLW9wYWNpdHk9IjEiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY2LjY2MzAzMiwgMTQ2LjUwMDIxOSkiPjxnPjxwYXRoIGQ9Ik0gMjYuMjY1NjI1IC05Ni41NjI1IEwgMjYuMjY1NjI1IDAgTCAxMC40MjE4NzUgMCBMIDEwLjQyMTg3NSAtOTYuNTYyNSBaIE0gMjYuMjY1NjI1IC05Ni41NjI1ICIvPjwvZz48L2c+PC9nPjxnIGZpbGw9IiNmYzczMDYiIGZpbGwtb3BhY2l0eT0iMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOTcuNjQzNzg4LCAxNDYuNTAwMjE5KSI+PGc+PHBhdGggZD0iTSA4MC4zMTI1IC02OC43ODEyNSBDIDc3LjgwMDc4MSAtNzMuNTkzNzUgNzQuMzIwMzEyIC03Ny4yMjI2NTYgNjkuODc1IC03OS42NzE4NzUgQyA2NS40Mzc1IC04Mi4xMjg5MDYgNjAuMzAwNzgxIC04My4zNTkzNzUgNTQuNDY4NzUgLTgzLjM1OTM3NSBDIDQ4LjA3MDMxMiAtODMuMzU5Mzc1IDQyLjM3NSAtODEuOTIxODc1IDM3LjM3NSAtNzkuMDQ2ODc1IEMgMzIuMzc1IC03Ni4xNzk2ODggMjguNDU3MDMxIC03Mi4xMDkzNzUgMjUuNjI1IC02Ni44MjgxMjUgQyAyMi44MDA3ODEgLTYxLjU0Njg3NSAyMS4zOTA2MjUgLTU1LjQyOTY4OCAyMS4zOTA2MjUgLTQ4LjQ4NDM3NSBDIDIxLjM5MDYyNSAtNDEuNTM1MTU2IDIyLjgwMDc4MSAtMzUuMzk4NDM4IDI1LjYyNSAtMzAuMDc4MTI1IEMgMjguNDU3MDMxIC0yNC43NTM5MDYgMzIuMzc1IC0yMC42NTYyNSAzNy4zNzUgLTE3Ljc4MTI1IEMgNDIuMzc1IC0xNC45MTQwNjIgNDguMDcwMzEyIC0xMy40ODQzNzUgNTQuNDY4NzUgLTEzLjQ4NDM3NSBDIDYzLjA4MjAzMSAtMTMuNDg0Mzc1IDcwLjA3MDMxMiAtMTUuODkwNjI1IDc1LjQzNzUgLTIwLjcwMzEyNSBDIDgwLjgxMjUgLTI1LjUxNTYyNSA4NC4xMDE1NjIgLTMyLjA0Njg3NSA4NS4zMTI1IC00MC4yOTY4NzUgTCA0OS4wNDY4NzUgLTQwLjI5Njg3NSBMIDQ5LjA0Njg3NSAtNTIuOTM3NSBMIDEwMi4yNjU2MjUgLTUyLjkzNzUgTCAxMDIuMjY1NjI1IC00MC41NjI1IEMgMTAxLjI0MjE4OCAtMzMuMDYyNSA5OC41NzgxMjUgLTI2LjE2MDE1NiA5NC4yNjU2MjUgLTE5Ljg1OTM3NSBDIDg5Ljk2MDkzOCAtMTMuNTY2NDA2IDg0LjM1OTM3NSAtOC41NDY4NzUgNzcuNDUzMTI1IC00Ljc5Njg3NSBDIDcwLjU1NDY4OCAtMS4wNDY4NzUgNjIuODk0NTMxIDAuODI4MTI1IDU0LjQ2ODc1IDAuODI4MTI1IEMgNDUuMzgyODEyIDAuODI4MTI1IDM3LjA5Mzc1IC0xLjI3MzQzOCAyOS41OTM3NSAtNS40ODQzNzUgQyAyMi4wOTM3NSAtOS43MDMxMjUgMTYuMTQwNjI1IC0xNS41NjI1IDExLjczNDM3NSAtMjMuMDYyNSBDIDcuMzM1OTM4IC0zMC41NjI1IDUuMTQwNjI1IC0zOS4wMzUxNTYgNS4xNDA2MjUgLTQ4LjQ4NDM3NSBDIDUuMTQwNjI1IC01Ny45Mjk2ODggNy4zMzU5MzggLTY2LjQwNjI1IDExLjczNDM3NSAtNzMuOTA2MjUgQyAxNi4xNDA2MjUgLTgxLjQxNDA2MiAyMi4xMTMyODEgLTg3LjI3MzQzOCAyOS42NTYyNSAtOTEuNDg0Mzc1IEMgMzcuMjA3MDMxIC05NS43MDMxMjUgNDUuNDc2NTYyIC05Ny44MTI1IDU0LjQ2ODc1IC05Ny44MTI1IEMgNjQuNzUgLTk3LjgxMjUgNzMuODk0NTMxIC05NS4yODUxNTYgODEuOTA2MjUgLTkwLjIzNDM3NSBDIDg5LjkxNDA2MiAtODUuMTkxNDA2IDk1LjcyNjU2MiAtNzguMDM5MDYyIDk5LjM0Mzc1IC02OC43ODEyNSBaIE0gODAuMzEyNSAtNjguNzgxMjUgIi8+PC9nPjwvZz48L2c+PGcgZmlsbD0iI2ZjNzMwNiIgZmlsbC1vcGFjaXR5PSIxIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOTkuMzM5OTUxLCAxNDYuNTAwMjE5KSI+PGc+PHBhdGggZD0iTSAyNi4xMjUgLTk2LjU2MjUgTCAyNi4xMjUgLTM1LjAxNTYyNSBDIDI2LjEyNSAtMjcuNjkxNDA2IDI4LjA0Njg3NSAtMjIuMTc1NzgxIDMxLjg5MDYyNSAtMTguNDY4NzUgQyAzNS43MzQzNzUgLTE0Ljc2OTUzMSA0MS4wODIwMzEgLTEyLjkyMTg3NSA0Ny45Mzc1IC0xMi45MjE4NzUgQyA1NC44ODI4MTIgLTEyLjkyMTg3NSA2MC4yODEyNSAtMTQuNzY5NTMxIDY0LjEyNSAtMTguNDY4NzUgQyA2Ny45Njg3NSAtMjIuMTc1NzgxIDY5Ljg5MDYyNSAtMjcuNjkxNDA2IDY5Ljg5MDYyNSAtMzUuMDE1NjI1IEwgNjkuODkwNjI1IC05Ni41NjI1IEwgODUuNzE4NzUgLTk2LjU2MjUgTCA4NS43MTg3NSAtMzUuMjk2ODc1IEMgODUuNzE4NzUgLTI3LjQyMTg3NSA4NC4wMDM5MDYgLTIwLjc1IDgwLjU3ODEyNSAtMTUuMjgxMjUgQyA3Ny4xNDg0MzggLTkuODEyNSA3Mi41NjY0MDYgLTUuNzM0Mzc1IDY2LjgyODEyNSAtMy4wNDY4NzUgQyA2MS4wODU5MzggLTAuMzY3MTg4IDU0Ljc0MjE4OCAwLjk2ODc1IDQ3Ljc5Njg3NSAwLjk2ODc1IEMgNDAuODQ3NjU2IDAuOTY4NzUgMzQuNTIzNDM4IC0wLjM2NzE4OCAyOC44MjgxMjUgLTMuMDQ2ODc1IEMgMjMuMTI4OTA2IC01LjczNDM3NSAxOC42MTMyODEgLTkuODEyNSAxNS4yODEyNSAtMTUuMjgxMjUgQyAxMS45NDUzMTIgLTIwLjc1IDEwLjI4MTI1IC0yNy40MjE4NzUgMTAuMjgxMjUgLTM1LjI5Njg3NSBMIDEwLjI4MTI1IC05Ni41NjI1IFogTSAyNi4xMjUgLTk2LjU2MjUgIi8+PC9nPjwvZz48L2c+PGcgZmlsbD0iI2ZjNzMwNiIgZmlsbC1vcGFjaXR5PSIxIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyODkuNTA0OTEyLCAxNDYuNTAwMjE5KSI+PGc+PHBhdGggZD0iTSAyNi4yNjU2MjUgLTgzLjc4MTI1IEwgMjYuMjY1NjI1IC01NS40Mzc1IEwgNTkuNjA5Mzc1IC01NS40Mzc1IEwgNTkuNjA5Mzc1IC00Mi41MTU2MjUgTCAyNi4yNjU2MjUgLTQyLjUxNTYyNSBMIDI2LjI2NTYyNSAtMTIuOTIxODc1IEwgNjMuNzY1NjI1IC0xMi45MjE4NzUgTCA2My43NjU2MjUgMCBMIDEwLjQyMTg3NSAwIEwgMTAuNDIxODc1IC05Ni43MDMxMjUgTCA2My43NjU2MjUgLTk2LjcwMzEyNSBMIDYzLjc2NTYyNSAtODMuNzgxMjUgWiBNIDI2LjI2NTYyNSAtODMuNzgxMjUgIi8+PC9nPjwvZz48L2c+PGcgZmlsbD0iI2ZjNzMwNiIgZmlsbC1vcGFjaXR5PSIxIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNTYuNjA3NDgzLCAxNDYuNTAwMjE5KSI+PGc+PHBhdGggZD0iTSA2MC41NzgxMjUgMCBMIDM4LjM0Mzc1IC0zOC42MjUgTCAyNi4yNjU2MjUgLTM4LjYyNSBMIDI2LjI2NTYyNSAwIEwgMTAuNDIxODc1IDAgTCAxMC40MjE4NzUgLTk2LjU2MjUgTCA0My43NjU2MjUgLTk2LjU2MjUgQyA1MS4xNzE4NzUgLTk2LjU2MjUgNTcuNDQxNDA2IC05NS4yNjU2MjUgNjIuNTc4MTI1IC05Mi42NzE4NzUgQyA2Ny43MjI2NTYgLTkwLjA3ODEyNSA3MS41NjY0MDYgLTg2LjYwMTU2MiA3NC4xMDkzNzUgLTgyLjI1IEMgNzYuNjYwMTU2IC03Ny44OTQ1MzEgNzcuOTM3NSAtNzMuMDMxMjUgNzcuOTM3NSAtNjcuNjU2MjUgQyA3Ny45Mzc1IC02MS4zNjMyODEgNzYuMTA5Mzc1IC01NS42NDQ1MzEgNzIuNDUzMTI1IC01MC41IEMgNjguNzk2ODc1IC00NS4zNjMyODEgNjMuMTcxODc1IC00MS44NjcxODggNTUuNTc4MTI1IC00MC4wMTU2MjUgTCA3OS40Njg3NSAwIFogTSAyNi4yNjU2MjUgLTUxLjI2NTYyNSBMIDQzLjc2NTYyNSAtNTEuMjY1NjI1IEMgNDkuNjkxNDA2IC01MS4yNjU2MjUgNTQuMTYwMTU2IC01Mi43NDIxODggNTcuMTcxODc1IC01NS43MDMxMjUgQyA2MC4xNzk2ODggLTU4LjY3MTg3NSA2MS42ODc1IC02Mi42NTYyNSA2MS42ODc1IC02Ny42NTYyNSBDIDYxLjY4NzUgLTcyLjY2NDA2MiA2MC4yMDMxMjUgLTc2LjU4MjAzMSA1Ny4yMzQzNzUgLTc5LjQwNjI1IEMgNTQuMjczNDM4IC04Mi4yMjY1NjIgNDkuNzg1MTU2IC04My42NDA2MjUgNDMuNzY1NjI1IC04My42NDA2MjUgTCAyNi4yNjU2MjUgLTgzLjY0MDYyNSBaIE0gMjYuMjY1NjI1IC01MS4yNjU2MjUgIi8+PC9nPjwvZz48L2c+PGcgZmlsbD0iI2ZjNzMwNiIgZmlsbC1vcGFjaXR5PSIxIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0MzguNzE0NTAxLCAxNDYuNTAwMjE5KSI+PGc+PHBhdGggZD0iTSA1NC40Njg3NSAwLjk2ODc1IEMgNDUuNDc2NTYyIDAuOTY4NzUgMzcuMjA3MDMxIC0xLjEzMjgxMiAyOS42NTYyNSAtNS4zNDM3NSBDIDIyLjExMzI4MSAtOS41NjI1IDE2LjE0MDYyNSAtMTUuNDQxNDA2IDExLjczNDM3NSAtMjIuOTg0Mzc1IEMgNy4zMzU5MzggLTMwLjUzNTE1NiA1LjE0MDYyNSAtMzkuMDM1MTU2IDUuMTQwNjI1IC00OC40ODQzNzUgQyA1LjE0MDYyNSAtNTcuOTI5Njg4IDcuMzM1OTM4IC02Ni40MDYyNSAxMS43MzQzNzUgLTczLjkwNjI1IEMgMTYuMTQwNjI1IC04MS40MTQwNjIgMjIuMTEzMjgxIC04Ny4yNzM0MzggMjkuNjU2MjUgLTkxLjQ4NDM3NSBDIDM3LjIwNzAzMSAtOTUuNzAzMTI1IDQ1LjQ3NjU2MiAtOTcuODEyNSA1NC40Njg3NSAtOTcuODEyNSBDIDYzLjUzOTA2MiAtOTcuODEyNSA3MS44NDc2NTYgLTk1LjcwMzEyNSA3OS4zOTA2MjUgLTkxLjQ4NDM3NSBDIDg2Ljk0MTQwNiAtODcuMjczNDM4IDkyLjg5NDUzMSAtODEuNDE0MDYyIDk3LjI1IC03My45MDYyNSBDIDEwMS42MDE1NjIgLTY2LjQwNjI1IDEwMy43ODEyNSAtNTcuOTI5Njg4IDEwMy43ODEyNSAtNDguNDg0Mzc1IEMgMTAzLjc4MTI1IC0zOS4wMzUxNTYgMTAxLjYwMTU2MiAtMzAuNTM1MTU2IDk3LjI1IC0yMi45ODQzNzUgQyA5Mi44OTQ1MzEgLTE1LjQ0MTQwNiA4Ni45NDE0MDYgLTkuNTYyNSA3OS4zOTA2MjUgLTUuMzQzNzUgQyA3MS44NDc2NTYgLTEuMTMyODEyIDYzLjUzOTA2MiAwLjk2ODc1IDU0LjQ2ODc1IDAuOTY4NzUgWiBNIDU0LjQ2ODc1IC0xMi43ODEyNSBDIDYwLjg1MTU2MiAtMTIuNzgxMjUgNjYuNTQ2ODc1IC0xNC4yMzgyODEgNzEuNTQ2ODc1IC0xNy4xNTYyNSBDIDc2LjU1NDY4OCAtMjAuMDcwMzEyIDgwLjQ3MjY1NiAtMjQuMjM4MjgxIDgzLjI5Njg3NSAtMjkuNjU2MjUgQyA4Ni4xMTcxODggLTM1LjA4MjAzMSA4Ny41MzEyNSAtNDEuMzU5Mzc1IDg3LjUzMTI1IC00OC40ODQzNzUgQyA4Ny41MzEyNSAtNTUuNjE3MTg4IDg2LjExNzE4OCAtNjEuODY3MTg4IDgzLjI5Njg3NSAtNjcuMjM0Mzc1IEMgODAuNDcyNjU2IC03Mi42MDkzNzUgNzYuNTU0Njg4IC03Ni43MzQzNzUgNzEuNTQ2ODc1IC03OS42MDkzNzUgQyA2Ni41NDY4NzUgLTgyLjQ4NDM3NSA2MC44NTE1NjIgLTgzLjkyMTg3NSA1NC40Njg3NSAtODMuOTIxODc1IEMgNDguMDcwMzEyIC04My45MjE4NzUgNDIuMzc1IC04Mi40ODQzNzUgMzcuMzc1IC03OS42MDkzNzUgQyAzMi4zNzUgLTc2LjczNDM3NSAyOC40NTcwMzEgLTcyLjYwOTM3NSAyNS42MjUgLTY3LjIzNDM3NSBDIDIyLjgwMDc4MSAtNjEuODY3MTg4IDIxLjM5MDYyNSAtNTUuNjE3MTg4IDIxLjM5MDYyNSAtNDguNDg0Mzc1IEMgMjEuMzkwNjI1IC00MS4zNTkzNzUgMjIuODAwNzgxIC0zNS4wODIwMzEgMjUuNjI1IC0yOS42NTYyNSBDIDI4LjQ1NzAzMSAtMjQuMjM4MjgxIDMyLjM3NSAtMjAuMDcwMzEyIDM3LjM3NSAtMTcuMTU2MjUgQyA0Mi4zNzUgLTE0LjIzODI4MSA0OC4wNzAzMTIgLTEyLjc4MTI1IDU0LjQ2ODc1IC0xMi43ODEyNSBaIE0gNTQuNDY4NzUgLTEyLjc4MTI1ICIvPjwvZz48L2c+PC9nPjxnIGZpbGw9IiNmYzczMDYiIGZpbGwtb3BhY2l0eT0iMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTQxLjkzODkxOCwgMTQ2LjUwMDIxOSkiPjxnPjxwYXRoIGQ9Ik0gNjguNjQwNjI1IC0xOS43MzQzNzUgTCAyOC4yMDMxMjUgLTE5LjczNDM3NSBMIDIxLjI1IDAgTCA0LjcxODc1IDAgTCAzOS4zMTI1IC05Ni43MDMxMjUgTCA1Ny42NTYyNSAtOTYuNzAzMTI1IEwgOTIuMjUgMCBMIDc1LjU3ODEyNSAwIFogTSA2NC4xODc1IC0zMi42NTYyNSBMIDQ4LjQ4NDM3NSAtNzcuNTMxMjUgTCAzMi42NTYyNSAtMzIuNjU2MjUgWiBNIDY0LjE4NzUgLTMyLjY1NjI1ICIvPjwvZz48L2c+PC9nPjwvZz48L2c+PHBhdGggc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHRyYW5zZm9ybT0ibWF0cml4KDAsIC0wLjc1LCAwLjc1LCAwLCAzODkuNzA4MDcyLCA2MzYuOTI1NzY0KSIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIgZD0iTSAtMC4wMDAwMjMwNTcyIDYuOTk4NjEyIEwgNjE4LjQ3OTE3NSA2Ljk5ODYxMiAiIHN0cm9rZT0iI2ZjNzMwNiIgc3Ryb2tlLXdpZHRoPSIxNCIgc3Ryb2tlLW9wYWNpdHk9IjEiIHN0cm9rZS1taXRlcmxpbWl0PSI0Ii8+PC9zdmc+";
-// analytics/src/lib/coverage.ts
+// src/lib/coverage.ts
 function wz(e, t) {
 	let n = [];
 	for (let r of [...e, t].sort((e, t) => e.start - t.start)) {
@@ -27252,7 +27252,7 @@ function Tz(e, t, n, r) {
 	let i = Date.parse(`${t}T00:00:00-03:00`), a = Date.parse(`${n}T${n === r ? "00:00:00" : "23:59:59.999"}-03:00`);
 	return e.reduce((e, t) => wz(e, t), []).some((e) => e.start <= i && e.end >= a);
 }
-// analytics/src/lib/report-metrics.ts
+// src/lib/report-metrics.ts
 function Ez(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r = lz(e, t)) {
 	let i = uz(r.orders, r.insights, e.mappings), a = (e.manualPeriods ?? []).filter((e) => e.start >= t.start && e.end <= t.end).reduce((e, t) => wz(e, {
 		start: Date.parse(t.start + "T00:00:00-03:00"),
@@ -27264,7 +27264,7 @@ function Ez(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r = lz(e, 
 		hotmartCovered: c
 	};
 }
-// analytics/src/lib/client-report.ts
+// src/lib/client-report.ts
 var Dz = (e) => e.split("-").reverse().join("/");
 function Oz(e, t) {
 	let n = Ez(e, t), r = n.metrics, i = lz(e, t), a = new Set(i.orders.filter((e) => YR(e.status) && !e.isBump && !e.isFunnel).map((e) => e.mainOrderId ?? e.transaction)).size, o = Ez(e, az(t)).metrics, s = oz(r.gross, o.gross), c = [
@@ -27309,7 +27309,7 @@ function kz(e) {
   @page{size:A4 portrait;margin:13mm}*{box-sizing:border-box}body{font:14px Arial,Helvetica,sans-serif;color:#202522;background:#eceeeb;margin:0;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sheet{max-width:780px;margin:24px auto;background:#fff;padding:40px;border-radius:12px}.brand{display:flex;align-items:center;gap:12px;color:#fc7306;font-weight:700;font-size:13px;letter-spacing:2px}.brand-mark{width:32px;height:32px;border-left:3px solid #fc7306;border-bottom:3px solid #fc7306;transform:skew(-12deg)}header{border-bottom:1px solid #dedfd9;padding-bottom:24px}.eyebrow{text-transform:uppercase;font-size:10px;letter-spacing:2px;color:#727b72;margin:32px 0 8px}h1{font-size:34px;line-height:1.15;margin:0 0 12px;overflow-wrap:anywhere}header p{margin:0;color:#687064}.hero{background:#191d18;border-radius:10px;padding:26px 28px;color:#fff;margin:24px 0}.hero span{display:block;font-size:12px;color:#c7cebf}.hero strong{display:block;font-size:40px;letter-spacing:-1.3px;color:#ff9b4c;margin-top:6px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px}.metric{padding:18px 20px;border:1px solid #dedfd7;border-radius:8px;break-inside:avoid}.metric span{font-size:11px;color:#646e60;display:block}.metric strong{font-size:23px;display:block;margin-top:7px;letter-spacing:-.5px}.reading{border-left:3px solid #fc7306;padding:14px 18px;background:#fff6ed;margin-top:22px}.reading h2{font-size:13px;margin:0 0 6px}.reading p{font-size:12px;margin:0}footer{margin-top:24px;padding-top:16px;border-top:1px solid #e0e3db;color:#737b70;font-size:10px}footer strong{display:block;color:#30392b;letter-spacing:1px;margin-top:12px}.print-button{display:block;margin:20px auto;padding:12px 20px;background:#fc7306;color:#111;border:0;border-radius:6px;cursor:pointer;font-weight:bold}@media print{body{background:#fff}.sheet{padding:0;margin:0;max-width:none;border:0;border-radius:0}.print-button{display:none}header,.hero,.metrics,.reading,footer{break-inside:avoid}}@media(max-width:500px){.sheet{margin:0;padding:24px}.metrics{grid-template-columns:1fr}.hero strong{font-size:34px}}
   </style></head><body><main class="sheet"><header><div class="brand"><img src="${Cz}" alt="Marketing Figueroa" width="186" height="62"></div><p class="eyebrow">Resumo de resultados</p><h1>${t(e.title)}</h1><p>${t(e.scope)}</p>${e.selection ? `<p>${t(e.selection)}</p>` : ""}</header><section class="hero"><span>${t(e.metrics[0][0])}</span><strong>${t(e.metrics[0][1])}</strong></section><section class="metrics">${e.metrics.slice(1).map(([e, n]) => `<article class="metric"><span>${t(e)}</span><strong>${t(n)}</strong></article>`).join("")}</section><section class="reading"><h2>Evolução do período</h2><p>${t(e.summary)}</p></section><footer>${t(e.caveat)}<strong>MARKETING FIGUEROA · MÍDIA & RESULTADOS</strong></footer></main><button class="print-button" onclick="window.print()">Salvar em PDF / imprimir</button></body></html>`;
 }
-// analytics/src/components/report-actions.tsx
+// src/components/report-actions.tsx
 function Az({ data: e, filters: t }) {
 	let [n, r] = (0, b.useState)("");
 	function i() {
@@ -27340,7 +27340,7 @@ function Az({ data: e, filters: t }) {
 		})]
 	});
 }
-// analytics/src/lib/strategic-report.ts
+// src/lib/strategic-report.ts
 var jz = new Set(Object.entries({
 	2947400: {
 		name: "Pack de IRs para Guitarra (Acesso Vitalício por tempo limitado)",
@@ -27820,7 +27820,7 @@ function Kz(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i = t.c
 		duplicates: lz(s, t).orders.length - new Set(lz(s, t).orders.map((e) => e.accountId + "|" + e.transaction + "|" + e.productId)).size
 	};
 }
-// analytics/src/lib/daily-operations.ts
+// src/lib/daily-operations.ts
 function qz(e, t) {
 	return t === null || !Number.isFinite(t) || t === 0 || [
 		"spend",
@@ -27913,7 +27913,7 @@ var Zz = [
 function Qz(e) {
 	return /^Pausar/.test(e) ? "pause" : /^Reduzir/.test(e) ? "reduce" : /^Aumentar|Candidato/.test(e) ? "increase" : /^Revisar/.test(e) ? "review" : "observe";
 }
-// analytics/src/components/strategic-report.tsx
+// src/components/strategic-report.tsx
 var $z = (e) => zz(e, "count"), eB = (e) => zz(e, "ratio"), tB = (e) => zz(e, "percent"), nB = (e) => e ? e.split("-").reverse().join("/") : "Sem relatório diário", rB = [
 	"Indicadores financeiros principais",
 	"Fechamento financeiro detalhado",
@@ -29032,7 +29032,7 @@ function uB({ data: e, filters: t, actions: n, onClose: r }) {
 		})]
 	});
 }
-// analytics/src/lib/performance.ts
+// src/lib/performance.ts
 function dB(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString())) {
 	let r = lz(e, t, !0), i = /* @__PURE__ */ new Map(), a = /* @__PURE__ */ new Map();
 	for (let e of r.orders) {
@@ -29077,13 +29077,13 @@ function fB(e, t, n, r) {
 	};
 }
 function pB(e, t, n) {
-	let r = (e.instagramDaily ?? []).filter((e) => e.date >= t && e.date <= n).sort((e, t) => e.date.localeCompare(t.date)), i = rz(t, n), a = i > 0 && r.length === i && new Set(r.map((e) => e.date)).size === i, o = (e) => a ? r.reduce((t, n) => t + n[e], 0) : null;
+	let r = (e.instagramDaily ?? []).filter((e) => e.date >= t && e.date <= n).sort((e, t) => e.date.localeCompare(t.date)), i = rz(t, n), a = i > 0 && r.length === i && new Set(r.map((e) => e.date)).size === i, o = (e) => a && r.every((t) => t[e] !== null && Number.isSafeInteger(t[e])), s = o("views") && o("interactions") && o("followers"), c = (e) => o(e) ? r.reduce((t, n) => t + n[e], 0) : null;
 	return {
 		rows: r,
-		complete: a,
-		views: o("views"),
-		interactions: o("interactions"),
-		followers: e.instagramFollowersKind === "new" ? o("followers") : null
+		complete: s,
+		views: c("views"),
+		interactions: c("interactions"),
+		followers: e.instagramFollowersKind === "new" ? c("followers") : null
 	};
 }
 function mB(e, t, n, r) {
@@ -29102,7 +29102,7 @@ function mB(e, t, n, r) {
 		return r === null ? 1 : i === null ? -1 : i - r;
 	});
 }
-// analytics/src/lib/operation.ts
+// src/lib/operation.ts
 var hB = "2026-08-21", gB = /*#__PURE__*/ JSON.parse("[{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-01\",\"src\":\"assets/images/analytics-creatives/catalog/06e6561b43745456.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d3ab0b83a7813b3e.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-03\",\"src\":\"assets/images/analytics-creatives/catalog/4554d5c24dd03f58.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-04\",\"src\":\"assets/images/analytics-creatives/catalog/12aea56bede5a031.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-05\",\"src\":\"assets/images/analytics-creatives/catalog/7f7d2c96ecc49b92.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-01\",\"src\":\"assets/images/analytics-creatives/catalog/46fafd5bdbfb3cac.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-02\",\"src\":\"assets/images/analytics-creatives/catalog/09747b279a73eef9.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-03\",\"src\":\"assets/images/analytics-creatives/catalog/2447d4aa336020c0.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-04\",\"src\":\"assets/images/analytics-creatives/catalog/d8b7d9df3208061b.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-05\",\"src\":\"assets/images/analytics-creatives/catalog/2170730126ac2120.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-01\",\"src\":\"assets/images/analytics-creatives/catalog/8d51547d82f8ad77.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-02\",\"src\":\"assets/images/analytics-creatives/catalog/0aff548a48598099.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-03\",\"src\":\"assets/images/analytics-creatives/catalog/0e5bc0ecb86d3b18.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-04\",\"src\":\"assets/images/analytics-creatives/catalog/d4c00bd36f501deb.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-05\",\"src\":\"assets/images/analytics-creatives/catalog/1a03cc002b0a864e.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-01\",\"src\":\"assets/images/analytics-creatives/catalog/5353c1320a2917e1.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d9707463a7434629.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-03\",\"src\":\"assets/images/analytics-creatives/catalog/747ebbdce233ee43.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-04\",\"src\":\"assets/images/analytics-creatives/catalog/8d381b026ea8e48b.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-05\",\"src\":\"assets/images/analytics-creatives/catalog/42865b751b70d5e4.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-01\",\"src\":\"assets/images/analytics-creatives/catalog/afe467521bbe4555.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d1a8ad21f2c17590.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-03\",\"src\":\"assets/images/analytics-creatives/catalog/060b54f9453c1b1f.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-04\",\"src\":\"assets/images/analytics-creatives/catalog/a6a6ae6e4c8bdd19.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-05\",\"src\":\"assets/images/analytics-creatives/catalog/02806a3a4c9254b3.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-01\",\"src\":\"assets/images/analytics-creatives/catalog/dd759340ecc0bbf7.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-02\",\"src\":\"assets/images/analytics-creatives/catalog/6b8146651609f0fe.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-03\",\"src\":\"assets/images/analytics-creatives/catalog/cd089ade587ea703.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-04\",\"src\":\"assets/images/analytics-creatives/catalog/5a585ea22c41e201.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-05\",\"src\":\"assets/images/analytics-creatives/catalog/26133d4adbdad231.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-01\",\"src\":\"assets/images/analytics-creatives/catalog/1431a771a9d0174f.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-02\",\"src\":\"assets/images/analytics-creatives/catalog/08eb2475efae5cea.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-03\",\"src\":\"assets/images/analytics-creatives/catalog/f547b9c6b6e10455.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-04\",\"src\":\"assets/images/analytics-creatives/catalog/8f2c7357fd19d5d3.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-05\",\"src\":\"assets/images/analytics-creatives/catalog/9c4aa9e07e2e2313.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-01\",\"src\":\"assets/images/analytics-creatives/catalog/1f6f42f3d60bb5ed.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-02\",\"src\":\"assets/images/analytics-creatives/catalog/8fb59266f4cb7c99.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-03\",\"src\":\"assets/images/analytics-creatives/catalog/9b44af6eeea92318.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-04\",\"src\":\"assets/images/analytics-creatives/catalog/c9abbbdb5ded5fc2.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-05\",\"src\":\"assets/images/analytics-creatives/catalog/47120c1c47be8e57.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CGuia01 - Capa\",\"src\":\"assets/images/analytics-creatives/catalog/52adf3b7ac799d9a.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"CB01-baixo-mix-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/749f4e6348912c36.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB02-baixo-quantidade-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/929facd7e59937eb.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB03-baixo-definicao-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/80864ffea3173690.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB04-baixo-grave-fundamental-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/6c4d3dd73937e8ca.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB05-baixo-encaixe-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/d12cfeb368730502.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB06-baixo-corpo-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/07a804f588e6ccfc.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB07-baixo-respostas-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/624ca570273e2fb4.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB08-baixo-presenca-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/994b2c0f36d585b7.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB09-baixo-articulacao-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/4b51b7217d893e36.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB10-baixo-variedade-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/b80c592cae2a11db.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB11-baixo-compare-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/05fbc3a7841f59cd.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB12-baixo-palheta-dedos-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/07220fba3f046b17.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB13-baixo-organizacao-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/d291ffbc87dba297.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB14-baixo-afinacoes-baixas-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/4e6b77932fb51287.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB15-baixo-redondo-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/347fb755ec5c1714.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB16-baixo-some-na-mix-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/cd15ef14ae96a0d1.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB17-baixo-possibilidades-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/95b5abb9ef1761a8.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB18-baixo-contexto-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/d49ccb6f49a53b06.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB19-baixo-equilibrio-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/319a8fc3cb7daded.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB20-baixo-curadoria-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/66c6d3e3aad6d89f.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"GG01-organizacao\",\"src\":\"assets/images/analytics-creatives/catalog/0cd16ca17682952f.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG02-praticidade\",\"src\":\"assets/images/analytics-creatives/catalog/eb54bba690802197.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG03-checklist-antes\",\"src\":\"assets/images/analytics-creatives/catalog/dd5268377507aa2e.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG04-checklist-montagem\",\"src\":\"assets/images/analytics-creatives/catalog/8f20bff615500dc2.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG05-checklist-refino\",\"src\":\"assets/images/analytics-creatives/catalog/e31abe5b99a7a30d.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG06-checklist-palco\",\"src\":\"assets/images/analytics-creatives/catalog/bcbf270a9b52ac23.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG07-cadeia-de-sinal\",\"src\":\"assets/images/analytics-creatives/catalog/aaf10e4010cb38bc.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG08-uma-mudanca\",\"src\":\"assets/images/analytics-creatives/catalog/ddb08bfb97f0a80a.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG09-tres-instrumentos\",\"src\":\"assets/images/analytics-creatives/catalog/2e04f2a747eaad78.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG10-41-paginas\",\"src\":\"assets/images/analytics-creatives/catalog/1e876277e0db53e2.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG11-dicionario-efeitos\",\"src\":\"assets/images/analytics-creatives/catalog/fb769d7ac4d2fe92.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG12-delay\",\"src\":\"assets/images/analytics-creatives/catalog/95c6f45e616a4b2a.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG13-reverb\",\"src\":\"assets/images/analytics-creatives/catalog/29a0f2bc65ab0f48.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG14-estilos\",\"src\":\"assets/images/analytics-creatives/catalog/eedbfc5e02a37929.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG15-receitas-rapidas\",\"src\":\"assets/images/analytics-creatives/catalog/852f837eaf628281.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG16-resolva-rapido\",\"src\":\"assets/images/analytics-creatives/catalog/fe440559cdd1adff.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG17-na-banda\",\"src\":\"assets/images/analytics-creatives/catalog/d360bd792327143c.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG18-volume-justo\",\"src\":\"assets/images/analytics-creatives/catalog/966a706d360345b7.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG19-menos-menus\",\"src\":\"assets/images/analytics-creatives/catalog/d1acc33c48f5f406.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG20-oferta\",\"src\":\"assets/images/analytics-creatives/catalog/9f5dee1f6b45ca0d.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"CG01-guitarra-versatilidade-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/ac229310735eb0cc.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG02-guitarra-estilos-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/28f46f493f8aa4db.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG03-guitarra-clean-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/61db2722fb8fb0a5.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG04-guitarra-crunch-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/d58fcaf6f1f2cc91.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG05-guitarra-high-gain-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/e6a3788031464b39.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG06-guitarra-rock-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/a2af174fd4a16817.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG07-guitarra-biblioteca-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/231ede7c493c4777.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG08-guitarra-transformacao-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/6f9a6aee7f586fb7.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG09-guitarra-compare-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/2df056444c740d15.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG10-guitarra-gabinetes-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/5595b20a96cf50c8.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG11-guitarra-dinamica-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/5a98a0789456bd57.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG12-guitarra-praticidade-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/6bf5d06ef7b49997.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG13-guitarra-possibilidades-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/256eff6159ce77e4.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG14-guitarra-definicao-high-gain-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/2307de37d2d64484.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG15-guitarra-clean-crunch-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/327f358beb69da51.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG16-guitarra-descoberta-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/028aad7aae7bb201.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG17-guitarra-mix-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/28d7736b7ec0914e.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG18-guitarra-referencias-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/53f259eaa72f8902.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG19-guitarra-setup-compacto-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/4505374cdf97c1b7.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG20-guitarra-curadoria-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/a8131ecfdad0c34d.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CV01-violao-naturalidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/37fa24f8e2d8ddd3.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV02-violao-organizacao-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/7ed08254beee7c19.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV03-violao-quantidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/ebf250e67020e80c.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV04-violao-som-em-linha-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/2f78c4f7b84671ae.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV05-violao-aco-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/0483ebdb07f57d12.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV06-violao-nylon-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/c6c4c19aa1216cf2.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV07-violao-compare-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/36c2c2e3e2fdd030.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV08-violao-piezo-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/a6421eaeb5dd588b.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV09-violao-praticidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/c68163dcf2790508.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV10-violao-referencias-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/35a5e74b273eeaa1.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV11-violao-naturalidade-ao-vivo-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/d502acea108002b9.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV12-violao-gravacao-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/cd32e324fd5a4f89.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV13-violao-brilho-controlado-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/7e4f5c1bfc8c269d.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV14-violao-corpo-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/00948f85fc5443b2.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV15-violao-dedilhado-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/f33ebd05d857202e.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV16-violao-batida-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/950b4b82b3783936.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV17-violao-dois-violoes-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/1fa45834a2f30f14.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV18-violao-som-duro-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/463b7e4e577d709a.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV19-violao-possibilidades-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/dcd6e3e8d3ac5d65.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV20-violao-curadoria-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/383446e3a3061e00.webp\",\"note\":\"violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ01\",\"src\":\"assets/images/analytics-creatives/catalog/7e7763493b81e5ee.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ02\",\"src\":\"assets/images/analytics-creatives/catalog/9be6bc1cc3037ca3.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ03\",\"src\":\"assets/images/analytics-creatives/catalog/9097a3bf59a00369.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ04\",\"src\":\"assets/images/analytics-creatives/catalog/9da26b998b4c9392.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ05\",\"src\":\"assets/images/analytics-creatives/catalog/43cdd85f8c60d4ec.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ06\",\"src\":\"assets/images/analytics-creatives/catalog/f2d54566a7712789.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ07\",\"src\":\"assets/images/analytics-creatives/catalog/4ba9effe74ad17c7.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ08\",\"src\":\"assets/images/analytics-creatives/catalog/b2bb844d2668fce6.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ09\",\"src\":\"assets/images/analytics-creatives/catalog/1a6911add3ac1e48.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ10\",\"src\":\"assets/images/analytics-creatives/catalog/e19e5d2703744ad0.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ11\",\"src\":\"assets/images/analytics-creatives/catalog/0d402015fb7909ad.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ12\",\"src\":\"assets/images/analytics-creatives/catalog/6eed7077b1d1ca86.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ13\",\"src\":\"assets/images/analytics-creatives/catalog/113d1ff4614af85d.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ14\",\"src\":\"assets/images/analytics-creatives/catalog/4a72523ddef88184.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ15\",\"src\":\"assets/images/analytics-creatives/catalog/31f25b8e0ece8338.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ16\",\"src\":\"assets/images/analytics-creatives/catalog/54820c02248569b0.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ17\",\"src\":\"assets/images/analytics-creatives/catalog/a70cfef2dcb6c735.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ18\",\"src\":\"assets/images/analytics-creatives/catalog/b19bce586c68a3ac.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ19\",\"src\":\"assets/images/analytics-creatives/catalog/c0aa829a5e53a989.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ20\",\"src\":\"assets/images/analytics-creatives/catalog/7da282762e7d4ce2.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ21\",\"src\":\"assets/images/analytics-creatives/catalog/c340b8f82a025a1d.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ22\",\"src\":\"assets/images/analytics-creatives/catalog/8ec55cc8889a7f6c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ23\",\"src\":\"assets/images/analytics-creatives/catalog/deb49f4b79610cc5.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ24\",\"src\":\"assets/images/analytics-creatives/catalog/04c550d7e4d6876c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ25\",\"src\":\"assets/images/analytics-creatives/catalog/973e1e4d0d3a01e9.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ26\",\"src\":\"assets/images/analytics-creatives/catalog/00bf954bbfbadce5.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ27\",\"src\":\"assets/images/analytics-creatives/catalog/547df70abb7ff77c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ28\",\"src\":\"assets/images/analytics-creatives/catalog/ba759fd14e9860f8.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ29\",\"src\":\"assets/images/analytics-creatives/catalog/da91a7d65d0c8785.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ30\",\"src\":\"assets/images/analytics-creatives/catalog/ad297ca3d47aec1c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV11\",\"src\":\"assets/images/analytics-creatives/catalog/df7e57744705c6ca.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV12\",\"src\":\"assets/images/analytics-creatives/catalog/b9c508066972c127.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV13\",\"src\":\"assets/images/analytics-creatives/catalog/eaa20baf9294ab15.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV14\",\"src\":\"assets/images/analytics-creatives/catalog/c723f9c738efa294.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV15\",\"src\":\"assets/images/analytics-creatives/catalog/dc00a1f9f158bb15.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV16\",\"src\":\"assets/images/analytics-creatives/catalog/dda2367bfcb996a7.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV17\",\"src\":\"assets/images/analytics-creatives/catalog/8fcc76bcd5c32842.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV18\",\"src\":\"assets/images/analytics-creatives/catalog/2fd53d2029ab223a.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV19\",\"src\":\"assets/images/analytics-creatives/catalog/b912f7d58e5eed07.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV20\",\"src\":\"assets/images/analytics-creatives/catalog/df128f413d1d29b0.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV21\",\"src\":\"assets/images/analytics-creatives/catalog/ce659c9798a1c7ab.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV22\",\"src\":\"assets/images/analytics-creatives/catalog/d556fd9a3ae3a1f5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV23\",\"src\":\"assets/images/analytics-creatives/catalog/25b1be269373aecf.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV24\",\"src\":\"assets/images/analytics-creatives/catalog/adc90937b76fac71.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV25\",\"src\":\"assets/images/analytics-creatives/catalog/a86d86e21ce31647.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV26\",\"src\":\"assets/images/analytics-creatives/catalog/e66778095fb1f083.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV27\",\"src\":\"assets/images/analytics-creatives/catalog/f14152bb0fe9c5ee.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV28\",\"src\":\"assets/images/analytics-creatives/catalog/ac3c496ae4cf679b.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV29\",\"src\":\"assets/images/analytics-creatives/catalog/7a86fae5dd0730aa.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV30\",\"src\":\"assets/images/analytics-creatives/catalog/9c169d5281252601.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV31\",\"src\":\"assets/images/analytics-creatives/catalog/4b2cbb29f7fdd7c2.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV32\",\"src\":\"assets/images/analytics-creatives/catalog/8eddf4bff85bb363.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV33\",\"src\":\"assets/images/analytics-creatives/catalog/5b6d24b4372c9f66.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV34\",\"src\":\"assets/images/analytics-creatives/catalog/254e225742a0b1a8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV35\",\"src\":\"assets/images/analytics-creatives/catalog/9d5bbf9bd449feb5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV36\",\"src\":\"assets/images/analytics-creatives/catalog/34635d7a6eefcb13.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV37\",\"src\":\"assets/images/analytics-creatives/catalog/511c7826a16773c5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV38\",\"src\":\"assets/images/analytics-creatives/catalog/6103aac250d661c8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV39\",\"src\":\"assets/images/analytics-creatives/catalog/e1678f57bbfef3ad.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV40\",\"src\":\"assets/images/analytics-creatives/catalog/82839143bf856852.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV41\",\"src\":\"assets/images/analytics-creatives/catalog/b5eeb2e35cd616bf.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV42\",\"src\":\"assets/images/analytics-creatives/catalog/974794639863a947.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV43\",\"src\":\"assets/images/analytics-creatives/catalog/b214e0719b6804fb.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV44\",\"src\":\"assets/images/analytics-creatives/catalog/f133f6979b49a1cd.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV45\",\"src\":\"assets/images/analytics-creatives/catalog/f0967ea7bf3fb3a5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV46\",\"src\":\"assets/images/analytics-creatives/catalog/320956e3bbc796ca.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV47\",\"src\":\"assets/images/analytics-creatives/catalog/08b0b0a8cd2d1889.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV48\",\"src\":\"assets/images/analytics-creatives/catalog/af500482e3e25090.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV49\",\"src\":\"assets/images/analytics-creatives/catalog/c55e7bf0f9598c9a.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV50\",\"src\":\"assets/images/analytics-creatives/catalog/1ccd860b7adda6f8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV51\",\"src\":\"assets/images/analytics-creatives/catalog/e674ddc4f23bf20e.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV52\",\"src\":\"assets/images/analytics-creatives/catalog/9511650b71ec494f.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV53\",\"src\":\"assets/images/analytics-creatives/catalog/a11d0c0f725aebe2.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV54\",\"src\":\"assets/images/analytics-creatives/catalog/2c67ef49492eebb0.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV55\",\"src\":\"assets/images/analytics-creatives/catalog/60ffa80d489824e1.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV56\",\"src\":\"assets/images/analytics-creatives/catalog/99b9630d067256bd.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV57\",\"src\":\"assets/images/analytics-creatives/catalog/627ca3e1c5ff86c6.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV58\",\"src\":\"assets/images/analytics-creatives/catalog/c1cf12bca4b0f441.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV59\",\"src\":\"assets/images/analytics-creatives/catalog/3198c76e4e30919b.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV60\",\"src\":\"assets/images/analytics-creatives/catalog/16c5d2d8562110b1.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC11\",\"src\":\"assets/images/analytics-creatives/catalog/1f8933652d266715.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC12\",\"src\":\"assets/images/analytics-creatives/catalog/ac56d6c862027e5b.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC13\",\"src\":\"assets/images/analytics-creatives/catalog/15a1922218b451c5.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC14\",\"src\":\"assets/images/analytics-creatives/catalog/90345642c875f563.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC15\",\"src\":\"assets/images/analytics-creatives/catalog/9efe54e3721d61f8.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC16\",\"src\":\"assets/images/analytics-creatives/catalog/e76f3392541c67a0.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC17\",\"src\":\"assets/images/analytics-creatives/catalog/2be6260c629e8c4f.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC18\",\"src\":\"assets/images/analytics-creatives/catalog/8d64935503d2ee09.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC19\",\"src\":\"assets/images/analytics-creatives/catalog/3b14886a153b4879.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC20\",\"src\":\"assets/images/analytics-creatives/catalog/ae97a9f5515e2926.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC21\",\"src\":\"assets/images/analytics-creatives/catalog/1335c0595506e791.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC22\",\"src\":\"assets/images/analytics-creatives/catalog/180589ecfa6ada72.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC23\",\"src\":\"assets/images/analytics-creatives/catalog/e09ed9893e53b99d.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC24\",\"src\":\"assets/images/analytics-creatives/catalog/5bdb780eb43ef493.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC25\",\"src\":\"assets/images/analytics-creatives/catalog/16a7a34021325a63.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC26\",\"src\":\"assets/images/analytics-creatives/catalog/627dd87a15e1d8f4.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC27\",\"src\":\"assets/images/analytics-creatives/catalog/168a0e8c5c43f606.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC28\",\"src\":\"assets/images/analytics-creatives/catalog/d1eeb0d2fea51a19.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC29\",\"src\":\"assets/images/analytics-creatives/catalog/eee350b317e4fe7f.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC30\",\"src\":\"assets/images/analytics-creatives/catalog/40b02e520b11d67d.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV01\",\"src\":\"assets/images/analytics-creatives/catalog/fea10d76f8de4aae.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV02\",\"src\":\"assets/images/analytics-creatives/catalog/006df43df535e6cd.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV03\",\"src\":\"assets/images/analytics-creatives/catalog/081b863f16d87ec0.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV04\",\"src\":\"assets/images/analytics-creatives/catalog/2fde010f88c192a9.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV05\",\"src\":\"assets/images/analytics-creatives/catalog/e9c60c1015cf42f6.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV06\",\"src\":\"assets/images/analytics-creatives/catalog/a5aed671ec5c5521.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV07\",\"src\":\"assets/images/analytics-creatives/catalog/f25a6c5af59c7b8e.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV08\",\"src\":\"assets/images/analytics-creatives/catalog/5337101405e6ab40.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV09\",\"src\":\"assets/images/analytics-creatives/catalog/3199bdaf568d9972.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV10\",\"src\":\"assets/images/analytics-creatives/catalog/9e04a58963f165f0.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC01\",\"src\":\"assets/images/analytics-creatives/catalog/6226ac94e680cc17.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC02\",\"src\":\"assets/images/analytics-creatives/catalog/32f4da2c86f4159b.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC03\",\"src\":\"assets/images/analytics-creatives/catalog/84d99f221e897b9a.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC04\",\"src\":\"assets/images/analytics-creatives/catalog/2361bbbe465fa08e.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC05\",\"src\":\"assets/images/analytics-creatives/catalog/13623b37c0633f12.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC06\",\"src\":\"assets/images/analytics-creatives/catalog/32ab53af29d78160.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC07\",\"src\":\"assets/images/analytics-creatives/catalog/ea10ab0b2436d747.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC08\",\"src\":\"assets/images/analytics-creatives/catalog/83fffa4a0d0467d1.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC09\",\"src\":\"assets/images/analytics-creatives/catalog/8b0ccf3caa41cd20.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC10\",\"src\":\"assets/images/analytics-creatives/catalog/b4b63dad2df2504e.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC01\",\"src\":\"assets/images/analytics-creatives/catalog/81290880e85704f7.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC02\",\"src\":\"assets/images/analytics-creatives/catalog/5c621a5eb7661a1e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC03\",\"src\":\"assets/images/analytics-creatives/catalog/a0cb39b4f8851272.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC04\",\"src\":\"assets/images/analytics-creatives/catalog/b85c5f955d659b92.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC05\",\"src\":\"assets/images/analytics-creatives/catalog/55f7a35b6013204e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC06\",\"src\":\"assets/images/analytics-creatives/catalog/9cc70d4caa62c9a6.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC07\",\"src\":\"assets/images/analytics-creatives/catalog/47e250a3b9c76eab.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC08\",\"src\":\"assets/images/analytics-creatives/catalog/b7daa5c7ca4a66ed.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC09\",\"src\":\"assets/images/analytics-creatives/catalog/62eafe50bbe27411.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC10\",\"src\":\"assets/images/analytics-creatives/catalog/77ac4b45035962d0.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC11\",\"src\":\"assets/images/analytics-creatives/catalog/a46ec78183f360bf.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC12\",\"src\":\"assets/images/analytics-creatives/catalog/04870f55f8f50327.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC13\",\"src\":\"assets/images/analytics-creatives/catalog/d2a216e3cbc2ad12.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC14\",\"src\":\"assets/images/analytics-creatives/catalog/b2c46e921b636cd4.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC15\",\"src\":\"assets/images/analytics-creatives/catalog/48fa89d08d18d0bc.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC16\",\"src\":\"assets/images/analytics-creatives/catalog/e4625a14a39e865a.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC17\",\"src\":\"assets/images/analytics-creatives/catalog/a03dcd0a46edfdba.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC18\",\"src\":\"assets/images/analytics-creatives/catalog/25166072d63a9d8e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC19\",\"src\":\"assets/images/analytics-creatives/catalog/c54c422300d6e077.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC20\",\"src\":\"assets/images/analytics-creatives/catalog/7f07ceca1a029c21.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C07-guitarra-gabinetes\",\"src\":\"assets/images/analytics-creatives/catalog/69a17e116c3d6249.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C11-bajo-cantidad\",\"src\":\"assets/images/analytics-creatives/catalog/69e35332d7863792.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C22-acustica-naturalidad\",\"src\":\"assets/images/analytics-creatives/catalog/1a28ccbaa584fd40.webp\",\"note\":\"Arquivo do repositório\"}]"), _B = (e) => e === null ? "—" : e.toLocaleString("pt-BR");
 function vB({ data: e, filters: t, compact: n = !1 }) {
 	let [r, i] = (0, b.useState)("views"), a = pB(e, t.start, t.end), { rows: o, complete: s } = a, c = e.instagramAudience;
@@ -29187,7 +29187,7 @@ function vB({ data: e, filters: t, compact: n = !1 }) {
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("p", {
 				className: "table-footer",
-				children: [s ? "Os três indicadores somam os novos registros diários do período." : "Cobertura incompleta: totais indisponíveis; o gráfico mostra os dias recebidos.", " Novos seguidores representam aquisições no período, não o total atual da conta nem o saldo após deixar de seguir."]
+				children: [s ? "Os três indicadores somam os novos registros diários do período." : "Métricas com lacunas ficam indisponíveis; o gráfico mostra os valores recebidos.", " Novos seguidores representam aquisições no período, não o total atual da conta nem o saldo após deixar de seguir."]
 			}),
 			!n && c && /* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "audience-grid",
@@ -29316,7 +29316,7 @@ function bB() {
 		]
 	});
 }
-// analytics/src/components/manual-fields.tsx
+// src/components/manual-fields.tsx
 function xB({ data: e, actions: t, onChange: n }) {
 	let [r, i] = (0, b.useState)(""), [a, o] = (0, b.useState)(!1);
 	async function s(e) {
@@ -29455,7 +29455,7 @@ function xB({ data: e, actions: t, onChange: n }) {
 		]
 	});
 }
-// analytics/src/components/performance-panels.tsx
+// src/components/performance-panels.tsx
 var SB = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), CB = (e) => e === null ? "—" : `${e.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%`, wB = (e) => e === null ? "—" : `${e.toLocaleString("pt-BR", {
 	minimumFractionDigits: 2,
 	maximumFractionDigits: 2
@@ -30111,7 +30111,7 @@ function NB({ data: e, filters: t, limit: n = 12 }) {
 		]
 	});
 }
-// analytics/src/components/dashboard.tsx
+// src/components/dashboard.tsx
 var PB = [
 	{
 		id: "overview",
@@ -31317,7 +31317,7 @@ function UB({ data: e }) {
 		}, t.provider))
 	});
 }
-// analytics/src/lib/board-analysis.ts
+// src/lib/board-analysis.ts
 function WB(e, t, n) {
 	let r = lz(e, t), i = Ez(e, {
 		...t,
@@ -31445,7 +31445,7 @@ function $B(e, t) {
 		reached: n && e > 0 && t >= e
 	};
 }
-// analytics/src/components/board-ui.tsx
+// src/components/board-ui.tsx
 var eV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), tV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", {
 	minimumFractionDigits: 2,
 	maximumFractionDigits: 2
@@ -31472,7 +31472,7 @@ function oV({ title: e, subtitle: t, children: n, className: r = "" }) {
 		}), n]
 	});
 }
-// analytics/src/components/board-extra-slides.tsx
+// src/components/board-extra-slides.tsx
 var sV = (e) => new Intl.DateTimeFormat("pt-BR", {
 	month: "long",
 	year: "numeric",
@@ -32079,7 +32079,7 @@ function fV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 		})
 	] });
 }
-// analytics/src/components/use-board-fit.ts
+// src/components/use-board-fit.ts
 function pV(e) {
 	let t = (0, b.useRef)(null), n = (0, b.useRef)(null);
 	return (0, b.useEffect)(() => {
@@ -32112,7 +32112,7 @@ function pV(e) {
 		stage: n
 	};
 }
-// analytics/src/components/operation-board.tsx
+// src/components/operation-board.tsx
 var mV = [
 	[
 		"Panorama",
@@ -32836,7 +32836,7 @@ function wV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 					children: ce.rows.slice(-5).reverse().map((e) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [
 						/* @__PURE__ */ (0, S.jsx)("span", { children: vV(e.date).slice(0, 5) }),
 						/* @__PURE__ */ (0, S.jsxs)("strong", { children: [
-							"+",
+							e.followers === null ? null : "+",
 							hV(e.followers),
 							" ",
 							/* @__PURE__ */ (0, S.jsx)("small", { children: "novos seguidores" })
@@ -32845,7 +32845,7 @@ function wV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 					] }, e.date))
 				}), /* @__PURE__ */ (0, S.jsxs)("p", {
 					className: "board-footnote",
-					children: [ce.complete ? "Todos os dias do período estão presentes." : "Cobertura incompleta: os totais ficam indisponíveis até receber todos os dias.", " Os dados do Instagram são independentes da moeda financeira."]
+					children: [ce.complete ? "Todos os dias do período estão presentes." : "Métricas com lacunas ficam indisponíveis até receber os valores faltantes.", " Os dados do Instagram são independentes da moeda financeira."]
 				})]
 			})]
 		})] }, "instagram")
@@ -33172,7 +33172,7 @@ function wV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 		]
 	});
 }
-// analytics/manual/crypto.ts
+// manual/crypto.ts
 var TV = (e) => Uint8Array.from(atob(e), (e) => e.charCodeAt(0)), EV = (e) => btoa(Array.from(e, (e) => String.fromCharCode(e)).join(""));
 async function DV(e, t, n) {
 	let r = await crypto.subtle.importKey("raw", new TextEncoder().encode(e), "PBKDF2", !1, ["deriveKey"]);
@@ -33208,7 +33208,7 @@ async function kV(e, t) {
 		data: EV(new Uint8Array(i))
 	};
 }
-// analytics/node_modules/zod/v4/core/util.js
+// node_modules/zod/v4/core/util.js
 function AV(e) {
 	let t = Object.values(e).filter((e) => typeof e == "number");
 	return Object.entries(e).filter(([e, n]) => t.indexOf(+e) === -1).map(([e, t]) => t);
@@ -33625,7 +33625,7 @@ function zH(e) {
 	let t = () => e;
 	return t[RH] = !0, t;
 }
-// analytics/node_modules/zod/v4/core/core.js
+// node_modules/zod/v4/core/core.js
 var BH, VH = {
 	value: void 0,
 	enumerable: !1
@@ -33705,7 +33705,7 @@ var KH = globalThis.__zod_globalConfig;
 function qH(e) {
 	return e && Object.assign(KH, e), KH;
 }
-// analytics/node_modules/zod/v4/core/errors.js
+// node_modules/zod/v4/core/errors.js
 function JH() {
 	let e = this._zod;
 	return e.message ??= JSON.stringify(e.def, MV, 2), e.message;
@@ -33790,7 +33790,7 @@ function nU(e, t = (e) => e.message) {
 	};
 	return r(e), n;
 }
-// analytics/node_modules/zod/v4/core/parse.js
+// node_modules/zod/v4/core/parse.js
 function rU(e, t) {
 	return {
 		callee: t?.callee ?? e,
@@ -35118,7 +35118,7 @@ function qG(e, t, n, r) {
 		r._zod.def.params && (e.params = r._zod.def.params), t.issues.push(EH(e));
 	}
 }
-// analytics/node_modules/zod/v4/core/memoizer.js
+// node_modules/zod/v4/core/memoizer.js
 var JG = class extends Error {
 	constructor() {
 		super("Cannot parse a reference cycle that closes through a transform"), this.name = "ZodCyclicError";
@@ -35302,7 +35302,7 @@ function uK(e, t) {
 	let n = e[YG]?.backEdges;
 	return n !== void 0 && ZG(t) && n.has(t);
 }
-// analytics/node_modules/zod/v4/locales/en.js
+// node_modules/zod/v4/locales/en.js
 var dK = () => {
 	let e = {
 		string: {
@@ -35394,7 +35394,7 @@ var dK = () => {
 function fK() {
 	return { localeError: dK() };
 }
-// analytics/node_modules/zod/v4/core/registries.js
+// node_modules/zod/v4/core/registries.js
 var pK, mK = class {
 	constructor() {
 		this._map = /* @__PURE__ */ new WeakMap(), this._idmap = /* @__PURE__ */ new Map();
@@ -35432,7 +35432,7 @@ function hK() {
 }
 (pK = globalThis).__zod_globalRegistry ?? (pK.__zod_globalRegistry = hK());
 var gK = globalThis.__zod_globalRegistry;
-// analytics/node_modules/zod/v4/core/api.js
+// node_modules/zod/v4/core/api.js
 function _K(e) {
 	return e.checks &&= [...e.checks], e;
 }
@@ -35918,7 +35918,7 @@ function vq(e, t) {
 	});
 	return n._zod.check = e, n;
 }
-// analytics/node_modules/zod/v4/core/to-json-schema.js
+// node_modules/zod/v4/core/to-json-schema.js
 function yq(e, ...t) {
 	for (let n of t) for (let t of Reflect.ownKeys(n)) Object.prototype.propertyIsEnumerable.call(n, t) && RV(e, t, n[t]);
 	return e;
@@ -36490,7 +36490,7 @@ var bJ = /*@__PURE__*/ $("ZodError", (e, t) => {
 		}
 	}));
 }, void 0, { Parent: Error }), xJ = /* @__PURE__ */ iU(bJ), SJ = /* @__PURE__ */ aU(bJ), CJ = /* @__PURE__ */ oU(bJ), wJ = /* @__PURE__ */ cU(bJ), TJ = /* @__PURE__ */ mU(bJ), EJ = /* @__PURE__ */ hU(bJ), DJ = /* @__PURE__ */ gU(bJ), OJ = /* @__PURE__ */ _U(bJ), kJ = /* @__PURE__ */ vU(bJ), AJ = /* @__PURE__ */ yU(bJ), jJ = /* @__PURE__ */ bU(bJ), MJ = /* @__PURE__ */ xU(bJ);
-// analytics/node_modules/zod/v4/classic/schemas.js
+// node_modules/zod/v4/classic/schemas.js
 function NJ() {
 	KH.localeError || qH(fK());
 }
@@ -37184,7 +37184,7 @@ function XY(e, t = {}) {
 function ZY(e, t) {
 	return /* @__PURE__ */ _q(e, t);
 }
-// analytics/manual/forecasts.ts
+// manual/forecasts.ts
 var QY = RJ().regex(/^\d{4}-\d{2}-\d{2}$/).refine((e) => {
 	let t = /* @__PURE__ */ new Date(e + "T12:00:00Z");
 	return Number.isFinite(t.getTime()) && t.toISOString().slice(0, 10) === e;
@@ -37266,7 +37266,7 @@ function rX(e, t, n) {
 		}
 	};
 }
-// analytics/manual/operations.json
+// manual/operations.json
 var iX = [{
 	id: "mvave-br",
 	name: "MVAVE BR",
@@ -37278,7 +37278,7 @@ var iX = [{
 	cadence: "weekly",
 	objective: "Resultados do negócio"
 }];
-// analytics/manual/workspace.tsx
+// manual/workspace.tsx
 function aX({ data: e, clients: t = {}, render: n }) {
 	let [r, i] = (0, b.useState)(""), a = iX.find((e) => e.id === r), o = r === "mvave-br" ? e : t[r], s = /* @__PURE__ */ (0, S.jsxs)("label", {
 		className: "operation-control",
@@ -37345,7 +37345,7 @@ function aX({ data: e, clients: t = {}, render: n }) {
 		]
 	});
 }
-// analytics/manual/analysis-history.ts
+// manual/analysis-history.ts
 function oX(e, t, n) {
 	let r = "figueroa-strategic-history-v1:" + t;
 	async function i() {
@@ -37391,7 +37391,7 @@ function oX(e, t, n) {
 		}
 	};
 }
-// analytics/manual/entry.tsx
+// manual/entry.tsx
 var sX = (e) => document.getElementById(e), cX = "figueroa-analytics-followers-v1", lX = (0, x.createRoot)(sX("dashboard")), uX;
 function dX(e) {
 	let t = e;
