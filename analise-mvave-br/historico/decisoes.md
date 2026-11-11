@@ -44,3 +44,10 @@
 - Seguidores de 10/11 permanecem indisponíveis por falta de export, sem preenchimento com zero.
 - Uma venda do Guia de Bolso do Timbre permanece REVISAR por falta de vínculo comprovado ao principal exigido pela configuração. Não incorporada aos totais MVAVE BR.
 - Histórico financeiro até 09/11 e Instagram anterior à correção preservados. Reimportação verificada sem duplicação; base, relatórios locais e pacote criptografado atualizados. Nenhuma campanha ou publicação remota foi alterada.
+
+### Correção solicitada pelo responsável — duas vendas em 10/11
+
+- O responsável confirmou **2 vendas em 10/11**, substituindo a pendência de classificação acima. O export Hotmart já continha o Pack de Violão (R$29,90 bruto / R$24,45 líquido) e o Guia de Bolso do Timbre (R$37,00 bruto / R$30,85 líquido), ambos aprovados.
+- O Guia foi reconhecido como venda avulsa nesta data. A exceção `standaloneSaleDates` no cadastro vale somente para 10/11; bumps e upgrades continuam separados, e os demais dias não são reclassificados.
+- Revisão: **1 → 2 pedidos principais**, **R$29,90 → R$66,90 bruto**, **R$24,45 → R$55,30 líquido**; contribuição após R$122,49 de mídia: **−R$67,19**. São dois pedidos e um comprador único identificado na fonte.
+- Preservados os valores e hashes originais, histórico anterior, mídia e Instagram. Confirmação, classificação antes/depois e cópias da base/pacote arquivadas em `dados/`. Reimportação sem duplicação. Pacote criptografado e relatórios locais atualizados; nenhuma publicação remota executada.

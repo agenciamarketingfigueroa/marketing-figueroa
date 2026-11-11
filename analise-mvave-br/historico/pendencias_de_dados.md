@@ -6,4 +6,4 @@ Seguidores de 09/11/2026: corrigidos de **0 para 65** pelo novo CSV fornecido em
 
 Seguidores de 10/11/2026: indisponíveis por ausência de export. Visualizações e interações do dia foram importadas normalmente.
 
-Hotmart de 10/11/2026: uma venda aprovada do Guia de Bolso do Timbre permanece REVISAR e fora dos totais MVAVE BR, pois não comprova vínculo ao principal exigido pelo cadastro vigente. Fonte preservada para revisão, sem reclassificação presumida.
+Hotmart de 10/11/2026: pendência do Guia de Bolso do Timbre resolvida pela confirmação do responsável de duas vendas no dia. Reconhecido como venda avulsa somente nessa data: total de 2 pedidos, R$66,90 bruto e R$55,30 líquido. Originais e revisão preservados; bumps de outros dias continuam exigindo vínculo ao principal.

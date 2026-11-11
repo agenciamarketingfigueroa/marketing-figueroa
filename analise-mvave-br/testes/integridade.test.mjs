@@ -1,9 +1,22 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {reconcile,closing,parseMeta,parseHotmart,cents,csvRows,creativeResults} from '../scripts/core.mjs';
 const base=()=>({orders:[],meta:[],ads:[],snapshots:[]});
 const order=(x={})=>({key:'item',transaction:x.key??'t1',item:'p1',day:'2026-11-06',operation:'mvave-br',currency:'BRL',status:'APPROVED',category:'principal',gross:2990,net:2445,buyer:'buyer',sck:'',...x});
 const batch=(rows,hash='a',provider='hotmart')=>({provider,operation:'mvave-br',hash,start:'2026-11-06',end:'2026-11-06',rows});
+
+test('Guia avulso confirmado em 10/11 conta como principal sem reclassificar bumps ou histórico',()=>{
+  const products=JSON.parse(readFileSync(new URL('../config/produtos_mvave_br.json',import.meta.url),'utf8'));
+  const headers=['Código do produto','Código da transação','Moeda de recebimento','País','Produto','Venda feita como','Status da transação','Data da transação','Faturamento bruto (sem impostos)','Faturamento líquido','Ferramenta de Venda','Transação do Produto Principal'];
+  const row=(date,tool='',parent='',currency='BRL')=>parseHotmart(csvRows(headers.join(';')+`\n8582046;t;${currency};Brasil;Guia de Bolso do Timbre;Produtor;Aprovado;${date};37,00;30,85;${tool};${parent}`),products,'source')[0];
+  const guide=row('10/11/2026');assert.equal(guide.operation,'mvave-br');assert.equal(guide.category,'principal');
+  const b={...base(),orders:[order({day:'2026-11-10'}),guide]};
+  const m=closing(b,'2026-11-10','2026-11-10');assert.equal(m.principal,2);assert.equal(m.gross,6690);assert.equal(m.net,5530);assert.equal(m.direct,0);
+  assert.equal(row('09/11/2026').operation,'REVISAR');assert.equal(row('11/11/2026').operation,'REVISAR');assert.equal(row('10/11/2026','','','USD').operation,'REVISAR');
+  assert.equal(row('10/11/2026','Produto order bump','pack').category,'bump');assert.equal(row('10/11/2026','Produto order bump').operation,'REVISAR');
+  assert.equal(row('10/11/2026','Upsell','pack').category,'upgrade');
+});
 test('bumps não viram principais ou compradores únicos; total em centavos',()=>{const b={...base(),orders:[order(),order({key:'b',category:'bump',gross:1390,net:1093})]};const m=closing(b,'2026-11-06','2026-11-06');assert.equal(m.principal,1);assert.equal(m.buyers,1);assert.equal(m.bumps,1);assert.equal(m.gross,4380);assert.equal(m.net,3538);});
 test('sem SCK e ID arredondado não atribuem; anúncio histórico exato mantém origem',()=>{const b={...base(),orders:[order(),order({key:'2',sck:'123'})],ads:[{level:'ad',id:'123',idPrecision:'rounded'}]};assert.equal(closing(b,'2026-11-06','2026-11-06').direct,0);b.ads[0].idPrecision='exact';const m=closing(b,'2026-11-06','2026-11-06');assert.equal(m.direct,1);assert.equal(m.roas,null);});
 test('mesmo export é idempotente; venda tardia e cancelamento revisam data original',()=>{let r=reconcile(base(),batch([order()]));assert.equal(reconcile(r.base,batch([order()])).duplicate,true);r=reconcile(r.base,batch([order({key:'late'})],'b'));assert.equal(r.changes[0].late,true);r=reconcile(r.base,batch([order({status:'CANCELLED'})],'c'));assert.equal(r.base.orders.length,2);assert.equal(closing(r.base,'2026-11-06','2026-11-06').principal,1);});

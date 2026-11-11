@@ -4,17 +4,19 @@ import {coversPeriod} from './coverage';
 import products from '../../../analise-mvave-br/config/produtos_mvave_br.json';
 
 const mainIds=new Set(Object.entries(products).filter(([,p])=>p.category==='principal').map(([id])=>id));
+const standaloneDates=new Map<string,string[]>(Object.entries(products).map(([id,p])=>[id,'standaloneSaleDates' in p?p.standaloneSaleDates:[]]));
+const confirmedPrincipal=(o:Order)=>mainIds.has(o.productId)||Boolean(standaloneDates.get(o.productId)?.includes(orderDay(o))&&o.currency==='BRL'&&o.product===products[o.productId as keyof typeof products]?.name&&!o.parentTransaction&&!o.isBump&&!o.isFunnel);
 export type SaleKind='principal'|'bump'|'upsell'|'upgrade'|'review';
 export const principalKey=(o:Order)=>o.mainOrderId??o.transaction;
 export function saleKind(o:Order):SaleKind {
   if(o.isBump)return 'bump';
   if(o.isFunnel)return o.additionalKind??'review';
-  return mainIds.has(o.productId)&&!o.parentTransaction?'principal':'review';
+  return confirmedPrincipal(o)&&!o.parentTransaction?'principal':'review';
 }
-/** Only confirmed pack IDs and explicitly linked additions belong to this scope. */
+/** Confirmed principals (including dated standalone sales) and linked additions. */
 export function scopeMvave(data:Dataset){
-  const main=new Set(data.orders.filter(o=>mainIds.has(o.productId)&&!o.isBump&&!o.isFunnel).map(o=>o.transaction));
-  const accepted=data.orders.filter(o=>mainIds.has(o.productId)||Boolean(o.parentTransaction&&main.has(o.parentTransaction)));
+  const main=new Set(data.orders.filter(o=>confirmedPrincipal(o)&&!o.isBump&&!o.isFunnel).map(o=>o.transaction));
+  const accepted=data.orders.filter(o=>confirmedPrincipal(o)||Boolean(o.parentTransaction&&main.has(o.parentTransaction)));
   const excluded=[...data.excludedOperationOrders??[],...data.orders.filter(o=>!accepted.includes(o))];
   return {data:{...data,orders:accepted,excludedOperationOrders:excluded},excluded};
 }

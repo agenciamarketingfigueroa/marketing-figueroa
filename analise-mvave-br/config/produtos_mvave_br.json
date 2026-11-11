@@ -6,5 +6,5 @@
   "3016657": {"name":"O Código dos timbres (Guitarra)","category":"adicional","segment":"Guitarra","requiresParent":true},
   "3016645": {"name":"O Código dos Timbres (Violão)","category":"adicional","segment":"Violão","requiresParent":true},
   "3016652": {"name":"O Código dos timbres (Baixo)","category":"adicional","segment":"Baixo","requiresParent":true},
-  "8582046": {"name":"Guia de Bolso do Timbre","category":"adicional","segment":"Geral","requiresParent":true}
+  "8582046": {"name":"Guia de Bolso do Timbre","category":"adicional","segment":"Geral","requiresParent":true,"standaloneSaleDates":["2026-11-10"]}
 }

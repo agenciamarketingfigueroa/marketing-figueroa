@@ -79,8 +79,11 @@ export function parseHotmart(rows,products,source) {
     const currency=clean(r['Moeda de recebimento']),country=clean(r['País']);check(/^[A-Z]{3}$/.test(currency),'Moeda ausente');
     check(cents(r['Faturamento bruto (sem impostos)'])!==null&&cents(r['Faturamento líquido'])!==null,'Receita ausente; revisar export Hotmart');
     const product=products[id];const name=clean(r.Produto);const parent=clean(r['Transação do Produto Principal']);
-    const tool=clean(r['Ferramenta de Venda']);const category=tool==='Produto order bump'?'bump':/upgrade|upsell|funil/i.test(tool)?'upgrade':product?.category==='principal'&&!parent?'principal':'REVISAR';
-    const operation=product&&product.name===name&&currency==='BRL'&&country==='Brasil'&&(!product.requiresParent||parent)?'mvave-br':'REVISAR';
+    const saleDay=day(r['Data da transação']);
+    // Explicitly confirmed standalone sales do not reclassify historical bumps.
+    const standalone=product?.standaloneSaleDates?.includes(saleDay)&&!parent;
+    const tool=clean(r['Ferramenta de Venda']);const category=tool==='Produto order bump'?'bump':/upgrade|upsell|funil/i.test(tool)?'upgrade':(product?.category==='principal'||standalone)&&!parent?'principal':'REVISAR';
+    const operation=product&&product.name===name&&currency==='BRL'&&country==='Brasil'&&(!product.requiresParent||parent||standalone&&category==='principal')?'mvave-br':'REVISAR';
     const buyer=clean(r['Email do(a) Comprador(a)']).toLowerCase();const status=statusMap[r['Status da transação']]??'REVISAR';
     check(r['Venda feita como']==='Produtor','Papel de venda não suportado');
     return {key:hash(tx+'|'+id),transaction:tx,item:id,product:name,day:day(r['Data da transação']),currency,country,operation,category,additionalKind:/upgrade/i.test(tool)?'upgrade':/upsell/i.test(tool)?'upsell':null,status,rawStatus:r['Status da transação'],gross:cents(r['Faturamento bruto (sem impostos)']),net:cents(r['Faturamento líquido']),buyer:buyer?hash(buyer):null,parent:parent||null,sck:clean(r['Código SCK']),payment:clean(r['Método de pagamento'])||'Não informado',manualTool:['Produto order bump','Produto principal','Hotmart Recomenda'].includes(tool)?tool:tool?'Outra ferramenta informada':'Não informada',source,line:r.line};
