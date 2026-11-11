@@ -36,3 +36,11 @@
 
 - O responsável confirmou explicitamente que não houve novos seguidores em 09/11. Registrado valor **0** no Analytics/Painel, com fonte de confirmação manual, hash, snapshot e auditoria privados.
 - A confirmação substitui a indisponibilidade registrada acima. O CSV vazio foi preservado; a regra geral continua sendo não inferir zero de arquivos vazios. Demais dados permanecem inalterados.
+
+## 11/11/2026 — atualização de 10/11 e correção dos seguidores de 09/11
+
+- Importados os cinco arquivos fornecidos, com datas conferidas no conteúdo: Hotmart e Meta de 10/11, visualizações e interações de 10/11 e seguidores de 09/11. Última data operacional: 10/11/2026.
+- Seguidores novos de 09/11 corrigidos de **0 para 65** conforme o CSV recebido. A nova evidência substitui a confirmação manual anterior, preservada junto ao export vazio, hashes, snapshots e auditoria privada.
+- Seguidores de 10/11 permanecem indisponíveis por falta de export, sem preenchimento com zero.
+- Uma venda do Guia de Bolso do Timbre permanece REVISAR por falta de vínculo comprovado ao principal exigido pela configuração. Não incorporada aos totais MVAVE BR.
+- Histórico financeiro até 09/11 e Instagram anterior à correção preservados. Reimportação verificada sem duplicação; base, relatórios locais e pacote criptografado atualizados. Nenhuma campanha ou publicação remota foi alterada.
