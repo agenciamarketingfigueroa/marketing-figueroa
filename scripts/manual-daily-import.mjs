@@ -43,7 +43,10 @@ export function summary(period,orders,insights,sources) {
   const result={id:period.start,start:period.start,end:period.end,days:daily.size,month:period.month,spend:0,impressions:0,metaPurchases:0,...totals(),sourceSignals:0};
   for(const row of insights) {
     const ad=ads.get(row.ad)??{name:row.ad,spend:0,impressions:0,purchases:0};
-    for(const key of ['spend','impressions']){result[key]=result[key]===null||row[key]===null?null:result[key]+row[key];ad[key]=ad[key]===null||row[key]===null?null:ad[key]+row[key];}result.metaPurchases+=row.purchases;ad.purchases+=row.purchases;ads.set(row.ad,ad);
+    for(const key of ['spend','impressions']){result[key]=result[key]===null||row[key]===null?null:result[key]+row[key];ad[key]=ad[key]===null||row[key]===null?null:ad[key]+row[key];}
+    result.metaPurchases=result.metaPurchases===null||row.purchases==null?null:result.metaPurchases+row.purchases;
+    ad.purchases=ad.purchases===null||row.purchases==null?null:ad.purchases+row.purchases;
+    ads.set(row.ad,ad);
   }
   for(const order of orders) {
     const status=Object.keys(statusMap).find(s=>statusMap[s]===order.status);check(status,'Status histórico desconhecido');statuses[status]=(statuses[status]??0)+1;

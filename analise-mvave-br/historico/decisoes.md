@@ -51,3 +51,12 @@
 - O Guia foi reconhecido como venda avulsa nesta data. A exceção `standaloneSaleDates` no cadastro vale somente para 10/11; bumps e upgrades continuam separados, e os demais dias não são reclassificados.
 - Revisão: **1 → 2 pedidos principais**, **R$29,90 → R$66,90 bruto**, **R$24,45 → R$55,30 líquido**; contribuição após R$122,49 de mídia: **−R$67,19**. São dois pedidos e um comprador único identificado na fonte.
 - Preservados os valores e hashes originais, histórico anterior, mídia e Instagram. Confirmação, classificação antes/depois e cópias da base/pacote arquivadas em `dados/`. Reimportação sem duplicação. Pacote criptografado e relatórios locais atualizados; nenhuma publicação remota executada.
+
+## 12/11/2026 — atualização de 11/11 e seguidores de 10/11
+
+- Importados os seis arquivos fornecidos, com datas verificadas no conteúdo: Hotmart e Meta de 11/11, três métricas Instagram de 11/11 e seguidores de 10/11. Última data operacional: 11/11/2026.
+- Seguidores novos de 10/11: **indisponível → 62**, conforme CSV; não se trata do total de seguidores. Preservados os 65 de 09/11 e as duas vendas confirmadas de 10/11. Em 11/11: 39 novos seguidores, 5.901 visualizações e 18 interações.
+- Hotmart de 11/11: quatro pedidos principais aprovados, R$119,60 bruto e R$97,80 líquido. Mídia de R$92,09; contribuição após mídia de R$5,71, não lucro final.
+- O novo Meta não contém IDs de anúncios, compras, valor de conversão, cliques, LPV ou checkouts. Preservados gasto, impressões, conjuntos e status explícitos; não foi inferida atribuição por nome. Métricas ausentes permanecem indisponíveis. Corrigido o resumo agregado interno para não converter compras Meta ausentes em zero.
+- Históricos financeiro e de mídia até 10/11 preservados; somente a métrica de seguidores solicitada foi completada nessa data. Originais, hashes, snapshots e auditoria antes/depois arquivados em `dados/`. Reimportação e integridade do pacote verificadas sem duplicação.
+- Atualizados a base, relatórios locais e pacote criptografado. Nenhuma campanha ou publicação remota foi alterada.

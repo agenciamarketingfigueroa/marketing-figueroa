@@ -22,11 +22,11 @@ for(const p of report.periods) {
   assert.equal(approved.filter(o=>o.currency==='BRL').reduce((s,o)=>s+o.gross,0),p.gross);
   assert.equal(approved.filter(o=>o.currency==='BRL').reduce((s,o)=>s+o.net,0),p.net);
   assert.equal(insights.reduce((s,i)=>s+i.spend,0),p.spend);
-  assert.equal(insights.reduce((s,i)=>s+i.purchases,0),p.metaPurchases);
+  assert.equal(insights.every(i=>i.purchases!=null)?insights.reduce((s,i)=>s+i.purchases,0):null,p.metaPurchases);
   if(report.dataset.manualMetaIdPrecision) {
     assert.equal(new Set(insights.map(i=>i.date+'|'+i.adId)).size,insights.length);
-    for(const row of insights)for(const metric of ['spend','purchases'])assert.ok(Number.isSafeInteger(row[metric])&&row[metric]>=0);
-    for(const row of insights)for(const metric of ['impressions','clicks','views','checkouts','purchaseValue','instagramFollows'])if(row[metric]!=null)assert.ok(Number.isSafeInteger(row[metric])&&row[metric]>=0);
+    for(const row of insights)assert.ok(Number.isSafeInteger(row.spend)&&row.spend>=0);
+    for(const row of insights)for(const metric of ['impressions','clicks','views','checkouts','purchases','purchaseValue','instagramFollows'])if(row[metric]!=null)assert.ok(Number.isSafeInteger(row[metric])&&row[metric]>=0);
     for(const row of insights)if(row.exportAdId&&/[Ee]/.test(row.exportAdId))assert.equal(row.idPrecision,'rounded');
   }
 }
