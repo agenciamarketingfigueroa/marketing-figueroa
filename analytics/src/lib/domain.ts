@@ -46,7 +46,7 @@ export interface Dataset {
   manualMetaIdPrecision?: 'rounded'|'exact';
   manualMetaDailyCoverage?: import('./coverage').CoverageWindow[];
   manualMetaAggregates?: Insight[];
-  manualMetaSupplementalExports?: {sha256:string;name:string;importedAt:string;date:string;filter:string;rows:Insight[]}[];
+  manualMetaSupplementalExports?: {sha256:string;name:string;importedAt:string;date:string;filter:string;rows:Insight[];supersededBy?:string}[];
   instagramAudience?: {age:{label:string;men:number;women:number}[];cities:{label:string;value:number}[];countries:{label:string;value:number}[]};
   manualPeriods?: {start:string;end:string;month:string;sources:{name:string;rows:number;sha256?:string}[]}[];
 }

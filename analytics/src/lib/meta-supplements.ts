@@ -5,6 +5,7 @@ export function metaSupplements(data:Dataset,filters:Filters) {
   if(filters.product!=='all')return [];
   const latest=new Map<string,NonNullable<Dataset['manualMetaSupplementalExports']>[number]>();
   for(const source of data.manualMetaSupplementalExports??[]){
+    if(source.supersededBy)continue;
     if(source.date<filters.start||source.date>filters.end)continue;
     const key=source.date+'|'+source.filter;
     if(!latest.has(key)||latest.get(key)!.importedAt<source.importedAt)latest.set(key,source);

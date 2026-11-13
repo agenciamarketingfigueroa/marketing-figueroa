@@ -9,6 +9,12 @@ const filters:Filters={start:'2026-11-01',end:'2026-11-11',currency:'BRL',accoun
 const row={date:'2026-11-11',accountId:'manual-meta',currency:'BRL',spend:8147,purchases:3,purchaseValue:7335,clicks:142,views:112,checkouts:12} as Insight;
 const make=()=>({insights:[{...row,spend:9209,purchases:null}],manualMetaSupplementalExports:[{sha256:'a',name:'Meta',date:row.date,importedAt:'2026-11-12T15:00:00Z',filter:'Somente ativos',rows:[row]}]} as Dataset);
 describe('exports filtrados complementares',()=>{
+  it('oculta complemento substituído explicitamente sem apagar sua evidência',()=>{
+    const data=make();data.manualMetaSupplementalExports![0].supersededBy='full-export-hash';
+    expect(metaSupplements(data,filters)).toEqual([]);
+    expect(renderToStaticMarkup(createElement(MetaSupplements,{data,filters}))).toBe('');
+    expect(data.manualMetaSupplementalExports).toHaveLength(1);
+  });
   it('exibe cobertura parcial e distingue ROAS do recorte dos totais gerais',()=>{
     const html=renderToStaticMarkup(createElement(MetaSupplements,{data:make(),filters}));
     expect(html).toContain('cobertura parcial');expect(html).toContain('81,47');expect(html).toContain('92,09');expect(html).toContain('0,90');

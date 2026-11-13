@@ -68,3 +68,11 @@
 - Importado como complemento independente em `metaSupplements` na base e `manualMetaSupplementalExports` no pacote criptografado. Painel/Mídia paga e tracking do relatório exibem cobertura parcial e tabela do recorte; os totais gerais incompletos continuam indisponíveis.
 - Hotmart, Instagram, mídia anterior, datas operacionais e períodos preservados integralmente. Original, SHA256, snapshots e auditoria privados; reimportação sem duplicação. Relatórios locais regenerados. Pendências manuais passam a ser preservadas pelo gerador.
 - Para completar os totais do dia: exportar todos os anúncios, incluindo inativos/sem entrega, com compras, valor de conversão, funil, impressões e IDs textuais íntegros. Nenhuma publicação remota executada.
+
+### Reexport completo recebido em 12/11 — métricas de 11/11 resolvidas
+
+- Novo export de 11/11 contém 52 anúncios: sete ativos, cinco inativos e 40 sem entrega. Conferidos R$92,09 e 10.023 impressões contra o primeiro arquivo, sem perda nem duplicação de mídia. Compras, valor de conversão e funil agora disponíveis em todas as linhas.
+- Dia 11/11: três compras Meta, R$73,35 de valor de conversão reportado, ROAS Meta 0,80x, CPA Meta R$30,70, 163 cliques, 128 LPVs e 13 checkouts. Hotmart permanece com quatro principais, R$119,60 bruto e R$97,80 líquido; não forçada igualdade entre fontes.
+- Período de 21/08 a 11/11: mídia R$13.501,66, 679 compras Meta, ROAS Meta 1,37x e CPA Meta R$19,88. Valores verificados pela mesma função do Painel e pela renderização estrutural dos cards com o pacote real.
+- O complemento filtrado anterior foi marcado como substituído pelo SHA256 do novo export; permanece no histórico e nos snapshots, mas o aviso parcial deixa de aparecer. Histórico financeiro, mídia anterior a 11/11 e Instagram preservados, incluindo 62 novos seguidores de 10/11. Reimportação sem duplicação.
+- IDs ainda arredondados: atribuição SCK exata continua indisponível. Atualizados relatórios locais, pacote criptografado e build manual; testes Node, Analytics e typecheck aprovados. Nenhuma publicação remota executada.

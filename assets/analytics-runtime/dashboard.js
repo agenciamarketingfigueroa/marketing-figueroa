@@ -27345,7 +27345,7 @@ function jz(e, t) {
 	if (t.product !== "all") return [];
 	let n = /* @__PURE__ */ new Map();
 	for (let r of e.manualMetaSupplementalExports ?? []) {
-		if (r.date < t.start || r.date > t.end) continue;
+		if (r.supersededBy || r.date < t.start || r.date > t.end) continue;
 		let e = r.date + "|" + r.filter;
 		(!n.has(e) || n.get(e).importedAt < r.importedAt) && n.set(e, r);
 	}
