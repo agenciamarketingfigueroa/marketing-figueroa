@@ -60,3 +60,11 @@
 - O novo Meta não contém IDs de anúncios, compras, valor de conversão, cliques, LPV ou checkouts. Preservados gasto, impressões, conjuntos e status explícitos; não foi inferida atribuição por nome. Métricas ausentes permanecem indisponíveis. Corrigido o resumo agregado interno para não converter compras Meta ausentes em zero.
 - Históricos financeiro e de mídia até 10/11 preservados; somente a métrica de seguidores solicitada foi completada nessa data. Originais, hashes, snapshots e auditoria antes/depois arquivados em `dados/`. Reimportação e integridade do pacote verificadas sem duplicação.
 - Atualizados a base, relatórios locais e pacote criptografado. Nenhuma campanha ou publicação remota foi alterada.
+
+### Reexport posterior de 11/11 — complemento filtrado
+
+- O responsável informou filtro de anúncios ativos. Novo arquivo contém seis anúncios, R$81,47 de mídia, três compras Meta, R$73,35 de valor de conversão, 142 cliques, 112 LPVs e 12 checkouts. ROAS do recorte: 0,90x; CPA Meta: R$27,16. IDs continuam arredondados e não há coluna de impressões.
+- O primeiro export conserva 52 linhas, R$92,09 de gasto e 10.023 impressões. O recorte novo deixa R$10,62 fora; não substitui o fechamento nem é somado à mídia anterior. Nenhum vínculo por nome ou ID exato foi inventado entre as versões.
+- Importado como complemento independente em `metaSupplements` na base e `manualMetaSupplementalExports` no pacote criptografado. Painel/Mídia paga e tracking do relatório exibem cobertura parcial e tabela do recorte; os totais gerais incompletos continuam indisponíveis.
+- Hotmart, Instagram, mídia anterior, datas operacionais e períodos preservados integralmente. Original, SHA256, snapshots e auditoria privados; reimportação sem duplicação. Relatórios locais regenerados. Pendências manuais passam a ser preservadas pelo gerador.
+- Para completar os totais do dia: exportar todos os anúncios, incluindo inativos/sem entrega, com compras, valor de conversão, funil, impressões e IDs textuais íntegros. Nenhuma publicação remota executada.

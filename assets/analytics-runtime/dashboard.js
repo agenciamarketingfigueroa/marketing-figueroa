@@ -27340,8 +27340,101 @@ function Az({ data: e, filters: t }) {
 		})]
 	});
 }
+// src/lib/meta-supplements.ts
+function jz(e, t) {
+	if (t.product !== "all") return [];
+	let n = /* @__PURE__ */ new Map();
+	for (let r of e.manualMetaSupplementalExports ?? []) {
+		if (r.date < t.start || r.date > t.end) continue;
+		let e = r.date + "|" + r.filter;
+		(!n.has(e) || n.get(e).importedAt < r.importedAt) && n.set(e, r);
+	}
+	return [...n.values()].sort((e, t) => t.date.localeCompare(e.date)).flatMap((n) => {
+		let r = n.rows.filter((e) => e.currency === t.currency && (t.account === "all" || e.accountId === t.account));
+		if (!r.length) return [];
+		let i = (e) => r.every((t) => t[e] !== null) ? ZR(r.map((t) => t[e])) : null, a = i("spend"), o = i("purchases"), s = i("purchaseValue"), c = e.insights.filter((e) => e.date === n.date && (e.periodEnd ?? e.date) === n.date && e.currency === t.currency && (t.account === "all" || e.accountId === t.account)), l = c.length ? ZR(c.map((e) => e.spend)) : null;
+		return [{
+			...n,
+			rows: r,
+			spend: a,
+			purchases: o,
+			value: s,
+			roas: Z(s, a),
+			cpa: Z(a, o),
+			clicks: i("clicks"),
+			views: i("views"),
+			checkouts: i("checkouts"),
+			knownSpend: l
+		}];
+	});
+}
+// src/components/meta-supplements.tsx
+var Mz = (e) => e === null ? "—" : e.toLocaleString("pt-BR"), Nz = (e) => e === null ? "—" : e.toLocaleString("pt-BR", {
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2
+}) + "×";
+function Pz({ data: e, filters: t }) {
+	return /* @__PURE__ */ (0, S.jsx)(S.Fragment, { children: jz(e, t).map((e) => /* @__PURE__ */ (0, S.jsxs)("aside", {
+		className: "meta-supplement",
+		"aria-label": "Complemento Meta com cobertura parcial",
+		children: [
+			/* @__PURE__ */ (0, S.jsxs)("strong", { children: [
+				e.date.split("-").reverse().join("/"),
+				" · Export filtrado · ",
+				e.rows.length,
+				" anúncios"
+			] }),
+			/* @__PURE__ */ (0, S.jsxs)("p", { children: [
+				"Recorte: ",
+				$R(e.spend, t.currency),
+				" de ",
+				$R(e.knownSpend, t.currency),
+				" de mídia registrada no dia · ",
+				Mz(e.purchases),
+				" compras Meta · ROAS ",
+				Nz(e.roas),
+				" · CPA ",
+				$R(e.cpa, t.currency),
+				"."
+			] }),
+			/* @__PURE__ */ (0, S.jsxs)("p", { children: [
+				"Filtro: ",
+				e.filter,
+				". Os resultados abaixo não completam os totais do período. O gasto e as impressões do export anterior foram preservados."
+			] }),
+			/* @__PURE__ */ (0, S.jsxs)("details", { children: [
+				/* @__PURE__ */ (0, S.jsx)("summary", { children: "Ver funil e resultados do recorte" }),
+				/* @__PURE__ */ (0, S.jsxs)("p", { children: [
+					Mz(e.clicks),
+					" cliques · ",
+					Mz(e.views),
+					" visitas à página · ",
+					Mz(e.checkouts),
+					" checkouts · ",
+					$R(e.value, t.currency),
+					" em valor de conversão reportado pela Meta."
+				] }),
+				/* @__PURE__ */ (0, S.jsx)("div", {
+					className: "meta-supplement-table",
+					children: /* @__PURE__ */ (0, S.jsxs)("table", { children: [/* @__PURE__ */ (0, S.jsx)("thead", { children: /* @__PURE__ */ (0, S.jsx)("tr", { children: [
+						"Anúncio",
+						"Mídia",
+						"Compras Meta",
+						"ROAS Meta"
+					].map((e) => /* @__PURE__ */ (0, S.jsx)("th", { children: e }, e)) }) }), /* @__PURE__ */ (0, S.jsx)("tbody", { children: e.rows.map((e) => /* @__PURE__ */ (0, S.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, S.jsx)("td", { children: e.ad }),
+						/* @__PURE__ */ (0, S.jsx)("td", { children: $R(e.spend, e.currency) }),
+						/* @__PURE__ */ (0, S.jsx)("td", { children: Mz(e.purchases) }),
+						/* @__PURE__ */ (0, S.jsx)("td", { children: Nz(Z(e.purchaseValue, e.spend)) })
+					] }, e.adId)) })] })
+				}),
+				/* @__PURE__ */ (0, S.jsx)("p", { children: "Compras Meta não equivalem a compradores Hotmart. IDs sem precisão comprovada não autorizam atribuição SCK. Importar o dia com todos os anúncios e métricas para completar o fechamento." })
+			] })
+		]
+	}, e.sha256)) });
+}
 // ../analise-mvave-br/config/produtos_mvave_br.json
-var jz = {
+var Fz = {
 	2947400: {
 		name: "Pack de IRs para Guitarra (Acesso Vitalício por tempo limitado)",
 		category: "principal",
@@ -27387,12 +27480,12 @@ var jz = {
 		requiresParent: !0,
 		standaloneSaleDates: ["2026-11-10"]
 	}
-}, Mz = new Set(Object.entries(jz).filter(([, e]) => e.category === "principal").map(([e]) => e)), Nz = new Map(Object.entries(jz).map(([e, t]) => [e, "standaloneSaleDates" in t ? t.standaloneSaleDates : []])), Pz = (e) => Mz.has(e.productId) || !(!Nz.get(e.productId)?.includes(nz(e)) || e.currency !== "BRL" || e.product !== jz[e.productId]?.name || e.parentTransaction || e.isBump || e.isFunnel), Fz = (e) => e.mainOrderId ?? e.transaction;
-function Iz(e) {
-	return e.isBump ? "bump" : e.isFunnel ? e.additionalKind ?? "review" : Pz(e) && !e.parentTransaction ? "principal" : "review";
+}, Iz = new Set(Object.entries(Fz).filter(([, e]) => e.category === "principal").map(([e]) => e)), Lz = new Map(Object.entries(Fz).map(([e, t]) => [e, "standaloneSaleDates" in t ? t.standaloneSaleDates : []])), Rz = (e) => Iz.has(e.productId) || !(!Lz.get(e.productId)?.includes(nz(e)) || e.currency !== "BRL" || e.product !== Fz[e.productId]?.name || e.parentTransaction || e.isBump || e.isFunnel), zz = (e) => e.mainOrderId ?? e.transaction;
+function Bz(e) {
+	return e.isBump ? "bump" : e.isFunnel ? e.additionalKind ?? "review" : Rz(e) && !e.parentTransaction ? "principal" : "review";
 }
-function Lz(e) {
-	let t = new Set(e.orders.filter((e) => Pz(e) && !e.isBump && !e.isFunnel).map((e) => e.transaction)), n = e.orders.filter((e) => Pz(e) || !!(e.parentTransaction && t.has(e.parentTransaction))), r = [...e.excludedOperationOrders ?? [], ...e.orders.filter((e) => !n.includes(e))];
+function Vz(e) {
+	let t = new Set(e.orders.filter((e) => Rz(e) && !e.isBump && !e.isFunnel).map((e) => e.transaction)), n = e.orders.filter((e) => Rz(e) || !!(e.parentTransaction && t.has(e.parentTransaction))), r = [...e.excludedOperationOrders ?? [], ...e.orders.filter((e) => !n.includes(e))];
 	return {
 		data: {
 			...e,
@@ -27402,25 +27495,25 @@ function Lz(e) {
 		excluded: r
 	};
 }
-function Rz(e, t) {
+function Hz(e, t) {
 	let n = t.sckAttribution;
 	return n?.status === "exact" && [...e.insights, ...e.manualMetaAggregates ?? []].some((e) => e.accountId === n.accountId && e.adId === n.adId && e.idPrecision === "exact" && !!e.exportAdId && (e.granularity ?? "ad") === "ad");
 }
-var zz = (e, t) => e.every((e) => e[t] !== null) ? ZR(e.map((e) => e[t])) : null;
-function Bz(e, t, n) {
-	let r = lz(e, t), i = Ez(e, t, n, r), a = i.metrics, o = r.orders.filter((e) => YR(e.status)), s = o.filter((e) => Iz(e) === "principal"), c = i.hotmartCovered ? new Set(s.map(Fz)).size : null, l = i.hotmartCovered ? zz(s, "gross") : null, u = i.hotmartCovered ? zz(s, "net") : null, d = [
+var Uz = (e, t) => e.every((e) => e[t] !== null) ? ZR(e.map((e) => e[t])) : null;
+function Wz(e, t, n) {
+	let r = lz(e, t), i = Ez(e, t, n, r), a = i.metrics, o = r.orders.filter((e) => YR(e.status)), s = o.filter((e) => Bz(e) === "principal"), c = i.hotmartCovered ? new Set(s.map(zz)).size : null, l = i.hotmartCovered ? Uz(s, "gross") : null, u = i.hotmartCovered ? Uz(s, "net") : null, d = [
 		"bump",
 		"upsell",
 		"upgrade"
 	].map((e) => {
-		let t = o.filter((t) => Iz(t) === e);
+		let t = o.filter((t) => Bz(t) === e);
 		return {
 			kind: e,
 			count: i.hotmartCovered ? t.length : null,
-			gross: i.hotmartCovered ? zz(t, "gross") : null,
-			net: i.hotmartCovered ? zz(t, "net") : null
+			gross: i.hotmartCovered ? Uz(t, "gross") : null,
+			net: i.hotmartCovered ? Uz(t, "net") : null
 		};
-	}), f = o.filter((e) => Iz(e) !== "review"), p = i.hotmartCovered ? zz(f, "gross") : null, m = i.hotmartCovered ? zz(f, "net") : null, h = s.filter((t) => Rz(e, t)), g = i.hotmartCovered ? new Set(h.map(Fz)).size : null;
+	}), f = o.filter((e) => Bz(e) !== "review"), p = i.hotmartCovered ? Uz(f, "gross") : null, m = i.hotmartCovered ? Uz(f, "net") : null, h = s.filter((t) => Hz(e, t)), g = i.hotmartCovered ? new Set(h.map(zz)).size : null;
 	return {
 		spend: a.spend,
 		main: c,
@@ -27457,13 +27550,13 @@ function Bz(e, t, n) {
 		pending: a.pending,
 		refunds: a.refunds,
 		additions: d,
-		review: o.filter((e) => Iz(e) === "review").length,
+		review: o.filter((e) => Bz(e) === "review").length,
 		metaCovered: i.metaCovered,
 		hotmartCovered: i.hotmartCovered,
 		complete: i.metaCovered && i.hotmartCovered
 	};
 }
-var Vz = [
+var Gz = [
 	{
 		key: "spend",
 		label: "Investimento em mídia",
@@ -27534,9 +27627,9 @@ var Vz = [
 		label: "Cobertura SCK exata · principais",
 		format: "percent"
 	}
-], Hz = (e, t, n = "BRL") => e === null ? "—" : t === "money" ? $R(e, n) : e.toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + (t === "ratio" ? "×" : t === "percent" ? "%" : ""), Uz = (e) => /\b[GBV]S\d|sorteio/i.test(e) ? /RMKT|remarketing/i.test(e) ? "Sorteio remarketing" : "Sorteio público frio" : "Tradicional", Wz = (e) => /viol[aã]o|\[VL\]|\bVS\d/i.test(e) ? "Violão" : /baixo|\[BX\]|\bBS\d/i.test(e) ? "Baixo" : /guitarra|\[GT\]|\bGS\d/i.test(e) ? "Guitarra" : /completo/i.test(e) ? "Completo" : "Não informado", Gz = (e, t) => e.length && e.every((e) => e[t] !== null) ? e.reduce((e, n) => e + n[t], 0) : null;
-function Kz(e, t, n, r = !1) {
-	let i = lz(e, t, r).insights, a = lz(e, az(t), r).insights, o = Ez(e, t, n).hotmartCovered, s = lz(e, t).orders.filter((e) => YR(e.status) && Iz(e) === "principal"), c = /* @__PURE__ */ new Map();
+], Kz = (e, t, n = "BRL") => e === null ? "—" : t === "money" ? $R(e, n) : e.toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + (t === "ratio" ? "×" : t === "percent" ? "%" : ""), qz = (e) => /\b[GBV]S\d|sorteio/i.test(e) ? /RMKT|remarketing/i.test(e) ? "Sorteio remarketing" : "Sorteio público frio" : "Tradicional", Jz = (e) => /viol[aã]o|\[VL\]|\bVS\d/i.test(e) ? "Violão" : /baixo|\[BX\]|\bBS\d/i.test(e) ? "Baixo" : /guitarra|\[GT\]|\bGS\d/i.test(e) ? "Guitarra" : /completo/i.test(e) ? "Completo" : "Não informado", Yz = (e, t) => e.length && e.every((e) => e[t] !== null) ? e.reduce((e, n) => e + n[t], 0) : null;
+function Xz(e, t, n, r = !1) {
+	let i = lz(e, t, r).insights, a = lz(e, az(t), r).insights, o = Ez(e, t, n).hotmartCovered, s = lz(e, t).orders.filter((e) => YR(e.status) && Bz(e) === "principal"), c = /* @__PURE__ */ new Map();
 	for (let e of i) {
 		let t = e.accountId + "|" + e.adId;
 		c.set(t, [...c.get(t) ?? [], e]);
@@ -27546,12 +27639,12 @@ function Kz(e, t, n, r = !1) {
 		r && !c.has(r.accountId + "|" + r.adId) && c.set(r.accountId + "|" + r.adId, []);
 	}
 	return [...c].map(([n, r]) => {
-		let i = [...r].sort((e, t) => (e.periodEnd ?? e.date).localeCompare(t.periodEnd ?? t.date)), [c, l] = n.split("|"), u = i.at(-1) ?? [...e.insights, ...e.manualMetaAggregates ?? []].find((e) => e.accountId === c && e.adId === l), d = u.idPrecision === "exact" && !!u.exportAdId && (u.granularity ?? "ad") === "ad" && i.every((e) => e.idPrecision === "exact" && (e.granularity ?? "ad") === "ad"), f = s.filter((t) => Rz(e, t) && t.sckAttribution?.adId === l && t.sckAttribution.accountId === c), p = i.length ? ZR(i.map((e) => e.spend)) : null, m = d && o ? new Set(f.map(Fz)).size : null, h = d && o ? zz(f, "gross") : null, g = d && o ? zz(f, "net") : null, _ = p !== null && g !== null ? g - p : null, v = a.filter((e) => e.accountId === c && e.adId === l), y = v.length ? ZR(v.map((e) => e.spend)) : null, b = new Set(f.map(nz)).size, x = f.some((e) => e.sckAttribution?.possiblyLate) || f.length > 0 && (p === null || p === 0 || u.status === "PAUSED"), S = /\bPERFORMANCE\b/i.test(u.campaign) ? "PERFORMANCE" : /\bLAB\b/i.test(u.campaign) ? "LAB" : "Não confirmada", C = u.budget ?? null, w = [...new Set(i.filter((e) => !e.periodEnd || e.periodEnd === e.date).map((e) => e.date))].sort().map((e) => {
+		let i = [...r].sort((e, t) => (e.periodEnd ?? e.date).localeCompare(t.periodEnd ?? t.date)), [c, l] = n.split("|"), u = i.at(-1) ?? [...e.insights, ...e.manualMetaAggregates ?? []].find((e) => e.accountId === c && e.adId === l), d = u.idPrecision === "exact" && !!u.exportAdId && (u.granularity ?? "ad") === "ad" && i.every((e) => e.idPrecision === "exact" && (e.granularity ?? "ad") === "ad"), f = s.filter((t) => Hz(e, t) && t.sckAttribution?.adId === l && t.sckAttribution.accountId === c), p = i.length ? ZR(i.map((e) => e.spend)) : null, m = d && o ? new Set(f.map(zz)).size : null, h = d && o ? Uz(f, "gross") : null, g = d && o ? Uz(f, "net") : null, _ = p !== null && g !== null ? g - p : null, v = a.filter((e) => e.accountId === c && e.adId === l), y = v.length ? ZR(v.map((e) => e.spend)) : null, b = new Set(f.map(nz)).size, x = f.some((e) => e.sckAttribution?.possiblyLate) || f.length > 0 && (p === null || p === 0 || u.status === "PAUSED"), S = /\bPERFORMANCE\b/i.test(u.campaign) ? "PERFORMANCE" : /\bLAB\b/i.test(u.campaign) ? "LAB" : "Não confirmada", C = u.budget ?? null, w = [...new Set(i.filter((e) => !e.periodEnd || e.periodEnd === e.date).map((e) => e.date))].sort().map((e) => {
 			let t = i.filter((t) => t.date === e), n = f.filter((t) => nz(t) === e);
 			return {
 				day: e,
 				spend: ZR(t.map((e) => e.spend)),
-				orders: d ? new Set(n.map(Fz)).size : null,
+				orders: d ? new Set(n.map(zz)).size : null,
 				budget: t.at(-1)?.budget ?? null
 			};
 		}), T = w.slice(1).flatMap((e, t) => e.budget !== null && w[t].budget !== null && e.budget !== w[t].budget ? [{
@@ -27565,11 +27658,11 @@ function Kz(e, t, n, r = !1) {
 			exportId: u.exportAdId ?? null,
 			name: u.ad,
 			accountId: c,
-			instrument: Wz(u.ad),
+			instrument: Jz(u.ad),
 			campaign: u.campaign,
 			adset: u.adset,
 			strategy: S,
-			family: Uz(u.ad),
+			family: qz(u.ad),
 			budget: C,
 			budgetScope: "conjunto informado no export",
 			status: u.status,
@@ -27589,10 +27682,10 @@ function Kz(e, t, n, r = !1) {
 			exact: d,
 			timeline: w,
 			changes: T,
-			clicks: Gz(i, "clicks"),
-			views: Gz(i, "views"),
-			checkouts: Gz(i, "checkouts"),
-			metaPurchases: Gz(i, "purchases"),
+			clicks: Yz(i, "clicks"),
+			views: Yz(i, "views"),
+			checkouts: Yz(i, "checkouts"),
+			metaPurchases: Yz(i, "purchases"),
 			decision: E,
 			reason: D,
 			suggestedBudget: null,
@@ -27600,12 +27693,12 @@ function Kz(e, t, n, r = !1) {
 		};
 	}).sort((e, t) => (t.spend ?? -1) - (e.spend ?? -1));
 }
-function qz(e, t) {
+function Zz(e, t) {
 	if (!e.length) return null;
 	let n = [...e].sort((e, t) => e - t), r = (n.length - 1) * t, i = Math.floor(r), a = r - i;
 	return n[i] + ((n[i + 1] ?? n[i]) - n[i]) * a;
 }
-function Jz(e, t, n, r, i = t.currency === "BRL" ? 1e6 : null, a = [
+function Qz(e, t, n, r, i = t.currency === "BRL" ? 1e6 : null, a = [
 	7,
 	14,
 	30
@@ -27616,7 +27709,7 @@ function Jz(e, t, n, r, i = t.currency === "BRL" ? 1e6 : null, a = [
 		let a = iz(s, i);
 		return {
 			day: a,
-			...Bz(e, {
+			...Wz(e, {
 				...t,
 				start: a,
 				end: a
@@ -27637,12 +27730,12 @@ function Jz(e, t, n, r, i = t.currency === "BRL" ? 1e6 : null, a = [
 			ticketGross: i ? t.reduce((e, t) => e + t.gross, 0) / n : null,
 			ticketNet: i ? t.reduce((e, t) => e + t.net, 0) / n : null
 		};
-	}), S = u.length && qz(b, .5) > 0 ? (qz(b, .75) - qz(b, .25)) / qz(b, .5) : null, C = e.insights.filter((e) => e.currency === t.currency && e.date <= o && (t.account === "all" || e.accountId === t.account)), w = new Set(C.filter((e) => e.date < iz(o, -6)).map((e) => e.accountId + "|" + e.adId)), T = w.size ? new Set(C.filter((e) => e.date >= iz(o, -6) && e.spend > 0 && !w.has(e.accountId + "|" + e.adId)).map((e) => e.accountId + "|" + e.adId)).size : 0, E = u.length < 14 || l.length < 30 || S === null || S > 1 || r !== void 0 || T > 0 ? "Baixo" : "Moderado", D = y ? a.map((r) => {
-		let i = iz(o, r), a = iz(i, -29), c = a <= o ? Bz(e, {
+	}), S = u.length && Zz(b, .5) > 0 ? (Zz(b, .75) - Zz(b, .25)) / Zz(b, .5) : null, C = e.insights.filter((e) => e.currency === t.currency && e.date <= o && (t.account === "all" || e.accountId === t.account)), w = new Set(C.filter((e) => e.date < iz(o, -6)).map((e) => e.accountId + "|" + e.adId)), T = w.size ? new Set(C.filter((e) => e.date >= iz(o, -6) && e.spend > 0 && !w.has(e.accountId + "|" + e.adId)).map((e) => e.accountId + "|" + e.adId)).size : 0, E = u.length < 14 || l.length < 30 || S === null || S > 1 || r !== void 0 || T > 0 ? "Baixo" : "Moderado", D = y ? a.map((r) => {
+		let i = iz(o, r), a = iz(i, -29), c = a <= o ? Wz(e, {
 			...t,
 			start: a,
 			end: o
-		}, n) : null, l = iz(a, -1), u = l >= s ? Bz(e, {
+		}, n) : null, l = iz(a, -1), u = l >= s ? Wz(e, {
 			...t,
 			start: s,
 			end: l > o ? o : l
@@ -27666,7 +27759,7 @@ function Jz(e, t, n, r, i = t.currency === "BRL" ? 1e6 : null, a = [
 					q: .75
 				}
 			].map(({ label: e, q: t }) => {
-				let n = qz(b, t), i = p * r, s = Math.round(i * n * 100) / 100, l = Math.round(s * _), u = Math.round(s * v), d = x.map((e) => ({
+				let n = Zz(b, t), i = p * r, s = Math.round(i * n * 100) / 100, l = Math.round(s * _), u = Math.round(s * v), d = x.map((e) => ({
 					...e,
 					projectedCount: e.supported ? s * e.rate : null,
 					gross: e.supported ? Math.round(s * e.rate * e.ticketGross) : null,
@@ -27715,7 +27808,7 @@ function Jz(e, t, n, r, i = t.currency === "BRL" ? 1e6 : null, a = [
 		currency: t.currency
 	};
 }
-function Yz(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i = t.currency === "BRL" ? 1e6 : null) {
+function $z(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i = t.currency === "BRL" ? 1e6 : null) {
 	let a = /* @__PURE__ */ new Set();
 	for (let t of e.orders) {
 		let e = [
@@ -27727,17 +27820,17 @@ function Yz(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i = t.c
 		a.add(e);
 	}
 	if (!Number.isFinite(rz(t.start, t.end)) || rz(t.start, t.end) < 1) throw Error("Período inválido.");
-	let o = Lz(e), s = o.data, c = Bz(s, t, n), l = Bz(s, az(t), n), u = Array.from({ length: rz(t.start, t.end) }, (e, r) => {
+	let o = Vz(e), s = o.data, c = Wz(s, t, n), l = Wz(s, az(t), n), u = Array.from({ length: rz(t.start, t.end) }, (e, r) => {
 		let i = iz(t.start, r);
 		return {
 			day: i,
-			...Bz(s, {
+			...Wz(s, {
 				...t,
 				start: i,
 				end: i
 			}, n)
 		};
-	}), d = Kz(s, t, n), f = d.reduce((e, t) => e + (t.spend ?? 0), 0), p = 0, m = d.filter((e) => {
+	}), d = Xz(s, t, n), f = d.reduce((e, t) => e + (t.spend ?? 0), 0), p = 0, m = d.filter((e) => {
 		let t = p < f * .8;
 		return p += e.spend ?? 0, t || (e.orders ?? 0) > 0 || e.changes.length > 0;
 	}), h = d.filter((e) => !m.includes(e)), g = (e) => [...new Set(d.map((t) => t[e]))].map((t) => {
@@ -27759,11 +27852,11 @@ function Yz(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i = t.c
 		length: e,
 		start: iz(t.end, 1 - e),
 		end: t.end,
-		...Bz(s, {
+		...Wz(s, {
 			...t,
 			start: iz(t.end, 1 - e)
 		}, n)
-	})), v = Vz.map((e) => ({
+	})), v = Gz.map((e) => ({
 		...e,
 		value: c[e.key],
 		previous: l[e.key],
@@ -27808,7 +27901,7 @@ function Yz(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i = t.c
 		groups: g("family"),
 		strategies: g("strategy"),
 		windows: _,
-		projections: Jz(s, t, n, r, i),
+		projections: Qz(s, t, n, r, i),
 		diagnosis: E,
 		status: w,
 		sources: S,
@@ -27822,7 +27915,7 @@ function Yz(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i = t.c
 	};
 }
 // src/lib/daily-operations.ts
-function Xz(e, t) {
+function eB(e, t) {
 	return t === null || !Number.isFinite(t) || t === 0 || [
 		"spend",
 		"impressions",
@@ -27835,7 +27928,7 @@ function Xz(e, t) {
 		"refunds"
 	].includes(e) ? t < 0 : t > 0) ? "positive" : "negative";
 }
-function Zz(e, t) {
+function tB(e, t) {
 	return e.filter((e) => t === "all" || (t === "current" ? e.activeAtEnd : t === "active" ? e.activeInPeriod : t === "paused" ? ["PAUSED", "INACTIVE"].includes(e.status) : t === "idle" ? e.status === "NOT_DELIVERING" : ![
 		"ACTIVE",
 		"PAUSED",
@@ -27843,18 +27936,18 @@ function Zz(e, t) {
 		"NOT_DELIVERING"
 	].includes(e.status)));
 }
-function Qz(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString())) {
+function nB(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString())) {
 	return [...new Set(e.insights.filter((e) => e.currency === t.currency && e.date <= n && (!e.periodEnd || e.periodEnd === e.date) && (t.account === "all" || e.accountId === t.account) && (e.granularity ?? "ad") === "ad").map((e) => e.date))].sort().reverse();
 }
-function $z(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i) {
-	let a = Lz(e).data, o = Qz(a, t, n), s = r ?? o[0] ?? null, c = {
+function rB(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i) {
+	let a = Vz(e).data, o = nB(a, t, n), s = r ?? o[0] ?? null, c = {
 		...t,
 		start: s ?? t.end,
 		end: s ?? t.end
-	}, l = !!(s && o.includes(s)), u = l ? Kz(a, c, n, !0) : [], d = u.filter((e) => e.activeAtEnd), f = l ? Kz(a, {
+	}, l = !!(s && o.includes(s)), u = l ? Xz(a, c, n, !0) : [], d = u.filter((e) => e.activeAtEnd), f = l ? Xz(a, {
 		...c,
 		start: iz(c.end, -6)
-	}, n, !0) : [], p = Jz(a, c, n, i, null, [1]);
+	}, n, !0) : [], p = Qz(a, c, n, i, null, [1]);
 	return l && s !== n || (p.enough = !1, p.scenarios = [], p.limitation = l ? "Feche o dia atual para estimar o próximo dia." : "Importe um relatório diário para gerar a estimativa."), {
 		day: s,
 		dates: o,
@@ -27864,8 +27957,8 @@ function $z(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i) {
 		all: u,
 		context: f,
 		projection: p,
-		financial: Bz(a, c, n),
-		previous: Bz(a, {
+		financial: Wz(a, c, n),
+		previous: Wz(a, {
 			...c,
 			start: iz(c.start, -1),
 			end: iz(c.end, -1)
@@ -27884,7 +27977,7 @@ function $z(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString()), r, i) {
 		].includes(e.status)).length
 	};
 }
-var eB = [
+var iB = [
 	{
 		id: "pause",
 		title: "Pausar",
@@ -27911,11 +28004,11 @@ var eB = [
 		description: "Preservar entrega e acompanhar os próximos fechamentos."
 	}
 ];
-function tB(e) {
+function aB(e) {
 	return /^Pausar/.test(e) ? "pause" : /^Reduzir/.test(e) ? "reduce" : /^Aumentar|Candidato/.test(e) ? "increase" : /^Revisar/.test(e) ? "review" : "observe";
 }
 // src/components/strategic-report.tsx
-var nB = (e) => Hz(e, "count"), rB = (e) => Hz(e, "ratio"), iB = (e) => Hz(e, "percent"), aB = (e) => e ? e.split("-").reverse().join("/") : "Sem relatório diário", oB = [
+var oB = (e) => Kz(e, "count"), sB = (e) => Kz(e, "ratio"), cB = (e) => Kz(e, "percent"), lB = (e) => e ? e.split("-").reverse().join("/") : "Sem relatório diário", uB = [
 	"Indicadores financeiros principais",
 	"Fechamento financeiro detalhado",
 	"Tracking diário · Meta × Hotmart",
@@ -27927,7 +28020,7 @@ var nB = (e) => Hz(e, "count"), rB = (e) => Hz(e, "ratio"), iB = (e) => Hz(e, "p
 	"Plano de ação operacional",
 	"Estimativa para o próximo dia"
 ];
-function sB({ index: e, children: t }) {
+function dB({ index: e, children: t }) {
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: "panel reports-panel strategic-section",
 		id: "analysis-" + e,
@@ -27936,17 +28029,17 @@ function sB({ index: e, children: t }) {
 			children: /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsxs)("span", {
 				className: "eyebrow",
 				children: [String(e).padStart(2, "0"), " / ANÁLISE ESTRATÉGICA"]
-			}), /* @__PURE__ */ (0, S.jsx)("h2", { children: oB[e - 1] })] })
+			}), /* @__PURE__ */ (0, S.jsx)("h2", { children: uB[e - 1] })] })
 		}), t]
 	});
 }
-function cB({ children: e }) {
+function fB({ children: e }) {
 	return /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "strategic-copy",
 		children: e
 	});
 }
-function lB({ headers: e, rows: t }) {
+function pB({ headers: e, rows: t }) {
 	return /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "table-scroll",
 		children: /* @__PURE__ */ (0, S.jsxs)("table", { children: [/* @__PURE__ */ (0, S.jsx)("thead", { children: /* @__PURE__ */ (0, S.jsx)("tr", { children: e.map((e) => /* @__PURE__ */ (0, S.jsx)("th", { children: e }, e)) }) }), /* @__PURE__ */ (0, S.jsx)("tbody", { children: t.length ? t.map((e, t) => /* @__PURE__ */ (0, S.jsx)("tr", { children: e.map((e, t) => /* @__PURE__ */ (0, S.jsx)("td", { children: e }, t)) }, t)) : /* @__PURE__ */ (0, S.jsx)("tr", { children: /* @__PURE__ */ (0, S.jsx)("td", {
@@ -27955,15 +28048,15 @@ function lB({ headers: e, rows: t }) {
 		}) }) })] })
 	});
 }
-function uB({ metric: e, value: t }) {
-	let n = Xz(e, t);
+function mB({ metric: e, value: t }) {
+	let n = eB(e, t);
 	return /* @__PURE__ */ (0, S.jsxs)("span", {
 		className: "delta " + n,
 		"aria-label": n === "positive" ? "Melhora" : n === "negative" ? "Piora" : "Variação neutra ou indisponível",
-		children: [t === null ? "" : t > 0 ? "↑ " : t < 0 ? "↓ " : "", iB(t)]
+		children: [t === null ? "" : t > 0 ? "↑ " : t < 0 ? "↓ " : "", cB(t)]
 	});
 }
-function dB({ metric: e, label: t, value: n, change: r }) {
+function hB({ metric: e, label: t, value: n, change: r }) {
 	return /* @__PURE__ */ (0, S.jsxs)("article", {
 		className: "kpi",
 		children: [
@@ -27977,7 +28070,7 @@ function dB({ metric: e, label: t, value: n, change: r }) {
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "kpi-comparison",
-				children: [/* @__PURE__ */ (0, S.jsx)(uB, {
+				children: [/* @__PURE__ */ (0, S.jsx)(mB, {
 					metric: e,
 					value: r
 				}), /* @__PURE__ */ (0, S.jsx)("span", { children: "vs. período anterior" })]
@@ -27985,13 +28078,13 @@ function dB({ metric: e, label: t, value: n, change: r }) {
 		]
 	});
 }
-function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
+function gB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 	let [i, a] = (0, b.useState)(t), [o, s] = (0, b.useState)(t), [c, l] = (0, b.useState)(""), [u, d] = (0, b.useState)(""), [f, p] = (0, b.useState)(), [m, h] = (0, b.useState)("current"), [g, _] = (0, b.useState)("spend"), [v, y] = (0, b.useState)(-1), [x, C] = (0, b.useState)(30), [w, T] = (0, b.useState)("frontGross"), [E, D] = (0, b.useState)([]), [O, k] = (0, b.useState)(!n), [A, j] = (0, b.useState)(!1), M = tz((/* @__PURE__ */ new Date()).toISOString()), N = c.trim() ? Math.round(Number(c) * 100) : void 0, P = (0, b.useMemo)(() => {
 		try {
 			return {
-				report: Yz(e, i, M),
-				daily: $z(e, i, M, void 0, N),
-				tracking: $z(e, i, M, f),
+				report: $z(e, i, M),
+				daily: rB(e, i, M, void 0, N),
+				tracking: rB(e, i, M, f),
 				error: null
 			};
 		} catch (e) {
@@ -28025,7 +28118,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 		role: "alert",
 		children: ["Relatório bloqueado para revisão: ", P.error]
 	});
-	let ee = i.currency, R = (e) => $R(e, ee), te = F.current, ne = I.projection, re = Zz(F.creatives, m).sort((e, t) => e[g] === null ? t[g] === null ? 0 : 1 : t[g] === null ? -1 : (e[g] - t[g]) * v), z = F.projections.history.filter((e) => e.day >= iz(F.projections.end, 1 - x)).map((e) => ({
+	let ee = i.currency, R = (e) => $R(e, ee), te = F.current, ne = I.projection, re = tB(F.creatives, m).sort((e, t) => e[g] === null ? t[g] === null ? 0 : 1 : t[g] === null ? -1 : (e[g] - t[g]) * v), z = F.projections.history.filter((e) => e.day >= iz(F.projections.end, 1 - x)).map((e) => ({
 		label: e.day.slice(8) + "/" + e.day.slice(5, 7),
 		value: e[w] === null ? null : [
 			"spend",
@@ -28111,7 +28204,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 		children: [
 			/* @__PURE__ */ (0, S.jsx)("span", {
 				className: "status-pill active",
-				children: aB(I.day)
+				children: lB(I.day)
 			}),
 			" Última data disponível · ",
 			I.current.length,
@@ -28132,7 +28225,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 			}),
 			/* @__PURE__ */ (0, S.jsx)("p", { children: "Registros locais deste navegador. Proposta, aprovação e execução informada são etapas separadas." }),
 			E.slice().reverse().map((e) => /* @__PURE__ */ (0, S.jsxs)("p", { children: [
-				aB(e.start),
+				lB(e.start),
 				" · ",
 				e.target,
 				" · ",
@@ -28218,7 +28311,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 					}),
 					/* @__PURE__ */ (0, S.jsxs)("p", {
 						className: "chart-footnote",
-						children: [r === "actions" ? `Decisões de ${aB(I.day)}. Os filtros de período do Analytics não mudam a data operacional.` : `Financeiro e ranking: ${aB(i.start)} a ${aB(i.end)}. Leitura operacional e projeção: último dia importado (${aB(I.day)}).`, " Os dois exports levam apenas o resumo para o cliente."]
+						children: [r === "actions" ? `Decisões de ${lB(I.day)}. Os filtros de período do Analytics não mudam a data operacional.` : `Financeiro e ranking: ${lB(i.start)} a ${lB(i.end)}. Leitura operacional e projeção: último dia importado (${lB(I.day)}).`, " Os dois exports levam apenas o resumo para o cliente."]
 					})
 				]
 			}),
@@ -28235,17 +28328,17 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 							className: "panel-heading",
 							children: /* @__PURE__ */ (0, S.jsx)("h2", { children: "Prioridades para otimizar" })
 						}),
-						/* @__PURE__ */ (0, S.jsxs)(cB, { children: [V, /* @__PURE__ */ (0, S.jsx)("p", { children: "Somente propostas sustentadas pelos dados. Nenhuma ação é enviada às plataformas." })] }),
+						/* @__PURE__ */ (0, S.jsxs)(fB, { children: [V, /* @__PURE__ */ (0, S.jsx)("p", { children: "Somente propostas sustentadas pelos dados. Nenhuma ação é enviada às plataformas." })] }),
 						/* @__PURE__ */ (0, S.jsx)("div", {
 							className: "quick-action-counts",
-							children: eB.map((e) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: I.current.filter((t) => tB(t.decision) === e.id).length }), /* @__PURE__ */ (0, S.jsx)("span", { children: e.title })] }, e.id))
+							children: iB.map((e) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: I.current.filter((t) => aB(t.decision) === e.id).length }), /* @__PURE__ */ (0, S.jsx)("span", { children: e.title })] }, e.id))
 						})
 					]
 				}),
 				/* @__PURE__ */ (0, S.jsx)("div", {
 					className: "quick-actions",
-					children: eB.map((e) => {
-						let t = I.current.filter((t) => tB(t.decision) === e.id);
+					children: iB.map((e) => {
+						let t = I.current.filter((t) => aB(t.decision) === e.id);
 						return /* @__PURE__ */ (0, S.jsxs)("section", {
 							className: "panel quick-action-group " + e.id,
 							children: [/* @__PURE__ */ (0, S.jsx)("div", {
@@ -28278,25 +28371,25 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 									] }),
 									oe(e)
 								]
-							}, e.key)) : /* @__PURE__ */ (0, S.jsx)(cB, { children: /* @__PURE__ */ (0, S.jsx)("p", { children: "Nenhuma ação deste tipo sustentada pelo fechamento atual." }) })]
+							}, e.key)) : /* @__PURE__ */ (0, S.jsx)(fB, { children: /* @__PURE__ */ (0, S.jsx)("p", { children: "Nenhuma ação deste tipo sustentada pelo fechamento atual." }) })]
 						}, e.id);
 					})
 				}),
 				se
 			] }) : /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 1,
 					children: [
 						/* @__PURE__ */ (0, S.jsx)("div", {
 							className: "kpi-grid strategic-kpis",
-							children: F.changes.map((e) => /* @__PURE__ */ (0, S.jsx)(dB, {
+							children: F.changes.map((e) => /* @__PURE__ */ (0, S.jsx)(hB, {
 								metric: e.key,
 								label: e.label,
-								value: Hz(e.value, e.format, ee),
+								value: Kz(e.value, e.format, ee),
 								change: e.variation
 							}, e.key))
 						}),
-						/* @__PURE__ */ (0, S.jsx)(cB, { children: /* @__PURE__ */ (0, S.jsxs)("p", {
+						/* @__PURE__ */ (0, S.jsx)(fB, { children: /* @__PURE__ */ (0, S.jsxs)("p", {
 							className: "comparison-key",
 							children: [
 								/* @__PURE__ */ (0, S.jsx)("span", {
@@ -28310,7 +28403,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								/* @__PURE__ */ (0, S.jsx)("span", { children: "CPA menor é melhora. Investimento é volume e fica neutro." })
 							]
 						}) }),
-						/* @__PURE__ */ (0, S.jsx)(lB, {
+						/* @__PURE__ */ (0, S.jsx)(pB, {
 							headers: [
 								"Adicionais",
 								"Itens aprovados",
@@ -28319,39 +28412,39 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 							],
 							rows: te.additions.map((e) => [
 								e.kind,
-								nB(e.count),
+								oB(e.count),
 								R(e.gross),
 								R(e.net)
 							])
 						})
 					]
 				}),
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 2,
-					children: [/* @__PURE__ */ (0, S.jsx)(lB, {
+					children: [/* @__PURE__ */ (0, S.jsx)(pB, {
 						headers: [
 							"Indicador",
-							aB(H),
-							aB(le),
+							lB(H),
+							lB(le),
 							"Variação"
 						],
-						rows: Vz.map((e) => {
+						rows: Gz.map((e) => {
 							let t = ce.length > 1 ? ce[0] : F.previous, n = ce.at(-1) ?? te;
 							return [
 								e.label,
-								Hz(t[e.key], e.format, ee),
-								Hz(n[e.key], e.format, ee),
-								/* @__PURE__ */ (0, S.jsx)(uB, {
+								Kz(t[e.key], e.format, ee),
+								Kz(n[e.key], e.format, ee),
+								/* @__PURE__ */ (0, S.jsx)(mB, {
 									metric: e.key,
 									value: oz(n[e.key], t[e.key])
 								})
 							];
 						})
-					}), /* @__PURE__ */ (0, S.jsxs)(cB, { children: [/* @__PURE__ */ (0, S.jsx)("p", { children: "Dois últimos dias do intervalo; em um único dia, comparação com o anterior. Contribuição = líquido − mídia, sem todos os custos da empresa." }), /* @__PURE__ */ (0, S.jsxs)("details", { children: [/* @__PURE__ */ (0, S.jsxs)("summary", { children: [
+					}), /* @__PURE__ */ (0, S.jsxs)(fB, { children: [/* @__PURE__ */ (0, S.jsx)("p", { children: "Dois últimos dias do intervalo; em um único dia, comparação com o anterior. Contribuição = líquido − mídia, sem todos os custos da empresa." }), /* @__PURE__ */ (0, S.jsxs)("details", { children: [/* @__PURE__ */ (0, S.jsxs)("summary", { children: [
 						"Todos os fechamentos diários (",
 						F.days.length,
 						")"
-					] }), /* @__PURE__ */ (0, S.jsx)(lB, {
+					] }), /* @__PURE__ */ (0, S.jsx)(pB, {
 						headers: [
 							"Data",
 							"Mídia",
@@ -28362,9 +28455,9 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 							"Contribuição"
 						],
 						rows: F.days.map((e) => [
-							aB(e.day),
+							lB(e.day),
 							R(e.spend),
-							nB(e.main),
+							oB(e.main),
 							R(e.frontGross),
 							R(e.frontNet),
 							R(e.gross),
@@ -28372,52 +28465,63 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 						])
 					})] })] })]
 				}),
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 3,
-					children: [/* @__PURE__ */ (0, S.jsx)("div", {
-						className: "table-toolbar",
-						children: /* @__PURE__ */ (0, S.jsxs)("label", { children: ["Dia do tracking ", /* @__PURE__ */ (0, S.jsxs)("select", {
-							"aria-label": "Dia do tracking",
-							value: L.day ?? "",
-							onChange: (e) => p(e.target.value),
-							children: [!L.dates.length && /* @__PURE__ */ (0, S.jsx)("option", {
-								value: "",
-								children: "Sem relatório diário"
-							}), L.dates.map((e) => /* @__PURE__ */ (0, S.jsxs)("option", {
-								value: e,
-								children: [aB(e), e === I.day ? " · mais recente" : ""]
-							}, e))]
-						})] })
-					}), L.available ? /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+					children: [
+						/* @__PURE__ */ (0, S.jsx)(Pz, {
+							data: e,
+							filters: {
+								...i,
+								start: L.day ?? i.end,
+								end: L.day ?? i.end
+							}
+						}),
 						/* @__PURE__ */ (0, S.jsx)("div", {
-							className: "tracking-day-grid",
-							children: [
-								["Compras Meta", L.financial.metaPurchases],
-								["Principais Hotmart", L.financial.main],
-								["Principais com SCK exato", L.financial.direct],
-								["Principais blended", L.financial.blended]
-							].map(([e, t]) => /* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e }), /* @__PURE__ */ (0, S.jsx)("strong", { children: nB(t) })] }, String(e)))
+							className: "table-toolbar",
+							children: /* @__PURE__ */ (0, S.jsxs)("label", { children: ["Dia do tracking ", /* @__PURE__ */ (0, S.jsxs)("select", {
+								"aria-label": "Dia do tracking",
+								value: L.day ?? "",
+								onChange: (e) => p(e.target.value),
+								children: [!L.dates.length && /* @__PURE__ */ (0, S.jsx)("option", {
+									value: "",
+									children: "Sem relatório diário"
+								}), L.dates.map((e) => /* @__PURE__ */ (0, S.jsxs)("option", {
+									value: e,
+									children: [lB(e), e === I.day ? " · mais recente" : ""]
+								}, e))]
+							})] })
 						}),
-						/* @__PURE__ */ (0, S.jsx)(lB, {
-							headers: ["Conciliação de " + aB(L.day), "Resultado"],
-							rows: [
-								["Purchases Meta − principais Hotmart", nB(L.financial.metaPurchases !== null && L.financial.main !== null ? L.financial.metaPurchases - L.financial.main : null)],
-								["Valor Meta − bruto Hotmart", R(L.financial.metaValue !== null && L.financial.gross !== null ? L.financial.metaValue - L.financial.gross : null)],
-								["Cobertura SCK direta", iB(L.financial.sckCoverage)],
-								["Cobertura SCK no dia anterior", iB(L.previous.sckCoverage)],
-								["Bumps reconhecidos individualmente na Meta", "Não verificável sem eventos individuais"],
-								["Possíveis conversões tardias", String(L.all.filter((e) => e.late).length) + " criativos com sinais"]
-							]
-						}),
-						/* @__PURE__ */ (0, S.jsx)(cB, { children: /* @__PURE__ */ (0, S.jsxs)("p", { children: [
-							/* @__PURE__ */ (0, S.jsx)("strong", { children: "Verificação do dia:" }),
-							" ",
-							(L.financial.blended ?? 0) > 0 ? "Conferir a passagem do SCK entre anúncio, página e checkout e a integridade dos IDs exportados." : "Conferir eventos individuais e possíveis duplicidades antes de alterar o tracking.",
-							" Diferença entre totais não prova falha de programação: janelas, bumps e pagamentos posteriores também podem explicar a divergência."
-						] }) })
-					] }) : /* @__PURE__ */ (0, S.jsx)(cB, { children: /* @__PURE__ */ (0, S.jsx)("p", { children: "Importe mídia diária para conferir o tracking de um dia específico." }) })]
+						L.available ? /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+							/* @__PURE__ */ (0, S.jsx)("div", {
+								className: "tracking-day-grid",
+								children: [
+									["Compras Meta", L.financial.metaPurchases],
+									["Principais Hotmart", L.financial.main],
+									["Principais com SCK exato", L.financial.direct],
+									["Principais blended", L.financial.blended]
+								].map(([e, t]) => /* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e }), /* @__PURE__ */ (0, S.jsx)("strong", { children: oB(t) })] }, String(e)))
+							}),
+							/* @__PURE__ */ (0, S.jsx)(pB, {
+								headers: ["Conciliação de " + lB(L.day), "Resultado"],
+								rows: [
+									["Purchases Meta − principais Hotmart", oB(L.financial.metaPurchases !== null && L.financial.main !== null ? L.financial.metaPurchases - L.financial.main : null)],
+									["Valor Meta − bruto Hotmart", R(L.financial.metaValue !== null && L.financial.gross !== null ? L.financial.metaValue - L.financial.gross : null)],
+									["Cobertura SCK direta", cB(L.financial.sckCoverage)],
+									["Cobertura SCK no dia anterior", cB(L.previous.sckCoverage)],
+									["Bumps reconhecidos individualmente na Meta", "Não verificável sem eventos individuais"],
+									["Possíveis conversões tardias", String(L.all.filter((e) => e.late).length) + " criativos com sinais"]
+								]
+							}),
+							/* @__PURE__ */ (0, S.jsx)(fB, { children: /* @__PURE__ */ (0, S.jsxs)("p", { children: [
+								/* @__PURE__ */ (0, S.jsx)("strong", { children: "Verificação do dia:" }),
+								" ",
+								(L.financial.blended ?? 0) > 0 ? "Conferir a passagem do SCK entre anúncio, página e checkout e a integridade dos IDs exportados." : "Conferir eventos individuais e possíveis duplicidades antes de alterar o tracking.",
+								" Diferença entre totais não prova falha de programação: janelas, bumps e pagamentos posteriores também podem explicar a divergência."
+							] }) })
+						] }) : /* @__PURE__ */ (0, S.jsx)(fB, { children: /* @__PURE__ */ (0, S.jsx)("p", { children: "Importe mídia diária para conferir o tracking de um dia específico." }) })
+					]
 				}),
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 4,
 					children: [
 						/* @__PURE__ */ (0, S.jsx)("div", {
@@ -28428,9 +28532,9 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								["LPVs", te.views],
 								["Checkouts Meta", te.checkouts],
 								["Principais Hotmart", te.main]
-							].map(([e, t]) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e }), /* @__PURE__ */ (0, S.jsx)("strong", { children: nB(t) })] }, String(e)))
+							].map(([e, t]) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e }), /* @__PURE__ */ (0, S.jsx)("strong", { children: oB(t) })] }, String(e)))
 						}),
-						/* @__PURE__ */ (0, S.jsx)(lB, {
+						/* @__PURE__ */ (0, S.jsx)(pB, {
 							headers: [
 								"Etapa / indicador",
 								"Período atual",
@@ -28475,18 +28579,18 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								]
 							].map(([e, t, n]) => [
 								e,
-								Hz(te[t], n, ee),
-								Hz(F.previous[t], n, ee),
-								/* @__PURE__ */ (0, S.jsx)(uB, {
+								Kz(te[t], n, ee),
+								Kz(F.previous[t], n, ee),
+								/* @__PURE__ */ (0, S.jsx)(mB, {
 									metric: t,
 									value: oz(te[t], F.previous[t])
 								})
 							])
 						}),
-						/* @__PURE__ */ (0, S.jsx)(cB, { children: /* @__PURE__ */ (0, S.jsx)("p", { children: "Taxas que terminam em Hotmart são agregadas, sem coorte comprovada. Campos ausentes ficam indisponíveis até receber os exports correspondentes." }) })
+						/* @__PURE__ */ (0, S.jsx)(fB, { children: /* @__PURE__ */ (0, S.jsx)("p", { children: "Taxas que terminam em Hotmart são agregadas, sem coorte comprovada. Campos ausentes ficam indisponíveis até receber os exports correspondentes." }) })
 					]
 				}),
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 5,
 					children: [
 						/* @__PURE__ */ (0, S.jsxs)("div", {
@@ -28545,13 +28649,13 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								})
 							]
 						}),
-						/* @__PURE__ */ (0, S.jsx)(cB, { children: /* @__PURE__ */ (0, S.jsxs)("p", { children: [
+						/* @__PURE__ */ (0, S.jsx)(fB, { children: /* @__PURE__ */ (0, S.jsxs)("p", { children: [
 							re.length,
 							" de ",
 							F.creatives.length,
 							" criativos · métricas do período selecionado. Filtro de ativos exige status explícito nas linhas diárias; gasto não comprova status."
 						] }) }),
-						/* @__PURE__ */ (0, S.jsx)(lB, {
+						/* @__PURE__ */ (0, S.jsx)(pB, {
 							headers: [
 								"Criativo",
 								"Mídia",
@@ -28572,19 +28676,19 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 									]
 								})] }),
 								R(e.spend),
-								nB(e.orders),
+								oB(e.orders),
 								R(e.cpa),
 								R(e.gross),
-								rB(e.roas),
+								sB(e.roas),
 								R(e.contribution),
 								e.decision
 							])
 						})
 					]
 				}),
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 6,
-					children: [/* @__PURE__ */ (0, S.jsx)(cB, { children: V }), /* @__PURE__ */ (0, S.jsxs)("div", {
+					children: [/* @__PURE__ */ (0, S.jsx)(fB, { children: V }), /* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "daily-creatives",
 						children: [I.current.map((e) => {
 							let t = I.context.find((t) => t.key === e.key);
@@ -28602,16 +28706,16 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 											]
 										}), /* @__PURE__ */ (0, S.jsx)("h3", { children: e.name })] }), /* @__PURE__ */ (0, S.jsxs)("span", {
 											className: "status-pill active",
-											children: ["Ativo no export de ", aB(I.day)]
+											children: ["Ativo no export de ", lB(I.day)]
 										})]
 									}),
 									/* @__PURE__ */ (0, S.jsx)("div", {
 										className: "creative-day-metrics",
 										children: [
 											["Mídia do dia", R(e.spend)],
-											["Principais SCK", nB(e.orders)],
+											["Principais SCK", oB(e.orders)],
 											["Contribuição direta", R(e.contribution)],
-											["Purchases Meta", nB(e.metaPurchases)]
+											["Purchases Meta", oB(e.metaPurchases)]
 										].map(([e, t]) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e }), /* @__PURE__ */ (0, S.jsx)("strong", { children: t })] }, e))
 									}),
 									/* @__PURE__ */ (0, S.jsxs)("div", {
@@ -28633,15 +28737,15 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 												className: "creative-analysis-grid",
 												children: [
 													/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("h4", { children: "Entrega e comportamento" }), /* @__PURE__ */ (0, S.jsxs)("p", { children: [
-														nB(e.clicks),
+														oB(e.clicks),
 														" cliques, ",
-														nB(e.views),
+														oB(e.views),
 														" visitas e ",
-														nB(e.checkouts),
+														oB(e.checkouts),
 														" checkouts no dia. Gasto anterior ",
 														R(e.priorSpend),
 														"; variação ",
-														iB(e.growth),
+														cB(e.growth),
 														". ",
 														e.late ? "Há sinal de conversão posterior; manter a origem histórica." : "Eventos Meta não substituem receita confirmada."
 													] })] }),
@@ -28653,7 +28757,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 														"; CPA ",
 														R(e.cpa),
 														" e ROAS ",
-														rB(e.roas),
+														sB(e.roas),
 														". ",
 														e.exact ? "Pedidos confirmados por SCK exato." : "O ID arredondado impede comprovar receita por anúncio; não significa ausência de vendas."
 													] })] }),
@@ -28663,11 +28767,11 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 															"Mídia ",
 															R(t?.spend ?? null),
 															"; ",
-															nB(t?.orders ?? null),
+															oB(t?.orders ?? null),
 															" principais diretamente confirmadas em ",
 															t?.recurringDays ?? 0,
 															" dias. ",
-															t?.changes.length ? t.changes.map((e) => `${aB(e.day)}: orçamento ${R(e.before)} → ${R(e.after)}`).join("; ") : "Nenhuma mudança de orçamento comprovada nos registros disponíveis."
+															t?.changes.length ? t.changes.map((e) => `${lB(e.day)}: orçamento ${R(e.before)} → ${R(e.after)}`).join("; ") : "Nenhuma mudança de orçamento comprovada nos registros disponíveis."
 														] }),
 														/* @__PURE__ */ (0, S.jsx)("p", { children: "Comparar repetição e margem antes de escalar; uma compra isolada não caracteriza vencedor." })
 													] }),
@@ -28688,7 +28792,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 													] })
 												]
 											}),
-											t && /* @__PURE__ */ (0, S.jsx)(lB, {
+											t && /* @__PURE__ */ (0, S.jsx)(pB, {
 												headers: [
 													"Data",
 													"Gasto",
@@ -28696,9 +28800,9 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 													"Orçamento informado"
 												],
 												rows: t.timeline.map((e) => [
-													aB(e.day),
+													lB(e.day),
 													R(e.spend),
-													nB(e.orders),
+													oB(e.orders),
 													R(e.budget)
 												])
 											})
@@ -28712,10 +28816,10 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 						})]
 					})]
 				}),
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 7,
 					children: [
-						/* @__PURE__ */ (0, S.jsx)(lB, {
+						/* @__PURE__ */ (0, S.jsx)(pB, {
 							headers: [
 								"Família",
 								"Mídia",
@@ -28727,13 +28831,13 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 							rows: F.groups.map((e) => [
 								e.name,
 								R(e.spend),
-								nB(e.orders),
+								oB(e.orders),
 								R(e.cpa),
-								rB(e.roas),
+								sB(e.roas),
 								R(e.contribution)
 							])
 						}),
-						/* @__PURE__ */ (0, S.jsx)(lB, {
+						/* @__PURE__ */ (0, S.jsx)(pB, {
 							headers: [
 								"Estrutura observada",
 								"Mídia",
@@ -28743,14 +28847,14 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 							rows: F.strategies.map((e) => [
 								e.name,
 								R(e.spend),
-								nB(e.orders),
+								oB(e.orders),
 								R(e.contribution)
 							])
 						}),
-						/* @__PURE__ */ (0, S.jsx)(cB, { children: /* @__PURE__ */ (0, S.jsx)("p", { children: "Famílias pelos nomes exportados; PERFORMANCE/LAB apenas quando a campanha é conhecida. Comparação descritiva, sem comprovar incrementalidade." }) })
+						/* @__PURE__ */ (0, S.jsx)(fB, { children: /* @__PURE__ */ (0, S.jsx)("p", { children: "Famílias pelos nomes exportados; PERFORMANCE/LAB apenas quando a campanha é conhecida. Comparação descritiva, sem comprovar incrementalidade." }) })
 					]
 				}),
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 8,
 					children: [
 						/* @__PURE__ */ (0, S.jsxs)("div", {
@@ -28816,9 +28920,9 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								})
 							})
 						}),
-						/* @__PURE__ */ (0, S.jsx)(lB, {
+						/* @__PURE__ */ (0, S.jsx)(pB, {
 							headers: [
-								"Janela até " + aB(i.end),
+								"Janela até " + lB(i.end),
 								"Principais",
 								"Bruto principal",
 								"Líquido principal",
@@ -28828,7 +28932,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 							],
 							rows: F.windows.map((e) => [
 								e.length + " dias",
-								nB(e.main),
+								oB(e.main),
 								R(e.frontGross),
 								R(e.frontNet),
 								R(e.spend),
@@ -28838,15 +28942,15 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 						})
 					]
 				}),
-				/* @__PURE__ */ (0, S.jsxs)(sB, {
+				/* @__PURE__ */ (0, S.jsxs)(dB, {
 					index: 9,
 					children: [
-						/* @__PURE__ */ (0, S.jsxs)(cB, { children: [V, /* @__PURE__ */ (0, S.jsxs)("p", { children: [
+						/* @__PURE__ */ (0, S.jsxs)(fB, { children: [V, /* @__PURE__ */ (0, S.jsxs)("p", { children: [
 							"Para consultar somente as prioridades, abra ",
 							/* @__PURE__ */ (0, S.jsx)("strong", { children: "Ações do dia" }),
 							" no workspace do Analytics."
 						] })] }),
-						/* @__PURE__ */ (0, S.jsx)(lB, {
+						/* @__PURE__ */ (0, S.jsx)(pB, {
 							headers: [
 								"Criativo atual",
 								"Orçamento atual",
@@ -28864,10 +28968,10 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								oe(e)
 							])
 						}),
-						/* @__PURE__ */ (0, S.jsx)(cB, { children: se })
+						/* @__PURE__ */ (0, S.jsx)(fB, { children: se })
 					]
 				}),
-				/* @__PURE__ */ (0, S.jsx)(sB, {
+				/* @__PURE__ */ (0, S.jsx)(dB, {
 					index: 10,
 					children: /* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "next-day-projection",
@@ -28879,10 +28983,10 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 										className: "eyebrow",
 										children: "PRÓXIMO DIA DO FECHAMENTO"
 									}),
-									/* @__PURE__ */ (0, S.jsx)("h3", { children: I.day ? aB(iz(I.day, 1)) : "Aguardando relatório diário" }),
+									/* @__PURE__ */ (0, S.jsx)("h3", { children: I.day ? lB(iz(I.day, 1)) : "Aguardando relatório diário" }),
 									/* @__PURE__ */ (0, S.jsxs)("p", { children: [
 										"Uma expectativa central, calculada com o histórico disponível até ",
-										aB(I.day),
+										lB(I.day),
 										"."
 									] })
 								] }), /* @__PURE__ */ (0, S.jsxs)("span", {
@@ -28901,11 +29005,11 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								className: "projection-metrics",
 								children: [
 									["Investimento previsto", R(B.spend)],
-									["Principais esperadas", nB(B.orders)],
+									["Principais esperadas", oB(B.orders)],
 									["Receita líquida esperada", R(B.totalNet)],
 									["Contribuição após mídia", R(B.totalContribution)],
 									["CPA esperado", R(B.cpa)],
-									["ROAS bruto front-end", rB(B.roas)]
+									["ROAS bruto front-end", sB(B.roas)]
 								].map(([e, t]) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e }), /* @__PURE__ */ (0, S.jsx)("strong", { children: t })] }, e))
 							})] }) : /* @__PURE__ */ (0, S.jsx)("p", {
 								className: "notice",
@@ -28936,9 +29040,9 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								/* @__PURE__ */ (0, S.jsx)("summary", { children: "Premissas e limites da estimativa" }),
 								/* @__PURE__ */ (0, S.jsxs)("p", { children: [
 									"Mediana (P50) das compras principais por mídia diária, multiplicada pelo gasto presumido e pelo ticket observado. Base: ",
-									aB(ne.start),
+									lB(ne.start),
 									" a ",
-									aB(ne.end),
+									lB(ne.end),
 									", ",
 									ne.usableDays,
 									" dias completos com mídia positiva. Exige pelo menos 7 dias e 7 principais."
@@ -28953,10 +29057,10 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 								/* @__PURE__ */ (0, S.jsxs)("p", { children: [
 									ne.confidenceReason,
 									" Lacunas: ",
-									ne.missingDays.map(aB).join(", ") || "nenhuma nas datas",
+									ne.missingDays.map(lB).join(", ") || "nenhuma nas datas",
 									". Mudanças de mix, público, página e atrasos de pagamento podem alterar o realizado."
 								] }),
-								B && /* @__PURE__ */ (0, S.jsx)(lB, {
+								B && /* @__PURE__ */ (0, S.jsx)(pB, {
 									headers: [
 										"Receita prevista",
 										"Bruto",
@@ -29007,7 +29111,7 @@ function fB({ data: e, initialFilters: t, actions: n, mode: r = "report" }) {
 		]
 	});
 }
-function pB({ data: e, filters: t, actions: n, onClose: r }) {
+function _B({ data: e, filters: t, actions: n, onClose: r }) {
 	let i = (0, b.useRef)(null);
 	return (0, b.useEffect)(() => {
 		let e = i.current;
@@ -29026,7 +29130,7 @@ function pB({ data: e, filters: t, actions: n, onClose: r }) {
 				onClick: r,
 				children: "Voltar ao Painel ×"
 			})]
-		}), /* @__PURE__ */ (0, S.jsx)(fB, {
+		}), /* @__PURE__ */ (0, S.jsx)(gB, {
 			data: e,
 			initialFilters: t,
 			actions: n
@@ -29034,7 +29138,7 @@ function pB({ data: e, filters: t, actions: n, onClose: r }) {
 	});
 }
 // src/lib/performance.ts
-function mB(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString())) {
+function vB(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString())) {
 	let r = lz(e, t, !0), i = /* @__PURE__ */ new Map(), a = /* @__PURE__ */ new Map();
 	for (let e of r.orders) {
 		let t = nz(e);
@@ -29066,7 +29170,7 @@ function mB(e, t, n = tz((/* @__PURE__ */ new Date()).toISOString())) {
 		};
 	});
 }
-function hB(e, t, n, r) {
+function yB(e, t, n, r) {
 	let i = e.filter((e) => e.accountId === r && e.date >= t && e.date <= n).sort((e, t) => e.date.localeCompare(t.date)), a = e.filter((e) => e.accountId === r && e.date < t).sort((e, t) => t.date.localeCompare(e.date))[0], o = i.at(-1) ?? null, s = a ?? i[0] ?? null, c = o && s && o.date !== s.date ? o.followers - s.followers : null;
 	return {
 		points: i,
@@ -29077,7 +29181,7 @@ function hB(e, t, n, r) {
 		partialBaseline: !a
 	};
 }
-function gB(e, t, n) {
+function bB(e, t, n) {
 	let r = (e.instagramDaily ?? []).filter((e) => e.date >= t && e.date <= n).sort((e, t) => e.date.localeCompare(t.date)), i = rz(t, n), a = i > 0 && r.length === i && new Set(r.map((e) => e.date)).size === i, o = (e) => a && r.every((t) => t[e] !== null && Number.isSafeInteger(t[e])), s = o("views") && o("interactions") && o("followers"), c = (e) => o(e) ? r.reduce((t, n) => t + n[e], 0) : null;
 	return {
 		rows: r,
@@ -29087,7 +29191,7 @@ function gB(e, t, n) {
 		followers: e.instagramFollowersKind === "new" ? c("followers") : null
 	};
 }
-function _B(e, t, n, r) {
+function xB(e, t, n, r) {
 	let i = lz(e, t), a = /* @__PURE__ */ new Map();
 	for (let e of i.insights) {
 		let t = `${e.accountId}:${e.adId}`;
@@ -29104,9 +29208,9 @@ function _B(e, t, n, r) {
 	});
 }
 // src/lib/operation.ts
-var vB = "2026-08-21", yB = /*#__PURE__*/ JSON.parse("[{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-01\",\"src\":\"assets/images/analytics-creatives/catalog/06e6561b43745456.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d3ab0b83a7813b3e.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-03\",\"src\":\"assets/images/analytics-creatives/catalog/4554d5c24dd03f58.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-04\",\"src\":\"assets/images/analytics-creatives/catalog/12aea56bede5a031.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-05\",\"src\":\"assets/images/analytics-creatives/catalog/7f7d2c96ecc49b92.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-01\",\"src\":\"assets/images/analytics-creatives/catalog/46fafd5bdbfb3cac.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-02\",\"src\":\"assets/images/analytics-creatives/catalog/09747b279a73eef9.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-03\",\"src\":\"assets/images/analytics-creatives/catalog/2447d4aa336020c0.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-04\",\"src\":\"assets/images/analytics-creatives/catalog/d8b7d9df3208061b.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-05\",\"src\":\"assets/images/analytics-creatives/catalog/2170730126ac2120.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-01\",\"src\":\"assets/images/analytics-creatives/catalog/8d51547d82f8ad77.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-02\",\"src\":\"assets/images/analytics-creatives/catalog/0aff548a48598099.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-03\",\"src\":\"assets/images/analytics-creatives/catalog/0e5bc0ecb86d3b18.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-04\",\"src\":\"assets/images/analytics-creatives/catalog/d4c00bd36f501deb.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-05\",\"src\":\"assets/images/analytics-creatives/catalog/1a03cc002b0a864e.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-01\",\"src\":\"assets/images/analytics-creatives/catalog/5353c1320a2917e1.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d9707463a7434629.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-03\",\"src\":\"assets/images/analytics-creatives/catalog/747ebbdce233ee43.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-04\",\"src\":\"assets/images/analytics-creatives/catalog/8d381b026ea8e48b.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-05\",\"src\":\"assets/images/analytics-creatives/catalog/42865b751b70d5e4.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-01\",\"src\":\"assets/images/analytics-creatives/catalog/afe467521bbe4555.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d1a8ad21f2c17590.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-03\",\"src\":\"assets/images/analytics-creatives/catalog/060b54f9453c1b1f.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-04\",\"src\":\"assets/images/analytics-creatives/catalog/a6a6ae6e4c8bdd19.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-05\",\"src\":\"assets/images/analytics-creatives/catalog/02806a3a4c9254b3.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-01\",\"src\":\"assets/images/analytics-creatives/catalog/dd759340ecc0bbf7.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-02\",\"src\":\"assets/images/analytics-creatives/catalog/6b8146651609f0fe.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-03\",\"src\":\"assets/images/analytics-creatives/catalog/cd089ade587ea703.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-04\",\"src\":\"assets/images/analytics-creatives/catalog/5a585ea22c41e201.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-05\",\"src\":\"assets/images/analytics-creatives/catalog/26133d4adbdad231.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-01\",\"src\":\"assets/images/analytics-creatives/catalog/1431a771a9d0174f.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-02\",\"src\":\"assets/images/analytics-creatives/catalog/08eb2475efae5cea.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-03\",\"src\":\"assets/images/analytics-creatives/catalog/f547b9c6b6e10455.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-04\",\"src\":\"assets/images/analytics-creatives/catalog/8f2c7357fd19d5d3.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-05\",\"src\":\"assets/images/analytics-creatives/catalog/9c4aa9e07e2e2313.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-01\",\"src\":\"assets/images/analytics-creatives/catalog/1f6f42f3d60bb5ed.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-02\",\"src\":\"assets/images/analytics-creatives/catalog/8fb59266f4cb7c99.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-03\",\"src\":\"assets/images/analytics-creatives/catalog/9b44af6eeea92318.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-04\",\"src\":\"assets/images/analytics-creatives/catalog/c9abbbdb5ded5fc2.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-05\",\"src\":\"assets/images/analytics-creatives/catalog/47120c1c47be8e57.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CGuia01 - Capa\",\"src\":\"assets/images/analytics-creatives/catalog/52adf3b7ac799d9a.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"CB01-baixo-mix-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/749f4e6348912c36.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB02-baixo-quantidade-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/929facd7e59937eb.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB03-baixo-definicao-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/80864ffea3173690.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB04-baixo-grave-fundamental-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/6c4d3dd73937e8ca.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB05-baixo-encaixe-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/d12cfeb368730502.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB06-baixo-corpo-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/07a804f588e6ccfc.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB07-baixo-respostas-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/624ca570273e2fb4.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB08-baixo-presenca-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/994b2c0f36d585b7.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB09-baixo-articulacao-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/4b51b7217d893e36.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB10-baixo-variedade-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/b80c592cae2a11db.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB11-baixo-compare-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/05fbc3a7841f59cd.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB12-baixo-palheta-dedos-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/07220fba3f046b17.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB13-baixo-organizacao-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/d291ffbc87dba297.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB14-baixo-afinacoes-baixas-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/4e6b77932fb51287.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB15-baixo-redondo-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/347fb755ec5c1714.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB16-baixo-some-na-mix-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/cd15ef14ae96a0d1.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB17-baixo-possibilidades-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/95b5abb9ef1761a8.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB18-baixo-contexto-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/d49ccb6f49a53b06.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB19-baixo-equilibrio-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/319a8fc3cb7daded.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB20-baixo-curadoria-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/66c6d3e3aad6d89f.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"GG01-organizacao\",\"src\":\"assets/images/analytics-creatives/catalog/0cd16ca17682952f.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG02-praticidade\",\"src\":\"assets/images/analytics-creatives/catalog/eb54bba690802197.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG03-checklist-antes\",\"src\":\"assets/images/analytics-creatives/catalog/dd5268377507aa2e.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG04-checklist-montagem\",\"src\":\"assets/images/analytics-creatives/catalog/8f20bff615500dc2.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG05-checklist-refino\",\"src\":\"assets/images/analytics-creatives/catalog/e31abe5b99a7a30d.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG06-checklist-palco\",\"src\":\"assets/images/analytics-creatives/catalog/bcbf270a9b52ac23.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG07-cadeia-de-sinal\",\"src\":\"assets/images/analytics-creatives/catalog/aaf10e4010cb38bc.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG08-uma-mudanca\",\"src\":\"assets/images/analytics-creatives/catalog/ddb08bfb97f0a80a.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG09-tres-instrumentos\",\"src\":\"assets/images/analytics-creatives/catalog/2e04f2a747eaad78.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG10-41-paginas\",\"src\":\"assets/images/analytics-creatives/catalog/1e876277e0db53e2.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG11-dicionario-efeitos\",\"src\":\"assets/images/analytics-creatives/catalog/fb769d7ac4d2fe92.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG12-delay\",\"src\":\"assets/images/analytics-creatives/catalog/95c6f45e616a4b2a.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG13-reverb\",\"src\":\"assets/images/analytics-creatives/catalog/29a0f2bc65ab0f48.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG14-estilos\",\"src\":\"assets/images/analytics-creatives/catalog/eedbfc5e02a37929.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG15-receitas-rapidas\",\"src\":\"assets/images/analytics-creatives/catalog/852f837eaf628281.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG16-resolva-rapido\",\"src\":\"assets/images/analytics-creatives/catalog/fe440559cdd1adff.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG17-na-banda\",\"src\":\"assets/images/analytics-creatives/catalog/d360bd792327143c.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG18-volume-justo\",\"src\":\"assets/images/analytics-creatives/catalog/966a706d360345b7.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG19-menos-menus\",\"src\":\"assets/images/analytics-creatives/catalog/d1acc33c48f5f406.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG20-oferta\",\"src\":\"assets/images/analytics-creatives/catalog/9f5dee1f6b45ca0d.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"CG01-guitarra-versatilidade-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/ac229310735eb0cc.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG02-guitarra-estilos-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/28f46f493f8aa4db.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG03-guitarra-clean-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/61db2722fb8fb0a5.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG04-guitarra-crunch-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/d58fcaf6f1f2cc91.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG05-guitarra-high-gain-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/e6a3788031464b39.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG06-guitarra-rock-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/a2af174fd4a16817.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG07-guitarra-biblioteca-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/231ede7c493c4777.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG08-guitarra-transformacao-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/6f9a6aee7f586fb7.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG09-guitarra-compare-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/2df056444c740d15.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG10-guitarra-gabinetes-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/5595b20a96cf50c8.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG11-guitarra-dinamica-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/5a98a0789456bd57.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG12-guitarra-praticidade-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/6bf5d06ef7b49997.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG13-guitarra-possibilidades-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/256eff6159ce77e4.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG14-guitarra-definicao-high-gain-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/2307de37d2d64484.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG15-guitarra-clean-crunch-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/327f358beb69da51.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG16-guitarra-descoberta-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/028aad7aae7bb201.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG17-guitarra-mix-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/28d7736b7ec0914e.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG18-guitarra-referencias-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/53f259eaa72f8902.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG19-guitarra-setup-compacto-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/4505374cdf97c1b7.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG20-guitarra-curadoria-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/a8131ecfdad0c34d.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CV01-violao-naturalidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/37fa24f8e2d8ddd3.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV02-violao-organizacao-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/7ed08254beee7c19.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV03-violao-quantidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/ebf250e67020e80c.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV04-violao-som-em-linha-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/2f78c4f7b84671ae.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV05-violao-aco-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/0483ebdb07f57d12.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV06-violao-nylon-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/c6c4c19aa1216cf2.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV07-violao-compare-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/36c2c2e3e2fdd030.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV08-violao-piezo-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/a6421eaeb5dd588b.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV09-violao-praticidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/c68163dcf2790508.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV10-violao-referencias-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/35a5e74b273eeaa1.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV11-violao-naturalidade-ao-vivo-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/d502acea108002b9.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV12-violao-gravacao-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/cd32e324fd5a4f89.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV13-violao-brilho-controlado-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/7e4f5c1bfc8c269d.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV14-violao-corpo-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/00948f85fc5443b2.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV15-violao-dedilhado-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/f33ebd05d857202e.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV16-violao-batida-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/950b4b82b3783936.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV17-violao-dois-violoes-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/1fa45834a2f30f14.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV18-violao-som-duro-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/463b7e4e577d709a.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV19-violao-possibilidades-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/dcd6e3e8d3ac5d65.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV20-violao-curadoria-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/383446e3a3061e00.webp\",\"note\":\"violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ01\",\"src\":\"assets/images/analytics-creatives/catalog/7e7763493b81e5ee.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ02\",\"src\":\"assets/images/analytics-creatives/catalog/9be6bc1cc3037ca3.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ03\",\"src\":\"assets/images/analytics-creatives/catalog/9097a3bf59a00369.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ04\",\"src\":\"assets/images/analytics-creatives/catalog/9da26b998b4c9392.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ05\",\"src\":\"assets/images/analytics-creatives/catalog/43cdd85f8c60d4ec.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ06\",\"src\":\"assets/images/analytics-creatives/catalog/f2d54566a7712789.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ07\",\"src\":\"assets/images/analytics-creatives/catalog/4ba9effe74ad17c7.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ08\",\"src\":\"assets/images/analytics-creatives/catalog/b2bb844d2668fce6.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ09\",\"src\":\"assets/images/analytics-creatives/catalog/1a6911add3ac1e48.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ10\",\"src\":\"assets/images/analytics-creatives/catalog/e19e5d2703744ad0.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ11\",\"src\":\"assets/images/analytics-creatives/catalog/0d402015fb7909ad.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ12\",\"src\":\"assets/images/analytics-creatives/catalog/6eed7077b1d1ca86.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ13\",\"src\":\"assets/images/analytics-creatives/catalog/113d1ff4614af85d.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ14\",\"src\":\"assets/images/analytics-creatives/catalog/4a72523ddef88184.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ15\",\"src\":\"assets/images/analytics-creatives/catalog/31f25b8e0ece8338.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ16\",\"src\":\"assets/images/analytics-creatives/catalog/54820c02248569b0.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ17\",\"src\":\"assets/images/analytics-creatives/catalog/a70cfef2dcb6c735.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ18\",\"src\":\"assets/images/analytics-creatives/catalog/b19bce586c68a3ac.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ19\",\"src\":\"assets/images/analytics-creatives/catalog/c0aa829a5e53a989.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ20\",\"src\":\"assets/images/analytics-creatives/catalog/7da282762e7d4ce2.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ21\",\"src\":\"assets/images/analytics-creatives/catalog/c340b8f82a025a1d.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ22\",\"src\":\"assets/images/analytics-creatives/catalog/8ec55cc8889a7f6c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ23\",\"src\":\"assets/images/analytics-creatives/catalog/deb49f4b79610cc5.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ24\",\"src\":\"assets/images/analytics-creatives/catalog/04c550d7e4d6876c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ25\",\"src\":\"assets/images/analytics-creatives/catalog/973e1e4d0d3a01e9.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ26\",\"src\":\"assets/images/analytics-creatives/catalog/00bf954bbfbadce5.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ27\",\"src\":\"assets/images/analytics-creatives/catalog/547df70abb7ff77c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ28\",\"src\":\"assets/images/analytics-creatives/catalog/ba759fd14e9860f8.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ29\",\"src\":\"assets/images/analytics-creatives/catalog/da91a7d65d0c8785.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ30\",\"src\":\"assets/images/analytics-creatives/catalog/ad297ca3d47aec1c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV11\",\"src\":\"assets/images/analytics-creatives/catalog/df7e57744705c6ca.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV12\",\"src\":\"assets/images/analytics-creatives/catalog/b9c508066972c127.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV13\",\"src\":\"assets/images/analytics-creatives/catalog/eaa20baf9294ab15.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV14\",\"src\":\"assets/images/analytics-creatives/catalog/c723f9c738efa294.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV15\",\"src\":\"assets/images/analytics-creatives/catalog/dc00a1f9f158bb15.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV16\",\"src\":\"assets/images/analytics-creatives/catalog/dda2367bfcb996a7.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV17\",\"src\":\"assets/images/analytics-creatives/catalog/8fcc76bcd5c32842.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV18\",\"src\":\"assets/images/analytics-creatives/catalog/2fd53d2029ab223a.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV19\",\"src\":\"assets/images/analytics-creatives/catalog/b912f7d58e5eed07.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV20\",\"src\":\"assets/images/analytics-creatives/catalog/df128f413d1d29b0.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV21\",\"src\":\"assets/images/analytics-creatives/catalog/ce659c9798a1c7ab.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV22\",\"src\":\"assets/images/analytics-creatives/catalog/d556fd9a3ae3a1f5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV23\",\"src\":\"assets/images/analytics-creatives/catalog/25b1be269373aecf.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV24\",\"src\":\"assets/images/analytics-creatives/catalog/adc90937b76fac71.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV25\",\"src\":\"assets/images/analytics-creatives/catalog/a86d86e21ce31647.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV26\",\"src\":\"assets/images/analytics-creatives/catalog/e66778095fb1f083.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV27\",\"src\":\"assets/images/analytics-creatives/catalog/f14152bb0fe9c5ee.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV28\",\"src\":\"assets/images/analytics-creatives/catalog/ac3c496ae4cf679b.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV29\",\"src\":\"assets/images/analytics-creatives/catalog/7a86fae5dd0730aa.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV30\",\"src\":\"assets/images/analytics-creatives/catalog/9c169d5281252601.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV31\",\"src\":\"assets/images/analytics-creatives/catalog/4b2cbb29f7fdd7c2.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV32\",\"src\":\"assets/images/analytics-creatives/catalog/8eddf4bff85bb363.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV33\",\"src\":\"assets/images/analytics-creatives/catalog/5b6d24b4372c9f66.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV34\",\"src\":\"assets/images/analytics-creatives/catalog/254e225742a0b1a8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV35\",\"src\":\"assets/images/analytics-creatives/catalog/9d5bbf9bd449feb5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV36\",\"src\":\"assets/images/analytics-creatives/catalog/34635d7a6eefcb13.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV37\",\"src\":\"assets/images/analytics-creatives/catalog/511c7826a16773c5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV38\",\"src\":\"assets/images/analytics-creatives/catalog/6103aac250d661c8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV39\",\"src\":\"assets/images/analytics-creatives/catalog/e1678f57bbfef3ad.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV40\",\"src\":\"assets/images/analytics-creatives/catalog/82839143bf856852.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV41\",\"src\":\"assets/images/analytics-creatives/catalog/b5eeb2e35cd616bf.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV42\",\"src\":\"assets/images/analytics-creatives/catalog/974794639863a947.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV43\",\"src\":\"assets/images/analytics-creatives/catalog/b214e0719b6804fb.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV44\",\"src\":\"assets/images/analytics-creatives/catalog/f133f6979b49a1cd.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV45\",\"src\":\"assets/images/analytics-creatives/catalog/f0967ea7bf3fb3a5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV46\",\"src\":\"assets/images/analytics-creatives/catalog/320956e3bbc796ca.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV47\",\"src\":\"assets/images/analytics-creatives/catalog/08b0b0a8cd2d1889.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV48\",\"src\":\"assets/images/analytics-creatives/catalog/af500482e3e25090.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV49\",\"src\":\"assets/images/analytics-creatives/catalog/c55e7bf0f9598c9a.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV50\",\"src\":\"assets/images/analytics-creatives/catalog/1ccd860b7adda6f8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV51\",\"src\":\"assets/images/analytics-creatives/catalog/e674ddc4f23bf20e.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV52\",\"src\":\"assets/images/analytics-creatives/catalog/9511650b71ec494f.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV53\",\"src\":\"assets/images/analytics-creatives/catalog/a11d0c0f725aebe2.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV54\",\"src\":\"assets/images/analytics-creatives/catalog/2c67ef49492eebb0.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV55\",\"src\":\"assets/images/analytics-creatives/catalog/60ffa80d489824e1.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV56\",\"src\":\"assets/images/analytics-creatives/catalog/99b9630d067256bd.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV57\",\"src\":\"assets/images/analytics-creatives/catalog/627ca3e1c5ff86c6.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV58\",\"src\":\"assets/images/analytics-creatives/catalog/c1cf12bca4b0f441.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV59\",\"src\":\"assets/images/analytics-creatives/catalog/3198c76e4e30919b.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV60\",\"src\":\"assets/images/analytics-creatives/catalog/16c5d2d8562110b1.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC11\",\"src\":\"assets/images/analytics-creatives/catalog/1f8933652d266715.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC12\",\"src\":\"assets/images/analytics-creatives/catalog/ac56d6c862027e5b.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC13\",\"src\":\"assets/images/analytics-creatives/catalog/15a1922218b451c5.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC14\",\"src\":\"assets/images/analytics-creatives/catalog/90345642c875f563.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC15\",\"src\":\"assets/images/analytics-creatives/catalog/9efe54e3721d61f8.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC16\",\"src\":\"assets/images/analytics-creatives/catalog/e76f3392541c67a0.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC17\",\"src\":\"assets/images/analytics-creatives/catalog/2be6260c629e8c4f.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC18\",\"src\":\"assets/images/analytics-creatives/catalog/8d64935503d2ee09.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC19\",\"src\":\"assets/images/analytics-creatives/catalog/3b14886a153b4879.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC20\",\"src\":\"assets/images/analytics-creatives/catalog/ae97a9f5515e2926.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC21\",\"src\":\"assets/images/analytics-creatives/catalog/1335c0595506e791.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC22\",\"src\":\"assets/images/analytics-creatives/catalog/180589ecfa6ada72.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC23\",\"src\":\"assets/images/analytics-creatives/catalog/e09ed9893e53b99d.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC24\",\"src\":\"assets/images/analytics-creatives/catalog/5bdb780eb43ef493.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC25\",\"src\":\"assets/images/analytics-creatives/catalog/16a7a34021325a63.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC26\",\"src\":\"assets/images/analytics-creatives/catalog/627dd87a15e1d8f4.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC27\",\"src\":\"assets/images/analytics-creatives/catalog/168a0e8c5c43f606.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC28\",\"src\":\"assets/images/analytics-creatives/catalog/d1eeb0d2fea51a19.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC29\",\"src\":\"assets/images/analytics-creatives/catalog/eee350b317e4fe7f.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC30\",\"src\":\"assets/images/analytics-creatives/catalog/40b02e520b11d67d.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV01\",\"src\":\"assets/images/analytics-creatives/catalog/fea10d76f8de4aae.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV02\",\"src\":\"assets/images/analytics-creatives/catalog/006df43df535e6cd.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV03\",\"src\":\"assets/images/analytics-creatives/catalog/081b863f16d87ec0.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV04\",\"src\":\"assets/images/analytics-creatives/catalog/2fde010f88c192a9.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV05\",\"src\":\"assets/images/analytics-creatives/catalog/e9c60c1015cf42f6.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV06\",\"src\":\"assets/images/analytics-creatives/catalog/a5aed671ec5c5521.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV07\",\"src\":\"assets/images/analytics-creatives/catalog/f25a6c5af59c7b8e.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV08\",\"src\":\"assets/images/analytics-creatives/catalog/5337101405e6ab40.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV09\",\"src\":\"assets/images/analytics-creatives/catalog/3199bdaf568d9972.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV10\",\"src\":\"assets/images/analytics-creatives/catalog/9e04a58963f165f0.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC01\",\"src\":\"assets/images/analytics-creatives/catalog/6226ac94e680cc17.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC02\",\"src\":\"assets/images/analytics-creatives/catalog/32f4da2c86f4159b.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC03\",\"src\":\"assets/images/analytics-creatives/catalog/84d99f221e897b9a.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC04\",\"src\":\"assets/images/analytics-creatives/catalog/2361bbbe465fa08e.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC05\",\"src\":\"assets/images/analytics-creatives/catalog/13623b37c0633f12.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC06\",\"src\":\"assets/images/analytics-creatives/catalog/32ab53af29d78160.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC07\",\"src\":\"assets/images/analytics-creatives/catalog/ea10ab0b2436d747.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC08\",\"src\":\"assets/images/analytics-creatives/catalog/83fffa4a0d0467d1.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC09\",\"src\":\"assets/images/analytics-creatives/catalog/8b0ccf3caa41cd20.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC10\",\"src\":\"assets/images/analytics-creatives/catalog/b4b63dad2df2504e.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC01\",\"src\":\"assets/images/analytics-creatives/catalog/81290880e85704f7.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC02\",\"src\":\"assets/images/analytics-creatives/catalog/5c621a5eb7661a1e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC03\",\"src\":\"assets/images/analytics-creatives/catalog/a0cb39b4f8851272.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC04\",\"src\":\"assets/images/analytics-creatives/catalog/b85c5f955d659b92.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC05\",\"src\":\"assets/images/analytics-creatives/catalog/55f7a35b6013204e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC06\",\"src\":\"assets/images/analytics-creatives/catalog/9cc70d4caa62c9a6.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC07\",\"src\":\"assets/images/analytics-creatives/catalog/47e250a3b9c76eab.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC08\",\"src\":\"assets/images/analytics-creatives/catalog/b7daa5c7ca4a66ed.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC09\",\"src\":\"assets/images/analytics-creatives/catalog/62eafe50bbe27411.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC10\",\"src\":\"assets/images/analytics-creatives/catalog/77ac4b45035962d0.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC11\",\"src\":\"assets/images/analytics-creatives/catalog/a46ec78183f360bf.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC12\",\"src\":\"assets/images/analytics-creatives/catalog/04870f55f8f50327.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC13\",\"src\":\"assets/images/analytics-creatives/catalog/d2a216e3cbc2ad12.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC14\",\"src\":\"assets/images/analytics-creatives/catalog/b2c46e921b636cd4.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC15\",\"src\":\"assets/images/analytics-creatives/catalog/48fa89d08d18d0bc.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC16\",\"src\":\"assets/images/analytics-creatives/catalog/e4625a14a39e865a.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC17\",\"src\":\"assets/images/analytics-creatives/catalog/a03dcd0a46edfdba.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC18\",\"src\":\"assets/images/analytics-creatives/catalog/25166072d63a9d8e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC19\",\"src\":\"assets/images/analytics-creatives/catalog/c54c422300d6e077.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC20\",\"src\":\"assets/images/analytics-creatives/catalog/7f07ceca1a029c21.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C07-guitarra-gabinetes\",\"src\":\"assets/images/analytics-creatives/catalog/69a17e116c3d6249.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C11-bajo-cantidad\",\"src\":\"assets/images/analytics-creatives/catalog/69e35332d7863792.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C22-acustica-naturalidad\",\"src\":\"assets/images/analytics-creatives/catalog/1a28ccbaa584fd40.webp\",\"note\":\"Arquivo do repositório\"}]"), bB = (e) => e === null ? "—" : e.toLocaleString("pt-BR");
-function xB({ data: e, filters: t, compact: n = !1 }) {
-	let [r, i] = (0, b.useState)("views"), a = gB(e, t.start, t.end), { rows: o, complete: s } = a, c = e.instagramAudience;
+var SB = "2026-08-21", CB = /*#__PURE__*/ JSON.parse("[{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-01\",\"src\":\"assets/images/analytics-creatives/catalog/06e6561b43745456.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d3ab0b83a7813b3e.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-03\",\"src\":\"assets/images/analytics-creatives/catalog/4554d5c24dd03f58.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-04\",\"src\":\"assets/images/analytics-creatives/catalog/12aea56bede5a031.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-05\",\"src\":\"assets/images/analytics-creatives/catalog/7f7d2c96ecc49b92.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-01\",\"src\":\"assets/images/analytics-creatives/catalog/46fafd5bdbfb3cac.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-02\",\"src\":\"assets/images/analytics-creatives/catalog/09747b279a73eef9.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-03\",\"src\":\"assets/images/analytics-creatives/catalog/2447d4aa336020c0.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-04\",\"src\":\"assets/images/analytics-creatives/catalog/d8b7d9df3208061b.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-05\",\"src\":\"assets/images/analytics-creatives/catalog/2170730126ac2120.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-01\",\"src\":\"assets/images/analytics-creatives/catalog/8d51547d82f8ad77.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-02\",\"src\":\"assets/images/analytics-creatives/catalog/0aff548a48598099.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-03\",\"src\":\"assets/images/analytics-creatives/catalog/0e5bc0ecb86d3b18.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-04\",\"src\":\"assets/images/analytics-creatives/catalog/d4c00bd36f501deb.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-05\",\"src\":\"assets/images/analytics-creatives/catalog/1a03cc002b0a864e.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-01\",\"src\":\"assets/images/analytics-creatives/catalog/5353c1320a2917e1.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d9707463a7434629.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-03\",\"src\":\"assets/images/analytics-creatives/catalog/747ebbdce233ee43.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-04\",\"src\":\"assets/images/analytics-creatives/catalog/8d381b026ea8e48b.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-05\",\"src\":\"assets/images/analytics-creatives/catalog/42865b751b70d5e4.webp\",\"note\":\"CAMPEOES-LABS-ESCURO/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-01\",\"src\":\"assets/images/analytics-creatives/catalog/afe467521bbe4555.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-02\",\"src\":\"assets/images/analytics-creatives/catalog/d1a8ad21f2c17590.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-03\",\"src\":\"assets/images/analytics-creatives/catalog/060b54f9453c1b1f.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-04\",\"src\":\"assets/images/analytics-creatives/catalog/a6a6ae6e4c8bdd19.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-BB-05\",\"src\":\"assets/images/analytics-creatives/catalog/02806a3a4c9254b3.webp\",\"note\":\"CAMPEOES-LABS/baixo/black-box\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-01\",\"src\":\"assets/images/analytics-creatives/catalog/dd759340ecc0bbf7.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-02\",\"src\":\"assets/images/analytics-creatives/catalog/6b8146651609f0fe.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-03\",\"src\":\"assets/images/analytics-creatives/catalog/cd089ade587ea703.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-04\",\"src\":\"assets/images/analytics-creatives/catalog/5a585ea22c41e201.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-CBB-05\",\"src\":\"assets/images/analytics-creatives/catalog/26133d4adbdad231.webp\",\"note\":\"CAMPEOES-LABS/baixo/cubebaby-baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-01\",\"src\":\"assets/images/analytics-creatives/catalog/1431a771a9d0174f.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-02\",\"src\":\"assets/images/analytics-creatives/catalog/08eb2475efae5cea.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-03\",\"src\":\"assets/images/analytics-creatives/catalog/f547b9c6b6e10455.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-04\",\"src\":\"assets/images/analytics-creatives/catalog/8f2c7357fd19d5d3.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-MK-05\",\"src\":\"assets/images/analytics-creatives/catalog/9c4aa9e07e2e2313.webp\",\"note\":\"CAMPEOES-LABS/baixo/mk300\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-01\",\"src\":\"assets/images/analytics-creatives/catalog/1f6f42f3d60bb5ed.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-02\",\"src\":\"assets/images/analytics-creatives/catalog/8fb59266f4cb7c99.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-03\",\"src\":\"assets/images/analytics-creatives/catalog/9b44af6eeea92318.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-04\",\"src\":\"assets/images/analytics-creatives/catalog/c9abbbdb5ded5fc2.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CCB-TB-05\",\"src\":\"assets/images/analytics-creatives/catalog/47120c1c47be8e57.webp\",\"note\":\"CAMPEOES-LABS/baixo/tank-b\"},{\"brand\":\"Mvave BR\",\"title\":\"CGuia01 - Capa\",\"src\":\"assets/images/analytics-creatives/catalog/52adf3b7ac799d9a.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"CB01-baixo-mix-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/749f4e6348912c36.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB02-baixo-quantidade-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/929facd7e59937eb.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB03-baixo-definicao-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/80864ffea3173690.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB04-baixo-grave-fundamental-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/6c4d3dd73937e8ca.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB05-baixo-encaixe-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/d12cfeb368730502.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB06-baixo-corpo-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/07a804f588e6ccfc.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB07-baixo-respostas-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/624ca570273e2fb4.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB08-baixo-presenca-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/994b2c0f36d585b7.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB09-baixo-articulacao-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/4b51b7217d893e36.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB10-baixo-variedade-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/b80c592cae2a11db.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB11-baixo-compare-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/05fbc3a7841f59cd.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB12-baixo-palheta-dedos-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/07220fba3f046b17.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB13-baixo-organizacao-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/d291ffbc87dba297.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB14-baixo-afinacoes-baixas-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/4e6b77932fb51287.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB15-baixo-redondo-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/347fb755ec5c1714.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB16-baixo-some-na-mix-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/cd15ef14ae96a0d1.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB17-baixo-possibilidades-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/95b5abb9ef1761a8.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB18-baixo-contexto-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/d49ccb6f49a53b06.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB19-baixo-equilibrio-cube-baby-bass\",\"src\":\"assets/images/analytics-creatives/catalog/319a8fc3cb7daded.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"CB20-baixo-curadoria-tank-b\",\"src\":\"assets/images/analytics-creatives/catalog/66c6d3e3aad6d89f.webp\",\"note\":\"baixo\"},{\"brand\":\"Mvave BR\",\"title\":\"GG01-organizacao\",\"src\":\"assets/images/analytics-creatives/catalog/0cd16ca17682952f.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG02-praticidade\",\"src\":\"assets/images/analytics-creatives/catalog/eb54bba690802197.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG03-checklist-antes\",\"src\":\"assets/images/analytics-creatives/catalog/dd5268377507aa2e.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG04-checklist-montagem\",\"src\":\"assets/images/analytics-creatives/catalog/8f20bff615500dc2.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG05-checklist-refino\",\"src\":\"assets/images/analytics-creatives/catalog/e31abe5b99a7a30d.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG06-checklist-palco\",\"src\":\"assets/images/analytics-creatives/catalog/bcbf270a9b52ac23.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG07-cadeia-de-sinal\",\"src\":\"assets/images/analytics-creatives/catalog/aaf10e4010cb38bc.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG08-uma-mudanca\",\"src\":\"assets/images/analytics-creatives/catalog/ddb08bfb97f0a80a.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG09-tres-instrumentos\",\"src\":\"assets/images/analytics-creatives/catalog/2e04f2a747eaad78.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG10-41-paginas\",\"src\":\"assets/images/analytics-creatives/catalog/1e876277e0db53e2.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG11-dicionario-efeitos\",\"src\":\"assets/images/analytics-creatives/catalog/fb769d7ac4d2fe92.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG12-delay\",\"src\":\"assets/images/analytics-creatives/catalog/95c6f45e616a4b2a.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG13-reverb\",\"src\":\"assets/images/analytics-creatives/catalog/29a0f2bc65ab0f48.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG14-estilos\",\"src\":\"assets/images/analytics-creatives/catalog/eedbfc5e02a37929.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG15-receitas-rapidas\",\"src\":\"assets/images/analytics-creatives/catalog/852f837eaf628281.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG16-resolva-rapido\",\"src\":\"assets/images/analytics-creatives/catalog/fe440559cdd1adff.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG17-na-banda\",\"src\":\"assets/images/analytics-creatives/catalog/d360bd792327143c.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG18-volume-justo\",\"src\":\"assets/images/analytics-creatives/catalog/966a706d360345b7.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG19-menos-menus\",\"src\":\"assets/images/analytics-creatives/catalog/d1acc33c48f5f406.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"GG20-oferta\",\"src\":\"assets/images/analytics-creatives/catalog/9f5dee1f6b45ca0d.webp\",\"note\":\"guia\"},{\"brand\":\"Mvave BR\",\"title\":\"CG01-guitarra-versatilidade-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/ac229310735eb0cc.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG02-guitarra-estilos-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/28f46f493f8aa4db.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG03-guitarra-clean-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/61db2722fb8fb0a5.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG04-guitarra-crunch-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/d58fcaf6f1f2cc91.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG05-guitarra-high-gain-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/e6a3788031464b39.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG06-guitarra-rock-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/a2af174fd4a16817.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG07-guitarra-biblioteca-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/231ede7c493c4777.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG08-guitarra-transformacao-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/6f9a6aee7f586fb7.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG09-guitarra-compare-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/2df056444c740d15.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG10-guitarra-gabinetes-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/5595b20a96cf50c8.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG11-guitarra-dinamica-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/5a98a0789456bd57.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG12-guitarra-praticidade-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/6bf5d06ef7b49997.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG13-guitarra-possibilidades-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/256eff6159ce77e4.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG14-guitarra-definicao-high-gain-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/2307de37d2d64484.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG15-guitarra-clean-crunch-blackbox\",\"src\":\"assets/images/analytics-creatives/catalog/327f358beb69da51.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG16-guitarra-descoberta-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/028aad7aae7bb201.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG17-guitarra-mix-cube-baby-guitar\",\"src\":\"assets/images/analytics-creatives/catalog/28d7736b7ec0914e.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG18-guitarra-referencias-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/53f259eaa72f8902.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG19-guitarra-setup-compacto-tank-mini\",\"src\":\"assets/images/analytics-creatives/catalog/4505374cdf97c1b7.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CG20-guitarra-curadoria-tank-g\",\"src\":\"assets/images/analytics-creatives/catalog/a8131ecfdad0c34d.webp\",\"note\":\"guitarra\"},{\"brand\":\"Mvave BR\",\"title\":\"CV01-violao-naturalidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/37fa24f8e2d8ddd3.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV02-violao-organizacao-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/7ed08254beee7c19.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV03-violao-quantidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/ebf250e67020e80c.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV04-violao-som-em-linha-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/2f78c4f7b84671ae.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV05-violao-aco-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/0483ebdb07f57d12.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV06-violao-nylon-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/c6c4c19aa1216cf2.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV07-violao-compare-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/36c2c2e3e2fdd030.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV08-violao-piezo-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/a6421eaeb5dd588b.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV09-violao-praticidade-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/c68163dcf2790508.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV10-violao-referencias-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/35a5e74b273eeaa1.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV11-violao-naturalidade-ao-vivo-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/d502acea108002b9.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV12-violao-gravacao-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/cd32e324fd5a4f89.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV13-violao-brilho-controlado-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/7e4f5c1bfc8c269d.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV14-violao-corpo-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/00948f85fc5443b2.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV15-violao-dedilhado-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/f33ebd05d857202e.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV16-violao-batida-irbox\",\"src\":\"assets/images/analytics-creatives/catalog/950b4b82b3783936.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV17-violao-dois-violoes-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/1fa45834a2f30f14.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV18-violao-som-duro-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/463b7e4e577d709a.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV19-violao-possibilidades-mk300\",\"src\":\"assets/images/analytics-creatives/catalog/dcd6e3e8d3ac5d65.webp\",\"note\":\"violao\"},{\"brand\":\"Mvave BR\",\"title\":\"CV20-violao-curadoria-cube-baby-ac\",\"src\":\"assets/images/analytics-creatives/catalog/383446e3a3061e00.webp\",\"note\":\"violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ01\",\"src\":\"assets/images/analytics-creatives/catalog/7e7763493b81e5ee.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ02\",\"src\":\"assets/images/analytics-creatives/catalog/9be6bc1cc3037ca3.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ03\",\"src\":\"assets/images/analytics-creatives/catalog/9097a3bf59a00369.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ04\",\"src\":\"assets/images/analytics-creatives/catalog/9da26b998b4c9392.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ05\",\"src\":\"assets/images/analytics-creatives/catalog/43cdd85f8c60d4ec.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ06\",\"src\":\"assets/images/analytics-creatives/catalog/f2d54566a7712789.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ07\",\"src\":\"assets/images/analytics-creatives/catalog/4ba9effe74ad17c7.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ08\",\"src\":\"assets/images/analytics-creatives/catalog/b2bb844d2668fce6.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ09\",\"src\":\"assets/images/analytics-creatives/catalog/1a6911add3ac1e48.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ10\",\"src\":\"assets/images/analytics-creatives/catalog/e19e5d2703744ad0.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ11\",\"src\":\"assets/images/analytics-creatives/catalog/0d402015fb7909ad.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ12\",\"src\":\"assets/images/analytics-creatives/catalog/6eed7077b1d1ca86.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ13\",\"src\":\"assets/images/analytics-creatives/catalog/113d1ff4614af85d.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ14\",\"src\":\"assets/images/analytics-creatives/catalog/4a72523ddef88184.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ15\",\"src\":\"assets/images/analytics-creatives/catalog/31f25b8e0ece8338.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ16\",\"src\":\"assets/images/analytics-creatives/catalog/54820c02248569b0.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ17\",\"src\":\"assets/images/analytics-creatives/catalog/a70cfef2dcb6c735.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ18\",\"src\":\"assets/images/analytics-creatives/catalog/b19bce586c68a3ac.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ19\",\"src\":\"assets/images/analytics-creatives/catalog/c0aa829a5e53a989.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ20\",\"src\":\"assets/images/analytics-creatives/catalog/7da282762e7d4ce2.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ21\",\"src\":\"assets/images/analytics-creatives/catalog/c340b8f82a025a1d.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ22\",\"src\":\"assets/images/analytics-creatives/catalog/8ec55cc8889a7f6c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ23\",\"src\":\"assets/images/analytics-creatives/catalog/deb49f4b79610cc5.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ24\",\"src\":\"assets/images/analytics-creatives/catalog/04c550d7e4d6876c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ25\",\"src\":\"assets/images/analytics-creatives/catalog/973e1e4d0d3a01e9.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ26\",\"src\":\"assets/images/analytics-creatives/catalog/00bf954bbfbadce5.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ27\",\"src\":\"assets/images/analytics-creatives/catalog/547df70abb7ff77c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ28\",\"src\":\"assets/images/analytics-creatives/catalog/ba759fd14e9860f8.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ29\",\"src\":\"assets/images/analytics-creatives/catalog/da91a7d65d0c8785.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"SEQ30\",\"src\":\"assets/images/analytics-creatives/catalog/ad297ca3d47aec1c.webp\",\"note\":\"2026-10-10-lote-02/acordes-em-sequencia\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV11\",\"src\":\"assets/images/analytics-creatives/catalog/df7e57744705c6ca.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV12\",\"src\":\"assets/images/analytics-creatives/catalog/b9c508066972c127.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV13\",\"src\":\"assets/images/analytics-creatives/catalog/eaa20baf9294ab15.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV14\",\"src\":\"assets/images/analytics-creatives/catalog/c723f9c738efa294.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV15\",\"src\":\"assets/images/analytics-creatives/catalog/dc00a1f9f158bb15.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV16\",\"src\":\"assets/images/analytics-creatives/catalog/dda2367bfcb996a7.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV17\",\"src\":\"assets/images/analytics-creatives/catalog/8fcc76bcd5c32842.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV18\",\"src\":\"assets/images/analytics-creatives/catalog/2fd53d2029ab223a.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV19\",\"src\":\"assets/images/analytics-creatives/catalog/b912f7d58e5eed07.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV20\",\"src\":\"assets/images/analytics-creatives/catalog/df128f413d1d29b0.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV21\",\"src\":\"assets/images/analytics-creatives/catalog/ce659c9798a1c7ab.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV22\",\"src\":\"assets/images/analytics-creatives/catalog/d556fd9a3ae3a1f5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV23\",\"src\":\"assets/images/analytics-creatives/catalog/25b1be269373aecf.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV24\",\"src\":\"assets/images/analytics-creatives/catalog/adc90937b76fac71.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV25\",\"src\":\"assets/images/analytics-creatives/catalog/a86d86e21ce31647.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV26\",\"src\":\"assets/images/analytics-creatives/catalog/e66778095fb1f083.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV27\",\"src\":\"assets/images/analytics-creatives/catalog/f14152bb0fe9c5ee.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV28\",\"src\":\"assets/images/analytics-creatives/catalog/ac3c496ae4cf679b.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV29\",\"src\":\"assets/images/analytics-creatives/catalog/7a86fae5dd0730aa.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV30\",\"src\":\"assets/images/analytics-creatives/catalog/9c169d5281252601.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV31\",\"src\":\"assets/images/analytics-creatives/catalog/4b2cbb29f7fdd7c2.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV32\",\"src\":\"assets/images/analytics-creatives/catalog/8eddf4bff85bb363.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV33\",\"src\":\"assets/images/analytics-creatives/catalog/5b6d24b4372c9f66.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV34\",\"src\":\"assets/images/analytics-creatives/catalog/254e225742a0b1a8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV35\",\"src\":\"assets/images/analytics-creatives/catalog/9d5bbf9bd449feb5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV36\",\"src\":\"assets/images/analytics-creatives/catalog/34635d7a6eefcb13.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV37\",\"src\":\"assets/images/analytics-creatives/catalog/511c7826a16773c5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV38\",\"src\":\"assets/images/analytics-creatives/catalog/6103aac250d661c8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV39\",\"src\":\"assets/images/analytics-creatives/catalog/e1678f57bbfef3ad.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV40\",\"src\":\"assets/images/analytics-creatives/catalog/82839143bf856852.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV41\",\"src\":\"assets/images/analytics-creatives/catalog/b5eeb2e35cd616bf.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV42\",\"src\":\"assets/images/analytics-creatives/catalog/974794639863a947.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV43\",\"src\":\"assets/images/analytics-creatives/catalog/b214e0719b6804fb.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV44\",\"src\":\"assets/images/analytics-creatives/catalog/f133f6979b49a1cd.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV45\",\"src\":\"assets/images/analytics-creatives/catalog/f0967ea7bf3fb3a5.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV46\",\"src\":\"assets/images/analytics-creatives/catalog/320956e3bbc796ca.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV47\",\"src\":\"assets/images/analytics-creatives/catalog/08b0b0a8cd2d1889.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV48\",\"src\":\"assets/images/analytics-creatives/catalog/af500482e3e25090.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV49\",\"src\":\"assets/images/analytics-creatives/catalog/c55e7bf0f9598c9a.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV50\",\"src\":\"assets/images/analytics-creatives/catalog/1ccd860b7adda6f8.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV51\",\"src\":\"assets/images/analytics-creatives/catalog/e674ddc4f23bf20e.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV52\",\"src\":\"assets/images/analytics-creatives/catalog/9511650b71ec494f.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV53\",\"src\":\"assets/images/analytics-creatives/catalog/a11d0c0f725aebe2.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV54\",\"src\":\"assets/images/analytics-creatives/catalog/2c67ef49492eebb0.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV55\",\"src\":\"assets/images/analytics-creatives/catalog/60ffa80d489824e1.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV56\",\"src\":\"assets/images/analytics-creatives/catalog/99b9630d067256bd.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV57\",\"src\":\"assets/images/analytics-creatives/catalog/627ca3e1c5ff86c6.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV58\",\"src\":\"assets/images/analytics-creatives/catalog/c1cf12bca4b0f441.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV59\",\"src\":\"assets/images/analytics-creatives/catalog/3198c76e4e30919b.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV60\",\"src\":\"assets/images/analytics-creatives/catalog/16c5d2d8562110b1.webp\",\"note\":\"2026-10-10-lote-02/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC11\",\"src\":\"assets/images/analytics-creatives/catalog/1f8933652d266715.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC12\",\"src\":\"assets/images/analytics-creatives/catalog/ac56d6c862027e5b.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC13\",\"src\":\"assets/images/analytics-creatives/catalog/15a1922218b451c5.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC14\",\"src\":\"assets/images/analytics-creatives/catalog/90345642c875f563.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC15\",\"src\":\"assets/images/analytics-creatives/catalog/9efe54e3721d61f8.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC16\",\"src\":\"assets/images/analytics-creatives/catalog/e76f3392541c67a0.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC17\",\"src\":\"assets/images/analytics-creatives/catalog/2be6260c629e8c4f.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC18\",\"src\":\"assets/images/analytics-creatives/catalog/8d64935503d2ee09.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC19\",\"src\":\"assets/images/analytics-creatives/catalog/3b14886a153b4879.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC20\",\"src\":\"assets/images/analytics-creatives/catalog/ae97a9f5515e2926.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC21\",\"src\":\"assets/images/analytics-creatives/catalog/1335c0595506e791.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC22\",\"src\":\"assets/images/analytics-creatives/catalog/180589ecfa6ada72.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC23\",\"src\":\"assets/images/analytics-creatives/catalog/e09ed9893e53b99d.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC24\",\"src\":\"assets/images/analytics-creatives/catalog/5bdb780eb43ef493.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC25\",\"src\":\"assets/images/analytics-creatives/catalog/16a7a34021325a63.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC26\",\"src\":\"assets/images/analytics-creatives/catalog/627dd87a15e1d8f4.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC27\",\"src\":\"assets/images/analytics-creatives/catalog/168a0e8c5c43f606.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC28\",\"src\":\"assets/images/analytics-creatives/catalog/d1eeb0d2fea51a19.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC29\",\"src\":\"assets/images/analytics-creatives/catalog/eee350b317e4fe7f.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC30\",\"src\":\"assets/images/analytics-creatives/catalog/40b02e520b11d67d.webp\",\"note\":\"2026-10-10-lote-02/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV01\",\"src\":\"assets/images/analytics-creatives/catalog/fea10d76f8de4aae.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV02\",\"src\":\"assets/images/analytics-creatives/catalog/006df43df535e6cd.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV03\",\"src\":\"assets/images/analytics-creatives/catalog/081b863f16d87ec0.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV04\",\"src\":\"assets/images/analytics-creatives/catalog/2fde010f88c192a9.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV05\",\"src\":\"assets/images/analytics-creatives/catalog/e9c60c1015cf42f6.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV06\",\"src\":\"assets/images/analytics-creatives/catalog/a5aed671ec5c5521.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV07\",\"src\":\"assets/images/analytics-creatives/catalog/f25a6c5af59c7b8e.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV08\",\"src\":\"assets/images/analytics-creatives/catalog/5337101405e6ab40.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV09\",\"src\":\"assets/images/analytics-creatives/catalog/3199bdaf568d9972.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"DFV10\",\"src\":\"assets/images/analytics-creatives/catalog/9e04a58963f165f0.webp\",\"note\":\"2026-10-10/de-ferias-com-o-violao\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC01\",\"src\":\"assets/images/analytics-creatives/catalog/6226ac94e680cc17.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC02\",\"src\":\"assets/images/analytics-creatives/catalog/32f4da2c86f4159b.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC03\",\"src\":\"assets/images/analytics-creatives/catalog/84d99f221e897b9a.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC04\",\"src\":\"assets/images/analytics-creatives/catalog/2361bbbe465fa08e.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC05\",\"src\":\"assets/images/analytics-creatives/catalog/13623b37c0633f12.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC06\",\"src\":\"assets/images/analytics-creatives/catalog/32ab53af29d78160.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC07\",\"src\":\"assets/images/analytics-creatives/catalog/ea10ab0b2436d747.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC08\",\"src\":\"assets/images/analytics-creatives/catalog/83fffa4a0d0467d1.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC09\",\"src\":\"assets/images/analytics-creatives/catalog/8b0ccf3caa41cd20.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"TAC10\",\"src\":\"assets/images/analytics-creatives/catalog/b4b63dad2df2504e.webp\",\"note\":\"2026-10-10/troca-de-acordes\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC01\",\"src\":\"assets/images/analytics-creatives/catalog/81290880e85704f7.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC02\",\"src\":\"assets/images/analytics-creatives/catalog/5c621a5eb7661a1e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC03\",\"src\":\"assets/images/analytics-creatives/catalog/a0cb39b4f8851272.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC04\",\"src\":\"assets/images/analytics-creatives/catalog/b85c5f955d659b92.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC05\",\"src\":\"assets/images/analytics-creatives/catalog/55f7a35b6013204e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC06\",\"src\":\"assets/images/analytics-creatives/catalog/9cc70d4caa62c9a6.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC07\",\"src\":\"assets/images/analytics-creatives/catalog/47e250a3b9c76eab.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC08\",\"src\":\"assets/images/analytics-creatives/catalog/b7daa5c7ca4a66ed.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC09\",\"src\":\"assets/images/analytics-creatives/catalog/62eafe50bbe27411.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC10\",\"src\":\"assets/images/analytics-creatives/catalog/77ac4b45035962d0.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC11\",\"src\":\"assets/images/analytics-creatives/catalog/a46ec78183f360bf.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC12\",\"src\":\"assets/images/analytics-creatives/catalog/04870f55f8f50327.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC13\",\"src\":\"assets/images/analytics-creatives/catalog/d2a216e3cbc2ad12.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC14\",\"src\":\"assets/images/analytics-creatives/catalog/b2c46e921b636cd4.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC15\",\"src\":\"assets/images/analytics-creatives/catalog/48fa89d08d18d0bc.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC16\",\"src\":\"assets/images/analytics-creatives/catalog/e4625a14a39e865a.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC17\",\"src\":\"assets/images/analytics-creatives/catalog/a03dcd0a46edfdba.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC18\",\"src\":\"assets/images/analytics-creatives/catalog/25166072d63a9d8e.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC19\",\"src\":\"assets/images/analytics-creatives/catalog/c54c422300d6e077.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Oficina do Violão\",\"title\":\"VBC20\",\"src\":\"assets/images/analytics-creatives/catalog/7f07ceca1a029c21.webp\",\"note\":\"2026-11-03-violao-bem-cuidado/imagens\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C07-guitarra-gabinetes\",\"src\":\"assets/images/analytics-creatives/catalog/69a17e116c3d6249.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C11-bajo-cantidad\",\"src\":\"assets/images/analytics-creatives/catalog/69e35332d7863792.webp\",\"note\":\"Arquivo do repositório\"},{\"brand\":\"Mvave BR\",\"title\":\"ES-C22-acustica-naturalidad\",\"src\":\"assets/images/analytics-creatives/catalog/1a28ccbaa584fd40.webp\",\"note\":\"Arquivo do repositório\"}]"), wB = (e) => e === null ? "—" : e.toLocaleString("pt-BR");
+function TB({ data: e, filters: t, compact: n = !1 }) {
+	let [r, i] = (0, b.useState)("views"), a = bB(e, t.start, t.end), { rows: o, complete: s } = a, c = e.instagramAudience;
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: "panel manual-instagram",
 		children: [
@@ -29135,9 +29239,9 @@ function xB({ data: e, filters: t, compact: n = !1 }) {
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "instagram-numbers",
 				children: [
-					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Novos seguidores" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(a.followers) })] }),
-					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Visualizações no período" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(a.views) })] }),
-					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Interações no período" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(a.interactions) })] })
+					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Novos seguidores" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(a.followers) })] }),
+					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Visualizações no período" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(a.views) })] }),
+					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Interações no período" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(a.interactions) })] })
 				]
 			}),
 			/* @__PURE__ */ (0, S.jsx)("div", {
@@ -29223,7 +29327,7 @@ function xB({ data: e, filters: t, compact: n = !1 }) {
 		]
 	});
 }
-function SB({ orders: e, metrics: t }) {
+function EB({ orders: e, metrics: t }) {
 	let n = e.filter((e) => YR(e.status)), r = (e) => n.filter((t) => t.manualSourceCategory === e).length, i = r("Código numérico SCK"), a = t.sales && t.purchases !== null ? t.purchases / t.sales * 100 : null;
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: "panel attribution-panel",
@@ -29246,27 +29350,27 @@ function SB({ orders: e, metrics: t }) {
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "attribution-row",
-				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Compras Meta" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(t.purchases) })]
+				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Compras Meta" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(t.purchases) })]
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "attribution-row",
-				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas Hotmart" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(t.sales) })]
+				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas Hotmart" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(t.sales) })]
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "attribution-row",
-				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Código numérico SCK" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(i) })]
+				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Código numérico SCK" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(i) })]
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "attribution-row",
-				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Hotmart Sales Agents" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(r("Hotmart Sales Agents")) })]
+				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Hotmart Sales Agents" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(r("Hotmart Sales Agents")) })]
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "attribution-row",
-				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Marketplace Hotmart" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(r("Marketplace Hotmart")) })]
+				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Marketplace Hotmart" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(r("Marketplace Hotmart")) })]
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "attribution-row",
-				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Order bumps · ferramenta" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: bB(n.filter((e) => e.isBump).length) })]
+				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Order bumps · ferramenta" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: wB(n.filter((e) => e.isBump).length) })]
 			}),
 			/* @__PURE__ */ (0, S.jsx)("div", {
 				className: "insight-note",
@@ -29279,7 +29383,7 @@ function SB({ orders: e, metrics: t }) {
 		]
 	});
 }
-function CB() {
+function DB() {
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: "panel creative-panel",
 		children: [
@@ -29294,11 +29398,11 @@ function CB() {
 			["Mvave BR", "Oficina do Violão"].map((e) => /* @__PURE__ */ (0, S.jsxs)("details", { children: [/* @__PURE__ */ (0, S.jsxs)("summary", { children: [
 				e,
 				" · ",
-				yB.filter((t) => t.brand === e).length,
+				CB.filter((t) => t.brand === e).length,
 				" peças"
 			] }), /* @__PURE__ */ (0, S.jsx)("div", {
 				className: "creative-grid",
-				children: yB.filter((t) => t.brand === e).map((e) => /* @__PURE__ */ (0, S.jsxs)("article", {
+				children: CB.filter((t) => t.brand === e).map((e) => /* @__PURE__ */ (0, S.jsxs)("article", {
 					className: "creative-card",
 					children: [/* @__PURE__ */ (0, S.jsx)(w, {
 						src: e.src,
@@ -29318,7 +29422,7 @@ function CB() {
 	});
 }
 // src/components/manual-fields.tsx
-function wB({ data: e, actions: t, onChange: n }) {
+function OB({ data: e, actions: t, onChange: n }) {
 	let [r, i] = (0, b.useState)(""), [a, o] = (0, b.useState)(!1);
 	async function s(e) {
 		await t.save(e), n(e);
@@ -29457,16 +29561,16 @@ function wB({ data: e, actions: t, onChange: n }) {
 	});
 }
 // src/components/performance-panels.tsx
-var TB = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), EB = (e) => e === null ? "—" : `${e.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%`, DB = (e) => e === null ? "—" : `${e.toLocaleString("pt-BR", {
+var kB = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), AB = (e) => e === null ? "—" : `${e.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%`, jB = (e) => e === null ? "—" : `${e.toLocaleString("pt-BR", {
 	minimumFractionDigits: 2,
 	maximumFractionDigits: 2
-})}x`, OB = (e) => e.slice(8) + "/" + e.slice(5, 7) + "/" + e.slice(0, 4), kB = {
+})}x`, MB = (e) => e.slice(8) + "/" + e.slice(5, 7) + "/" + e.slice(0, 4), NB = {
 	background: "#202020",
 	border: "1px solid #3b3b3b",
 	borderRadius: 10,
 	color: "#fafafa"
 };
-function AB({ metrics: e, currency: t, manual: n = !1 }) {
+function PB({ metrics: e, currency: t, manual: n = !1 }) {
 	let [r, i] = (0, b.useState)(e.metaRoas === null && n ? "mer" : "meta"), a = r === "mer" ? e.mer : r === "meta" ? e.metaRoas : e.attributedRoas;
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: "roas-hero",
@@ -29500,11 +29604,11 @@ function AB({ metrics: e, currency: t, manual: n = !1 }) {
 						]
 					})]
 				}),
-				/* @__PURE__ */ (0, S.jsx)("strong", { children: DB(a) }),
+				/* @__PURE__ */ (0, S.jsx)("strong", { children: jB(a) }),
 				/* @__PURE__ */ (0, S.jsx)("p", { children: r === "mer" ? "Receita bruta Hotmart ÷ investimento Meta. Inclui todas as origens; não comprova atribuição." : r === "meta" ? "Valor de compras atribuído pela Meta ÷ investimento." : "Receita aprovada Hotmart com origem verificável ÷ investimento." }),
 				/* @__PURE__ */ (0, S.jsxs)("small", { children: [
 					"MER geral: ",
-					DB(e.mer),
+					jB(e.mer),
 					" · inclui todas as origens no recorte."
 				] })
 			]
@@ -29514,19 +29618,19 @@ function AB({ metrics: e, currency: t, manual: n = !1 }) {
 				/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Investimento em anúncios" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: $R(e.spend, t) })] }),
 				/* @__PURE__ */ (0, S.jsxs)("article", { children: [
 					/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas aprovadas · Hotmart" }),
-					/* @__PURE__ */ (0, S.jsx)("strong", { children: TB(e.sales) }),
+					/* @__PURE__ */ (0, S.jsx)("strong", { children: kB(e.sales) }),
 					/* @__PURE__ */ (0, S.jsxs)("small", { children: [$R(e.gross, t), " em receita bruta"] })
 				] }),
 				/* @__PURE__ */ (0, S.jsxs)("article", { children: [
 					/* @__PURE__ */ (0, S.jsx)("span", { children: "Tracking das vendas" }),
-					/* @__PURE__ */ (0, S.jsx)("strong", { children: EB(e.trackingRate) }),
-					/* @__PURE__ */ (0, S.jsx)("small", { children: n ? "Compras Meta ÷ vendas aprovadas Hotmart" : `${TB(e.attributed)} com origem mapeada` })
+					/* @__PURE__ */ (0, S.jsx)("strong", { children: AB(e.trackingRate) }),
+					/* @__PURE__ */ (0, S.jsx)("small", { children: n ? "Compras Meta ÷ vendas aprovadas Hotmart" : `${kB(e.attributed)} com origem mapeada` })
 				] })
 			]
 		})]
 	});
 }
-function jB({ metrics: e, currency: t }) {
+function FB({ metrics: e, currency: t }) {
 	let n = [
 		{
 			title: "Cliques no link",
@@ -29589,11 +29693,11 @@ function jB({ metrics: e, currency: t }) {
 					/* @__PURE__ */ (0, S.jsx)("h3", { children: e }),
 					/* @__PURE__ */ (0, S.jsx)("strong", {
 						className: "stage-value",
-						children: TB(n)
+						children: kB(n)
 					}),
 					/* @__PURE__ */ (0, S.jsxs)("dl", { children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: i }), /* @__PURE__ */ (0, S.jsx)("dd", { children: $R(a, t) })] }), /* @__PURE__ */ (0, S.jsxs)("div", {
 						title: c + " × 100",
-						children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: o }), /* @__PURE__ */ (0, S.jsx)("dd", { children: EB(s) })]
+						children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: o }), /* @__PURE__ */ (0, S.jsx)("dd", { children: AB(s) })]
 					})] }),
 					/* @__PURE__ */ (0, S.jsxs)("small", { children: [c, " × 100"] })
 				] }, e))
@@ -29605,7 +29709,7 @@ function jB({ metrics: e, currency: t }) {
 		]
 	});
 }
-function MB({ data: e, orders: t, metrics: n }) {
+function IB({ data: e, orders: t, metrics: n }) {
 	let r = t.filter((e) => YR(e.status)), i = r.filter((e) => e.manualSourcePresent || Object.values(e.source).some(Boolean)), a = i.filter((t) => !sz(t, e.mappings));
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: "panel",
@@ -29617,9 +29721,9 @@ function MB({ data: e, orders: t, metrics: n }) {
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "tracking-summary",
 				children: [
-					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e.mode === "manual" ? "Com código de origem" : "Com atribuição confirmada" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: TB(e.mode === "manual" ? i.length : n.attributed) })] }),
-					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e.mode === "manual" ? "Código numérico SCK" : "Origem recebida, sem mapeamento" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: TB(e.mode === "manual" ? r.filter((e) => e.manualSourceCategory === "Código numérico SCK").length : a.length) })] }),
-					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Sem identificador de origem" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: TB(r.length - i.length) })] })
+					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e.mode === "manual" ? "Com código de origem" : "Com atribuição confirmada" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: kB(e.mode === "manual" ? i.length : n.attributed) })] }),
+					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e.mode === "manual" ? "Código numérico SCK" : "Origem recebida, sem mapeamento" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: kB(e.mode === "manual" ? r.filter((e) => e.manualSourceCategory === "Código numérico SCK").length : a.length) })] }),
+					/* @__PURE__ */ (0, S.jsxs)("article", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Sem identificador de origem" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: kB(r.length - i.length) })] })
 				]
 			}),
 			/* @__PURE__ */ (0, S.jsx)("div", {
@@ -29646,7 +29750,7 @@ function MB({ data: e, orders: t, metrics: n }) {
 		]
 	});
 }
-function NB({ series: e, filters: t }) {
+function LB({ series: e, filters: t }) {
 	let [n, r] = (0, b.useState)("cumulative"), i = {
 		cumulative: {
 			title: "Crescimento da operação",
@@ -29695,9 +29799,9 @@ function NB({ series: e, filters: t }) {
 				className: "panel-heading",
 				children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("h2", { children: i.title }), /* @__PURE__ */ (0, S.jsxs)("p", { children: [
 					t.start === "2026-08-21" ? "Desde o início da operação · " : "",
-					OB(t.start),
+					MB(t.start),
 					" a ",
-					OB(t.end)
+					MB(t.end)
 				] })] }), /* @__PURE__ */ (0, S.jsxs)("select", {
 					"aria-label": "Indicador do gráfico",
 					value: n,
@@ -29795,7 +29899,7 @@ function NB({ series: e, filters: t }) {
 								tickFormatter: (e) => Number(e) >= 1e3 ? `${(Number(e) / 1e3).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}k` : Number(e).toLocaleString("pt-BR", { maximumFractionDigits: 1 })
 							}),
 							/* @__PURE__ */ (0, S.jsx)(wT, {
-								contentStyle: kB,
+								contentStyle: NB,
 								formatter: (e, t) => [typeof e == "number" ? e.toLocaleString("pt-BR", { maximumFractionDigits: 2 }) : "—", t === i.primary ? i.label : i.second]
 							}),
 							i.secondary && /* @__PURE__ */ (0, S.jsx)(wN, {
@@ -29827,8 +29931,8 @@ function NB({ series: e, filters: t }) {
 		]
 	});
 }
-function PB({ data: e, filters: t }) {
-	let [n, r] = (0, b.useState)(""), i = [...new Map((e.followers ?? []).map((e) => [e.accountId, e.username])).entries()], a = n || i[0]?.[0] || "", o = hB(e.followers ?? [], t.start, t.end, a);
+function RB({ data: e, filters: t }) {
+	let [n, r] = (0, b.useState)(""), i = [...new Map((e.followers ?? []).map((e) => [e.accountId, e.username])).entries()], a = n || i[0]?.[0] || "", o = yB(e.followers ?? [], t.start, t.end, a);
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: "panel instagram-panel",
 		children: [
@@ -29848,15 +29952,15 @@ function PB({ data: e, filters: t }) {
 				className: "instagram-numbers",
 				children: [/* @__PURE__ */ (0, S.jsxs)("article", { children: [
 					/* @__PURE__ */ (0, S.jsx)("span", { children: "Seguidores no último registro do período" }),
-					/* @__PURE__ */ (0, S.jsx)("strong", { children: TB(o.latest?.followers ?? null) }),
-					/* @__PURE__ */ (0, S.jsx)("small", { children: o.latest ? OB(o.latest.date) : e.mode === "manual" ? "Aguardando seus registros" : "Aguardando integração" })
+					/* @__PURE__ */ (0, S.jsx)("strong", { children: kB(o.latest?.followers ?? null) }),
+					/* @__PURE__ */ (0, S.jsx)("small", { children: o.latest ? MB(o.latest.date) : e.mode === "manual" ? "Aguardando seus registros" : "Aguardando integração" })
 				] }), /* @__PURE__ */ (0, S.jsxs)("article", { children: [
 					/* @__PURE__ */ (0, S.jsx)("span", { children: "Variação entre registros" }),
 					/* @__PURE__ */ (0, S.jsxs)("strong", {
 						className: o.delta !== null && o.delta >= 0 ? "positive" : "",
-						children: [o.delta !== null && o.delta > 0 ? "+" : "", TB(o.delta)]
+						children: [o.delta !== null && o.delta > 0 ? "+" : "", kB(o.delta)]
 					}),
-					/* @__PURE__ */ (0, S.jsxs)("small", { children: [EB(o.percent), o.baseline ? ` · base de ${OB(o.baseline.date)}` : ""] })
+					/* @__PURE__ */ (0, S.jsxs)("small", { children: [AB(o.percent), o.baseline ? ` · base de ${MB(o.baseline.date)}` : ""] })
 				] })]
 			}),
 			o.points.length > 0 ? /* @__PURE__ */ (0, S.jsx)("div", {
@@ -29881,7 +29985,7 @@ function PB({ data: e, filters: t }) {
 							}),
 							/* @__PURE__ */ (0, S.jsx)(eF, {
 								dataKey: "date",
-								tickFormatter: OB,
+								tickFormatter: MB,
 								minTickGap: 45,
 								tick: {
 									fill: "#929292",
@@ -29900,8 +30004,8 @@ function PB({ data: e, filters: t }) {
 								axisLine: !1
 							}),
 							/* @__PURE__ */ (0, S.jsx)(wT, {
-								labelFormatter: (e) => OB(String(e)),
-								contentStyle: kB
+								labelFormatter: (e) => MB(String(e)),
+								contentStyle: NB
 							}),
 							/* @__PURE__ */ (0, S.jsx)(wN, {
 								type: "linear",
@@ -29926,7 +30030,7 @@ function PB({ data: e, filters: t }) {
 		]
 	});
 }
-function FB({ src: e, demo: t, index: n, name: r }) {
+function zB({ src: e, demo: t, index: n, name: r }) {
 	let [i, a] = (0, b.useState)(!1);
 	return t ? /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: `demo-creative art-${n % 3}`,
@@ -29962,8 +30066,8 @@ function FB({ src: e, demo: t, index: n, name: r }) {
 		className: "creative-image"
 	});
 }
-function IB({ data: e, filters: t, limit: n = 12 }) {
-	let [r, i] = (0, b.useState)(e.mode === "manual" ? "purchases" : "roas"), [a, o] = (0, b.useState)("0"), [s, c] = (0, b.useState)(null), l = (0, b.useRef)(null), u = (0, b.useMemo)(() => _B(e, t, r, Math.max(0, Number(a) || 0) * 10 ** QR(t.currency)), [
+function BB({ data: e, filters: t, limit: n = 12 }) {
+	let [r, i] = (0, b.useState)(e.mode === "manual" ? "purchases" : "roas"), [a, o] = (0, b.useState)("0"), [s, c] = (0, b.useState)(null), l = (0, b.useRef)(null), u = (0, b.useMemo)(() => xB(e, t, r, Math.max(0, Number(a) || 0) * 10 ** QR(t.currency)), [
 		e,
 		t,
 		r,
@@ -30029,7 +30133,7 @@ function IB({ data: e, filters: t, limit: n = 12 }) {
 						"aria-label": `Ampliar criativo ${n.ad.ad}`,
 						onClick: () => c(n.key),
 						children: [
-							/* @__PURE__ */ (0, S.jsx)(FB, {
+							/* @__PURE__ */ (0, S.jsx)(zB, {
 								src: f(n.ad.accountId, n.ad.adId),
 								demo: e.mode === "demo",
 								index: r,
@@ -30056,9 +30160,9 @@ function IB({ data: e, filters: t, limit: n = 12 }) {
 							/* @__PURE__ */ (0, S.jsxs)("dl", { children: [
 								/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "ROAS Meta" }), /* @__PURE__ */ (0, S.jsx)("dd", {
 									className: "orange-value",
-									children: DB(n.metrics.metaRoas)
+									children: jB(n.metrics.metaRoas)
 								})] }),
-								/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Compras" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: TB(n.metrics.purchases) })] }),
+								/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Compras" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: kB(n.metrics.purchases) })] }),
 								/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Gasto" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: $R(n.metrics.spend, t.currency) })] }),
 								/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Custo por compra" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: $R(n.metrics.cpa, t.currency) })] })
 							] }),
@@ -30089,7 +30193,7 @@ function IB({ data: e, filters: t, limit: n = 12 }) {
 					onClick: () => l.current?.close(),
 					children: /* @__PURE__ */ (0, S.jsx)(KR, { size: 20 })
 				}), d && /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
-					/* @__PURE__ */ (0, S.jsx)(FB, {
+					/* @__PURE__ */ (0, S.jsx)(zB, {
 						src: f(d.ad.accountId, d.ad.adId),
 						demo: e.mode === "demo",
 						index: u.indexOf(d),
@@ -30105,7 +30209,7 @@ function IB({ data: e, filters: t, limit: n = 12 }) {
 						"Anúncio ",
 						d.ad.adId,
 						" · ROAS ",
-						DB(d.metrics.metaRoas)
+						jB(d.metrics.metaRoas)
 					] })
 				] })]
 			})
@@ -30113,7 +30217,7 @@ function IB({ data: e, filters: t, limit: n = 12 }) {
 	});
 }
 // src/components/dashboard.tsx
-var LB = [
+var VB = [
 	{
 		id: "overview",
 		label: "Visão geral",
@@ -30174,17 +30278,17 @@ var LB = [
 		label: "Configurações",
 		icon: AR
 	}
-], RB = (e, t = 2) => e === null ? "—" : e.toLocaleString("pt-BR", {
+], HB = (e, t = 2) => e === null ? "—" : e.toLocaleString("pt-BR", {
 	maximumFractionDigits: t,
 	minimumFractionDigits: t
-}), zB = (e) => e === null ? "—" : `${RB(e)}x`, BB = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), VB = (e) => new Intl.DateTimeFormat("pt-BR", {
+}), UB = (e) => e === null ? "—" : `${HB(e)}x`, WB = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), GB = (e) => new Intl.DateTimeFormat("pt-BR", {
 	day: "2-digit",
 	month: "short",
 	hour: "2-digit",
 	minute: "2-digit",
 	timeZone: "America/Sao_Paulo"
 }).format(new Date(e));
-function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, manualNotice: i, clientControl: a, analysisActions: o }) {
+function KB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, manualNotice: i, clientControl: a, analysisActions: o }) {
 	let s = E(), [c, l] = (0, b.useState)(() => Date.now()), [u, d] = (0, b.useState)(e), [f, p] = (0, b.useState)("overview"), [m, h] = (0, b.useState)(!1), [g, _] = (0, b.useState)({
 		start: t,
 		end: n,
@@ -30273,7 +30377,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 		"BRL",
 		...u.orders.map((e) => e.currency),
 		...u.insights.map((e) => e.currency)
-	])], R = [...new Map(u.orders.map((e) => [e.productId, e.product])).entries()], te = (0, b.useMemo)(() => mB(u, g, tz(new Date(c).toISOString())), [
+	])], R = [...new Map(u.orders.map((e) => [e.productId, e.product])).entries()], te = (0, b.useMemo)(() => vB(u, g, tz(new Date(c).toISOString())), [
 		u,
 		g,
 		c
@@ -30288,7 +30392,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 	}).sort((e, t) => t.revenue - e.revenue), re = [...new Set(P.orders.filter((e) => YR(e.status)).map((e) => e.payment))].map((e) => ({
 		name: e === "CREDIT_CARD" ? "Cartão" : e,
 		value: P.orders.filter((t) => YR(t.status) && t.payment === e).length
-	})), z = u.mode === "manual", B = u.mode === "demo", ie = LB.find((e) => e.id === f), ae = P.orders.length > 0 || P.insights.length > 0, oe = u.mode === "live" && u.sync.some((e) => !e.lastSuccess || c - Date.parse(e.lastSuccess) > (e.provider === "instagram" ? 120 : 15) * 6e4 || e.status === "error");
+	})), z = u.mode === "manual", B = u.mode === "demo", ie = VB.find((e) => e.id === f), ae = P.orders.length > 0 || P.insights.length > 0, oe = u.mode === "live" && u.sync.some((e) => !e.lastSuccess || c - Date.parse(e.lastSuccess) > (e.provider === "instagram" ? 120 : 15) * 6e4 || e.status === "error");
 	function V(e) {
 		p(e), h(!1);
 	}
@@ -30302,7 +30406,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 	}
 	function ce(e) {
 		let t = B || z ? n : tz((/* @__PURE__ */ new Date()).toISOString()), r = {
-			start: e === 0 ? vB : iz(t, 1 - e),
+			start: e === 0 ? SB : iz(t, 1 - e),
 			end: t
 		};
 		y(r), _({
@@ -30360,7 +30464,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 					}),
 					/* @__PURE__ */ (0, S.jsx)("nav", {
 						"aria-label": "Navegação principal",
-						children: LB.map(({ id: e, label: t, icon: n }) => /* @__PURE__ */ (0, S.jsxs)("button", {
+						children: VB.map(({ id: e, label: t, icon: n }) => /* @__PURE__ */ (0, S.jsxs)("button", {
 							className: `${f === e ? "active" : ""} ${e === "integrations" ? "nav-divider" : ""}`,
 							onClick: () => V(e),
 							"aria-current": f === e ? "page" : void 0,
@@ -30480,7 +30584,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 										className: "orange-dot",
 										children: "."
 									})] }),
-									/* @__PURE__ */ (0, S.jsx)("p", { children: f === "overview" ? "Mídia, vendas e resultado. Cada número no seu devido lugar." : UB[f] })
+									/* @__PURE__ */ (0, S.jsx)("p", { children: f === "overview" ? "Mídia, vendas e resultado. Cada número no seu devido lugar." : qB[f] })
 								] }),
 								z && /* @__PURE__ */ (0, S.jsxs)("button", {
 									className: "button secondary",
@@ -30684,11 +30788,11 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 								})
 							]
 						}),
-						["overview", "meta"].includes(f) && /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)(AB, {
+						["overview", "meta"].includes(f) && /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)(PB, {
 							metrics: I,
 							currency: g.currency,
 							manual: z
-						}), /* @__PURE__ */ (0, S.jsx)(jB, {
+						}), /* @__PURE__ */ (0, S.jsx)(FB, {
 							metrics: I,
 							currency: g.currency
 						})] }),
@@ -30704,7 +30808,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 							/* @__PURE__ */ (0, S.jsxs)("div", {
 								className: "kpi-grid",
 								children: [
-									/* @__PURE__ */ (0, S.jsx)(WB, {
+									/* @__PURE__ */ (0, S.jsx)(JB, {
 										title: f === "meta" ? "Investimento em mídia" : "Receita bruta aprovada",
 										value: $R(f === "meta" ? I.spend : I.gross, g.currency),
 										change: x ? oz(f === "meta" ? I.spend : I.gross, f === "meta" ? L.spend : L.gross) : null,
@@ -30712,24 +30816,24 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 										icon: /* @__PURE__ */ (0, S.jsx)(WR, { size: 18 }),
 										featured: !0
 									}),
-									/* @__PURE__ */ (0, S.jsx)(WB, {
+									/* @__PURE__ */ (0, S.jsx)(JB, {
 										title: f === "meta" ? "Compras atribuídas · Meta" : "Investimento em mídia",
-										value: f === "meta" ? BB(I.purchases) : $R(I.spend, g.currency),
+										value: f === "meta" ? WB(I.purchases) : $R(I.spend, g.currency),
 										change: x ? oz(f === "meta" ? I.purchases : I.spend, f === "meta" ? L.purchases : L.spend) : null,
 										detail: f === "meta" ? "Conversões reportadas pela plataforma" : "Meta Ads · valor gasto",
 										icon: /* @__PURE__ */ (0, S.jsx)(vR, { size: 18 }),
 										neutral: !0
 									}),
-									/* @__PURE__ */ (0, S.jsx)(WB, {
+									/* @__PURE__ */ (0, S.jsx)(JB, {
 										title: f === "meta" ? "ROAS · Meta" : "Resultado após mídia",
-										value: f === "meta" ? zB(I.metaRoas) : $R(I.profit, g.currency),
+										value: f === "meta" ? UB(I.metaRoas) : $R(I.profit, g.currency),
 										change: x ? oz(f === "meta" ? I.metaRoas : I.profit, f === "meta" ? L.metaRoas : L.profit) : null,
 										detail: f === "meta" ? "Valor atribuído Meta ÷ investimento" : "Líquido apurado − investimento",
 										icon: /* @__PURE__ */ (0, S.jsx)(HR, { size: 18 })
 									}),
-									/* @__PURE__ */ (0, S.jsx)(WB, {
+									/* @__PURE__ */ (0, S.jsx)(JB, {
 										title: f === "meta" ? "CPA · Meta" : "MER da operação",
-										value: f === "meta" ? $R(I.cpa, g.currency) : zB(I.mer),
+										value: f === "meta" ? $R(I.cpa, g.currency) : UB(I.mer),
 										change: x ? oz(f === "meta" ? I.cpa : I.mer, f === "meta" ? L.cpa : L.mer) : null,
 										detail: f === "meta" ? "Investimento ÷ compras Meta" : "Receita bruta ÷ investimento total",
 										icon: /* @__PURE__ */ (0, S.jsx)(HL, { size: 18 }),
@@ -30740,25 +30844,25 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 							/* @__PURE__ */ (0, S.jsx)("div", {
 								className: "secondary-kpis",
 								children: (f === "meta" ? [
-									["Impressões", BB(I.impressions)],
+									["Impressões", WB(I.impressions)],
 									["CPC · link", $R(I.cpc, g.currency)],
-									["CTR · link", I.ctr === null ? "—" : RB(I.ctr) + "%"],
+									["CTR · link", I.ctr === null ? "—" : HB(I.ctr) + "%"],
 									["CPM", $R(I.cpm, g.currency)],
-									["Frequência", RB(I.frequency)]
+									["Frequência", HB(I.frequency)]
 								] : [
-									["Vendas aprovadas", BB(I.sales)],
+									["Vendas aprovadas", WB(I.sales)],
 									["Ticket médio", $R(I.ticket, g.currency)],
 									["Líquido apurado", $R(I.net, g.currency)],
-									["Pendentes", BB(I.pending)],
-									["Reembolsos / chargebacks", BB(I.refunds)]
+									["Pendentes", WB(I.pending)],
+									["Reembolsos / chargebacks", WB(I.refunds)]
 								]).map(([e, t]) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e }), /* @__PURE__ */ (0, S.jsx)("strong", { children: t })] }, e))
 							}),
 							/* @__PURE__ */ (0, S.jsxs)("div", {
 								className: "charts-grid",
-								children: [/* @__PURE__ */ (0, S.jsx)(NB, {
+								children: [/* @__PURE__ */ (0, S.jsx)(LB, {
 									series: te,
 									filters: g
-								}), z ? /* @__PURE__ */ (0, S.jsx)(SB, {
+								}), z ? /* @__PURE__ */ (0, S.jsx)(EB, {
 									orders: P.orders,
 									metrics: I
 								}) : /* @__PURE__ */ (0, S.jsxs)("section", {
@@ -30798,13 +30902,13 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 										}),
 										/* @__PURE__ */ (0, S.jsxs)("div", {
 											className: "attributed-roas",
-											children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "ROAS Hotmart atribuído" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: zB(I.attributedRoas) })]
+											children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "ROAS Hotmart atribuído" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: UB(I.attributedRoas) })]
 										})
 									]
 								})]
 							})
 						] }),
-						z && f === "overview" && /* @__PURE__ */ (0, S.jsx)(xB, {
+						z && f === "overview" && /* @__PURE__ */ (0, S.jsx)(TB, {
 							data: u,
 							filters: g,
 							compact: !0
@@ -30813,7 +30917,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 							"overview",
 							"campaigns",
 							"meta"
-						].includes(f) && /* @__PURE__ */ (0, S.jsx)(GB, {
+						].includes(f) && /* @__PURE__ */ (0, S.jsx)(YB, {
 							manual: z,
 							insights: P.insights,
 							orders: P.orders,
@@ -30946,23 +31050,23 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 								})
 							]
 						}),
-						["overview", "creatives"].includes(f) && /* @__PURE__ */ (0, S.jsx)(IB, {
+						["overview", "creatives"].includes(f) && /* @__PURE__ */ (0, S.jsx)(BB, {
 							data: u,
 							filters: g
 						}),
-						z && f === "creatives" && /* @__PURE__ */ (0, S.jsx)(CB, {}),
-						z && f === "tracking" && /* @__PURE__ */ (0, S.jsx)(SB, {
+						z && f === "creatives" && /* @__PURE__ */ (0, S.jsx)(DB, {}),
+						z && f === "tracking" && /* @__PURE__ */ (0, S.jsx)(EB, {
 							orders: P.orders,
 							metrics: I
 						}),
-						f === "tracking" && /* @__PURE__ */ (0, S.jsx)(MB, {
+						f === "tracking" && /* @__PURE__ */ (0, S.jsx)(IB, {
 							data: u,
 							orders: P.orders,
 							metrics: I
 						}),
 						z && f === "instagram" && r && /* @__PURE__ */ (0, S.jsxs)("details", {
 							className: "manual-total-details",
-							children: [/* @__PURE__ */ (0, S.jsx)("summary", { children: "Registrar total atual de seguidores (opcional)" }), /* @__PURE__ */ (0, S.jsx)(wB, {
+							children: [/* @__PURE__ */ (0, S.jsx)("summary", { children: "Registrar total atual de seguidores (opcional)" }), /* @__PURE__ */ (0, S.jsx)(OB, {
 								data: u,
 								actions: r,
 								onChange: (e) => d({
@@ -30971,11 +31075,11 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 								})
 							})]
 						}),
-						z && f === "instagram" && /* @__PURE__ */ (0, S.jsx)(xB, {
+						z && f === "instagram" && /* @__PURE__ */ (0, S.jsx)(TB, {
 							data: u,
 							filters: g
 						}),
-						(!z && ["overview", "instagram"].includes(f) || z && f === "instagram" && !!u.followers?.length) && /* @__PURE__ */ (0, S.jsx)(PB, {
+						(!z && ["overview", "instagram"].includes(f) || z && f === "instagram" && !!u.followers?.length) && /* @__PURE__ */ (0, S.jsx)(RB, {
 							data: u,
 							filters: g
 						}),
@@ -31003,7 +31107,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 									children: "A Oficina do Violão ainda não tem dados nestes arquivos. Para novembro, recomendamos atualização semanal e conferência no fechamento do mês."
 								})
 							]
-						}) : /* @__PURE__ */ (0, S.jsx)(KB, { data: u })),
+						}) : /* @__PURE__ */ (0, S.jsx)(XB, { data: u })),
 						f === "settings" && /* @__PURE__ */ (0, S.jsxs)("section", {
 							className: "panel settings-panel",
 							children: [
@@ -31020,7 +31124,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 								})
 							]
 						}),
-						["reports", "actions"].includes(f) && /* @__PURE__ */ (0, S.jsx)(fB, {
+						["reports", "actions"].includes(f) && /* @__PURE__ */ (0, S.jsx)(gB, {
 							mode: f === "actions" ? "actions" : "report",
 							data: u,
 							initialFilters: g,
@@ -31048,7 +31152,7 @@ function HB({ initialData: e, initialStart: t, initialEnd: n, manualActions: r, 
 		]
 	});
 }
-var UB = {
+var qB = {
 	creatives: "Identifique os anúncios com melhor resultado no período.",
 	tracking: "Confira a ligação entre vendas e anúncios.",
 	instagram: "Acompanhe a evolução dos seguidores da operação.",
@@ -31061,7 +31165,7 @@ var UB = {
 	integrations: "Acompanhe a origem e a atualização dos dados.",
 	settings: "Identidade, acesso e critérios da sua operação."
 };
-function WB({ title: e, value: t, change: n, detail: r, icon: i, featured: a = !1, inverse: o = !1, neutral: s = !1 }) {
+function JB({ title: e, value: t, change: n, detail: r, icon: i, featured: a = !1, inverse: o = !1, neutral: s = !1 }) {
 	return /* @__PURE__ */ (0, S.jsxs)("article", {
 		className: `kpi ${a ? "featured" : ""}`,
 		children: [
@@ -31083,7 +31187,7 @@ function WB({ title: e, value: t, change: n, detail: r, icon: i, featured: a = !
 					children: [
 						n >= 0 ? /* @__PURE__ */ (0, S.jsx)(PL, { size: 13 }) : /* @__PURE__ */ (0, S.jsx)(OL, { size: 13 }),
 						" ",
-						RB(Math.abs(n), 1),
+						HB(Math.abs(n), 1),
 						"%"
 					]
 				}), /* @__PURE__ */ (0, S.jsx)("span", { children: n === null ? "Sem comparação disponível" : "vs. período anterior" })]
@@ -31092,7 +31196,7 @@ function WB({ title: e, value: t, change: n, detail: r, icon: i, featured: a = !
 		]
 	});
 }
-function GB({ insights: e, orders: t, mappings: n, currency: r, manual: i = !1 }) {
+function YB({ insights: e, orders: t, mappings: n, currency: r, manual: i = !1 }) {
 	let [a, o] = (0, b.useState)(""), [s, c] = (0, b.useState)("all"), [l, u] = (0, b.useState)(i ? "ad" : "campaign"), [d, f] = (0, b.useState)(null), [p, m] = (0, b.useState)(null), [h, g] = (0, b.useState)({
 		key: "spend",
 		direction: -1
@@ -31256,7 +31360,7 @@ function GB({ insights: e, orders: t, mappings: n, currency: r, manual: i = !1 }
 								"spend",
 								"cpa",
 								"hotmart"
-							].includes(t) ? $R(n, r) : t === "roas" ? zB(n) : t === "ctr" ? n === null ? "—" : RB(n) + "%" : BB(n)
+							].includes(t) ? $R(n, r) : t === "roas" ? UB(n) : t === "ctr" ? n === null ? "—" : HB(n) + "%" : WB(n)
 						}, t);
 					})
 				] }, e.id)) })] }), !w.length && /* @__PURE__ */ (0, S.jsx)("p", {
@@ -31276,7 +31380,7 @@ function GB({ insights: e, orders: t, mappings: n, currency: r, manual: i = !1 }
 		]
 	});
 }
-function KB({ data: e }) {
+function XB({ data: e }) {
 	return /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "integration-grid",
 		children: e.sync.map((t) => /* @__PURE__ */ (0, S.jsxs)("section", {
@@ -31300,8 +31404,8 @@ function KB({ data: e }) {
 					})
 				}),
 				/* @__PURE__ */ (0, S.jsxs)("dl", { children: [
-					t.provider === "hotmart" && /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Último webhook processado" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: t.lastEvent ? VB(t.lastEvent) : "Nenhum evento" })] }),
-					/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Último lote concluído" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: t.lastSuccess ? VB(t.lastSuccess) : "Nenhuma sincronização" })] }),
+					t.provider === "hotmart" && /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Último webhook processado" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: t.lastEvent ? GB(t.lastEvent) : "Nenhum evento" })] }),
+					/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Último lote concluído" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: t.lastSuccess ? GB(t.lastSuccess) : "Nenhuma sincronização" })] }),
 					/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Atualização prevista" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: t.provider === "meta" ? "Lotes a cada 5 minutos" : t.provider === "instagram" ? "A cada hora" : "Webhooks + conferência agendada" })] }),
 					/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Permissão" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: t.provider === "meta" ? "Leitura · ads_read" : t.provider === "instagram" ? "Leitura de conta profissional" : "Eventos + leitura de vendas" })] })
 				] }),
@@ -31319,7 +31423,7 @@ function KB({ data: e }) {
 	});
 }
 // src/lib/board-analysis.ts
-function qB(e, t, n) {
+function ZB(e, t, n) {
 	let r = lz(e, t), i = Ez(e, {
 		...t,
 		product: "all"
@@ -31345,34 +31449,34 @@ function qB(e, t, n) {
 		};
 	}).sort((e, t) => t.sales - e.sales || t.gross - e.gross || e.key.localeCompare(t.key));
 }
-var JB = [
+var QB = [
 	"gross",
 	"net",
 	"sales",
 	"spend",
 	"purchases"
 ];
-function YB(e) {
+function $B(e) {
 	let t = e + "-01", n = /* @__PURE__ */ new Date(t + "T12:00:00Z");
 	return n.setUTCMonth(n.getUTCMonth() + 1), {
 		start: t,
 		end: iz(n.toISOString().slice(0, 10), -1)
 	};
 }
-function XB(e) {
-	return iz(YB(e.slice(0, 7)).end, 1).slice(0, 7);
+function eV(e) {
+	return iz($B(e.slice(0, 7)).end, 1).slice(0, 7);
 }
-var ZB = (e) => JSON.stringify([
+var tV = (e) => JSON.stringify([
 	e.organizationId,
 	e.currency,
 	e.target
 ]);
-function QB(e, t, n, r) {
+function nV(e, t, n, r) {
 	if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(n) || n < r.slice(0, 7)) return null;
 	let i = [], a = r.slice(0, 7);
 	for (let n = 0; n < 6 && i.length < 3; n++) {
 		a = iz(a + "-01", -1).slice(0, 7);
-		let n = YB(a), { metrics: o, hotmartCovered: s } = Ez(e, {
+		let n = $B(a), { metrics: o, hotmartCovered: s } = Ez(e, {
 			...n,
 			currency: t,
 			account: "all",
@@ -31390,7 +31494,7 @@ function QB(e, t, n, r) {
 	}
 	if (!i.length) return null;
 	i.reverse();
-	let o = YB(n), s = rz(o.start, o.end), c = Object.fromEntries(JB.map((e) => [e, i.every((t) => t[e] !== null) ? Math.round(ZR(i.map((t) => t[e])) / i.reduce((e, t) => e + t.days, 0) * s) : null]));
+	let o = $B(n), s = rz(o.start, o.end), c = Object.fromEntries(QB.map((e) => [e, i.every((t) => t[e] !== null) ? Math.round(ZR(i.map((t) => t[e])) / i.reduce((e, t) => e + t.days, 0) * s) : null]));
 	return {
 		version: 1,
 		organizationId: e.organizationId,
@@ -31402,17 +31506,17 @@ function QB(e, t, n, r) {
 		base: c
 	};
 }
-function $B(e, t) {
-	return Object.fromEntries(JB.map((n) => [n, e.base[n] === null ? null : n === "spend" ? e.base[n] : Math.round(e.base[n] * t)]));
+function rV(e, t) {
+	return Object.fromEntries(QB.map((n) => [n, e.base[n] === null ? null : n === "spend" ? e.base[n] : Math.round(e.base[n] * t)]));
 }
-function eV(e) {
+function iV(e) {
 	return {
 		cpa: Z(e.spend, e.purchases),
 		mer: Z(e.gross, e.spend)
 	};
 }
-function tV(e, t, n) {
-	let r = YB(t.target), i = r.end < n ? r.end : n, a = null, o = null;
+function aV(e, t, n) {
+	let r = $B(t.target), i = r.end < n ? r.end : n, a = null, o = null;
 	for (let s = i; s >= r.start; s = iz(s, -1)) {
 		let i = Ez(e, {
 			start: r.start,
@@ -31437,7 +31541,7 @@ function tV(e, t, n) {
 		meta: o
 	};
 }
-function nV(e, t) {
+function oV(e, t) {
 	let n = e !== null && t !== null;
 	return {
 		remaining: n ? Math.max(0, e - t) : null,
@@ -31447,14 +31551,14 @@ function nV(e, t) {
 	};
 }
 // src/components/board-ui.tsx
-var rV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), iV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", {
+var sV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), cV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", {
 	minimumFractionDigits: 2,
 	maximumFractionDigits: 2
-}) + "×", aV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%", oV = (e) => e.split("-").reverse().join("/"), sV = (e) => Intl.NumberFormat("pt-BR", {
+}) + "×", lV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%", uV = (e) => e.split("-").reverse().join("/"), dV = (e) => Intl.NumberFormat("pt-BR", {
 	notation: "compact",
 	maximumFractionDigits: 1
 }).format(e);
-function cV({ label: e, value: t, detail: n, accent: r = !1 }) {
+function fV({ label: e, value: t, detail: n, accent: r = !1 }) {
 	return /* @__PURE__ */ (0, S.jsxs)("article", {
 		className: `board-metric ${r ? "board-metric-accent" : ""}`,
 		children: [
@@ -31464,7 +31568,7 @@ function cV({ label: e, value: t, detail: n, accent: r = !1 }) {
 		]
 	});
 }
-function lV({ title: e, subtitle: t, children: n, className: r = "" }) {
+function pV({ title: e, subtitle: t, children: n, className: r = "" }) {
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: `board-panel ${r}`,
 		children: [/* @__PURE__ */ (0, S.jsxs)("div", {
@@ -31474,13 +31578,13 @@ function lV({ title: e, subtitle: t, children: n, className: r = "" }) {
 	});
 }
 // src/components/board-extra-slides.tsx
-var uV = (e) => new Intl.DateTimeFormat("pt-BR", {
+var mV = (e) => new Intl.DateTimeFormat("pt-BR", {
 	month: "long",
 	year: "numeric",
 	timeZone: "UTC"
 }).format(/* @__PURE__ */ new Date(e + "-01T12:00:00Z"));
-function dV({ data: e, filters: t, today: n, page: r }) {
-	let i = (0, b.useMemo)(() => qB(e, t, n), [
+function hV({ data: e, filters: t, today: n, page: r }) {
+	let i = (0, b.useMemo)(() => ZB(e, t, n), [
 		e,
 		t,
 		n
@@ -31488,23 +31592,23 @@ function dV({ data: e, filters: t, today: n, page: r }) {
 	return /* @__PURE__ */ (0, S.jsxs)("div", { children: [r === void 0 && /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "board-metrics four",
 		children: [
-			/* @__PURE__ */ (0, S.jsx)(cV, {
+			/* @__PURE__ */ (0, S.jsx)(fV, {
 				label: "Produtos com vendas",
-				value: rV(i.length),
+				value: sV(i.length),
 				detail: o ? "Produtos aprovados no período" : "Somente registros recebidos",
 				accent: !0
 			}),
-			/* @__PURE__ */ (0, S.jsx)(cV, {
+			/* @__PURE__ */ (0, S.jsx)(fV, {
 				label: "Receita dos produtos",
 				value: s(a.gross),
 				detail: "Receita bruta aprovada · Hotmart"
 			}),
-			/* @__PURE__ */ (0, S.jsx)(cV, {
+			/* @__PURE__ */ (0, S.jsx)(fV, {
 				label: "Receita líquida",
 				value: s(a.net),
 				detail: "Líquido informado pela Hotmart"
 			}),
-			/* @__PURE__ */ (0, S.jsx)(cV, {
+			/* @__PURE__ */ (0, S.jsx)(fV, {
 				label: "CPA Meta da operação",
 				value: s(a.cpa),
 				detail: "Gasto ÷ compras Meta; todas as ofertas"
@@ -31521,7 +31625,7 @@ function dV({ data: e, filters: t, today: n, page: r }) {
 				}),
 				/* @__PURE__ */ (0, S.jsx)("h3", { children: e.name }),
 				/* @__PURE__ */ (0, S.jsxs)("strong", { children: [
-					rV(e.sales),
+					sV(e.sales),
 					" ",
 					/* @__PURE__ */ (0, S.jsx)("small", { children: "vendas" })
 				] }),
@@ -31529,7 +31633,7 @@ function dV({ data: e, filters: t, today: n, page: r }) {
 					className: "board-track",
 					children: /* @__PURE__ */ (0, S.jsx)("i", { style: { width: `${c ? e.sales / c * 100 : 0}%` } })
 				}),
-				/* @__PURE__ */ (0, S.jsxs)("p", { children: [aV(c ? e.sales / c * 100 : null), " das vendas aprovadas"] }),
+				/* @__PURE__ */ (0, S.jsxs)("p", { children: [lV(c ? e.sales / c * 100 : null), " das vendas aprovadas"] }),
 				/* @__PURE__ */ (0, S.jsxs)("dl", { children: [
 					/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Receita bruta" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: s(e.gross) })] }),
 					/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Receita líquida" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: s(e.net) })] }),
@@ -31540,7 +31644,7 @@ function dV({ data: e, filters: t, today: n, page: r }) {
 	}), /* @__PURE__ */ (0, S.jsx)("p", {
 		className: "board-footnote",
 		children: "CPA por produto exige vínculo exclusivo com os anúncios. Sem vínculo confiável, aparece “—”."
-	})] }) : /* @__PURE__ */ (0, S.jsxs)(lV, {
+	})] }) : /* @__PURE__ */ (0, S.jsxs)(pV, {
 		className: "board-product-ranking",
 		title: "Ranking de produtos",
 		subtitle: `Produtos ${r * 6 + 1}–${Math.min((r + 1) * 6, i.length)} de ${i.length} · por vendas`,
@@ -31556,7 +31660,7 @@ function dV({ data: e, filters: t, today: n, page: r }) {
 					}), /* @__PURE__ */ (0, S.jsx)("h3", { children: e.name })] }),
 					/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "board-product-primary",
-						children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas aprovadas" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: rV(e.sales) })] }), /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Receita bruta" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: s(e.gross) })] })]
+						children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas aprovadas" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: sV(e.sales) })] }), /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Receita bruta" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: s(e.gross) })] })]
 					}),
 					/* @__PURE__ */ (0, S.jsxs)("dl", { children: [
 						/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("dt", { children: "Receita líquida" }), /* @__PURE__ */ (0, S.jsx)("dd", { children: s(e.net) })] }),
@@ -31569,7 +31673,7 @@ function dV({ data: e, filters: t, today: n, page: r }) {
 			className: "board-footnote",
 			children: ["CPA vinculado = gasto ÷ compras dos anúncios com vínculo exclusivo e verificável com o produto. Sem esse vínculo, aparece “—”. O CPA da operação não é distribuído entre os produtos.", o ? "" : " Cobertura parcial: ranking apenas dos registros recebidos."]
 		})]
-	}) }) : /* @__PURE__ */ (0, S.jsx)(lV, {
+	}) }) : /* @__PURE__ */ (0, S.jsx)(pV, {
 		title: "Produtos mais vendidos",
 		subtitle: t.currency,
 		children: /* @__PURE__ */ (0, S.jsx)("p", {
@@ -31578,15 +31682,15 @@ function dV({ data: e, filters: t, today: n, page: r }) {
 		})
 	})] });
 }
-function fV({ data: e, filters: t, today: n }) {
+function gV({ data: e, filters: t, today: n }) {
 	let r = Ez(e, t, n).metaCovered;
 	return /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "board-creatives",
-		children: r ? /* @__PURE__ */ (0, S.jsx)(IB, {
+		children: r ? /* @__PURE__ */ (0, S.jsx)(BB, {
 			data: e,
 			filters: t,
 			limit: 4
-		}) : /* @__PURE__ */ (0, S.jsx)(lV, {
+		}) : /* @__PURE__ */ (0, S.jsx)(pV, {
 			title: "Melhores criativos",
 			subtitle: "Meta Ads",
 			children: /* @__PURE__ */ (0, S.jsx)("p", {
@@ -31596,8 +31700,8 @@ function fV({ data: e, filters: t, today: n }) {
 		})
 	});
 }
-function pV(e, t, n, r) {
-	let i = n.slice(0, 7), a = XB(n), [o, s] = (0, b.useState)(""), [c, l] = (0, b.useState)([]), [u, d] = (0, b.useState)(!r), [f, p] = (0, b.useState)(!1), [m, h] = (0, b.useState)("");
+function _V(e, t, n, r) {
+	let i = n.slice(0, 7), a = eV(n), [o, s] = (0, b.useState)(""), [c, l] = (0, b.useState)([]), [u, d] = (0, b.useState)(!r), [f, p] = (0, b.useState)(!1), [m, h] = (0, b.useState)("");
 	(0, b.useEffect)(() => {
 		let e = !0;
 		return r && r.load().then((t) => {
@@ -31612,7 +31716,7 @@ function pV(e, t, n, r) {
 		i,
 		a,
 		...g.map((e) => e.target)
-	])].sort().reverse(), v = _.includes(o) ? o : i, y = g.find((e) => e.target === v), x = (0, b.useMemo)(() => QB(e, t, v, n), [
+	])].sort().reverse(), v = _.includes(o) ? o : i, y = g.find((e) => e.target === v), x = (0, b.useMemo)(() => nV(e, t, v, n), [
 		e,
 		t,
 		v,
@@ -31644,7 +31748,7 @@ function pV(e, t, n, r) {
 		run: C
 	};
 }
-function mV({ data: e, today: t, actions: n, state: r, view: i }) {
+function vV({ data: e, today: t, actions: n, state: r, view: i }) {
 	let { target: a, targets: o, frozen: s, forecast: c, relevant: l, ready: u, busy: d, message: f, saved: p, setSelected: m, setSaved: h, setMessage: g, run: _ } = r;
 	return /* @__PURE__ */ (0, S.jsxs)("div", { children: [
 		/* @__PURE__ */ (0, S.jsxs)("div", {
@@ -31654,7 +31758,7 @@ function mV({ data: e, today: t, actions: n, state: r, view: i }) {
 					className: "board-eyebrow",
 					children: s ? "PROJEÇÃO FIXADA" : "PRÉVIA DA PROJEÇÃO"
 				}),
-				/* @__PURE__ */ (0, S.jsx)("h2", { children: uV(a) }),
+				/* @__PURE__ */ (0, S.jsx)("h2", { children: mV(a) }),
 				/* @__PURE__ */ (0, S.jsx)("p", { children: "Base própria de meses fechados · independente do filtro de período acima" })
 			] }), /* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "board-forecast-actions",
@@ -31664,7 +31768,7 @@ function mV({ data: e, today: t, actions: n, state: r, view: i }) {
 					onChange: (e) => m(e.target.value),
 					children: o.map((e) => /* @__PURE__ */ (0, S.jsxs)("option", {
 						value: e,
-						children: [uV(e), l.some((t) => t.target === e) ? " · fixada" : ""]
+						children: [mV(e), l.some((t) => t.target === e) ? " · fixada" : ""]
 					}, e))
 				})] }), /* @__PURE__ */ (0, S.jsx)("button", {
 					disabled: !n || !u || d || !c || !!s,
@@ -31680,13 +31784,13 @@ function mV({ data: e, today: t, actions: n, state: r, view: i }) {
 			role: "status",
 			children: f
 		}),
-		c ? /* @__PURE__ */ (0, S.jsx)(hV, {
+		c ? /* @__PURE__ */ (0, S.jsx)(yV, {
 			data: e,
 			forecast: c,
 			today: t,
 			frozen: !!s,
 			view: i
-		}) : /* @__PURE__ */ (0, S.jsx)(lV, {
+		}) : /* @__PURE__ */ (0, S.jsx)(pV, {
 			title: "Aguardando uma base completa",
 			subtitle: "Projeção do mês selecionado",
 			children: /* @__PURE__ */ (0, S.jsx)("p", {
@@ -31696,7 +31800,7 @@ function mV({ data: e, today: t, actions: n, state: r, view: i }) {
 		}),
 		i === "method" && /* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "board-forecast-storage",
-			children: [/* @__PURE__ */ (0, S.jsxs)("p", { children: [s ? `Fixada em ${oV(s.createdOn)}. ` : "Fixe a projeção para preservar os valores antes de receber os resultados. ", "As projeções ficam criptografadas neste navegador; baixe uma cópia para usar em outro dispositivo."] }), n && /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("button", {
+			children: [/* @__PURE__ */ (0, S.jsxs)("p", { children: [s ? `Fixada em ${uV(s.createdOn)}. ` : "Fixe a projeção para preservar os valores antes de receber os resultados. ", "As projeções ficam criptografadas neste navegador; baixe uma cópia para usar em outro dispositivo."] }), n && /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("button", {
 				disabled: d || !u || !p.length,
 				onClick: () => void _(async () => {
 					await n.download(), g("Cópia criptografada de todas as projeções baixada.");
@@ -31720,13 +31824,13 @@ function mV({ data: e, today: t, actions: n, state: r, view: i }) {
 		})
 	] });
 }
-function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
-	let a = (e) => $R(e, t.currency), o = YB(t.target), s = rz(o.start, o.end), c = 10 ** QR(t.currency), l = (0, b.useMemo)(() => tV(e, t, n), [
+function yV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
+	let a = (e) => $R(e, t.currency), o = $B(t.target), s = rz(o.start, o.end), c = 10 ** QR(t.currency), l = (0, b.useMemo)(() => aV(e, t, n), [
 		e,
 		t,
 		n
-	]), u = (0, b.useMemo)(() => mB(e, {
-		...YB(t.target),
+	]), u = (0, b.useMemo)(() => vB(e, {
+		...$B(t.target),
 		currency: t.currency,
 		account: "all",
 		product: "all"
@@ -31778,38 +31882,38 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 			actual: l.meta,
 			money: !1
 		}
-	], m = eV(t.base), h = l.hotmart?.gross ?? null, g = nV(t.base.gross, h), _ = nV(t.base.sales, l.hotmart?.sales ?? null), v = l.hotmart?.through, y = v ? `Importado até ${oV(v)}${v === n ? " · dia parcial" : ""}` : t.target > n.slice(0, 7) ? "Mês ainda não iniciado" : "Aguardando cobertura desde o início do mês";
+	], m = iV(t.base), h = l.hotmart?.gross ?? null, g = oV(t.base.gross, h), _ = oV(t.base.sales, l.hotmart?.sales ?? null), v = l.hotmart?.through, y = v ? `Importado até ${uV(v)}${v === n ? " · dia parcial" : ""}` : t.target > n.slice(0, 7) ? "Mês ainda não iniciado" : "Aguardando cobertura desde o início do mês";
 	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
 		i === "overview" && /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "board-metrics four",
 			children: [
-				/* @__PURE__ */ (0, S.jsx)(cV, {
+				/* @__PURE__ */ (0, S.jsx)(fV, {
 					label: "Receita projetada",
 					value: a(t.base.gross),
 					detail: `${s} dias · cenário base`,
 					accent: !0
 				}),
-				/* @__PURE__ */ (0, S.jsx)(cV, {
+				/* @__PURE__ */ (0, S.jsx)(fV, {
 					label: "Vendas projetadas",
-					value: rV(t.base.sales),
+					value: sV(t.base.sales),
 					detail: "Vendas aprovadas · Hotmart"
 				}),
-				/* @__PURE__ */ (0, S.jsx)(cV, {
+				/* @__PURE__ */ (0, S.jsx)(fV, {
 					label: "Investimento estimado",
 					value: a(t.base.spend),
 					detail: "Mantém o ritmo diário de mídia da base"
 				}),
-				/* @__PURE__ */ (0, S.jsx)(cV, {
+				/* @__PURE__ */ (0, S.jsx)(fV, {
 					label: "CPA Meta estimado",
 					value: a(m.cpa),
-					detail: `Gasto ÷ compras Meta · MER ${iV(m.mer)}`
+					detail: `Gasto ÷ compras Meta · MER ${cV(m.mer)}`
 				})
 			]
 		}), /* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "board-two-columns board-projection-columns",
-			children: [/* @__PURE__ */ (0, S.jsxs)(lV, {
+			children: [/* @__PURE__ */ (0, S.jsxs)(pV, {
 				title: "Receita acumulada · previsto × realizado",
-				subtitle: `${uV(t.target)} · ${t.currency}`,
+				subtitle: `${mV(t.target)} · ${t.currency}`,
 				children: [
 					/* @__PURE__ */ (0, S.jsx)("div", {
 						className: "board-chart",
@@ -31843,7 +31947,7 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 										tickLine: !1
 									}),
 									/* @__PURE__ */ (0, S.jsx)(hF, {
-										tickFormatter: sV,
+										tickFormatter: dV,
 										tick: {
 											fill: "#8e9998",
 											fontSize: 11
@@ -31912,22 +32016,22 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 						children: "A linha prevista distribui a estimativa mensal igualmente pelos dias. O realizado usa os dias importados com cobertura contínua. O dia atual, quando disponível, é parcial; lacunas permanecem vazias."
 					})
 				]
-			}), /* @__PURE__ */ (0, S.jsxs)(lV, {
+			}), /* @__PURE__ */ (0, S.jsxs)(pV, {
 				title: "Três cenários para planejar",
 				subtitle: "Sensibilidade do resultado · mesmo investimento",
 				children: [/* @__PURE__ */ (0, S.jsx)("div", {
 					className: "board-scenarios",
 					children: d.map((e) => {
-						let n = $B(t, e.multiplier);
+						let n = rV(t, e.multiplier);
 						return /* @__PURE__ */ (0, S.jsxs)("article", {
 							className: e.multiplier === 1 ? "is-base" : "",
 							children: [
 								/* @__PURE__ */ (0, S.jsxs)("span", { children: [e.name, /* @__PURE__ */ (0, S.jsx)("small", { children: e.multiplier === 1 ? "Ritmo histórico" : e.multiplier < 1 ? "Resultado −20%" : "Resultado +20%" })] }),
 								/* @__PURE__ */ (0, S.jsx)("strong", { children: a(n.gross) }),
 								/* @__PURE__ */ (0, S.jsxs)("p", { children: [
-									rV(n.sales),
+									sV(n.sales),
 									" vendas · CPA ",
-									a(eV(n).cpa)
+									a(iV(n).cpa)
 								] })
 							]
 						}, e.name);
@@ -31943,30 +32047,30 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 			children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "board-metrics three",
 				children: [
-					/* @__PURE__ */ (0, S.jsx)(cV, {
+					/* @__PURE__ */ (0, S.jsx)(fV, {
 						label: "Receita projetada no mês",
 						value: a(t.base.gross),
-						detail: `Cenário base · ${uV(t.target)}`
+						detail: `Cenário base · ${mV(t.target)}`
 					}),
-					/* @__PURE__ */ (0, S.jsx)(cV, {
+					/* @__PURE__ */ (0, S.jsx)(fV, {
 						label: "Já conquistado",
 						value: a(h),
 						detail: `Receita bruta aprovada · ${y}`,
 						accent: !0
 					}),
-					/* @__PURE__ */ (0, S.jsx)(cV, {
+					/* @__PURE__ */ (0, S.jsx)(fV, {
 						label: (g.exceeded ?? 0) > 0 ? "Acima da projeção" : "Falta para atingir",
 						value: a((g.exceeded ?? 0) > 0 ? g.exceeded : g.remaining),
 						detail: (g.exceeded ?? 0) > 0 ? "Excedente em receita" : g.reached ? "Projeção atingida · saldo restante zero" : "Projeção mensal − receita realizada"
 					})
 				]
-			}), /* @__PURE__ */ (0, S.jsxs)(lV, {
+			}), /* @__PURE__ */ (0, S.jsxs)(pV, {
 				title: "Progresso da receita",
 				subtitle: r ? "Comparado à projeção fixada" : "Prévia · fixe para preservar a referência",
 				children: [
 					/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "board-goal-heading",
-						children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: aV(g.percent) }), /* @__PURE__ */ (0, S.jsx)("span", { children: g.reached ? "Projeção atingida" : g.percent === null ? "Percentual indisponível" : "da receita projetada já alcançada" })]
+						children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: lV(g.percent) }), /* @__PURE__ */ (0, S.jsx)("span", { children: g.reached ? "Projeção atingida" : g.percent === null ? "Percentual indisponível" : "da receita projetada já alcançada" })]
 					}),
 					g.percent === null ? /* @__PURE__ */ (0, S.jsx)("p", {
 						className: "board-footnote",
@@ -31978,15 +32082,15 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 						"aria-valuemin": 0,
 						"aria-valuemax": 100,
 						"aria-valuenow": Math.min(100, g.percent),
-						"aria-valuetext": `${aV(g.percent)} da projeção alcançada`,
+						"aria-valuetext": `${lV(g.percent)} da projeção alcançada`,
 						children: /* @__PURE__ */ (0, S.jsx)("i", { style: { width: `${Math.min(100, g.percent)}%` } })
 					}),
 					/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "board-goal-sales",
 						children: [
-							/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas conquistadas" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: rV(l.hotmart?.sales ?? null) })] }),
-							/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas projetadas" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: rV(t.base.sales) })] }),
-							/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: (_.exceeded ?? 0) > 0 ? "Vendas acima da projeção" : "Vendas que faltam" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: rV((_.exceeded ?? 0) > 0 ? _.exceeded : _.remaining) })] })
+							/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas conquistadas" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: sV(l.hotmart?.sales ?? null) })] }),
+							/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Vendas projetadas" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: sV(t.base.sales) })] }),
+							/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: (_.exceeded ?? 0) > 0 ? "Vendas acima da projeção" : "Vendas que faltam" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: sV((_.exceeded ?? 0) > 0 ? _.exceeded : _.remaining) })] })
 						]
 					}),
 					/* @__PURE__ */ (0, S.jsxs)("p", {
@@ -31994,7 +32098,7 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 						children: [
 							y,
 							". Valores somente de ",
-							uV(t.target),
+							mV(t.target),
 							", em ",
 							t.currency,
 							". Ao atingir a projeção, o saldo restante é zero e o card mostra o excedente. Novas importações atualizam o realizado."
@@ -32003,7 +32107,7 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 				]
 			})]
 		}),
-		i === "comparison" && /* @__PURE__ */ (0, S.jsxs)(lV, {
+		i === "comparison" && /* @__PURE__ */ (0, S.jsxs)(pV, {
 			title: "Acompanhamento da projeção",
 			subtitle: r ? "Estimativa original preservada" : "Prévia · fixe para acompanhar sem recalcular",
 			className: "board-forecast-comparison",
@@ -32018,13 +32122,13 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 						/* @__PURE__ */ (0, S.jsx)("th", { children: "Realizado" }),
 						/* @__PURE__ */ (0, S.jsx)("th", { children: "Desvio do previsto" })
 					] }) }), /* @__PURE__ */ (0, S.jsx)("tbody", { children: p.map((e) => {
-						let r = t.base[e.key], i = e.actual && e.key in e.actual ? e.actual[e.key] : null, c = e.actual && r !== null ? Math.round(r * rz(o.start, e.actual.through) / s) : null, l = e.money ? a : rV, u = oz(i, c);
+						let r = t.base[e.key], i = e.actual && e.key in e.actual ? e.actual[e.key] : null, c = e.actual && r !== null ? Math.round(r * rz(o.start, e.actual.through) / s) : null, l = e.money ? a : sV, u = oz(i, c);
 						return /* @__PURE__ */ (0, S.jsxs)("tr", { children: [
 							/* @__PURE__ */ (0, S.jsx)("td", { children: e.label }),
 							/* @__PURE__ */ (0, S.jsx)("td", { children: l(r) }),
-							/* @__PURE__ */ (0, S.jsxs)("td", { children: [l(c), /* @__PURE__ */ (0, S.jsx)("small", { children: e.actual ? `Até ${oV(e.actual.through)}` : "Aguardando dados" })] }),
+							/* @__PURE__ */ (0, S.jsxs)("td", { children: [l(c), /* @__PURE__ */ (0, S.jsx)("small", { children: e.actual ? `Até ${uV(e.actual.through)}` : "Aguardando dados" })] }),
 							/* @__PURE__ */ (0, S.jsxs)("td", { children: [l(i), /* @__PURE__ */ (0, S.jsx)("small", { children: e.actual ? e.actual.through === n ? "Parcial · dia em andamento" : e.actual.through === o.end ? "Mês completo" : "Parcial · dias importados" : "Sem cobertura" })] }),
-							/* @__PURE__ */ (0, S.jsx)("td", { children: u === null ? "—" : `${u > 0 ? "+" : ""}${aV(u)}` })
+							/* @__PURE__ */ (0, S.jsx)("td", { children: u === null ? "—" : `${u > 0 ? "+" : ""}${lV(u)}` })
 						] }, e.key);
 					}) })]
 				})
@@ -32044,11 +32148,11 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 				] }),
 				/* @__PURE__ */ (0, S.jsxs)("p", { children: [
 					"Média diária ponderada: soma dos valores ÷ soma dos dias dos últimos até três meses completos disponíveis nos seis meses anteriores à criação (",
-					oV(t.createdOn),
+					uV(t.createdOn),
 					"), multiplicada pelos ",
 					s,
 					" dias de ",
-					uV(t.target),
+					mV(t.target),
 					". Não utiliza dados posteriores à criação."
 				] }),
 				/* @__PURE__ */ (0, S.jsx)("div", {
@@ -32062,10 +32166,10 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 							/* @__PURE__ */ (0, S.jsx)("th", { children: "Vendas" }),
 							/* @__PURE__ */ (0, S.jsx)("th", { children: "Investimento" })
 						] }) }), /* @__PURE__ */ (0, S.jsx)("tbody", { children: t.months.map((e) => /* @__PURE__ */ (0, S.jsxs)("tr", { children: [
-							/* @__PURE__ */ (0, S.jsx)("td", { children: uV(e.start.slice(0, 7)) }),
+							/* @__PURE__ */ (0, S.jsx)("td", { children: mV(e.start.slice(0, 7)) }),
 							/* @__PURE__ */ (0, S.jsx)("td", { children: e.days }),
 							/* @__PURE__ */ (0, S.jsx)("td", { children: a(e.gross) }),
-							/* @__PURE__ */ (0, S.jsx)("td", { children: rV(e.sales) }),
+							/* @__PURE__ */ (0, S.jsx)("td", { children: sV(e.sales) }),
 							/* @__PURE__ */ (0, S.jsx)("td", { children: a(e.spend) })
 						] }, e.start)) })]
 					})
@@ -32073,7 +32177,7 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 				/* @__PURE__ */ (0, S.jsxs)("p", { children: [
 					t.months.length < 3 ? "Histórico curto: estimativa baseada em menos de três meses completos. " : "",
 					"Último mês usado: ",
-					uV(t.months.at(-1).start.slice(0, 7)),
+					mV(t.months.at(-1).start.slice(0, 7)),
 					". Sem cobertura Meta em toda a base, investimento e CPA ficam indisponíveis."
 				] })
 			]
@@ -32081,7 +32185,7 @@ function hV({ data: e, forecast: t, today: n, frozen: r, view: i }) {
 	] });
 }
 // src/components/use-board-fit.ts
-function gV(e) {
+function bV(e) {
 	let t = (0, b.useRef)(null), n = (0, b.useRef)(null);
 	return (0, b.useEffect)(() => {
 		let e = t.current, r = n.current;
@@ -32114,7 +32218,7 @@ function gV(e) {
 	};
 }
 // src/components/operation-board.tsx
-var _V = [
+var xV = [
 	[
 		"Panorama",
 		"Visão geral",
@@ -32140,18 +32244,18 @@ var _V = [
 		"Audiência",
 		"Sua marca em movimento."
 	]
-], vV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), yV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", {
+], SV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 0 }), CV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", {
 	minimumFractionDigits: 2,
 	maximumFractionDigits: 2
-}) + "×", bV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%", xV = (e) => e.split("-").reverse().join("/"), SV = (e) => Intl.NumberFormat("pt-BR", {
+}) + "×", wV = (e) => e === null ? "—" : e.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%", TV = (e) => e.split("-").reverse().join("/"), EV = (e) => Intl.NumberFormat("pt-BR", {
 	notation: "compact",
 	maximumFractionDigits: 1
-}).format(e), CV = new Intl.DateTimeFormat("pt-BR", {
+}).format(e), DV = new Intl.DateTimeFormat("pt-BR", {
 	hour: "2-digit",
 	minute: "2-digit",
 	timeZone: "America/Sao_Paulo"
 });
-function wV({ label: e, value: t, detail: n, accent: r = !1 }) {
+function OV({ label: e, value: t, detail: n, accent: r = !1 }) {
 	return /* @__PURE__ */ (0, S.jsxs)("article", {
 		className: `board-metric ${r ? "board-metric-accent" : ""}`,
 		children: [
@@ -32161,7 +32265,7 @@ function wV({ label: e, value: t, detail: n, accent: r = !1 }) {
 		]
 	});
 }
-function TV({ title: e, subtitle: t, children: n, className: r = "" }) {
+function kV({ title: e, subtitle: t, children: n, className: r = "" }) {
 	return /* @__PURE__ */ (0, S.jsxs)("section", {
 		className: `board-panel ${r}`,
 		children: [/* @__PURE__ */ (0, S.jsxs)("div", {
@@ -32170,7 +32274,7 @@ function TV({ title: e, subtitle: t, children: n, className: r = "" }) {
 		}), n]
 	});
 }
-function EV({ rows: e, kind: t = "money", currency: n }) {
+function AV({ rows: e, kind: t = "money", currency: n }) {
 	let r = (0, b.useId)();
 	return /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "board-chart",
@@ -32220,7 +32324,7 @@ function EV({ rows: e, kind: t = "money", currency: n }) {
 						minTickGap: 35
 					}),
 					/* @__PURE__ */ (0, S.jsx)(hF, {
-						tickFormatter: SV,
+						tickFormatter: EV,
 						tick: {
 							fill: "#8e9998",
 							fontSize: 11
@@ -32239,7 +32343,7 @@ function EV({ rows: e, kind: t = "money", currency: n }) {
 						formatter: (e, r) => [t === "money" ? new Intl.NumberFormat("pt-BR", {
 							style: "currency",
 							currency: n
-						}).format(Number(e)) : vV(Number(e)), r]
+						}).format(Number(e)) : SV(Number(e)), r]
 					}),
 					/* @__PURE__ */ (0, S.jsx)(wN, {
 						type: "linear",
@@ -32266,7 +32370,7 @@ function EV({ rows: e, kind: t = "money", currency: n }) {
 		})
 	});
 }
-function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientControl: i, analysisActions: a }) {
+function jV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientControl: i, analysisActions: a }) {
 	let [o, s] = (0, b.useState)(!1), c = e.manualPeriods, l = c.reduce((e, t) => t.start < e ? t.start : e, c[0].start), u = c.reduce((e, t) => t.end > e ? t.end : e, c[0].end), [d, f] = (0, b.useState)({
 		start: l,
 		end: u
@@ -32287,11 +32391,11 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 		e,
 		ie,
 		ae
-	]), V = oe.metrics, se = (0, b.useMemo)(() => mB(e, ie, ae), [
+	]), V = oe.metrics, se = (0, b.useMemo)(() => vB(e, ie, ae), [
 		e,
 		ie,
 		ae
-	]), ce = (0, b.useMemo)(() => gB(e, h.start, h.end), [e, h]), H = !z || z < h.start || z > h.end ? h.end : z, le = (0, b.useMemo)(() => Ez(e, {
+	]), ce = (0, b.useMemo)(() => bB(e, h.start, h.end), [e, h]), H = !z || z < h.start || z > h.end ? h.end : z, le = (0, b.useMemo)(() => Ez(e, {
 		...ie,
 		start: H,
 		end: H
@@ -32301,7 +32405,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 		H,
 		ae
 	]), ue = se.filter((e) => e.day <= H).slice(-14), de = (0, b.useMemo)(() => lz(e, ie), [e, ie]), fe = Math.max(1, Math.ceil(new Set(de.orders.filter((e) => YR(e.status)).map((e) => JSON.stringify([e.accountId, e.productId]))).size / 6)), pe = [
-		..._V,
+		...xV,
 		[
 			"Produtos",
 			"Produtos · Visão geral",
@@ -32337,7 +32441,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 			"Projeções · Base e método",
 			"A base de cada estimativa."
 		]
-	], me = Math.min(C, pe.length - 1), { frame: he, stage: ge } = gV(me), _e = pV(e, y, ae, r), ve = me >= pe.length - 4, ye = (0, b.useMemo)(() => {
+	], me = Math.min(C, pe.length - 1), { frame: he, stage: ge } = bV(me), _e = _V(e, y, ae, r), ve = me >= pe.length - 4, ye = (0, b.useMemo)(() => {
 		let e = de.orders.filter((e) => YR(e.status));
 		return [...new Set(e.map((e) => e.productId))].map((t) => {
 			let n = e.filter((e) => e.productId === t);
@@ -32348,7 +32452,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 				gross: ZR(n.map((e) => e.gross))
 			};
 		}).sort((e, t) => t.gross - e.gross).slice(0, 5);
-	}, [de]), be = (0, b.useMemo)(() => oe.metaCovered ? _B(e, ie, "purchases", 0).slice(0, 4) : [], [
+	}, [de]), be = (0, b.useMemo)(() => oe.metaCovered ? xB(e, ie, "purchases", 0).slice(0, 4) : [], [
 		e,
 		ie,
 		oe.metaCovered
@@ -32422,7 +32526,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 							}),
 							/* @__PURE__ */ (0, S.jsx)("p", {
 								className: "board-big-number",
-								children: yV(V.metaRoas ?? V.mer)
+								children: CV(V.metaRoas ?? V.mer)
 							}),
 							/* @__PURE__ */ (0, S.jsx)("h3", { children: V.metaRoas === null ? "MER da operação" : "ROAS Meta" }),
 							/* @__PURE__ */ (0, S.jsx)("p", { children: V.metaRoas === null ? /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
@@ -32442,7 +32546,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 						}),
 						/* @__PURE__ */ (0, S.jsxs)("div", {
 							className: "board-hero-bottom",
-							children: [/* @__PURE__ */ (0, S.jsxs)("span", { children: ["MER da operação ", /* @__PURE__ */ (0, S.jsx)("strong", { children: yV(V.mer) })] }), /* @__PURE__ */ (0, S.jsx)("small", { children: "Receita bruta Hotmart ÷ investimento" })]
+							children: [/* @__PURE__ */ (0, S.jsxs)("span", { children: ["MER da operação ", /* @__PURE__ */ (0, S.jsx)("strong", { children: CV(V.mer) })] }), /* @__PURE__ */ (0, S.jsx)("small", { children: "Receita bruta Hotmart ÷ investimento" })]
 						})
 					]
 				}),
@@ -32451,27 +32555,27 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 					children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "board-metrics three",
 						children: [
-							/* @__PURE__ */ (0, S.jsx)(wV, {
+							/* @__PURE__ */ (0, S.jsx)(OV, {
 								label: "Receita bruta",
 								value: Te(V.gross),
 								detail: "Vendas aprovadas · Hotmart",
 								accent: !0
 							}),
-							/* @__PURE__ */ (0, S.jsx)(wV, {
+							/* @__PURE__ */ (0, S.jsx)(OV, {
 								label: "Investimento",
 								value: Te(V.spend),
 								detail: "Valor gasto · Meta Ads"
 							}),
-							/* @__PURE__ */ (0, S.jsx)(wV, {
+							/* @__PURE__ */ (0, S.jsx)(OV, {
 								label: "Após mídia",
 								value: Te(V.profit),
 								detail: "Líquido − mídia; não é lucro final"
 							})
 						]
-					}), /* @__PURE__ */ (0, S.jsxs)(TV, {
+					}), /* @__PURE__ */ (0, S.jsxs)(kV, {
 						title: "Receita × investimento",
 						subtitle: `Evolução diária · ${y}`,
-						children: [/* @__PURE__ */ (0, S.jsx)(EV, {
+						children: [/* @__PURE__ */ (0, S.jsx)(AV, {
 							rows: se,
 							currency: y
 						}), /* @__PURE__ */ (0, S.jsxs)("div", {
@@ -32487,19 +32591,19 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 				/* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "board-metrics three board-social-strip",
 					children: [
-						/* @__PURE__ */ (0, S.jsx)(wV, {
+						/* @__PURE__ */ (0, S.jsx)(OV, {
 							label: "Novos seguidores",
-							value: vV(ce.followers),
+							value: SV(ce.followers),
 							detail: "Aquisições no período · Instagram"
 						}),
-						/* @__PURE__ */ (0, S.jsx)(wV, {
+						/* @__PURE__ */ (0, S.jsx)(OV, {
 							label: "Visualizações",
-							value: vV(ce.views),
+							value: SV(ce.views),
 							detail: "Conteúdo visto · Instagram"
 						}),
-						/* @__PURE__ */ (0, S.jsx)(wV, {
+						/* @__PURE__ */ (0, S.jsx)(OV, {
 							label: "Interações",
-							value: vV(ce.interactions),
+							value: SV(ce.interactions),
 							detail: "Interações no período · Instagram"
 						})
 					]
@@ -32511,7 +32615,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 				className: "board-daily-heading",
 				children: [/* @__PURE__ */ (0, S.jsxs)("p", { children: [
 					"Leitura de ",
-					/* @__PURE__ */ (0, S.jsx)("strong", { children: xV(H) }),
+					/* @__PURE__ */ (0, S.jsx)("strong", { children: TV(H) }),
 					H === ae ? " · dia em andamento" : ""
 				] }), /* @__PURE__ */ (0, S.jsxs)("label", { children: ["Dia em foco ", /* @__PURE__ */ (0, S.jsx)("input", {
 					type: "date",
@@ -32527,39 +32631,39 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "board-metrics four",
 				children: [
-					/* @__PURE__ */ (0, S.jsx)(wV, {
+					/* @__PURE__ */ (0, S.jsx)(OV, {
 						label: "Receita do dia",
 						value: Te(le.gross),
 						detail: "Bruto aprovado · Hotmart",
 						accent: !0
 					}),
-					/* @__PURE__ */ (0, S.jsx)(wV, {
+					/* @__PURE__ */ (0, S.jsx)(OV, {
 						label: "Investimento do dia",
 						value: Te(le.spend),
 						detail: "Gasto informado no export diário"
 					}),
-					/* @__PURE__ */ (0, S.jsx)(wV, {
+					/* @__PURE__ */ (0, S.jsx)(OV, {
 						label: "ROAS Meta do dia",
-						value: yV(le.metaRoas),
+						value: CV(le.metaRoas),
 						detail: "Conversão Meta ÷ gasto do dia"
 					}),
-					/* @__PURE__ */ (0, S.jsx)(wV, {
+					/* @__PURE__ */ (0, S.jsx)(OV, {
 						label: "Vendas do dia",
-						value: vV(le.sales),
-						detail: `MER do dia: ${yV(le.mer)}`
+						value: SV(le.sales),
+						detail: `MER do dia: ${CV(le.mer)}`
 					})
 				]
 			}),
 			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "board-two-columns",
-				children: [/* @__PURE__ */ (0, S.jsx)(TV, {
+				children: [/* @__PURE__ */ (0, S.jsx)(kV, {
 					title: "Ritmo diário",
 					subtitle: "Até 14 dias até a data em foco",
-					children: /* @__PURE__ */ (0, S.jsx)(EV, {
+					children: /* @__PURE__ */ (0, S.jsx)(AV, {
 						rows: ue,
 						currency: y
 					})
-				}), /* @__PURE__ */ (0, S.jsxs)(TV, {
+				}), /* @__PURE__ */ (0, S.jsxs)(kV, {
 					title: "Últimos dias",
 					subtitle: `Receita e mídia · ${y}`,
 					children: [/* @__PURE__ */ (0, S.jsx)("div", {
@@ -32575,7 +32679,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 								/* @__PURE__ */ (0, S.jsx)("td", { children: e.label }),
 								/* @__PURE__ */ (0, S.jsx)("td", { children: e.revenue === null ? "—" : Te(Math.round(e.revenue * 10 ** QR(y))) }),
 								/* @__PURE__ */ (0, S.jsx)("td", { children: e.spend === null ? "—" : Te(Math.round(e.spend * 10 ** QR(y))) }),
-								/* @__PURE__ */ (0, S.jsx)("td", { children: yV(e.roas) })
+								/* @__PURE__ */ (0, S.jsx)("td", { children: CV(e.roas) })
 							] }, e.day)) })]
 						})
 					}), /* @__PURE__ */ (0, S.jsx)("p", {
@@ -32585,104 +32689,111 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 				})]
 			})
 		] }, "daily"),
-		/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsxs)("div", {
-			className: "board-metrics four",
-			children: [
-				/* @__PURE__ */ (0, S.jsx)(wV, {
-					label: "Investimento",
-					value: Te(V.spend),
-					detail: "Meta Ads · período selecionado",
-					accent: !0
-				}),
-				/* @__PURE__ */ (0, S.jsx)(wV, {
-					label: "ROAS Meta",
-					value: yV(V.metaRoas),
-					detail: "Receita atribuída ÷ investimento"
-				}),
-				/* @__PURE__ */ (0, S.jsx)(wV, {
-					label: "Compras Meta",
-					value: vV(V.purchases),
-					detail: "Reportadas pela plataforma"
-				}),
-				/* @__PURE__ */ (0, S.jsx)(wV, {
-					label: "CPA Meta",
-					value: Te(V.cpa),
-					detail: "Investimento ÷ compras Meta"
-				})
-			]
-		}), /* @__PURE__ */ (0, S.jsxs)("div", {
-			className: "board-two-columns",
-			children: [/* @__PURE__ */ (0, S.jsxs)(TV, {
-				title: "Caminho até a compra",
-				subtitle: "Eventos reportados pela Meta",
-				children: [/* @__PURE__ */ (0, S.jsx)("div", {
-					className: "board-funnel",
-					children: [
-						["Cliques no link", V.clicks],
-						["Visitas à página", V.views],
-						["Checkouts", V.checkouts],
-						["Compras", V.purchases]
-					].map(([e, t], n) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [
-						/* @__PURE__ */ (0, S.jsx)("span", { children: String(e) }),
-						/* @__PURE__ */ (0, S.jsx)("strong", { children: vV(t) }),
-						/* @__PURE__ */ (0, S.jsx)("div", { style: { width: `${100 - n * 18}%` } })
-					] }, String(e)))
-				}), /* @__PURE__ */ (0, S.jsxs)("p", {
-					className: "board-footnote",
-					children: [
-						"Connect rate ",
-						bV(V.connectRate),
-						" · Página → compra ",
-						bV(V.pvToPurchase),
-						". Etapas ilustrativas, sem escala proporcional."
-					]
-				})]
-			}), /* @__PURE__ */ (0, S.jsxs)(TV, {
-				title: "Anúncios em destaque",
-				subtitle: "Top 4 por compras Meta",
-				children: [/* @__PURE__ */ (0, S.jsxs)("div", {
-					className: "board-rankings",
-					children: [be.map((e, t) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [
-						/* @__PURE__ */ (0, S.jsxs)("span", {
-							className: "board-rank",
-							children: ["0", t + 1]
-						}),
-						/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: e.ad.ad }), /* @__PURE__ */ (0, S.jsxs)("small", { children: [
-							vV(e.metrics.purchases),
-							" compras · ",
-							Te(e.metrics.spend)
-						] })] }),
-						/* @__PURE__ */ (0, S.jsx)("b", { children: yV(e.metrics.metaRoas) })
-					] }, e.key)), !be.length && /* @__PURE__ */ (0, S.jsx)("p", {
-						className: "board-empty",
-						children: "Selecione um período completo de mídia para ver os destaques."
+		/* @__PURE__ */ (0, S.jsxs)("div", { children: [
+			/* @__PURE__ */ (0, S.jsx)(Pz, {
+				data: e,
+				filters: ie
+			}),
+			/* @__PURE__ */ (0, S.jsxs)("div", {
+				className: "board-metrics four",
+				children: [
+					/* @__PURE__ */ (0, S.jsx)(OV, {
+						label: "Investimento",
+						value: Te(V.spend),
+						detail: "Meta Ads · período selecionado",
+						accent: !0
+					}),
+					/* @__PURE__ */ (0, S.jsx)(OV, {
+						label: "ROAS Meta",
+						value: CV(V.metaRoas),
+						detail: "Receita atribuída ÷ investimento"
+					}),
+					/* @__PURE__ */ (0, S.jsx)(OV, {
+						label: "Compras Meta",
+						value: SV(V.purchases),
+						detail: "Reportadas pela plataforma"
+					}),
+					/* @__PURE__ */ (0, S.jsx)(OV, {
+						label: "CPA Meta",
+						value: Te(V.cpa),
+						detail: "Investimento ÷ compras Meta"
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, S.jsxs)("div", {
+				className: "board-two-columns",
+				children: [/* @__PURE__ */ (0, S.jsxs)(kV, {
+					title: "Caminho até a compra",
+					subtitle: "Eventos reportados pela Meta",
+					children: [/* @__PURE__ */ (0, S.jsx)("div", {
+						className: "board-funnel",
+						children: [
+							["Cliques no link", V.clicks],
+							["Visitas à página", V.views],
+							["Checkouts", V.checkouts],
+							["Compras", V.purchases]
+						].map(([e, t], n) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, S.jsx)("span", { children: String(e) }),
+							/* @__PURE__ */ (0, S.jsx)("strong", { children: SV(t) }),
+							/* @__PURE__ */ (0, S.jsx)("div", { style: { width: `${100 - n * 18}%` } })
+						] }, String(e)))
+					}), /* @__PURE__ */ (0, S.jsxs)("p", {
+						className: "board-footnote",
+						children: [
+							"Connect rate ",
+							wV(V.connectRate),
+							" · Página → compra ",
+							wV(V.pvToPurchase),
+							". Etapas ilustrativas, sem escala proporcional."
+						]
 					})]
-				}), /* @__PURE__ */ (0, S.jsx)("p", {
-					className: "board-footnote",
-					children: "ROAS à direita · compras Meta e vendas Hotmart têm critérios diferentes."
+				}), /* @__PURE__ */ (0, S.jsxs)(kV, {
+					title: "Anúncios em destaque",
+					subtitle: "Top 4 por compras Meta",
+					children: [/* @__PURE__ */ (0, S.jsxs)("div", {
+						className: "board-rankings",
+						children: [be.map((e, t) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, S.jsxs)("span", {
+								className: "board-rank",
+								children: ["0", t + 1]
+							}),
+							/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: e.ad.ad }), /* @__PURE__ */ (0, S.jsxs)("small", { children: [
+								SV(e.metrics.purchases),
+								" compras · ",
+								Te(e.metrics.spend)
+							] })] }),
+							/* @__PURE__ */ (0, S.jsx)("b", { children: CV(e.metrics.metaRoas) })
+						] }, e.key)), !be.length && /* @__PURE__ */ (0, S.jsx)("p", {
+							className: "board-empty",
+							children: "Selecione um período completo de mídia para ver os destaques."
+						})]
+					}), /* @__PURE__ */ (0, S.jsx)("p", {
+						className: "board-footnote",
+						children: "ROAS à direita · compras Meta e vendas Hotmart têm critérios diferentes."
+					})]
 				})]
-			})]
-		})] }, "meta"),
+			})
+		] }, "meta"),
 		/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "board-metrics four",
 			children: [
-				/* @__PURE__ */ (0, S.jsx)(wV, {
+				/* @__PURE__ */ (0, S.jsx)(OV, {
 					label: "Receita bruta",
 					value: Te(V.gross),
 					detail: "Aprovadas e completas · Hotmart",
 					accent: !0
 				}),
-				/* @__PURE__ */ (0, S.jsx)(wV, {
+				/* @__PURE__ */ (0, S.jsx)(OV, {
 					label: "Receita líquida",
 					value: Te(V.net),
 					detail: "Líquido informado no export"
 				}),
-				/* @__PURE__ */ (0, S.jsx)(wV, {
+				/* @__PURE__ */ (0, S.jsx)(OV, {
 					label: "Vendas aprovadas",
-					value: vV(V.sales),
+					value: SV(V.sales),
 					detail: "Transações no período"
 				}),
-				/* @__PURE__ */ (0, S.jsx)(wV, {
+				/* @__PURE__ */ (0, S.jsx)(OV, {
 					label: "Ticket médio",
 					value: Te(V.ticket),
 					detail: "Receita bruta ÷ vendas"
@@ -32690,7 +32801,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 			]
 		}), /* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "board-two-columns",
-			children: [/* @__PURE__ */ (0, S.jsxs)(TV, {
+			children: [/* @__PURE__ */ (0, S.jsxs)(kV, {
 				title: "Produtos que movem a operação",
 				subtitle: "Top 5 · receita aprovada",
 				children: [/* @__PURE__ */ (0, S.jsxs)("div", {
@@ -32699,7 +32810,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 						/* @__PURE__ */ (0, S.jsxs)("span", { children: ["0", t + 1] }),
 						/* @__PURE__ */ (0, S.jsxs)("div", { children: [
 							/* @__PURE__ */ (0, S.jsx)("strong", { children: e.name }),
-							/* @__PURE__ */ (0, S.jsxs)("small", { children: [vV(e.sales), " vendas"] }),
+							/* @__PURE__ */ (0, S.jsxs)("small", { children: [SV(e.sales), " vendas"] }),
 							/* @__PURE__ */ (0, S.jsx)("div", {
 								className: "board-track",
 								children: /* @__PURE__ */ (0, S.jsx)("i", { style: { width: `${ye[0].gross ? e.gross / ye[0].gross * 100 : 0}%` } })
@@ -32714,42 +32825,42 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 					className: "board-footnote",
 					children: "Cobertura parcial: ranking apenas dos registros recebidos."
 				})]
-			}), /* @__PURE__ */ (0, S.jsxs)(TV, {
+			}), /* @__PURE__ */ (0, S.jsxs)(kV, {
 				title: "Volume de vendas",
 				subtitle: "Transações aprovadas por dia",
-				children: [/* @__PURE__ */ (0, S.jsx)(EV, {
+				children: [/* @__PURE__ */ (0, S.jsx)(AV, {
 					rows: se,
 					kind: "sales",
 					currency: y
 				}), /* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "board-sales-status",
-					children: [/* @__PURE__ */ (0, S.jsxs)("span", { children: ["Pendentes ", /* @__PURE__ */ (0, S.jsx)("b", { children: vV(V.pending) })] }), /* @__PURE__ */ (0, S.jsxs)("span", { children: ["Reembolsos / chargebacks ", /* @__PURE__ */ (0, S.jsx)("b", { children: vV(V.refunds) })] })]
+					children: [/* @__PURE__ */ (0, S.jsxs)("span", { children: ["Pendentes ", /* @__PURE__ */ (0, S.jsx)("b", { children: SV(V.pending) })] }), /* @__PURE__ */ (0, S.jsxs)("span", { children: ["Reembolsos / chargebacks ", /* @__PURE__ */ (0, S.jsx)("b", { children: SV(V.refunds) })] })]
 				})]
 			})]
 		})] }, "sales"),
 		/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "board-metrics three",
 			children: [
-				/* @__PURE__ */ (0, S.jsx)(wV, {
+				/* @__PURE__ */ (0, S.jsx)(OV, {
 					label: "Novos seguidores",
-					value: vV(ce.followers),
+					value: SV(ce.followers),
 					detail: "Aquisições; não é o saldo nem o total",
 					accent: !0
 				}),
-				/* @__PURE__ */ (0, S.jsx)(wV, {
+				/* @__PURE__ */ (0, S.jsx)(OV, {
 					label: "Visualizações",
-					value: vV(ce.views),
+					value: SV(ce.views),
 					detail: "Soma dos registros diários"
 				}),
-				/* @__PURE__ */ (0, S.jsx)(wV, {
+				/* @__PURE__ */ (0, S.jsx)(OV, {
 					label: "Interações",
-					value: vV(ce.interactions),
+					value: SV(ce.interactions),
 					detail: "Soma dos registros diários"
 				})
 			]
 		}), /* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "board-two-columns board-instagram-columns",
-			children: [/* @__PURE__ */ (0, S.jsx)(TV, {
+			children: [/* @__PURE__ */ (0, S.jsx)(kV, {
 				title: "A atenção se transforma em presença",
 				subtitle: "Visualizações por dia",
 				children: /* @__PURE__ */ (0, S.jsx)("div", {
@@ -32798,7 +32909,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 									tickLine: !1
 								}),
 								/* @__PURE__ */ (0, S.jsx)(hF, {
-									tickFormatter: SV,
+									tickFormatter: EV,
 									tick: {
 										fill: "#8e9998",
 										fontSize: 11
@@ -32813,7 +32924,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 										border: "1px solid #394543",
 										borderRadius: 12
 									},
-									labelFormatter: (e) => xV(String(e))
+									labelFormatter: (e) => TV(String(e))
 								}),
 								/* @__PURE__ */ (0, S.jsx)(wN, {
 									type: "linear",
@@ -32829,20 +32940,20 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 						})
 					})
 				})
-			}), /* @__PURE__ */ (0, S.jsxs)(TV, {
+			}), /* @__PURE__ */ (0, S.jsxs)(kV, {
 				title: "Construindo audiência",
 				subtitle: "Últimos dias recebidos",
 				children: [/* @__PURE__ */ (0, S.jsx)("div", {
 					className: "board-ig-days",
 					children: ce.rows.slice(-5).reverse().map((e) => /* @__PURE__ */ (0, S.jsxs)("div", { children: [
-						/* @__PURE__ */ (0, S.jsx)("span", { children: xV(e.date).slice(0, 5) }),
+						/* @__PURE__ */ (0, S.jsx)("span", { children: TV(e.date).slice(0, 5) }),
 						/* @__PURE__ */ (0, S.jsxs)("strong", { children: [
 							e.followers === null ? null : "+",
-							vV(e.followers),
+							SV(e.followers),
 							" ",
 							/* @__PURE__ */ (0, S.jsx)("small", { children: "novos seguidores" })
 						] }),
-						/* @__PURE__ */ (0, S.jsxs)("span", { children: [vV(e.interactions), /* @__PURE__ */ (0, S.jsx)("small", { children: "interações" })] })
+						/* @__PURE__ */ (0, S.jsxs)("span", { children: [SV(e.interactions), /* @__PURE__ */ (0, S.jsx)("small", { children: "interações" })] })
 					] }, e.date))
 				}), /* @__PURE__ */ (0, S.jsxs)("p", {
 					className: "board-footnote",
@@ -32851,16 +32962,16 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 			})]
 		})] }, "instagram")
 	];
-	return Ee.push(/* @__PURE__ */ (0, S.jsx)(dV, {
+	return Ee.push(/* @__PURE__ */ (0, S.jsx)(hV, {
 		data: e,
 		filters: ie,
 		today: ae
-	}, "products"), ...Array.from({ length: fe }, (t, n) => /* @__PURE__ */ (0, S.jsx)(dV, {
+	}, "products"), ...Array.from({ length: fe }, (t, n) => /* @__PURE__ */ (0, S.jsx)(hV, {
 		data: e,
 		filters: ie,
 		today: ae,
 		page: n
-	}, `products-${n}`)), /* @__PURE__ */ (0, S.jsx)(fV, {
+	}, `products-${n}`)), /* @__PURE__ */ (0, S.jsx)(gV, {
 		data: e,
 		filters: ie,
 		today: ae
@@ -32869,7 +32980,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 		"progress",
 		"comparison",
 		"method"
-	].map((t) => /* @__PURE__ */ (0, S.jsx)(mV, {
+	].map((t) => /* @__PURE__ */ (0, S.jsx)(vV, {
 		data: e,
 		today: ae,
 		actions: r,
@@ -32879,7 +32990,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 		className: "operation-board",
 		style: { "--board-duration": `${D}s` },
 		children: [
-			o && /* @__PURE__ */ (0, S.jsx)(pB, {
+			o && /* @__PURE__ */ (0, S.jsx)(_B, {
 				data: e,
 				filters: ie,
 				actions: a,
@@ -32899,7 +33010,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 					/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "board-header-status",
 						children: [/* @__PURE__ */ (0, S.jsxs)("span", { children: [/* @__PURE__ */ (0, S.jsx)("i", {}), " ARQUIVOS IMPORTADOS"] }), /* @__PURE__ */ (0, S.jsxs)("time", { children: [
-							CV.format(F),
+							DV.format(F),
 							" ",
 							/* @__PURE__ */ (0, S.jsx)("small", { children: "Brasília" })
 						] })]
@@ -32952,7 +33063,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 						i,
 						/* @__PURE__ */ (0, S.jsx)(wR, { size: 16 }),
 						/* @__PURE__ */ (0, S.jsx)("strong", { children: e.organization }),
-						/* @__PURE__ */ (0, S.jsxs)("span", { children: ["Dados até ", xV(u)] })
+						/* @__PURE__ */ (0, S.jsxs)("span", { children: ["Dados até ", TV(u)] })
 					]
 				}), /* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "board-filters",
@@ -33055,7 +33166,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 								" ",
 								pe[me][1].toUpperCase()
 							]
-						}), /* @__PURE__ */ (0, S.jsx)("h1", { children: pe[me][2] })] }), /* @__PURE__ */ (0, S.jsxs)("p", { children: [ve ? `Mês projetado · ${_e.target.split("-").reverse().join("/")}` : `${xV(h.start)} — ${xV(h.end)}`, /* @__PURE__ */ (0, S.jsxs)("span", { children: [
+						}), /* @__PURE__ */ (0, S.jsx)("h1", { children: pe[me][2] })] }), /* @__PURE__ */ (0, S.jsxs)("p", { children: [ve ? `Mês projetado · ${_e.target.split("-").reverse().join("/")}` : `${TV(h.start)} — ${TV(h.end)}`, /* @__PURE__ */ (0, S.jsxs)("span", { children: [
 							ve ? "Base de meses fechados" : `${rz(h.start, h.end)} dias`,
 							" · ",
 							y
@@ -33150,7 +33261,7 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 						className: "board-check",
 						children: [
 							"Consulta ",
-							CV.format(L),
+							DV.format(L),
 							/* @__PURE__ */ (0, S.jsx)("small", { children: "Reconsulta a cada 5 min · importação manual" })
 						]
 					})
@@ -33162,9 +33273,9 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 					/* @__PURE__ */ (0, S.jsx)("span", { children: "OPERAÇÃO" }),
 					/* @__PURE__ */ (0, S.jsxs)("p", { children: ["RECEITA ", /* @__PURE__ */ (0, S.jsx)("b", { children: Te(V.gross) })] }),
 					/* @__PURE__ */ (0, S.jsxs)("p", { children: ["MÍDIA ", /* @__PURE__ */ (0, S.jsx)("b", { children: Te(V.spend) })] }),
-					/* @__PURE__ */ (0, S.jsxs)("p", { children: ["ROAS META ", /* @__PURE__ */ (0, S.jsx)("b", { children: yV(V.metaRoas) })] }),
-					/* @__PURE__ */ (0, S.jsxs)("p", { children: ["MER ", /* @__PURE__ */ (0, S.jsx)("b", { children: yV(V.mer) })] }),
-					/* @__PURE__ */ (0, S.jsxs)("p", { children: ["VENDAS ", /* @__PURE__ */ (0, S.jsx)("b", { children: vV(V.sales) })] }),
+					/* @__PURE__ */ (0, S.jsxs)("p", { children: ["ROAS META ", /* @__PURE__ */ (0, S.jsx)("b", { children: CV(V.metaRoas) })] }),
+					/* @__PURE__ */ (0, S.jsxs)("p", { children: ["MER ", /* @__PURE__ */ (0, S.jsx)("b", { children: CV(V.mer) })] }),
+					/* @__PURE__ */ (0, S.jsxs)("p", { children: ["VENDAS ", /* @__PURE__ */ (0, S.jsx)("b", { children: SV(V.sales) })] }),
 					/* @__PURE__ */ (0, S.jsx)("span", {
 						className: "board-ticker-note",
 						children: "Oficina do Violão · aguardando exports"
@@ -33175,8 +33286,8 @@ function DV({ data: e, onRefresh: t, onLogout: n, forecastActions: r, clientCont
 	});
 }
 // manual/crypto.ts
-var OV = (e) => Uint8Array.from(atob(e), (e) => e.charCodeAt(0)), kV = (e) => btoa(Array.from(e, (e) => String.fromCharCode(e)).join(""));
-async function AV(e, t, n) {
+var MV = (e) => Uint8Array.from(atob(e), (e) => e.charCodeAt(0)), NV = (e) => btoa(Array.from(e, (e) => String.fromCharCode(e)).join(""));
+async function PV(e, t, n) {
 	let r = await crypto.subtle.importKey("raw", new TextEncoder().encode(e), "PBKDF2", !1, ["deriveKey"]);
 	return crypto.subtle.deriveKey({
 		name: "PBKDF2",
@@ -33188,40 +33299,40 @@ async function AV(e, t, n) {
 		length: 256
 	}, !1, ["encrypt", "decrypt"]);
 }
-async function jV(e, t) {
+async function FV(e, t) {
 	if (e.version !== 1 || e.kdf !== "PBKDF2-SHA256" || e.iterations !== 6e5) throw Error("INVALID_ENVELOPE");
 	let n = await crypto.subtle.decrypt({
 		name: "AES-GCM",
-		iv: OV(e.iv)
-	}, await AV(t, OV(e.salt), e.iterations), OV(e.data));
+		iv: MV(e.iv)
+	}, await PV(t, MV(e.salt), e.iterations), MV(e.data));
 	return JSON.parse(new TextDecoder().decode(n));
 }
-async function MV(e, t) {
+async function IV(e, t) {
 	let n = crypto.getRandomValues(/* @__PURE__ */ new Uint8Array(16)), r = crypto.getRandomValues(/* @__PURE__ */ new Uint8Array(12)), i = await crypto.subtle.encrypt({
 		name: "AES-GCM",
 		iv: r
-	}, await AV(t, n, 6e5), new TextEncoder().encode(JSON.stringify(e)));
+	}, await PV(t, n, 6e5), new TextEncoder().encode(JSON.stringify(e)));
 	return {
 		version: 1,
 		kdf: "PBKDF2-SHA256",
 		iterations: 6e5,
-		salt: kV(n),
-		iv: kV(r),
-		data: kV(new Uint8Array(i))
+		salt: NV(n),
+		iv: NV(r),
+		data: NV(new Uint8Array(i))
 	};
 }
 // node_modules/zod/v4/core/util.js
-function NV(e) {
+function LV(e) {
 	let t = Object.values(e).filter((e) => typeof e == "number");
 	return Object.entries(e).filter(([e, n]) => t.indexOf(+e) === -1).map(([e, t]) => t);
 }
-function PV(e, t = "|") {
-	return e.map((e) => aH(e)).join(t);
+function RV(e, t = "|") {
+	return e.map((e) => lH(e)).join(t);
 }
-function FV(e, t) {
+function zV(e, t) {
 	return typeof t == "bigint" ? t.toString() : t;
 }
-var IV = class {
+var BV = class {
 	constructor(e) {
 		this._getter = e, this._value = void 0;
 	}
@@ -33230,21 +33341,21 @@ var IV = class {
 		return e !== void 0 && (this._value = e(), this._getter = void 0), this._value;
 	}
 };
-function LV(e) {
-	return new IV(e);
+function VV(e) {
+	return new BV(e);
 }
-function RV(e) {
+function HV(e) {
 	return e == null;
 }
-function zV(e) {
+function UV(e) {
 	let t = +!!e.startsWith("^"), n = e.endsWith("$") ? e.length - 1 : e.length;
 	return e.slice(t, n);
 }
-function BV(e, t) {
+function WV(e, t) {
 	let n = e / t, r = Math.round(n), i = 4 * 2 ** -52 * Math.max(Math.abs(n), 1);
 	return Math.abs(n - r) < i ? 0 : n - r;
 }
-function VV(e, t, n) {
+function GV(e, t, n) {
 	Object.defineProperty(e, t, {
 		value: n,
 		writable: !0,
@@ -33252,43 +33363,43 @@ function VV(e, t, n) {
 		configurable: !0
 	});
 }
-function HV(e) {
+function KV(e) {
 	let t = Object.getOwnPropertyDescriptor(e, "shape");
 	return t?.get ? t.get.raw : t?.value;
 }
-function UV(e) {
-	return HV(e._zod.def) ?? e._zod.def.shape;
+function qV(e) {
+	return KV(e._zod.def) ?? e._zod.def.shape;
 }
-function WV(e, t, n) {
+function JV(e, t, n) {
 	Object.defineProperty(e, t, {
 		get() {
 			let e = n();
-			return VV(this, t, e), e;
+			return GV(this, t, e), e;
 		},
 		enumerable: !0,
 		configurable: !0
 	});
 }
-function GV(e, t, n) {
-	t in e ? VV(e, t, n) : e[t] = n;
+function YV(e, t, n) {
+	t in e ? GV(e, t, n) : e[t] = n;
 }
-function KV(e, t, n, r) {
-	let i = UV(t);
+function XV(e, t, n, r) {
+	let i = qV(t);
 	for (let a of n) {
 		let n = Object.getOwnPropertyDescriptor(i, a);
-		n.enumerable && (n.get ? WV(e, a, () => {
+		n.enumerable && (n.get ? JV(e, a, () => {
 			let e = t._zod.def.shape[a];
 			return r ? r(e, a) : e;
-		}) : GV(e, a, r ? r(n.value, a) : n.value));
+		}) : YV(e, a, r ? r(n.value, a) : n.value));
 	}
 }
-function qV(e, t) {
+function ZV(e, t) {
 	for (let n of Reflect.ownKeys(t)) {
 		let r = Object.getOwnPropertyDescriptor(t, n);
-		r.enumerable && (r.get ? WV(e, n, () => t[n]) : GV(e, n, r.value));
+		r.enumerable && (r.get ? JV(e, n, () => t[n]) : YV(e, n, r.value));
 	}
 }
-function JV(...e) {
+function QV(...e) {
 	let t = {};
 	for (let n of e) {
 		let e = Object.getOwnPropertyDescriptors(n);
@@ -33296,43 +33407,43 @@ function JV(...e) {
 	}
 	return Object.defineProperties({}, t);
 }
-function YV(e) {
+function $V(e) {
 	return JSON.stringify(e);
 }
-function XV(e) {
+function eH(e) {
 	return e.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/[\s_-]+/g, "-").replace(/^-+|-+$/g, "");
 }
-var ZV = "captureStackTrace" in Error ? Error.captureStackTrace : (...e) => {};
-function QV(e) {
+var tH = "captureStackTrace" in Error ? Error.captureStackTrace : (...e) => {};
+function nH(e) {
 	return typeof e == "object" && !!e && !Array.isArray(e);
 }
-var $V = /* @__PURE__*/ LV(() => {
-	if (YH.jitless || typeof navigator < "u" && navigator?.userAgent?.includes("Cloudflare")) return !1;
+var rH = /* @__PURE__*/ VV(() => {
+	if ($H.jitless || typeof navigator < "u" && navigator?.userAgent?.includes("Cloudflare")) return !1;
 	try {
 		return Function(""), !0;
 	} catch {
 		return !1;
 	}
 });
-function eH(e) {
-	if (QV(e) === !1) return !1;
+function iH(e) {
+	if (nH(e) === !1) return !1;
 	let t = e.constructor;
 	if (t === void 0 || typeof t != "function") return !0;
 	let n = t.prototype;
-	return QV(n) !== !1 && Object.prototype.hasOwnProperty.call(n, "isPrototypeOf") !== !1;
+	return nH(n) !== !1 && Object.prototype.hasOwnProperty.call(n, "isPrototypeOf") !== !1;
 }
-function tH(e) {
-	return eH(e) ? { ...e } : Array.isArray(e) ? [...e] : e instanceof Map ? new Map(e) : e instanceof Set ? new Set(e) : e;
+function aH(e) {
+	return iH(e) ? { ...e } : Array.isArray(e) ? [...e] : e instanceof Map ? new Map(e) : e instanceof Set ? new Set(e) : e;
 }
-var nH = /* @__PURE__*/ new Set([
+var oH = /* @__PURE__*/ new Set([
 	"string",
 	"number",
 	"symbol"
 ]);
-function rH(e) {
+function sH(e) {
 	return e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-function iH(e, t, n) {
+function cH(e, t, n) {
 	let r = new e._zod.constr(t ?? e._zod.def);
 	return (!t || n?.parent) && (r._zod.parent = e), r;
 }
@@ -33349,70 +33460,70 @@ function Q(e) {
 		error: () => t.error
 	} : t;
 }
-function aH(e) {
+function lH(e) {
 	return typeof e == "bigint" ? e.toString() + "n" : typeof e == "string" ? `"${e}"` : `${e}`;
 }
-function oH(e) {
+function uH(e) {
 	return Object.keys(e).filter((t) => e[t]._zod.optin !== void 0 && e[t]._zod.optout === "optional");
 }
-var sH = {
+var dH = {
 	safeint: [-(2 ** 53 - 1), 2 ** 53 - 1],
 	int32: [-2147483648, 2147483647],
 	uint32: [0, 4294967295],
 	float32: [-34028234663852886e22, 34028234663852886e22],
 	float64: [-Number.MAX_VALUE, Number.MAX_VALUE]
-}, cH = {
+}, fH = {
 	int64: [/* @__PURE__*/ BigInt("-9223372036854775808"), /* @__PURE__*/ BigInt("9223372036854775807")],
 	uint64: [/* @__PURE__*/ BigInt(0), /* @__PURE__*/ BigInt("18446744073709551615")]
 };
-function lH(e, t) {
+function pH(e, t) {
 	let n = e._zod.def, r = n.checks;
 	if (r && r.length > 0) throw Error(".pick() cannot be used on object schemas containing refinements");
 	let i = {};
-	return KV(i, e, uH(e, t)), iH(e, JV(n, {
+	return XV(i, e, mH(e, t)), cH(e, QV(n, {
 		shape: i,
 		checks: []
 	}));
 }
-function uH(e, t) {
-	let n = UV(e), r = [];
+function mH(e, t) {
+	let n = qV(e), r = [];
 	for (let e of Reflect.ownKeys(t)) {
 		if (!Object.getOwnPropertyDescriptor(n, e)?.enumerable) throw Error(`Unrecognized key: "${String(e)}"`);
 		t[e] && r.push(e);
 	}
 	return r;
 }
-function dH(e, t) {
+function hH(e, t) {
 	let n = e._zod.def, r = n.checks;
 	if (r && r.length > 0) throw Error(".omit() cannot be used on object schemas containing refinements");
-	let i = new Set(uH(e, t)), a = {};
-	return KV(a, e, Reflect.ownKeys(UV(e)).filter((e) => !i.has(e))), iH(e, JV(n, {
+	let i = new Set(mH(e, t)), a = {};
+	return XV(a, e, Reflect.ownKeys(qV(e)).filter((e) => !i.has(e))), cH(e, QV(n, {
 		shape: a,
 		checks: []
 	}));
 }
-function fH(e, t) {
-	if (!eH(t)) throw Error("Invalid input to extend: expected a plain object");
+function gH(e, t) {
+	if (!iH(t)) throw Error("Invalid input to extend: expected a plain object");
 	let n = e._zod.def.checks;
 	if (n && n.length > 0) {
-		let n = UV(e);
+		let n = qV(e);
 		for (let e of Reflect.ownKeys(t)) if (Object.getOwnPropertyDescriptor(n, e) !== void 0) throw Error("Cannot overwrite keys on object schemas containing refinements. Use `.safeExtend()` instead.");
 	}
-	return iH(e, JV(e._zod.def, { shape: pH(e, t) }));
+	return cH(e, QV(e._zod.def, { shape: _H(e, t) }));
 }
-function pH(e, t) {
+function _H(e, t) {
 	let n = {};
-	return KV(n, e, Reflect.ownKeys(UV(e))), qV(n, t), n;
+	return XV(n, e, Reflect.ownKeys(qV(e))), ZV(n, t), n;
 }
-function mH(e, t) {
-	if (!eH(t)) throw Error("Invalid input to safeExtend: expected a plain object");
-	return iH(e, JV(e._zod.def, { shape: pH(e, t) }));
+function vH(e, t) {
+	if (!iH(t)) throw Error("Invalid input to safeExtend: expected a plain object");
+	return cH(e, QV(e._zod.def, { shape: _H(e, t) }));
 }
-function hH(e, t) {
+function yH(e, t) {
 	if (!t?._zod?.def) throw Error("Invalid input to merge: expected an object schema. To merge a plain shape, use `.extend()`.");
 	if (e._zod.def.checks?.length) throw Error(".merge() cannot be used on object schemas containing refinements. Use .safeExtend() instead.");
 	let n = {};
-	return KV(n, e, Reflect.ownKeys(UV(e))), KV(n, t, Reflect.ownKeys(UV(t))), iH(e, JV(e._zod.def, {
+	return XV(n, e, Reflect.ownKeys(qV(e))), XV(n, t, Reflect.ownKeys(qV(t))), cH(e, QV(e._zod.def, {
 		shape: n,
 		get catchall() {
 			return t._zod.def.catchall;
@@ -33420,45 +33531,45 @@ function hH(e, t) {
 		checks: t._zod.def.checks ?? []
 	}));
 }
-function gH(e, t, n, r = "partial") {
+function bH(e, t, n, r = "partial") {
 	let i = t._zod.def.checks;
 	if (i && i.length > 0) throw Error(`.${r}() cannot be used on object schemas containing refinements`);
-	let a = n ? new Set(uH(t, n)) : void 0, o = {};
-	return KV(o, t, Reflect.ownKeys(UV(t)), e && ((t, n) => a && !a.has(n) ? t : new e({
+	let a = n ? new Set(mH(t, n)) : void 0, o = {};
+	return XV(o, t, Reflect.ownKeys(qV(t)), e && ((t, n) => a && !a.has(n) ? t : new e({
 		type: "optional",
 		innerType: t
-	}))), iH(t, JV(t._zod.def, {
+	}))), cH(t, QV(t._zod.def, {
 		shape: o,
 		checks: []
 	}));
 }
-function _H(e, t, n) {
-	let r = n ? new Set(uH(t, n)) : void 0, i = {};
-	return KV(i, t, Reflect.ownKeys(UV(t)), (t, n) => r && !r.has(n) ? t : new e({
+function xH(e, t, n) {
+	let r = n ? new Set(mH(t, n)) : void 0, i = {};
+	return XV(i, t, Reflect.ownKeys(qV(t)), (t, n) => r && !r.has(n) ? t : new e({
 		type: "nonoptional",
 		innerType: t
-	})), iH(t, JV(t._zod.def, { shape: i }));
+	})), cH(t, QV(t._zod.def, { shape: i }));
 }
-function vH(e, t = 0) {
+function SH(e, t = 0) {
 	if (e.aborted === !0) return !0;
 	for (let n = t; n < e.issues.length; n++) if (e.issues[n]?.continue !== !0) return !0;
 	return !1;
 }
-function yH(e, t = 0) {
+function CH(e, t = 0) {
 	if (e.aborted === !0) return !0;
 	for (let n = t; n < e.issues.length; n++) if (e.issues[n]?.continue === !1) return !0;
 	return !1;
 }
-function bH(e, t) {
+function wH(e, t) {
 	return t.map((t) => {
 		var n;
 		return (n = t).path ?? (n.path = []), t.path.unshift(e), t;
 	});
 }
-function xH(e) {
+function TH(e) {
 	return typeof e == "string" ? e : e?.message;
 }
-function SH(e) {
+function EH(e) {
 	let t = [];
 	for (let n of e ?? []) {
 		let e = n._zod.def;
@@ -33468,30 +33579,30 @@ function SH(e) {
 	}
 	return t;
 }
-function CH(e, t, n) {
+function DH(e, t, n) {
 	var r;
 	for (let i = t; i < e.length; i++) (r = e[i]).schema ?? (r.schema = n);
 }
-function wH(e, t, n) {
+function OH(e, t, n) {
 	var r;
 	let i = e.inst?._zod?.traits;
 	i?.has("$ZodType") && (i.has("$ZodCheck") ? (r = e).schema ?? (r.schema = e.inst) : e.schema = e.inst);
-	let a = e.schema === e.inst ? void 0 : e.schema?._zod.def?.error, o = e.message ? e.message : xH(e.inst?._zod.def?.error?.(e)) ?? xH(a?.(e)) ?? xH(t?.error?.(e)) ?? xH(n.customError?.(e)) ?? xH(n.localeError?.(e)) ?? "Invalid input", s = {};
+	let a = e.schema === e.inst ? void 0 : e.schema?._zod.def?.error, o = e.message ? e.message : TH(e.inst?._zod.def?.error?.(e)) ?? TH(a?.(e)) ?? TH(t?.error?.(e)) ?? TH(n.customError?.(e)) ?? TH(n.localeError?.(e)) ?? "Invalid input", s = {};
 	for (let t of Object.keys(e)) t !== "inst" && t !== "schema" && t !== "continue" && t !== "input" && t !== "__proto__" && (s[t] = e[t]);
 	return s.path ??= [], s.message = o, t?.reportInput && (s.input = e.input), s;
 }
-var TH = /[\uD800-\uDBFF]/;
-function EH(e) {
+var kH = /[\uD800-\uDBFF]/;
+function AH(e) {
 	let t = e.length;
-	if (!TH.test(e)) return t;
+	if (!kH.test(e)) return t;
 	let n = t;
 	for (let r = 0; r < t - 1; r++) (e.charCodeAt(r) & 64512) == 55296 && (e.charCodeAt(r + 1) & 64512) == 56320 && (n--, r++);
 	return n;
 }
-function DH(e) {
+function jH(e) {
 	return Array.isArray(e) ? "array" : typeof e == "string" ? "string" : "unknown";
 }
-function OH(e) {
+function MH(e) {
 	let t = typeof e;
 	switch (t) {
 		case "number": return Number.isNaN(e) ? "nan" : "number";
@@ -33504,7 +33615,7 @@ function OH(e) {
 	}
 	return t;
 }
-function kH(...e) {
+function NH(...e) {
 	let [t, n, r] = e;
 	return typeof t == "string" ? {
 		message: t,
@@ -33513,16 +33624,16 @@ function kH(...e) {
 		inst: r
 	} : { ...t };
 }
-function AH(e, t) {
+function PH(e, t) {
 	for (let n in t) {
 		let r = Object.getOwnPropertyDescriptor(t, n);
 		r.get ? Object.defineProperty(e, n, {
 			...r,
 			enumerable: !1
-		}) : PH(e, n, r.value);
+		}) : RH(e, n, r.value);
 	}
 }
-function jH(e, t, n, r = !0) {
+function FH(e, t, n, r = !0) {
 	return Object.defineProperty(e, t, {
 		configurable: !0,
 		writable: !0,
@@ -33530,64 +33641,64 @@ function jH(e, t, n, r = !0) {
 		value: n
 	}), n;
 }
-function MH(e, t, n) {
-	return jH(e, t, n, !1);
+function IH(e, t, n) {
+	return FH(e, t, n, !1);
 }
 /* @__NO_SIDE_EFFECTS__ */
-function NH(e, t) {
+function LH(e, t) {
 	for (let n in e) {
 		let r = e[n];
 		Object.defineProperty(t, n, {
 			configurable: !0,
 			enumerable: !0,
 			get() {
-				return jH(this, n, r(this));
+				return FH(this, n, r(this));
 			},
 			set(e) {
-				jH(this, n, e);
+				FH(this, n, e);
 			}
 		});
 	}
 	return t;
 }
-function PH(e, t, n) {
+function RH(e, t, n) {
 	Object.defineProperty(e, t, {
 		configurable: !0,
 		get() {
-			return this == null ? n : jH(this, t, n.bind(this));
+			return this == null ? n : FH(this, t, n.bind(this));
 		},
 		set(e) {
-			jH(this, t, e);
+			FH(this, t, e);
 		}
 	});
 }
-function FH(e, t) {
+function zH(e, t) {
 	let n = Object.getPrototypeOf(e);
 	return t in n ? void 0 : n;
 }
-var IH, LH = !1, RH = {
+var BH, VH = !1, HH = {
 	configurable: !0,
 	get() {
-		LH = !0;
+		VH = !0;
 	}
 };
-function zH(e, t, n) {
+function UH(e, t, n) {
 	let r = Object.getPrototypeOf(e._zod);
-	t in r && IH !== e._zod ? IH = void 0 : (IH = e._zod, Object.defineProperty(r, t, {
+	t in r && BH !== e._zod ? BH = void 0 : (BH = e._zod, Object.defineProperty(r, t, {
 		configurable: !0,
 		get() {
-			Object.defineProperty(this, t, RH);
-			let e = LH;
-			LH = !1;
+			Object.defineProperty(this, t, HH);
+			let e = VH;
+			VH = !1;
 			try {
 				let r = n(this);
-				return LH ? delete this[t] : Object.defineProperty(this, t, {
+				return VH ? delete this[t] : Object.defineProperty(this, t, {
 					configurable: !0,
 					writable: !0,
 					value: r
-				}), LH ||= e, r;
+				}), VH ||= e, r;
 			} catch (n) {
-				throw delete this[t], LH ||= e, n;
+				throw delete this[t], VH ||= e, n;
 			}
 		},
 		set(e) {
@@ -33599,8 +33710,8 @@ function zH(e, t, n) {
 		}
 	}));
 }
-function BH(e, t, n, r) {
-	let i = FH(e, t);
+function WH(e, t, n, r) {
+	let i = zH(e, t);
 	i && Object.defineProperty(i, t, {
 		configurable: !0,
 		get() {
@@ -33622,25 +33733,25 @@ function BH(e, t, n, r) {
 		}
 	});
 }
-var VH = "~constantCatch";
-function HH(e) {
+var GH = "~constantCatch";
+function KH(e) {
 	let t = () => e;
-	return t[VH] = !0, t;
+	return t[GH] = !0, t;
 }
 // node_modules/zod/v4/core/core.js
-var UH, WH = {
+var qH, JH = {
 	value: void 0,
 	enumerable: !1
-}, GH = "captureStackTrace" in Error ? Error : null;
-function KH(e) {
-	let t = GH;
+}, YH = "captureStackTrace" in Error ? Error : null;
+function XH(e) {
+	let t = YH;
 	if (t) {
 		let n = t.stackTraceLimit;
 		if (typeof n == "number") {
 			try {
 				t.stackTraceLimit = 0;
 			} catch {
-				return GH = null, new e();
+				return YH = null, new e();
 			}
 			try {
 				return new e();
@@ -33661,18 +33772,18 @@ function $(e, t, n, r) {
 	let o = n, s = o && /* @__PURE__ */ new WeakSet();
 	function c(n, r) {
 		if (!n._zod) {
-			WH.value = new a(r);
+			JH.value = new a(r);
 			try {
-				Object.defineProperty(n, "_zod", WH);
+				Object.defineProperty(n, "_zod", JH);
 			} finally {
-				WH.value = void 0;
+				JH.value = void 0;
 			}
 		} else if (n._zod.traits.has(e)) return;
 		if (n._zod.traits.add(e), t(n, r), s) {
 			let e = Object.getPrototypeOf(n), t = n._zod.constr.prototype, r = e;
 			for (; r && r !== t;) r = Object.getPrototypeOf(r);
 			let i = r ?? e;
-			s.has(i) || (s.add(i), AH(i, o));
+			s.has(i) || (s.add(i), PH(i, o));
 		}
 		let i = d.prototype;
 		for (let e in i) Object.prototype.hasOwnProperty.call(i, e) && (e in n || (n[e] = i[e].bind(n)));
@@ -33681,7 +33792,7 @@ function $(e, t, n, r) {
 	class u extends l {}
 	Object.defineProperty(u, "name", { value: e });
 	function d(e) {
-		let t = r?.Parent ? KH(u) : this;
+		let t = r?.Parent ? XH(u) : this;
 		c(t, e);
 		let n = t._zod.deferred;
 		if (n) {
@@ -33693,40 +33804,40 @@ function $(e, t, n, r) {
 	}
 	return Object.defineProperty(d, "init", { value: c }), Object.defineProperty(d, Symbol.hasInstance, { value: (t) => r?.Parent && t instanceof r.Parent ? !0 : t?._zod?.traits?.has(e) }), Object.defineProperty(d, "name", { value: e }), d;
 }
-var qH = class extends Error {
+var ZH = class extends Error {
 	constructor() {
 		super("Encountered Promise during synchronous parse. Use .parseAsync() instead.");
 	}
-}, JH = class extends Error {
+}, QH = class extends Error {
 	constructor(e) {
 		super(`Encountered unidirectional transform during encode: ${e}`), this.name = "ZodEncodeError";
 	}
 };
-(UH = globalThis).__zod_globalConfig ?? (UH.__zod_globalConfig = {});
-var YH = globalThis.__zod_globalConfig;
-function XH(e) {
-	return e && Object.assign(YH, e), YH;
+(qH = globalThis).__zod_globalConfig ?? (qH.__zod_globalConfig = {});
+var $H = globalThis.__zod_globalConfig;
+function eU(e) {
+	return e && Object.assign($H, e), $H;
 }
 // node_modules/zod/v4/core/errors.js
-function ZH() {
+function tU() {
 	let e = this._zod;
-	return e.message ??= JSON.stringify(e.def, FV, 2), e.message;
+	return e.message ??= JSON.stringify(e.def, zV, 2), e.message;
 }
-function QH(e) {
+function nU(e) {
 	this._zod.message = e;
 }
-var $H = {
-	get: ZH,
-	set: QH,
+var rU = {
+	get: tU,
+	set: nU,
 	enumerable: !0,
 	configurable: !0
-}, eU = {
+}, iU = {
 	value: void 0,
 	enumerable: !1
-}, tU = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]), nU = /* @__PURE__ */ $("$ZodError", (e, t) => {
-	e.name = "$ZodError", eU.value = t, Object.defineProperty(e, "issues", eU), eU.value = void 0, Object.defineProperty(e, "message", $H);
+}, aU = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]), oU = /* @__PURE__ */ $("$ZodError", (e, t) => {
+	e.name = "$ZodError", iU.value = t, Object.defineProperty(e, "issues", iU), iU.value = void 0, Object.defineProperty(e, "message", rU);
 	let n = Object.getPrototypeOf(e);
-	tU.has(n) || (tU.add(n), Object.defineProperty(n, "toString", {
+	aU.has(n) || (aU.add(n), Object.defineProperty(n, "toString", {
 		configurable: !0,
 		enumerable: !1,
 		get() {
@@ -33746,7 +33857,7 @@ var $H = {
 		}
 	}));
 });
-function rU(e, t, n) {
+function sU(e, t, n) {
 	return Object.prototype.hasOwnProperty.call(e, t) || (t === "__proto__" ? Object.defineProperty(e, t, {
 		value: n(),
 		writable: !0,
@@ -33754,15 +33865,15 @@ function rU(e, t, n) {
 		configurable: !0
 	}) : e[t] = n()), e[t];
 }
-function iU(e, t = (e) => e.message) {
+function cU(e, t = (e) => e.message) {
 	let n = {}, r = [];
-	for (let i of e.issues) i.path.length > 0 ? rU(n, i.path[0], () => []).push(t(i)) : r.push(t(i));
+	for (let i of e.issues) i.path.length > 0 ? sU(n, i.path[0], () => []).push(t(i)) : r.push(t(i));
 	return {
 		formErrors: r,
 		fieldErrors: n
 	};
 }
-function aU(e, t = (e) => e.message) {
+function lU(e, t = (e) => e.message) {
 	let n = { _errors: [] }, r = (e, i = []) => {
 		for (let a of e.issues) if (a.code === "invalid_union" && a.errors.length) a.errors.map((e) => r({ issues: e }, [...i, ...a.path]));
 		else if (a.code === "invalid_key") r({ issues: a.issues }, [...i, ...a.path]);
@@ -33793,13 +33904,13 @@ function aU(e, t = (e) => e.message) {
 	return r(e), n;
 }
 // node_modules/zod/v4/core/parse.js
-function oU(e, t) {
+function uU(e, t) {
 	return {
 		callee: t?.callee ?? e,
 		Err: t?.Err
 	};
 }
-var sU = (e) => {
+var dU = (e) => {
 	let t = (n, r, i, a) => {
 		let o = i ? {
 			...i,
@@ -33808,15 +33919,15 @@ var sU = (e) => {
 			value: r,
 			issues: []
 		}, o);
-		if (s instanceof Promise) throw new qH();
+		if (s instanceof Promise) throw new ZH();
 		if (s.issues.length) {
-			let n = new ((a?.Err) ?? e)(s.issues.map((e) => wH(e, o, XH())));
-			throw ZV(n, a?.callee ?? t), n;
+			let n = new ((a?.Err) ?? e)(s.issues.map((e) => OH(e, o, eU())));
+			throw tH(n, a?.callee ?? t), n;
 		}
 		return s.value;
 	};
 	return t;
-}, cU = (e) => {
+}, fU = (e) => {
 	let t = async (n, r, i, a) => {
 		let o = i ? {
 			...i,
@@ -33826,13 +33937,13 @@ var sU = (e) => {
 			issues: []
 		}, o);
 		if (s instanceof Promise && (s = await s), s.issues.length) {
-			let n = new ((a?.Err) ?? e)(s.issues.map((e) => wH(e, o, XH())));
-			throw ZV(n, a?.callee ?? t), n;
+			let n = new ((a?.Err) ?? e)(s.issues.map((e) => OH(e, o, eU())));
+			throw tH(n, a?.callee ?? t), n;
 		}
 		return s.value;
 	};
 	return t;
-}, lU = (e) => (t, n, r) => {
+}, pU = (e) => (t, n, r) => {
 	let i = r ? {
 		...r,
 		async: !1
@@ -33840,25 +33951,25 @@ var sU = (e) => {
 		value: n,
 		issues: []
 	}, i);
-	if (a instanceof Promise) throw new qH();
-	return a.issues.length ? uU(e, a.issues, i) : {
+	if (a instanceof Promise) throw new ZH();
+	return a.issues.length ? mU(e, a.issues, i) : {
 		success: !0,
 		data: a.value
 	};
 };
-function uU(e, t, n) {
+function mU(e, t, n) {
 	let r;
 	return {
 		success: !1,
 		get error() {
-			return r || (r = new e(t.map((e) => wH(e, n, XH()))), t = void 0, n = void 0), r;
+			return r || (r = new e(t.map((e) => OH(e, n, eU()))), t = void 0, n = void 0), r;
 		},
 		set error(e) {
 			r = e, t = void 0, n = void 0;
 		}
 	};
 }
-var dU = (e) => async (t, n, r) => {
+var hU = (e) => async (t, n, r) => {
 	let i = r ? {
 		...r,
 		async: !0
@@ -33866,19 +33977,19 @@ var dU = (e) => async (t, n, r) => {
 		value: n,
 		issues: []
 	}, i);
-	return a instanceof Promise && (a = await a), a.issues.length ? uU(e, a.issues, i) : {
+	return a instanceof Promise && (a = await a), a.issues.length ? mU(e, a.issues, i) : {
 		success: !0,
 		data: a.value
 	};
-}, fU = /* @__PURE__ */ Symbol.for("zod.compile.invalid"), pU = /* @__PURE__ */ Symbol.for("zod.compile.fallback"), mU = ((e, t, n) => {
+}, gU = /* @__PURE__ */ Symbol.for("zod.compile.invalid"), _U = /* @__PURE__ */ Symbol.for("zod.compile.fallback"), vU = ((e, t, n) => {
 	let r = e._zod.bag.validator;
 	if (r !== void 0) {
-		if (r(t) !== fU) return !0;
+		if (r(t) !== gU) return !0;
 		if (r.definite === !0 && n === void 0) return !1;
 	}
-	return hU(e, t, n);
+	return yU(e, t, n);
 });
-function hU(e, t, n) {
+function yU(e, t, n) {
 	let r = n ? {
 		...n,
 		async: !1,
@@ -33887,16 +33998,16 @@ function hU(e, t, n) {
 		async: !1,
 		abortEarly: !0
 	}, i = e._zod.bag.fallbackRun, a;
-	if (i ? (r[pU] = !0, a = i({
+	if (i ? (r[_U] = !0, a = i({
 		value: t,
 		issues: []
 	}, r)) : a = e._zod.run({
 		value: t,
 		issues: []
-	}, r), a instanceof Promise) throw new qH();
+	}, r), a instanceof Promise) throw new ZH();
 	return a.issues.length === 0;
 }
-var gU = async (e, t, n) => {
+var bU = async (e, t, n) => {
 	let r = n ? {
 		...n,
 		async: !0,
@@ -33909,87 +34020,87 @@ var gU = async (e, t, n) => {
 		issues: []
 	}, r);
 	return i instanceof Promise && (i = await i), i.issues.length === 0;
-}, _U = (e) => {
-	let t = sU(e), n = (e, r, i, a) => {
+}, xU = (e) => {
+	let t = dU(e), n = (e, r, i, a) => {
 		let o = i ? {
 			...i,
 			direction: "backward"
 		} : { direction: "backward" };
-		return t(e, r, o, oU(n, a));
+		return t(e, r, o, uU(n, a));
 	};
 	return n;
-}, vU = (e) => {
-	let t = sU(e), n = (e, r, i, a) => t(e, r, i, oU(n, a));
+}, SU = (e) => {
+	let t = dU(e), n = (e, r, i, a) => t(e, r, i, uU(n, a));
 	return n;
-}, yU = (e) => {
-	let t = cU(e), n = async (e, r, i, a) => {
+}, CU = (e) => {
+	let t = fU(e), n = async (e, r, i, a) => {
 		let o = i ? {
 			...i,
 			direction: "backward"
 		} : { direction: "backward" };
-		return await t(e, r, o, oU(n, a));
+		return await t(e, r, o, uU(n, a));
 	};
 	return n;
-}, bU = (e) => {
-	let t = cU(e), n = async (e, r, i, a) => await t(e, r, i, oU(n, a));
+}, wU = (e) => {
+	let t = fU(e), n = async (e, r, i, a) => await t(e, r, i, uU(n, a));
 	return n;
-}, xU = (e) => (t, n, r) => {
+}, TU = (e) => (t, n, r) => {
 	let i = r ? {
 		...r,
 		direction: "backward"
 	} : { direction: "backward" };
-	return lU(e)(t, n, i);
-}, SU = (e) => (t, n, r) => lU(e)(t, n, r), CU = (e) => async (t, n, r) => {
+	return pU(e)(t, n, i);
+}, EU = (e) => (t, n, r) => pU(e)(t, n, r), DU = (e) => async (t, n, r) => {
 	let i = r ? {
 		...r,
 		direction: "backward"
 	} : { direction: "backward" };
-	return dU(e)(t, n, i);
-}, wU = (e) => async (t, n, r) => dU(e)(t, n, r), TU = /^[cC][0-9a-z]{6,}$/, EU = /^[0-9a-z]+$/, DU = /^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$/, OU = /^[0-9a-vA-V]{20}$/, kU = /^[A-Za-z0-9]{27}$/, AU = /^[a-zA-Z0-9_-]{21}$/;
-function jU(e) {
+	return hU(e)(t, n, i);
+}, OU = (e) => async (t, n, r) => hU(e)(t, n, r), kU = /^[cC][0-9a-z]{6,}$/, AU = /^[0-9a-z]+$/, jU = /^[0-7][0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{25}$/, MU = /^[0-9a-vA-V]{20}$/, NU = /^[A-Za-z0-9]{27}$/, PU = /^[a-zA-Z0-9_-]{21}$/;
+function FU(e) {
 	return RegExp(`^[a-zA-Z0-9_-]{${e}}$`);
 }
-var MU = /^P(?:(\d+W)|(?!.*W)(?=\d|T\d)(\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+([.,]\d+)?S)?)?)$/, NU = /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/, PU = (e) => e ? RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${e}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`) : /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/, FU = /^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/, IU = "^(?=[\\s\\S]*[\\p{Extended_Pictographic}\\p{Regional_Indicator}\\u20E3])[\\p{Extended_Pictographic}\\p{Emoji_Component}]+$";
-function LU() {
-	return new RegExp(IU, "u");
+var IU = /^P(?:(\d+W)|(?!.*W)(?=\d|T\d)(\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+([.,]\d+)?S)?)?)$/, LU = /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/, RU = (e) => e ? RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${e}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`) : /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/, zU = /^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/, BU = "^(?=[\\s\\S]*[\\p{Extended_Pictographic}\\p{Regional_Indicator}\\u20E3])[\\p{Extended_Pictographic}\\p{Emoji_Component}]+$";
+function VU() {
+	return new RegExp(BU, "u");
 }
-var RU = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/, zU = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/, BU = /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/([0-9]|[1-2][0-9]|3[0-2])$/, VU = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/, HU = /^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA-Z+/]{3}=))?$/, UU = /^(?:[A-Za-z0-9_-]{4})*(?:[A-Za-z0-9_-]{2,3})?$/, WU = /^https?$/, GU = /^\+[1-9]\d{6,14}$/, KU = "(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))";
-function qU(e) {
+var HU = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/, UU = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/, WU = /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/([0-9]|[1-2][0-9]|3[0-2])$/, GU = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/, KU = /^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA-Z+/]{3}=))?$/, qU = /^(?:[A-Za-z0-9_-]{4})*(?:[A-Za-z0-9_-]{2,3})?$/, JU = /^https?$/, YU = /^\+[1-9]\d{6,14}$/, XU = "(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))";
+function ZU(e) {
 	return RegExp(`^${e}$`);
 }
-var JU = /*@__PURE__*/ qU(KU);
-function YU(e) {
+var QU = /*@__PURE__*/ ZU(XU);
+function $U(e) {
 	let t = "(?:[01]\\d|2[0-3]):[0-5]\\d";
 	return typeof e.precision == "number" ? e.precision === -1 ? `${t}` : e.precision === 0 ? `${t}:[0-5]\\d` : `${t}:[0-5]\\d\\.\\d{${e.precision}}` : e.seconds ? `${t}:[0-5]\\d(?:\\.\\d+)?` : `${t}(?::[0-5]\\d(?:\\.\\d+)?)?`;
 }
-function XU(e) {
-	return RegExp(`^${YU(e)}$`);
+function eW(e) {
+	return RegExp(`^${$U(e)}$`);
 }
-function ZU(e) {
+function tW(e) {
 	let t = ["Z"];
 	e.offset && t.push("([+-](?:[01]\\d|2[0-3]):[0-5]\\d)");
-	let n = `${YU({
+	let n = `${$U({
 		precision: e.precision,
 		seconds: !0
-	})}(?:${t.join("|")})`, r = e.local ? `${n}|${YU({ precision: e.precision })}` : n;
-	return RegExp(`^${KU}T(?:${r})$`);
+	})}(?:${t.join("|")})`, r = e.local ? `${n}|${$U({ precision: e.precision })}` : n;
+	return RegExp(`^${XU}T(?:${r})$`);
 }
-var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-z]*$/, nW = /*@__PURE__*/ $("$ZodCheck", (e, t) => {
+var nW = /^[\s\S]{0,}$/, rW = /^-?\d+(?:\.\d+)?$/, iW = /^[^A-Z]*$/, aW = /^[^a-z]*$/, oW = /*@__PURE__*/ $("$ZodCheck", (e, t) => {
 	var n;
 	e._zod ??= {}, e._zod.def = t, (n = e._zod).onattach ?? (n.onattach = []);
-}), rW = (e) => {
+}), sW = (e) => {
 	let t = e.value;
-	return !RV(t) && t.length !== void 0;
-}, iW = {
+	return !HV(t) && t.length !== void 0;
+}, cW = {
 	number: "number",
 	bigint: "bigint",
 	object: "date"
-}, aW = /*@__PURE__*/ $("$ZodCheckLessThan", (e, t) => {
-	nW.init(e, t);
-	let n = iW[typeof t.value];
+}, lW = /*@__PURE__*/ $("$ZodCheckLessThan", (e, t) => {
+	oW.init(e, t);
+	let n = cW[typeof t.value];
 	e._zod.check = (r) => {
 		(t.inclusive ? r.value <= t.value : r.value < t.value) || r.issues.push({
-			origin: iW[typeof r.value] ?? n,
+			origin: cW[typeof r.value] ?? n,
 			code: "too_big",
 			maximum: typeof t.value == "object" ? t.value.getTime() : t.value,
 			input: r.value,
@@ -33998,12 +34109,12 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), oW = /*@__PURE__*/ $("$ZodCheckGreaterThan", (e, t) => {
-	nW.init(e, t);
-	let n = iW[typeof t.value];
+}), uW = /*@__PURE__*/ $("$ZodCheckGreaterThan", (e, t) => {
+	oW.init(e, t);
+	let n = cW[typeof t.value];
 	e._zod.check = (r) => {
 		(t.inclusive ? r.value >= t.value : r.value > t.value) || r.issues.push({
-			origin: iW[typeof r.value] ?? n,
+			origin: cW[typeof r.value] ?? n,
 			code: "too_small",
 			minimum: typeof t.value == "object" ? t.value.getTime() : t.value,
 			input: r.value,
@@ -34012,10 +34123,10 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), sW = /*@__PURE__*/ $("$ZodCheckMultipleOf", (e, t) => {
-	nW.init(e, t), e._zod.check = (n) => {
+}), dW = /*@__PURE__*/ $("$ZodCheckMultipleOf", (e, t) => {
+	oW.init(e, t), e._zod.check = (n) => {
 		if (typeof n.value != typeof t.value) throw Error("Cannot mix number and bigint in multiple_of check.");
-		(typeof n.value == "bigint" ? t.value !== BigInt(0) && n.value % t.value === BigInt(0) : BV(n.value, t.value) === 0) || n.issues.push({
+		(typeof n.value == "bigint" ? t.value !== BigInt(0) && n.value % t.value === BigInt(0) : WV(n.value, t.value) === 0) || n.issues.push({
 			origin: typeof n.value,
 			code: "not_multiple_of",
 			divisor: t.value,
@@ -34024,9 +34135,9 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), cW = /*@__PURE__*/ $("$ZodCheckNumberFormat", (e, t) => {
-	nW.init(e, t), t.format = t.format || "float64";
-	let n = t.format?.includes("int"), r = n ? "int" : "number", [i, a] = sH[t.format];
+}), fW = /*@__PURE__*/ $("$ZodCheckNumberFormat", (e, t) => {
+	oW.init(e, t), t.format = t.format || "float64";
+	let n = t.format?.includes("int"), r = n ? "int" : "number", [i, a] = dH[t.format];
 	e._zod.check = (o) => {
 		let s = o.value;
 		if (n) {
@@ -34082,12 +34193,12 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), lW = /*@__PURE__*/ $("$ZodCheckMaxLength", (e, t) => {
+}), pW = /*@__PURE__*/ $("$ZodCheckMaxLength", (e, t) => {
 	var n;
-	nW.init(e, t), (n = e._zod.def).when ?? (n.when = rW), e._zod.check = (n) => {
+	oW.init(e, t), (n = e._zod.def).when ?? (n.when = sW), e._zod.check = (n) => {
 		let r = n.value, i = r.length;
-		if ((typeof r == "string" && i > t.maximum ? EH(r) : i) <= t.maximum) return;
-		let a = DH(r);
+		if ((typeof r == "string" && i > t.maximum ? AH(r) : i) <= t.maximum) return;
+		let a = jH(r);
 		n.issues.push({
 			origin: a,
 			code: "too_big",
@@ -34098,12 +34209,12 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), uW = /*@__PURE__*/ $("$ZodCheckMinLength", (e, t) => {
+}), mW = /*@__PURE__*/ $("$ZodCheckMinLength", (e, t) => {
 	var n;
-	nW.init(e, t), (n = e._zod.def).when ?? (n.when = rW), e._zod.check = (n) => {
+	oW.init(e, t), (n = e._zod.def).when ?? (n.when = sW), e._zod.check = (n) => {
 		let r = n.value, i = r.length;
-		if ((typeof r == "string" && i >= t.minimum && i < t.minimum * 2 ? EH(r) : i) >= t.minimum) return;
-		let a = DH(r);
+		if ((typeof r == "string" && i >= t.minimum && i < t.minimum * 2 ? AH(r) : i) >= t.minimum) return;
+		let a = jH(r);
 		n.issues.push({
 			origin: a,
 			code: "too_small",
@@ -34114,12 +34225,12 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), dW = /*@__PURE__*/ $("$ZodCheckLengthEquals", (e, t) => {
+}), hW = /*@__PURE__*/ $("$ZodCheckLengthEquals", (e, t) => {
 	var n;
-	nW.init(e, t), (n = e._zod.def).when ?? (n.when = rW), e._zod.check = (n) => {
-		let r = n.value, i = r.length, a = typeof r == "string" && i >= t.length && i <= t.length * 2 ? EH(r) : i;
+	oW.init(e, t), (n = e._zod.def).when ?? (n.when = sW), e._zod.check = (n) => {
+		let r = n.value, i = r.length, a = typeof r == "string" && i >= t.length && i <= t.length * 2 ? AH(r) : i;
 		if (a === t.length) return;
-		let o = DH(r), s = a > t.length;
+		let o = jH(r), s = a > t.length;
 		n.issues.push({
 			origin: o,
 			...s ? {
@@ -34136,9 +34247,9 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), fW = /*@__PURE__*/ $("$ZodCheckStringFormat", (e, t) => {
+}), gW = /*@__PURE__*/ $("$ZodCheckStringFormat", (e, t) => {
 	var n, r;
-	nW.init(e, t), t.pattern ? (n = e._zod).check ?? (n.check = (n) => {
+	oW.init(e, t), t.pattern ? (n = e._zod).check ?? (n.check = (n) => {
 		t.pattern.lastIndex = 0, t.pattern.test(n.value) || n.issues.push({
 			origin: "string",
 			code: "invalid_format",
@@ -34149,8 +34260,8 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	}) : (r = e._zod).check ?? (r.check = () => {});
-}), pW = /*@__PURE__*/ $("$ZodCheckRegex", (e, t) => {
-	fW.init(e, t), e._zod.check = (n) => {
+}), _W = /*@__PURE__*/ $("$ZodCheckRegex", (e, t) => {
+	gW.init(e, t), e._zod.check = (n) => {
 		t.pattern.lastIndex = 0, t.pattern.test(n.value) || n.issues.push({
 			origin: "string",
 			code: "invalid_format",
@@ -34161,13 +34272,13 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), mW = /*@__PURE__*/ $("$ZodCheckLowerCase", (e, t) => {
-	t.pattern ??= eW, fW.init(e, t);
-}), hW = /*@__PURE__*/ $("$ZodCheckUpperCase", (e, t) => {
-	t.pattern ??= tW, fW.init(e, t);
-}), gW = /*@__PURE__*/ $("$ZodCheckIncludes", (e, t) => {
-	nW.init(e, t);
-	let n = rH(t.includes);
+}), vW = /*@__PURE__*/ $("$ZodCheckLowerCase", (e, t) => {
+	t.pattern ??= iW, gW.init(e, t);
+}), yW = /*@__PURE__*/ $("$ZodCheckUpperCase", (e, t) => {
+	t.pattern ??= aW, gW.init(e, t);
+}), bW = /*@__PURE__*/ $("$ZodCheckIncludes", (e, t) => {
+	oW.init(e, t);
+	let n = sH(t.includes);
 	t.pattern = new RegExp(typeof t.position == "number" ? `^.{${t.position},}${n}` : n), e._zod.check = (n) => {
 		n.value.includes(t.includes, t.position) || n.issues.push({
 			origin: "string",
@@ -34179,9 +34290,9 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), _W = /*@__PURE__*/ $("$ZodCheckStartsWith", (e, t) => {
-	nW.init(e, t);
-	let n = RegExp(`^${rH(t.prefix)}.*`);
+}), xW = /*@__PURE__*/ $("$ZodCheckStartsWith", (e, t) => {
+	oW.init(e, t);
+	let n = RegExp(`^${sH(t.prefix)}.*`);
 	t.pattern ??= n, e._zod.check = (n) => {
 		n.value.startsWith(t.prefix) || n.issues.push({
 			origin: "string",
@@ -34193,9 +34304,9 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), vW = /*@__PURE__*/ $("$ZodCheckEndsWith", (e, t) => {
-	nW.init(e, t);
-	let n = RegExp(`.*${rH(t.suffix)}$`);
+}), SW = /*@__PURE__*/ $("$ZodCheckEndsWith", (e, t) => {
+	oW.init(e, t);
+	let n = RegExp(`.*${sH(t.suffix)}$`);
 	t.pattern ??= n, e._zod.check = (n) => {
 		n.value.endsWith(t.suffix) || n.issues.push({
 			origin: "string",
@@ -34207,11 +34318,11 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			continue: !t.abort
 		});
 	};
-}), yW = /*@__PURE__*/ $("$ZodCheckOverwrite", (e, t) => {
-	nW.init(e, t), e._zod.check = (e) => {
+}), CW = /*@__PURE__*/ $("$ZodCheckOverwrite", (e, t) => {
+	oW.init(e, t), e._zod.check = (e) => {
 		e.value = t.tx(e.value);
 	};
-}), bW = class {
+}), wW = class {
 	constructor(e = [], t = {}) {
 		this.content = [], this.indent = 0, this.args = e, this.closed = t;
 	}
@@ -34235,13 +34346,13 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 		let e = Function, t = this?.content ?? [""];
 		return new e(...Object.keys(this.closed), `return function (${this.args.join(", ")}) {\n${t.join("\n")}\n};`)(...Object.values(this.closed));
 	}
-}, xW = {
+}, TW = {
 	major: 4,
 	minor: 6,
 	patch: 7
-}, SW = /*@__PURE__*/ $("$ZodType", (e, t) => {
+}, EW = /*@__PURE__*/ $("$ZodType", (e, t) => {
 	var n;
-	e ??= {}, e._zod.def = t, e._zod.bag = e._zod.bag || {}, e._zod.version = xW;
+	e ??= {}, e._zod.def = t, e._zod.bag = e._zod.bag || {}, e._zod.version = TW;
 	let r = e._zod.def.checks, i = e._zod.traits.has("$ZodCheck") ? [e, ...r ?? []] : r?.length ? [...r] : [];
 	for (let t of i) for (let n of t._zod.onattach) n(e);
 	if (i.length === 0) (n = e._zod).deferred ?? (n.deferred = []), e._zod.deferred?.push(() => {
@@ -34250,27 +34361,27 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 	else {
 		let t = (t, n, r) => {
 			if (t.memo) return t;
-			let i = vH(t), a;
+			let i = SH(t), a;
 			for (let o of n) {
 				if (o._zod.def.when) {
-					if (yH(t) || !o._zod.def.when(t)) continue;
+					if (CH(t) || !o._zod.def.when(t)) continue;
 				} else if (i) continue;
 				let n = t.issues.length, s = o._zod.check(t);
-				if (s instanceof Promise && r?.async === !1) throw new qH();
+				if (s instanceof Promise && r?.async === !1) throw new ZH();
 				if (a || s instanceof Promise) a = (a ?? Promise.resolve()).then(async () => {
-					await s, t.issues.length !== n && (CH(t.issues, n, e), i ||= vH(t, n));
+					await s, t.issues.length !== n && (DH(t.issues, n, e), i ||= SH(t, n));
 				});
 				else {
 					if (t.issues.length === n) continue;
-					CH(t.issues, n, e), i ||= vH(t, n);
+					DH(t.issues, n, e), i ||= SH(t, n);
 				}
 			}
 			return a ? a.then(() => t) : t;
 		}, n = (n, r, a) => {
-			if (vH(n)) return n.aborted = !0, n;
+			if (SH(n)) return n.aborted = !0, n;
 			let o = t(r, i, a);
 			if (o instanceof Promise) {
-				if (a.async === !1) throw new qH();
+				if (a.async === !1) throw new ZH();
 				return o.then((t) => e._zod.parse(t, a));
 			}
 			return e._zod.parse(o, a);
@@ -34289,7 +34400,7 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 			}
 			let o = e._zod.parse(r, a);
 			if (o instanceof Promise) {
-				if (a.async === !1) throw new qH();
+				if (a.async === !1) throw new ZH();
 				return o.then((e) => t(e, i, a));
 			}
 			return t(o, i, a);
@@ -34297,20 +34408,20 @@ var QU = /^[\s\S]{0,}$/, $U = /^-?\d+(?:\.\d+)?$/, eW = /^[^A-Z]*$/, tW = /^[^a-
 	}
 }, {
 	get "~standard"() {
-		return MH(this, "~standard", TW(this));
+		return IH(this, "~standard", kW(this));
 	},
 	set "~standard"(e) {
-		jH(this, "~standard", e);
+		FH(this, "~standard", e);
 	}
-}), CW = (e, t) => e.issues.length ? { issues: e.issues.map((e) => wH(e, t, XH())) } : { value: e.value };
-async function wW(e, t) {
+}), DW = (e, t) => e.issues.length ? { issues: e.issues.map((e) => OH(e, t, eU())) } : { value: e.value };
+async function OW(e, t) {
 	let n = { async: !0 };
-	return CW(await e._zod.run({
+	return DW(await e._zod.run({
 		value: t,
 		issues: []
 	}, n), n);
 }
-function TW(e) {
+function kW(e) {
 	return {
 		validate: (t) => {
 			let n = { async: !1 };
@@ -34319,16 +34430,16 @@ function TW(e) {
 					value: t,
 					issues: []
 				}, n);
-				if (!(r instanceof Promise)) return CW(r, n);
+				if (!(r instanceof Promise)) return DW(r, n);
 			} catch {}
-			return wW(e, t);
+			return OW(e, t);
 		},
 		vendor: "zod",
 		version: 1
 	};
 }
-var EW = /*@__PURE__*/ $("$ZodString", (e, t) => {
-	SW.init(e, t), e._zod.pattern = t.pattern ?? QU, e._zod.parse = (n, r) => {
+var AW = /*@__PURE__*/ $("$ZodString", (e, t) => {
+	EW.init(e, t), e._zod.pattern = t.pattern ?? nW, e._zod.parse = (n, r) => {
 		if (t.coerce) try {
 			n.value = String(n.value);
 		} catch {}
@@ -34339,11 +34450,11 @@ var EW = /*@__PURE__*/ $("$ZodString", (e, t) => {
 			inst: e
 		}), n;
 	};
-}), DW = /*@__PURE__*/ $("$ZodStringFormat", (e, t) => {
-	fW.init(e, t), EW.init(e, t);
-}), OW = /*@__PURE__*/ $("$ZodGUID", (e, t) => {
-	t.pattern ??= NU, DW.init(e, t);
-}), kW = /*@__PURE__*/ $("$ZodUUID", (e, t) => {
+}), jW = /*@__PURE__*/ $("$ZodStringFormat", (e, t) => {
+	gW.init(e, t), AW.init(e, t);
+}), MW = /*@__PURE__*/ $("$ZodGUID", (e, t) => {
+	t.pattern ??= LU, jW.init(e, t);
+}), NW = /*@__PURE__*/ $("$ZodUUID", (e, t) => {
 	if (t.version) {
 		let e = {
 			v1: 1,
@@ -34356,24 +34467,24 @@ var EW = /*@__PURE__*/ $("$ZodString", (e, t) => {
 			v8: 8
 		}[t.version];
 		if (e === void 0) throw Error(`Invalid UUID version: "${t.version}"`);
-		t.pattern ??= PU(e);
-	} else t.pattern ??= PU();
-	DW.init(e, t);
-}), AW = /*@__PURE__*/ $("$ZodEmail", (e, t) => {
-	t.pattern ??= FU, DW.init(e, t);
+		t.pattern ??= RU(e);
+	} else t.pattern ??= RU();
+	jW.init(e, t);
+}), PW = /*@__PURE__*/ $("$ZodEmail", (e, t) => {
+	t.pattern ??= zU, jW.init(e, t);
 });
-function jW(e) {
+function FW(e) {
 	try {
 		return typeof URL < "u" && typeof URL.canParse == "function" ? URL.canParse(e) : (new URL(e), !0);
 	} catch {
 		return !1;
 	}
 }
-function MW(e, t) {
-	return !("normalize" in t) && !("hostname" in t) && !("protocol" in t) ? jW(e) || 2 : NW(e, t);
+function IW(e, t) {
+	return !("normalize" in t) && !("hostname" in t) && !("protocol" in t) ? FW(e) || 2 : LW(e, t);
 }
-function NW(e, t) {
-	if (!t.normalize && t.protocol?.source === WU.source && !/^https?:\/\//i.test(e)) return 1;
+function LW(e, t) {
+	if (!t.normalize && t.protocol?.source === JU.source && !/^https?:\/\//i.test(e)) return 1;
 	try {
 		if (typeof URL < "u") {
 			let t = URL;
@@ -34384,20 +34495,20 @@ function NW(e, t) {
 		return 2;
 	}
 }
-var PW = /[\t\n\r]/g;
-function FW(e) {
-	return e.replace(PW, "");
+var RW = /[\t\n\r]/g;
+function zW(e) {
+	return e.replace(RW, "");
 }
-function IW(e, t) {
+function BW(e, t) {
 	return t.lastIndex = 0, t.test(e.hostname);
 }
-function LW(e, t) {
+function VW(e, t) {
 	return t.lastIndex = 0, t.test(e.protocol.endsWith(":") ? e.protocol.slice(0, -1) : e.protocol);
 }
-var RW = /*@__PURE__*/ $("$ZodURL", (e, t) => {
-	DW.init(e, t), e._zod.check = (n) => {
+var HW = /*@__PURE__*/ $("$ZodURL", (e, t) => {
+	jW.init(e, t), e._zod.check = (n) => {
 		try {
-			let r = n.value.trim(), i = MW(r, t);
+			let r = n.value.trim(), i = IW(r, t);
 			if (i === 1) {
 				n.issues.push({
 					code: "invalid_format",
@@ -34420,10 +34531,10 @@ var RW = /*@__PURE__*/ $("$ZodURL", (e, t) => {
 				return;
 			}
 			if (i === !0) {
-				n.value = FW(r);
+				n.value = zW(r);
 				return;
 			}
-			t.hostname && !IW(i, t.hostname) && n.issues.push({
+			t.hostname && !BW(i, t.hostname) && n.issues.push({
 				code: "invalid_format",
 				format: "url",
 				note: "Invalid hostname",
@@ -34431,7 +34542,7 @@ var RW = /*@__PURE__*/ $("$ZodURL", (e, t) => {
 				input: n.value,
 				inst: e,
 				continue: !t.abort
-			}), t.protocol && !LW(i, t.protocol) && n.issues.push({
+			}), t.protocol && !VW(i, t.protocol) && n.issues.push({
 				code: "invalid_format",
 				format: "url",
 				note: "Invalid protocol",
@@ -34439,7 +34550,7 @@ var RW = /*@__PURE__*/ $("$ZodURL", (e, t) => {
 				input: n.value,
 				inst: e,
 				continue: !t.abort
-			}), n.value = t.normalize ? i.href : FW(r);
+			}), n.value = t.normalize ? i.href : zW(r);
 			return;
 		} catch {
 			n.issues.push({
@@ -34451,38 +34562,38 @@ var RW = /*@__PURE__*/ $("$ZodURL", (e, t) => {
 			});
 		}
 	};
-}), zW = /*@__PURE__*/ $("$ZodEmoji", (e, t) => {
-	t.pattern ??= LU(), DW.init(e, t);
-}), BW = /*@__PURE__*/ $("$ZodNanoID", (e, t) => {
+}), UW = /*@__PURE__*/ $("$ZodEmoji", (e, t) => {
+	t.pattern ??= VU(), jW.init(e, t);
+}), WW = /*@__PURE__*/ $("$ZodNanoID", (e, t) => {
 	if (t.length !== void 0 && (!Number.isInteger(t.length) || t.length < 1)) throw Error(`Invalid nanoid length: ${t.length}`);
-	t.pattern ??= t.length === void 0 ? AU : jU(t.length), DW.init(e, t);
-}), VW = /*@__PURE__*/ $("$ZodCUID", (e, t) => {
-	t.pattern ??= TU, DW.init(e, t);
-}), HW = /*@__PURE__*/ $("$ZodCUID2", (e, t) => {
-	t.pattern ??= EU, DW.init(e, t);
-}), UW = /*@__PURE__*/ $("$ZodULID", (e, t) => {
-	t.pattern ??= DU, DW.init(e, t);
-}), WW = /*@__PURE__*/ $("$ZodXID", (e, t) => {
-	t.pattern ??= OU, DW.init(e, t);
-}), GW = /*@__PURE__*/ $("$ZodKSUID", (e, t) => {
-	t.pattern ??= kU, DW.init(e, t);
-}), KW = /*@__PURE__*/ $("$ZodISODateTime", (e, t) => {
-	t.pattern ??= ZU(t), DW.init(e, t);
-}), qW = /*@__PURE__*/ $("$ZodISODate", (e, t) => {
-	t.pattern ??= JU, DW.init(e, t);
-}), JW = /*@__PURE__*/ $("$ZodISOTime", (e, t) => {
-	t.pattern ??= XU(t), DW.init(e, t);
-}), YW = /*@__PURE__*/ $("$ZodISODuration", (e, t) => {
-	t.pattern ??= MU, DW.init(e, t);
-}), XW = /*@__PURE__*/ $("$ZodIPv4", (e, t) => {
-	t.pattern ??= RU, DW.init(e, t);
-}), ZW = /^[0-9a-fA-F:.]+$/;
-function QW(e) {
-	return ZW.test(e) ? jW(`http://[${e}]`) : !1;
+	t.pattern ??= t.length === void 0 ? PU : FU(t.length), jW.init(e, t);
+}), GW = /*@__PURE__*/ $("$ZodCUID", (e, t) => {
+	t.pattern ??= kU, jW.init(e, t);
+}), KW = /*@__PURE__*/ $("$ZodCUID2", (e, t) => {
+	t.pattern ??= AU, jW.init(e, t);
+}), qW = /*@__PURE__*/ $("$ZodULID", (e, t) => {
+	t.pattern ??= jU, jW.init(e, t);
+}), JW = /*@__PURE__*/ $("$ZodXID", (e, t) => {
+	t.pattern ??= MU, jW.init(e, t);
+}), YW = /*@__PURE__*/ $("$ZodKSUID", (e, t) => {
+	t.pattern ??= NU, jW.init(e, t);
+}), XW = /*@__PURE__*/ $("$ZodISODateTime", (e, t) => {
+	t.pattern ??= tW(t), jW.init(e, t);
+}), ZW = /*@__PURE__*/ $("$ZodISODate", (e, t) => {
+	t.pattern ??= QU, jW.init(e, t);
+}), QW = /*@__PURE__*/ $("$ZodISOTime", (e, t) => {
+	t.pattern ??= eW(t), jW.init(e, t);
+}), $W = /*@__PURE__*/ $("$ZodISODuration", (e, t) => {
+	t.pattern ??= IU, jW.init(e, t);
+}), eG = /*@__PURE__*/ $("$ZodIPv4", (e, t) => {
+	t.pattern ??= HU, jW.init(e, t);
+}), tG = /^[0-9a-fA-F:.]+$/;
+function nG(e) {
+	return tG.test(e) ? FW(`http://[${e}]`) : !1;
 }
-var $W = /*@__PURE__*/ $("$ZodIPv6", (e, t) => {
-	t.pattern ??= zU, DW.init(e, t), e._zod.check = (n) => {
-		QW(n.value) || n.issues.push({
+var rG = /*@__PURE__*/ $("$ZodIPv6", (e, t) => {
+	t.pattern ??= UU, jW.init(e, t), e._zod.check = (n) => {
+		nG(n.value) || n.issues.push({
 			code: "invalid_format",
 			format: "ipv6",
 			input: n.value,
@@ -34490,20 +34601,20 @@ var $W = /*@__PURE__*/ $("$ZodIPv6", (e, t) => {
 			continue: !t.abort
 		});
 	};
-}), eG = /*@__PURE__*/ $("$ZodCIDRv4", (e, t) => {
-	t.pattern ??= BU, DW.init(e, t);
+}), iG = /*@__PURE__*/ $("$ZodCIDRv4", (e, t) => {
+	t.pattern ??= WU, jW.init(e, t);
 });
-function tG(e) {
+function aG(e) {
 	let t = e.split("/");
 	if (t.length !== 2) return !1;
 	let [n, r] = t;
 	if (!r) return !1;
 	let i = Number(r);
-	return `${i}` !== r || i < 0 || i > 128 ? !1 : QW(n);
+	return `${i}` !== r || i < 0 || i > 128 ? !1 : nG(n);
 }
-var nG = /*@__PURE__*/ $("$ZodCIDRv6", (e, t) => {
-	t.pattern ??= VU, DW.init(e, t), e._zod.check = (n) => {
-		tG(n.value) || n.issues.push({
+var oG = /*@__PURE__*/ $("$ZodCIDRv6", (e, t) => {
+	t.pattern ??= GU, jW.init(e, t), e._zod.check = (n) => {
+		aG(n.value) || n.issues.push({
 			code: "invalid_format",
 			format: "cidrv6",
 			input: n.value,
@@ -34512,7 +34623,7 @@ var nG = /*@__PURE__*/ $("$ZodCIDRv6", (e, t) => {
 		});
 	};
 });
-function rG(e) {
+function sG(e) {
 	if (e === "") return !0;
 	if (/\s/.test(e) || e.length % 4 != 0) return !1;
 	try {
@@ -34521,9 +34632,9 @@ function rG(e) {
 		return !1;
 	}
 }
-var iG = /^[0-9a-zA-Z+/]*={0,2}$/, aG = /*@__PURE__*/ $("$ZodBase64", (e, t) => {
-	t.pattern ??= iG, DW.init(e, t), e._zod.check = (n) => {
-		rG(n.value) || n.issues.push({
+var cG = /^[0-9a-zA-Z+/]*={0,2}$/, lG = /*@__PURE__*/ $("$ZodBase64", (e, t) => {
+	t.pattern ??= cG, jW.init(e, t), e._zod.check = (n) => {
+		sG(n.value) || n.issues.push({
 			code: "invalid_format",
 			format: "base64",
 			input: n.value,
@@ -34531,15 +34642,15 @@ var iG = /^[0-9a-zA-Z+/]*={0,2}$/, aG = /*@__PURE__*/ $("$ZodBase64", (e, t) => 
 			continue: !t.abort
 		});
 	};
-}), oG = /^[A-Za-z0-9_-]*$/;
-function sG(e) {
-	if (!oG.test(e)) return !1;
+}), uG = /^[A-Za-z0-9_-]*$/;
+function dG(e) {
+	if (!uG.test(e)) return !1;
 	let t = e.replace(/[-_]/g, (e) => e === "-" ? "+" : "/");
-	return rG(t.padEnd(Math.ceil(t.length / 4) * 4, "="));
+	return sG(t.padEnd(Math.ceil(t.length / 4) * 4, "="));
 }
-var cG = /*@__PURE__*/ $("$ZodBase64URL", (e, t) => {
-	t.pattern ??= oG, DW.init(e, t), e._zod.check = (n) => {
-		sG(n.value) || n.issues.push({
+var fG = /*@__PURE__*/ $("$ZodBase64URL", (e, t) => {
+	t.pattern ??= uG, jW.init(e, t), e._zod.check = (n) => {
+		dG(n.value) || n.issues.push({
 			code: "invalid_format",
 			format: "base64url",
 			input: n.value,
@@ -34547,10 +34658,10 @@ var cG = /*@__PURE__*/ $("$ZodBase64URL", (e, t) => {
 			continue: !t.abort
 		});
 	};
-}), lG = /*@__PURE__*/ $("$ZodE164", (e, t) => {
-	t.pattern ??= GU, DW.init(e, t);
+}), pG = /*@__PURE__*/ $("$ZodE164", (e, t) => {
+	t.pattern ??= YU, jW.init(e, t);
 });
-function uG(e, t = null) {
+function mG(e, t = null) {
 	try {
 		let n = e.split(".");
 		if (n.length !== 3) return !1;
@@ -34562,9 +34673,9 @@ function uG(e, t = null) {
 		return !1;
 	}
 }
-var dG = /*@__PURE__*/ $("$ZodJWT", (e, t) => {
-	DW.init(e, t), e._zod.check = (n) => {
-		uG(n.value, t.alg) || n.issues.push({
+var hG = /*@__PURE__*/ $("$ZodJWT", (e, t) => {
+	jW.init(e, t), e._zod.check = (n) => {
+		mG(n.value, t.alg) || n.issues.push({
 			code: "invalid_format",
 			format: "jwt",
 			input: n.value,
@@ -34572,8 +34683,8 @@ var dG = /*@__PURE__*/ $("$ZodJWT", (e, t) => {
 			continue: !t.abort
 		});
 	};
-}), fG = /*@__PURE__*/ $("$ZodNumber", (e, t) => {
-	SW.init(e, t), e._zod.pattern = $U, e._zod.parse = (n, r) => {
+}), gG = /*@__PURE__*/ $("$ZodNumber", (e, t) => {
+	EW.init(e, t), e._zod.pattern = rW, e._zod.parse = (n, r) => {
 		if (t.coerce) try {
 			n.value = Number(n.value);
 		} catch {}
@@ -34588,40 +34699,40 @@ var dG = /*@__PURE__*/ $("$ZodJWT", (e, t) => {
 			...a ? { received: a } : {}
 		}), n;
 	};
-}), pG = /*@__PURE__*/ $("$ZodNumberFormat", (e, t) => {
-	cW.init(e, t), fG.init(e, t);
-}), mG = /*@__PURE__*/ $("$ZodUnknown", (e, t) => {
-	SW.init(e, t), e._zod.parse = (e) => e;
-}), hG = /*@__PURE__*/ $("$ZodNever", (e, t) => {
-	SW.init(e, t), e._zod.parse = (t, n) => (t.issues.push({
+}), _G = /*@__PURE__*/ $("$ZodNumberFormat", (e, t) => {
+	fW.init(e, t), gG.init(e, t);
+}), vG = /*@__PURE__*/ $("$ZodUnknown", (e, t) => {
+	EW.init(e, t), e._zod.parse = (e) => e;
+}), yG = /*@__PURE__*/ $("$ZodNever", (e, t) => {
+	EW.init(e, t), e._zod.parse = (t, n) => (t.issues.push({
 		expected: "never",
 		code: "invalid_type",
 		input: t.value,
 		inst: e
 	}), t);
 });
-function gG(e, t) {
-	let n = SH(e._zod.def.checks);
+function bG(e, t) {
+	let n = EH(e._zod.def.checks);
 	if (!n.length) return;
 	let r = Math.min(...n.map((e) => e[0])), i = e._zod.parse;
 	e._zod.parse = (n, a) => {
 		let o = t(n.value);
 		if (o > r && !a?.skipChecks && a?.direction !== "backward") {
-			for (let [t, r] of SH(e._zod.def.checks)) if (o > t && r._zod.def.when(n)) {
+			for (let [t, r] of EH(e._zod.def.checks)) if (o > t && r._zod.def.when(n)) {
 				let t = n.issues.length;
-				return r._zod.check(n), n.issues[t].continue = !1, CH(n.issues, t, e), n;
+				return r._zod.check(n), n.issues[t].continue = !1, DH(n.issues, t, e), n;
 			}
 		}
 		return i(n, a);
 	};
 }
-var _G = (e) => Array.isArray(e) ? e.length : -1;
-function vG(e, t, n) {
-	e.issues.length && t.issues.push(...bH(n, e.issues)), t.value[n] = e.value;
+var xG = (e) => Array.isArray(e) ? e.length : -1;
+function SG(e, t, n) {
+	e.issues.length && t.issues.push(...wH(n, e.issues)), t.value[n] = e.value;
 }
-var yG = /*@__PURE__*/ $("$ZodArray", (e, t) => {
-	SW.init(e, t);
-	let n = YH.memoizer;
+var CG = /*@__PURE__*/ $("$ZodArray", (e, t) => {
+	EW.init(e, t);
+	let n = $H.memoizer;
 	n?.attach(e), e._zod.parse = (r, i) => {
 		let a = r.value;
 		if (!Array.isArray(a)) return r.issues.push({
@@ -34637,18 +34748,18 @@ var yG = /*@__PURE__*/ $("$ZodArray", (e, t) => {
 				value: n,
 				issues: []
 			}, i);
-			if (c instanceof Promise) o.push(c.then((t) => vG(t, r, e)));
-			else if (vG(c, r, e), s && c.issues.length !== 0 && vH(c)) break;
+			if (c instanceof Promise) o.push(c.then((t) => SG(t, r, e)));
+			else if (SG(c, r, e), s && c.issues.length !== 0 && SH(c)) break;
 		}
 		return o.length ? Promise.all(o).then(() => r) : r;
-	}, gG(e, _G);
+	}, bG(e, xG);
 });
-function bG(e, t, n, r, i, a) {
+function wG(e, t, n, r, i, a) {
 	let o = n in r, s = a === "optional";
 	if (o || !s || i !== "optional") {
 		if (e.issues.length) {
 			if (i !== void 0 && s && !o) return;
-			t.issues.push(...bH(n, e.issues));
+			t.issues.push(...wH(n, e.issues));
 		}
 		!o && i === void 0 ? e.issues.length || t.issues.push({
 			code: "invalid_type",
@@ -34658,11 +34769,11 @@ function bG(e, t, n, r, i, a) {
 		}) : e.value === void 0 ? (o || i === "defaulted" && !s) && (t.value[n] = void 0) : t.value[n] = e.value;
 	}
 }
-var xG = [];
-function SG(e) {
-	let t = Object.keys(e.shape), n = Object.getOwnPropertySymbols(e.shape), r = n.length ? n : xG, i = r.length ? [...t, ...r] : t;
+var TG = [];
+function EG(e) {
+	let t = Object.keys(e.shape), n = Object.getOwnPropertySymbols(e.shape), r = n.length ? n : TG, i = r.length ? [...t, ...r] : t;
 	for (let t of i) if (!e.shape?.[t]?._zod?.traits?.has("$ZodType")) throw Error(`Invalid element at key "${String(t)}": expected a Zod schema`);
-	let a = oH(e.shape);
+	let a = uH(e.shape);
 	return {
 		...e,
 		allKeys: i,
@@ -34672,11 +34783,11 @@ function SG(e) {
 		optionalKeys: new Set(a)
 	};
 }
-function CG(e, t, n, r, i, a, o) {
+function DG(e, t, n, r, i, a, o) {
 	let s = [], c = i.keySet, l = i.catchall._zod, u = l.def.type, d = l.optin, f = l.optout, p = 0;
 	for (let i in t) {
 		if (o && n.issues.length !== p) {
-			if (vH(n, p)) break;
+			if (SH(n, p)) break;
 			p = n.issues.length;
 		}
 		if (c.has(i)) continue;
@@ -34692,7 +34803,7 @@ function CG(e, t, n, r, i, a, o) {
 			value: t[i],
 			issues: []
 		}, r);
-		a instanceof Promise ? e.push(a.then((e) => bG(e, n, i, t, d, f))) : bG(a, n, i, t, d, f);
+		a instanceof Promise ? e.push(a.then((e) => wG(e, n, i, t, d, f))) : wG(a, n, i, t, d, f);
 	}
 	return s.length && n.issues.push({
 		code: "unrecognized_keys",
@@ -34702,8 +34813,8 @@ function CG(e, t, n, r, i, a, o) {
 		continue: !0
 	}), e.length ? Promise.all(e).then(() => n) : n;
 }
-var wG = /*@__PURE__*/ $("$ZodObject", (e, t) => {
-	SW.init(e, t);
+var OG = /*@__PURE__*/ $("$ZodObject", (e, t) => {
+	EW.init(e, t);
 	let n = Object.getOwnPropertyDescriptor(t, "shape"), r = n?.get ? n.get.raw : t.shape ?? {};
 	if (r) {
 		let e = () => {
@@ -34712,20 +34823,20 @@ var wG = /*@__PURE__*/ $("$ZodObject", (e, t) => {
 		};
 		e.raw = r, Object.defineProperty(t, "shape", { get: e });
 	}
-	let i = LV(() => SG(t));
-	zH(e, "propValues", (e) => {
+	let i = VV(() => EG(t));
+	UH(e, "propValues", (e) => {
 		let t = e.def.shape, n = {};
 		for (let e in t) {
 			let r = t[e]._zod;
 			if (r.values) {
-				Object.prototype.hasOwnProperty.call(n, e) || VV(n, e, /* @__PURE__ */ new Set());
+				Object.prototype.hasOwnProperty.call(n, e) || GV(n, e, /* @__PURE__ */ new Set());
 				for (let t of r.values) n[e].add(t);
 				r.optin !== void 0 && n[e].add(void 0);
 			}
 		}
 		return n;
 	});
-	let a = QV, o = t.catchall, s, c = YH.memoizer;
+	let a = nH, o = t.catchall, s, c = $H.memoizer;
 	c?.attach(e), e._zod.parse = (t, n) => {
 		s ??= i.value;
 		let r = t.value;
@@ -34739,7 +34850,7 @@ var wG = /*@__PURE__*/ $("$ZodObject", (e, t) => {
 		let l = [], u = s.shape, d = n?.abortEarly, f = t.issues.length;
 		for (let e of s.allKeys) {
 			if (d && t.issues.length !== f) {
-				if (vH(t, f)) break;
+				if (SH(t, f)) break;
 				f = t.issues.length;
 			}
 			if (e === "__proto__") continue;
@@ -34747,14 +34858,14 @@ var wG = /*@__PURE__*/ $("$ZodObject", (e, t) => {
 				value: r[e],
 				issues: []
 			}, n);
-			s instanceof Promise ? l.push(s.then((n) => bG(n, t, e, r, a, o))) : bG(s, t, e, r, a, o);
+			s instanceof Promise ? l.push(s.then((n) => wG(n, t, e, r, a, o))) : wG(s, t, e, r, a, o);
 		}
-		return o ? CG(l, r, t, n, i.value, e, d === !0) : l.length ? Promise.all(l).then(() => t) : t;
+		return o ? DG(l, r, t, n, i.value, e, d === !0) : l.length ? Promise.all(l).then(() => t) : t;
 	};
-}), TG = /*@__PURE__*/ $("$ZodObjectJIT", (e, t) => {
-	wG.init(e, t);
-	let n = e._zod.parse, r = LV(() => SG(t)), i = YH.memoizer, a = (t) => {
-		let n = r.value, a = n.symbolKeys, o = new bW(["payload", "ctx"], {
+}), kG = /*@__PURE__*/ $("$ZodObjectJIT", (e, t) => {
+	OG.init(e, t);
+	let n = e._zod.parse, r = VV(() => EG(t)), i = $H.memoizer, a = (t) => {
+		let n = r.value, a = n.symbolKeys, o = new wW(["payload", "ctx"], {
 			shape: t,
 			inst: e,
 			memo: i,
@@ -34777,7 +34888,7 @@ var wG = /*@__PURE__*/ $("$ZodObject", (e, t) => {
 		o.write(i ? "const newResult = memo.alloc(inst, payload, {}, ctx);" : "const newResult = {};");
 		for (let e of n.allKeys) {
 			if (e === "__proto__") continue;
-			let n = l[e], r = typeof e == "symbol" ? `syms[${a.indexOf(e)}]` : YV(e), i = `${r} in input`, u = t[e], d = u?._zod?.optin, f = d !== void 0, p = u?._zod?.optout === "optional";
+			let n = l[e], r = typeof e == "symbol" ? `syms[${a.indexOf(e)}]` : $V(e), i = `${r} in input`, u = t[e], d = u?._zod?.optin, f = d !== void 0, p = u?._zod?.optout === "optional";
 			if (o.write(`const ${n} = ${s(r)};`), f && p) {
 				let e = d === "optional" ? `${n}_present` : `${n}.value !== undefined || ${n}_present`;
 				o.write(`
@@ -34823,11 +34934,11 @@ var wG = /*@__PURE__*/ $("$ZodObject", (e, t) => {
       `);
 		}
 		return o.write("payload.value = newResult;"), o.write("return payload;"), o.compile();
-	}, o, s = QV, c = !YH.jitless, l = c && $V.value, u = t.catchall, d;
+	}, o, s = nH, c = !$H.jitless, l = c && rH.value, u = t.catchall, d;
 	e._zod.parse = (i, f) => {
 		d ??= r.value;
 		let p = i.value;
-		return s(p) ? c && l && f?.async === !1 && f.jitless !== !0 ? (o ||= a(t.shape), i = o(i, f), u ? CG([], p, i, f, d, e, f?.abortEarly === !0) : i) : n(i, f) : (i.issues.push({
+		return s(p) ? c && l && f?.async === !1 && f.jitless !== !0 ? (o ||= a(t.shape), i = o(i, f), u ? DG([], p, i, f, d, e, f?.abortEarly === !0) : i) : n(i, f) : (i.issues.push({
 			expected: "object",
 			code: "invalid_type",
 			input: p,
@@ -34835,23 +34946,23 @@ var wG = /*@__PURE__*/ $("$ZodObject", (e, t) => {
 		}), i);
 	};
 });
-function EG(e, t, n, r) {
+function AG(e, t, n, r) {
 	for (let n of e) if (n.issues.length === 0) return t.value = n.value, t;
-	let i = e.filter((e) => !vH(e));
+	let i = e.filter((e) => !SH(e));
 	return i.length === 1 ? (t.value = i[0].value, i[0]) : (t.issues.push({
 		code: "invalid_union",
 		input: t.value,
 		inst: n,
-		errors: e.map((e) => e.issues.map((e) => wH(e, r, XH())))
+		errors: e.map((e) => e.issues.map((e) => OH(e, r, eU())))
 	}), t);
 }
-var DG = /*@__PURE__*/ $("$ZodUnion", (e, t) => {
-	SW.init(e, t), zH(e, "optin", (e) => e.def.options.some((e) => e._zod.optin === "defaulted") ? "defaulted" : e.def.options.some((e) => e._zod.optin !== void 0) ? "optional" : void 0), zH(e, "optout", (e) => e.def.options.some((e) => e._zod.optout === "optional") ? "optional" : void 0), zH(e, "values", (e) => {
+var jG = /*@__PURE__*/ $("$ZodUnion", (e, t) => {
+	EW.init(e, t), UH(e, "optin", (e) => e.def.options.some((e) => e._zod.optin === "defaulted") ? "defaulted" : e.def.options.some((e) => e._zod.optin !== void 0) ? "optional" : void 0), UH(e, "optout", (e) => e.def.options.some((e) => e._zod.optout === "optional") ? "optional" : void 0), UH(e, "values", (e) => {
 		if (e.def.options.every((e) => e._zod.values)) return new Set(e.def.options.flatMap((e) => Array.from(e._zod.values)));
-	}), zH(e, "pattern", (e) => {
+	}), UH(e, "pattern", (e) => {
 		if (e.def.options.every((e) => e._zod.pattern)) {
 			let t = e.def.options.map((e) => e._zod.pattern);
-			return RegExp(`^(${t.map((e) => zV(e.source)).join("|")})$`);
+			return RegExp(`^(${t.map((e) => UV(e.source)).join("|")})$`);
 		}
 	});
 	let n = t.options.length === 1 ? t.options[0]._zod.run : null;
@@ -34869,10 +34980,10 @@ var DG = /*@__PURE__*/ $("$ZodUnion", (e, t) => {
 				o.push(t);
 			}
 		}
-		return a ? Promise.all(o).then((t) => EG(t, r, e, i)) : EG(o, r, e, i);
+		return a ? Promise.all(o).then((t) => AG(t, r, e, i)) : AG(o, r, e, i);
 	};
-}), OG = /*@__PURE__*/ $("$ZodIntersection", (e, t) => {
-	SW.init(e, t), e._zod.parse = (e, n) => {
+}), MG = /*@__PURE__*/ $("$ZodIntersection", (e, t) => {
+	EW.init(e, t), e._zod.parse = (e, n) => {
 		let r = e.value, i = t.left._zod.run({
 			value: r,
 			issues: []
@@ -34880,15 +34991,15 @@ var DG = /*@__PURE__*/ $("$ZodUnion", (e, t) => {
 			value: r,
 			issues: []
 		}, n);
-		return i instanceof Promise || a instanceof Promise ? Promise.all([i, a]).then(([t, n]) => AG(e, t, n)) : AG(e, i, a);
+		return i instanceof Promise || a instanceof Promise ? Promise.all([i, a]).then(([t, n]) => PG(e, t, n)) : PG(e, i, a);
 	};
 });
-function kG(e, t) {
+function NG(e, t) {
 	if (e === t || e instanceof Date && t instanceof Date && +e == +t) return {
 		valid: !0,
 		data: e
 	};
-	if (eH(e) && eH(t)) {
+	if (iH(e) && iH(t)) {
 		let n = Object.keys(t), r = Object.keys(e).filter((e) => n.indexOf(e) !== -1), i = {
 			...e,
 			...t
@@ -34896,7 +35007,7 @@ function kG(e, t) {
 		Object.prototype.hasOwnProperty.call(i, "__proto__") && delete i.__proto__;
 		for (let n of r) {
 			if (n === "__proto__") continue;
-			let r = kG(e[n], t[n]);
+			let r = NG(e[n], t[n]);
 			if (!r.valid) return {
 				valid: !1,
 				mergeErrorPath: [n, ...r.mergeErrorPath]
@@ -34915,7 +35026,7 @@ function kG(e, t) {
 		};
 		let n = [];
 		for (let r = 0; r < e.length; r++) {
-			let i = e[r], a = t[r], o = kG(i, a);
+			let i = e[r], a = t[r], o = NG(i, a);
 			if (!o.valid) return {
 				valid: !1,
 				mergeErrorPath: [r, ...o.mergeErrorPath]
@@ -34932,7 +35043,7 @@ function kG(e, t) {
 		mergeErrorPath: []
 	};
 }
-function AG(e, t, n) {
+function PG(e, t, n) {
 	let r = /* @__PURE__ */ new Map(), i, a = /* @__PURE__ */ new Map(), o = (e, t) => {
 		let n;
 		if (e.code === "unrecognized_keys" && !e.path?.length) i ??= e, n = e.keys;
@@ -34954,19 +35065,19 @@ function AG(e, t, n) {
 		});
 		for (let n of s) !t.includes(n) && a.has(n) && e.issues.push(a.get(n));
 	}
-	let c = kG(t.value, n.value);
+	let c = NG(t.value, n.value);
 	if (!c.valid) {
-		if (vH(e)) return e;
+		if (SH(e)) return e;
 		throw Error(`Unmergable intersection. Error path: ${JSON.stringify(c.mergeErrorPath)}`);
 	}
 	return e.value = c.data, e;
 }
-var jG = /*@__PURE__*/ $("$ZodEnum", (e, t) => {
-	SW.init(e, t);
-	let n = NV(t.entries), r = new Set(n);
-	e._zod.values = r, zH(e, "pattern", (e) => {
-		let t = NV(e.def.entries).filter((e) => nH.has(typeof e));
-		return RegExp(t.length ? `^(${t.map((e) => rH(e.toString())).join("|")})$` : "^[^\\s\\S]$");
+var FG = /*@__PURE__*/ $("$ZodEnum", (e, t) => {
+	EW.init(e, t);
+	let n = LV(t.entries), r = new Set(n);
+	e._zod.values = r, UH(e, "pattern", (e) => {
+		let t = LV(e.def.entries).filter((e) => oH.has(typeof e));
+		return RegExp(t.length ? `^(${t.map((e) => sH(e.toString())).join("|")})$` : "^[^\\s\\S]$");
 	}), e._zod.parse = (t, i) => {
 		let a = t.value;
 		return r.has(a) || t.issues.push({
@@ -34976,12 +35087,12 @@ var jG = /*@__PURE__*/ $("$ZodEnum", (e, t) => {
 			inst: e
 		}), t;
 	};
-}), MG = /*@__PURE__*/ $("$ZodLiteral", (e, t) => {
-	SW.init(e, t);
+}), IG = /*@__PURE__*/ $("$ZodLiteral", (e, t) => {
+	EW.init(e, t);
 	let n = new Set(t.values);
-	e._zod.values = n, zH(e, "pattern", (e) => {
+	e._zod.values = n, UH(e, "pattern", (e) => {
 		let t = e.def.values;
-		return RegExp(t.length ? `^(${t.map((e) => typeof e == "string" ? rH(e) : e ? rH(e.toString()) : String(e)).join("|")})$` : "^[^\\s\\S]$");
+		return RegExp(t.length ? `^(${t.map((e) => typeof e == "string" ? sH(e) : e ? sH(e.toString()) : String(e)).join("|")})$` : "^[^\\s\\S]$");
 	}), e._zod.parse = (r, i) => {
 		let a = r.value;
 		return n.has(a) || r.issues.push({
@@ -34991,25 +35102,25 @@ var jG = /*@__PURE__*/ $("$ZodEnum", (e, t) => {
 			inst: e
 		}), r;
 	};
-}), NG = /*@__PURE__*/ $("$ZodTransform", (e, t) => {
-	SW.init(e, t), e._zod.optin = "optional", YH.memoizer?.guard(e), e._zod.parse = (n, r) => {
-		if (r.direction === "backward") throw new JH(e.constructor.name);
+}), LG = /*@__PURE__*/ $("$ZodTransform", (e, t) => {
+	EW.init(e, t), e._zod.optin = "optional", $H.memoizer?.guard(e), e._zod.parse = (n, r) => {
+		if (r.direction === "backward") throw new QH(e.constructor.name);
 		let i = t.transform(n.value, n);
 		if (r.async) return (i instanceof Promise ? i : Promise.resolve(i)).then((e) => (n.value = e, n));
-		if (i instanceof Promise) throw new qH();
+		if (i instanceof Promise) throw new ZH();
 		return n.value = i, n;
 	};
 });
-function PG(e, t) {
+function RG(e, t) {
 	return e.value = t.issues.length ? void 0 : t.value, e;
 }
-var FG = /*@__PURE__*/ $("$ZodOptional", (e, t) => {
-	SW.init(e, t), zH(e, "optin", (e) => e.def.innerType._zod.optin === "defaulted" ? "defaulted" : "optional"), e._zod.optout = "optional", zH(e, "values", (e) => {
+var zG = /*@__PURE__*/ $("$ZodOptional", (e, t) => {
+	EW.init(e, t), UH(e, "optin", (e) => e.def.innerType._zod.optin === "defaulted" ? "defaulted" : "optional"), e._zod.optout = "optional", UH(e, "values", (e) => {
 		let t = e.def.innerType._zod.values;
 		return t ? /* @__PURE__ */ new Set([...t, void 0]) : void 0;
-	}), zH(e, "pattern", (e) => {
+	}), UH(e, "pattern", (e) => {
 		let t = e.def.innerType._zod.pattern;
-		return t ? RegExp(`^(${zV(t.source)})?$`) : void 0;
+		return t ? RegExp(`^(${UV(t.source)})?$`) : void 0;
 	}), e._zod.parse = (e, n) => {
 		if (e.value === void 0) {
 			if (t.innerType._zod.optin !== "defaulted") return e;
@@ -35017,40 +35128,40 @@ var FG = /*@__PURE__*/ $("$ZodOptional", (e, t) => {
 				value: e.value,
 				issues: []
 			}, n);
-			return r instanceof Promise ? r.then((t) => PG(e, t)) : PG(e, r);
+			return r instanceof Promise ? r.then((t) => RG(e, t)) : RG(e, r);
 		}
 		return t.innerType._zod.run(e, n);
 	};
-}), IG = /*@__PURE__*/ $("$ZodExactOptional", (e, t) => {
-	FG.init(e, t), zH(e, "values", (e) => e.def.innerType._zod.values), zH(e, "pattern", (e) => e.def.innerType._zod.pattern), e._zod.parse = (e, n) => t.innerType._zod.run(e, n);
-}), LG = /*@__PURE__*/ $("$ZodNullable", (e, t) => {
-	SW.init(e, t), zH(e, "optin", (e) => e.def.innerType._zod.optin), zH(e, "optout", (e) => e.def.innerType._zod.optout), zH(e, "pattern", (e) => {
+}), BG = /*@__PURE__*/ $("$ZodExactOptional", (e, t) => {
+	zG.init(e, t), UH(e, "values", (e) => e.def.innerType._zod.values), UH(e, "pattern", (e) => e.def.innerType._zod.pattern), e._zod.parse = (e, n) => t.innerType._zod.run(e, n);
+}), VG = /*@__PURE__*/ $("$ZodNullable", (e, t) => {
+	EW.init(e, t), UH(e, "optin", (e) => e.def.innerType._zod.optin), UH(e, "optout", (e) => e.def.innerType._zod.optout), UH(e, "pattern", (e) => {
 		let t = e.def.innerType._zod.pattern;
-		return t ? RegExp(`^(${zV(t.source)}|null)$`) : void 0;
-	}), zH(e, "values", (e) => e.def.innerType._zod.values ? /* @__PURE__ */ new Set([...e.def.innerType._zod.values, null]) : void 0), e._zod.parse = (e, n) => e.value === null ? e : t.innerType._zod.run(e, n);
-}), RG = /*@__PURE__*/ $("$ZodDefault", (e, t) => {
-	SW.init(e, t), e._zod.optin = "defaulted", zH(e, "values", (e) => e.def.innerType._zod.values), e._zod.parse = (e, n) => {
+		return t ? RegExp(`^(${UV(t.source)}|null)$`) : void 0;
+	}), UH(e, "values", (e) => e.def.innerType._zod.values ? /* @__PURE__ */ new Set([...e.def.innerType._zod.values, null]) : void 0), e._zod.parse = (e, n) => e.value === null ? e : t.innerType._zod.run(e, n);
+}), HG = /*@__PURE__*/ $("$ZodDefault", (e, t) => {
+	EW.init(e, t), e._zod.optin = "defaulted", UH(e, "values", (e) => e.def.innerType._zod.values), e._zod.parse = (e, n) => {
 		if (n.direction === "backward") return t.innerType._zod.run(e, n);
 		if (e.value === void 0) return e.value = t.defaultValue, e;
 		let r = t.innerType._zod.run(e, n);
-		return r instanceof Promise ? r.then((e) => zG(e, t)) : zG(r, t);
+		return r instanceof Promise ? r.then((e) => UG(e, t)) : UG(r, t);
 	};
 });
-function zG(e, t) {
+function UG(e, t) {
 	return e.value === void 0 && (e.value = t.defaultValue), e;
 }
-var BG = /*@__PURE__*/ $("$ZodPrefault", (e, t) => {
-	SW.init(e, t), e._zod.optin = "defaulted", zH(e, "values", (e) => e.def.innerType._zod.values), e._zod.parse = (e, n) => (n.direction === "backward" || e.value === void 0 && (e.value = t.defaultValue), t.innerType._zod.run(e, n));
-}), VG = /*@__PURE__*/ $("$ZodNonOptional", (e, t) => {
-	SW.init(e, t), zH(e, "values", (e) => {
+var WG = /*@__PURE__*/ $("$ZodPrefault", (e, t) => {
+	EW.init(e, t), e._zod.optin = "defaulted", UH(e, "values", (e) => e.def.innerType._zod.values), e._zod.parse = (e, n) => (n.direction === "backward" || e.value === void 0 && (e.value = t.defaultValue), t.innerType._zod.run(e, n));
+}), GG = /*@__PURE__*/ $("$ZodNonOptional", (e, t) => {
+	EW.init(e, t), UH(e, "values", (e) => {
 		let t = e.def.innerType._zod.values;
 		return t ? new Set([...t].filter((e) => e !== void 0)) : void 0;
 	}), e._zod.parse = (n, r) => {
 		let i = t.innerType._zod.run(n, r);
-		return i instanceof Promise ? i.then((t) => HG(t, e)) : HG(i, e);
+		return i instanceof Promise ? i.then((t) => KG(t, e)) : KG(i, e);
 	};
 });
-function HG(e, t) {
+function KG(e, t) {
 	return !e.issues.length && e.value === void 0 && e.issues.push({
 		code: "invalid_type",
 		expected: "nonoptional",
@@ -35058,57 +35169,57 @@ function HG(e, t) {
 		inst: t
 	}), e;
 }
-function UG(e, t, n, r) {
+function qG(e, t, n, r) {
 	return t.issues.length ? (e.value = n.catchValue({
 		...t,
 		value: e.value,
-		error: { issues: t.issues.map((e) => wH(e, r, XH())) },
+		error: { issues: t.issues.map((e) => OH(e, r, eU())) },
 		input: e.value
 	}), e) : (e.value = t.value, t.memo && (e.memo = !0), e);
 }
-var WG = /*@__PURE__*/ $("$ZodCatch", (e, t) => {
-	SW.init(e, t), zH(e, "optin", (e) => e.def.innerType._zod.optin === "defaulted" ? "defaulted" : "optional"), zH(e, "optout", (e) => e.def.innerType._zod.optout), zH(e, "values", (e) => e.def.innerType._zod.values), e._zod.parse = (e, n) => {
+var JG = /*@__PURE__*/ $("$ZodCatch", (e, t) => {
+	EW.init(e, t), UH(e, "optin", (e) => e.def.innerType._zod.optin === "defaulted" ? "defaulted" : "optional"), UH(e, "optout", (e) => e.def.innerType._zod.optout), UH(e, "values", (e) => e.def.innerType._zod.values), e._zod.parse = (e, n) => {
 		if (n.direction === "backward") return t.innerType._zod.run(e, n);
 		let r = t.innerType._zod.run({
 			value: e.value,
 			issues: []
 		}, n);
-		return r instanceof Promise ? r.then((r) => UG(e, r, t, n)) : UG(e, r, t, n);
+		return r instanceof Promise ? r.then((r) => qG(e, r, t, n)) : qG(e, r, t, n);
 	};
-}), GG = /*@__PURE__*/ $("$ZodPipe", (e, t) => {
-	SW.init(e, t), zH(e, "values", (e) => e.def.in._zod.values), zH(e, "optin", (e) => e.def.in._zod.optin), zH(e, "optout", (e) => e.def.out._zod.optout), zH(e, "propValues", (e) => e.def.in._zod.propValues), e._zod.parse = (e, n) => {
+}), YG = /*@__PURE__*/ $("$ZodPipe", (e, t) => {
+	EW.init(e, t), UH(e, "values", (e) => e.def.in._zod.values), UH(e, "optin", (e) => e.def.in._zod.optin), UH(e, "optout", (e) => e.def.out._zod.optout), UH(e, "propValues", (e) => e.def.in._zod.propValues), e._zod.parse = (e, n) => {
 		if (n.direction === "backward") {
 			let r = t.out._zod.run(e, n);
-			return r instanceof Promise ? r.then((e) => KG(e, t.in, n)) : KG(r, t.in, n);
+			return r instanceof Promise ? r.then((e) => XG(e, t.in, n)) : XG(r, t.in, n);
 		}
 		let r = t.in._zod.run(e, n);
-		return r instanceof Promise ? r.then((e) => KG(e, t.out, n)) : KG(r, t.out, n);
+		return r instanceof Promise ? r.then((e) => XG(e, t.out, n)) : XG(r, t.out, n);
 	};
 });
-function KG(e, t, n) {
+function XG(e, t, n) {
 	return e.issues.some((e) => e.code !== "unrecognized_keys") ? (e.aborted = !0, e) : t._zod.run({
 		value: e.value,
 		issues: e.issues
 	}, n);
 }
-var qG = /*@__PURE__*/ $("$ZodReadonly", (e, t) => {
-	SW.init(e, t), zH(e, "propValues", (e) => e.def.innerType._zod.propValues), zH(e, "values", (e) => e.def.innerType._zod.values), zH(e, "optin", (e) => e.def.innerType?._zod?.optin), zH(e, "optout", (e) => e.def.innerType?._zod?.optout), e._zod.parse = (e, n) => {
+var ZG = /*@__PURE__*/ $("$ZodReadonly", (e, t) => {
+	EW.init(e, t), UH(e, "propValues", (e) => e.def.innerType._zod.propValues), UH(e, "values", (e) => e.def.innerType._zod.values), UH(e, "optin", (e) => e.def.innerType?._zod?.optin), UH(e, "optout", (e) => e.def.innerType?._zod?.optout), e._zod.parse = (e, n) => {
 		if (n.direction === "backward") return t.innerType._zod.run(e, n);
 		let r = t.innerType._zod.run(e, n);
-		return r instanceof Promise ? r.then(JG) : JG(r);
+		return r instanceof Promise ? r.then(QG) : QG(r);
 	};
 });
-function JG(e) {
+function QG(e) {
 	return e.memo || (e.value = Object.freeze(e.value)), e;
 }
-var YG = /*@__PURE__*/ $("$ZodCustom", (e, t) => {
-	nW.init(e, t), SW.init(e, t), e._zod.parse = (e, t) => e, e._zod.check = (n) => {
+var $G = /*@__PURE__*/ $("$ZodCustom", (e, t) => {
+	oW.init(e, t), EW.init(e, t), e._zod.parse = (e, t) => e, e._zod.check = (n) => {
 		let r = n.value, i = t.fn(r);
-		if (i instanceof Promise) return i.then((t) => XG(t, n, r, e));
-		XG(i, n, r, e);
+		if (i instanceof Promise) return i.then((t) => eK(t, n, r, e));
+		eK(i, n, r, e);
 	};
 });
-function XG(e, t, n, r) {
+function eK(e, t, n, r) {
 	if (!e) {
 		let e = {
 			code: "custom",
@@ -35117,41 +35228,41 @@ function XG(e, t, n, r) {
 			path: [...r._zod.def.path ?? []],
 			continue: !r._zod.def.abort
 		};
-		r._zod.def.params && (e.params = r._zod.def.params), t.issues.push(kH(e));
+		r._zod.def.params && (e.params = r._zod.def.params), t.issues.push(NH(e));
 	}
 }
 // node_modules/zod/v4/core/memoizer.js
-var ZG = class extends Error {
+var tK = class extends Error {
 	constructor() {
 		super("Cannot parse a reference cycle that closes through a transform"), this.name = "ZodCyclicError";
 	}
-}, QG = "~memo", $G = [];
-function eK(e) {
+}, nK = "~memo", rK = [];
+function iK(e) {
 	return typeof e == "object" && !!e;
 }
-function tK(e) {
+function aK(e) {
 	return e.map((e) => e.path ? {
 		...e,
 		path: e.path.slice()
 	} : { ...e });
 }
-var nK = /*@__PURE__*/ new WeakMap(), rK = 0, iK = 1, aK = 2;
-function oK(e, t, n) {
-	let r = nK.get(e);
-	if (r !== void 0) return r ? aK : rK;
-	if (t.has(e)) return aK;
+var oK = /*@__PURE__*/ new WeakMap(), sK = 0, cK = 1, lK = 2;
+function uK(e, t, n) {
+	let r = oK.get(e);
+	if (r !== void 0) return r ? lK : sK;
+	if (t.has(e)) return lK;
 	t.add(e);
-	let i = rK, a = (e) => {
-		if (i !== aK && e?._zod) {
-			let r = oK(e, t, n);
+	let i = sK, a = (e) => {
+		if (i !== lK && e?._zod) {
+			let r = uK(e, t, n);
 			r > i && (i = r);
 		}
 	}, o = (e, r) => {
-		let i = rK;
+		let i = sK;
 		for (let a of Reflect.ownKeys(e)) {
 			let o = Object.getOwnPropertyDescriptor(e, a);
 			if (r && !o.enumerable) continue;
-			let s = o.get ? iK : o.value?._zod ? oK(o.value, t, n) : rK;
+			let s = o.get ? cK : o.value?._zod ? uK(o.value, t, n) : sK;
 			s > i && (i = s);
 		}
 		return i;
@@ -35160,8 +35271,8 @@ function oK(e, t, n) {
 	}, c = e._zod.def;
 	switch (c.type) {
 		case "object": {
-			let e = HV(c);
-			s(e ? o(e, !0) : iK), a(c.catchall);
+			let e = KV(c);
+			s(e ? o(e, !0) : cK), a(c.catchall);
 			break;
 		}
 		case "array":
@@ -35203,7 +35314,7 @@ function oK(e, t, n) {
 			break;
 		case "lazy": {
 			let r = c._cachedInner ?? (n ? e._zod.innerType : void 0);
-			s(r ? oK(r, t, !1) : iK);
+			s(r ? uK(r, t, !1) : cK);
 			break;
 		}
 		case "template_literal":
@@ -35236,31 +35347,31 @@ function oK(e, t, n) {
 			}
 		}
 	}
-	return t.delete(e), sK(e, i);
+	return t.delete(e), dK(e, i);
 }
-function sK(e, t) {
-	return t !== iK && nK.set(e, t === aK), t;
+function dK(e, t) {
+	return t !== cK && oK.set(e, t === lK), t;
 }
-function cK(e, t) {
+function fK(e, t) {
 	let n = e.buckets.get(t);
 	return n || (n = /* @__PURE__ */ new WeakMap(), e.buckets.set(t, n)), n;
 }
-var lK, uK = [], dK = {
+var pK, mK = [], hK = {
 	alloc(e, t, n) {
-		let r = lK;
+		let r = pK;
 		if (!r) return n;
-		lK = void 0;
+		pK = void 0;
 		let i = {
 			value: n,
 			issues: null
 		};
-		return r.set(t.value, i), uK.push(i), n;
+		return r.set(t.value, i), mK.push(i), n;
 	},
 	guard(e) {
 		var t;
 		(t = e._zod).deferred ?? (t.deferred = []), e._zod.deferred.push(() => {
 			let t = e._zod.parse, n = (e, n) => {
-				if (n.direction !== "backward" && pK(n, e.value)) throw new ZG();
+				if (n.direction !== "backward" && _K(n, e.value)) throw new tK();
 				return t(e, n);
 			};
 			e._zod.parse = n, e._zod.run === t && (e._zod.run = n);
@@ -35272,40 +35383,40 @@ var lK, uK = [], dK = {
 		(t = e._zod).deferred ?? (t.deferred = []), e._zod.deferred.push(() => {
 			let t = e._zod.parse, o = (s, c) => {
 				if (n === void 0) {
-					let i = oK(e, /* @__PURE__ */ new Set(), !1);
-					if (i === rK) return e._zod.parse = t, e._zod.run === o && (e._zod.run = t), t(s, c);
-					i === aK || r ? n = !0 : r = !0;
+					let i = uK(e, /* @__PURE__ */ new Set(), !1);
+					if (i === sK) return e._zod.parse = t, e._zod.run === o && (e._zod.run = t), t(s, c);
+					i === lK || r ? n = !0 : r = !0;
 				}
 				let l = s.value;
-				if (!eK(l)) return t(s, c);
-				let u = c[QG];
+				if (!iK(l)) return t(s, c);
+				let u = c[nK];
 				u || (u = {
 					buckets: /* @__PURE__ */ new WeakMap(),
 					backEdges: void 0
-				}, c[QG] = u);
+				}, c[nK] = u);
 				let d;
-				i === c ? d = a : (d = cK(u, e), i = c, a = d);
+				i === c ? d = a : (d = fK(u, e), i = c, a = d);
 				let f = d.get(l);
-				if (f) return s.value = f.value, f.issues ? f.issues.length && s.issues.push(...tK(f.issues)) : (s.memo = !0, u.backEdges ?? (u.backEdges = /* @__PURE__ */ new WeakSet()), u.backEdges.add(f.value)), s;
-				lK = d;
-				let p = uK.length, m = t(s, c);
-				lK = void 0;
-				let h = uK.length > p ? uK.pop() : void 0;
-				return m instanceof Promise ? m.then((e) => (h && (h.issues = e.issues.length ? tK(e.issues) : $G), e)) : (h && (h.issues = m.issues.length ? tK(m.issues) : $G), m);
+				if (f) return s.value = f.value, f.issues ? f.issues.length && s.issues.push(...aK(f.issues)) : (s.memo = !0, u.backEdges ?? (u.backEdges = /* @__PURE__ */ new WeakSet()), u.backEdges.add(f.value)), s;
+				pK = d;
+				let p = mK.length, m = t(s, c);
+				pK = void 0;
+				let h = mK.length > p ? mK.pop() : void 0;
+				return m instanceof Promise ? m.then((e) => (h && (h.issues = e.issues.length ? aK(e.issues) : rK), e)) : (h && (h.issues = m.issues.length ? aK(m.issues) : rK), m);
 			};
 			e._zod.parse = o, e._zod.run === t && (e._zod.run = o);
 		});
 	}
 };
-function fK() {
-	return dK;
+function gK() {
+	return hK;
 }
-function pK(e, t) {
-	let n = e[QG]?.backEdges;
-	return n !== void 0 && eK(t) && n.has(t);
+function _K(e, t) {
+	let n = e[nK]?.backEdges;
+	return n !== void 0 && iK(t) && n.has(t);
 }
 // node_modules/zod/v4/locales/en.js
-var mK = () => {
+var vK = () => {
 	let e = {
 		string: {
 			unit: "characters",
@@ -35370,8 +35481,8 @@ var mK = () => {
 	}
 	return (e) => {
 		switch (e.code) {
-			case "invalid_type": return `Invalid input: expected ${i(e.expected)}, received ${i(OH(e.input), e.input)}`;
-			case "invalid_value": return e.values.length === 1 ? `Invalid input: expected ${aH(e.values[0])}` : `Invalid option: expected one of ${PV(e.values, "|")}`;
+			case "invalid_type": return `Invalid input: expected ${i(e.expected)}, received ${i(MH(e.input), e.input)}`;
+			case "invalid_value": return e.values.length === 1 ? `Invalid input: expected ${lH(e.values[0])}` : `Invalid option: expected one of ${RV(e.values, "|")}`;
 			case "too_big": {
 				let n = e.exact ? "exactly " : e.inclusive ? "<=" : "<", r = t(e.origin);
 				return r ? `Too big: expected ${e.origin ?? "value"} to have ${n}${e.maximum.toString()} ${r.unit ?? "elements"}` : `Too big: expected ${e.origin ?? "value"} to be ${n}${e.maximum.toString()}`;
@@ -35385,7 +35496,7 @@ var mK = () => {
 				return t.format === "starts_with" ? `Invalid string: must start with "${t.prefix}"` : t.format === "ends_with" ? `Invalid string: must end with "${t.suffix}"` : t.format === "includes" ? `Invalid string: must include "${t.includes}"` : t.format === "regex" ? `Invalid string: must match pattern ${t.pattern}` : `Invalid ${n[t.format] ?? e.format}`;
 			}
 			case "not_multiple_of": return `Invalid number: must be a multiple of ${e.divisor}`;
-			case "unrecognized_keys": return `Unrecognized key${e.keys.length > 1 ? "s" : ""}: ${PV(e.keys, ", ")}`;
+			case "unrecognized_keys": return `Unrecognized key${e.keys.length > 1 ? "s" : ""}: ${RV(e.keys, ", ")}`;
 			case "invalid_key": return `Invalid key in ${e.origin}`;
 			case "invalid_union": return e.options && Array.isArray(e.options) && e.options.length > 0 ? `Invalid discriminator value. Expected ${e.options.map((e) => `'${e}'`).join(" | ")}` : e.inclusive === !1 ? "Invalid input: more than one option matched" : "Invalid input";
 			case "invalid_element": return `Invalid value in ${e.origin}`;
@@ -35393,11 +35504,11 @@ var mK = () => {
 		}
 	};
 };
-function hK() {
-	return { localeError: mK() };
+function yK() {
+	return { localeError: vK() };
 }
 // node_modules/zod/v4/core/registries.js
-var gK, _K = class {
+var bK, xK = class {
 	constructor() {
 		this._map = /* @__PURE__ */ new WeakMap(), this._idmap = /* @__PURE__ */ new Map();
 	}
@@ -35429,24 +35540,24 @@ var gK, _K = class {
 		return this._map.has(e);
 	}
 };
-function vK() {
-	return new _K();
+function SK() {
+	return new xK();
 }
-(gK = globalThis).__zod_globalRegistry ?? (gK.__zod_globalRegistry = vK());
-var yK = globalThis.__zod_globalRegistry;
+(bK = globalThis).__zod_globalRegistry ?? (bK.__zod_globalRegistry = SK());
+var CK = globalThis.__zod_globalRegistry;
 // node_modules/zod/v4/core/api.js
-function bK(e) {
+function wK(e) {
 	return e.checks &&= [...e.checks], e;
 }
 // @__NO_SIDE_EFFECTS__
-function xK(e, t) {
-	return new e(bK({
+function TK(e, t) {
+	return new e(wK({
 		type: "string",
 		...Q(t)
 	}));
 }
 // @__NO_SIDE_EFFECTS__
-function SK(e, t) {
+function EK(e, t) {
 	return new e({
 		type: "string",
 		format: "email",
@@ -35456,7 +35567,7 @@ function SK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function CK(e, t) {
+function DK(e, t) {
 	return new e({
 		type: "string",
 		format: "guid",
@@ -35466,7 +35577,7 @@ function CK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function wK(e, t) {
+function OK(e, t) {
 	return new e({
 		type: "string",
 		format: "uuid",
@@ -35476,7 +35587,7 @@ function wK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function TK(e, t) {
+function kK(e, t) {
 	return new e({
 		type: "string",
 		format: "uuid",
@@ -35487,7 +35598,7 @@ function TK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function EK(e, t) {
+function AK(e, t) {
 	return new e({
 		type: "string",
 		format: "uuid",
@@ -35498,7 +35609,7 @@ function EK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function DK(e, t) {
+function jK(e, t) {
 	return new e({
 		type: "string",
 		format: "uuid",
@@ -35509,7 +35620,7 @@ function DK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function OK(e, t) {
+function MK(e, t) {
 	return new e({
 		type: "string",
 		format: "url",
@@ -35519,7 +35630,7 @@ function OK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function kK(e, t) {
+function NK(e, t) {
 	return new e({
 		type: "string",
 		format: "emoji",
@@ -35529,7 +35640,7 @@ function kK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function AK(e, t) {
+function PK(e, t) {
 	return new e({
 		type: "string",
 		format: "nanoid",
@@ -35539,7 +35650,7 @@ function AK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function jK(e, t) {
+function FK(e, t) {
 	return new e({
 		type: "string",
 		format: "cuid",
@@ -35549,7 +35660,7 @@ function jK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function MK(e, t) {
+function IK(e, t) {
 	return new e({
 		type: "string",
 		format: "cuid2",
@@ -35559,7 +35670,7 @@ function MK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function NK(e, t) {
+function LK(e, t) {
 	return new e({
 		type: "string",
 		format: "ulid",
@@ -35569,7 +35680,7 @@ function NK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function PK(e, t) {
+function RK(e, t) {
 	return new e({
 		type: "string",
 		format: "xid",
@@ -35579,7 +35690,7 @@ function PK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function FK(e, t) {
+function zK(e, t) {
 	return new e({
 		type: "string",
 		format: "ksuid",
@@ -35589,7 +35700,7 @@ function FK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function IK(e, t) {
+function BK(e, t) {
 	return new e({
 		type: "string",
 		format: "ipv4",
@@ -35599,7 +35710,7 @@ function IK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function LK(e, t) {
+function VK(e, t) {
 	return new e({
 		type: "string",
 		format: "ipv6",
@@ -35609,7 +35720,7 @@ function LK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function RK(e, t) {
+function HK(e, t) {
 	return new e({
 		type: "string",
 		format: "cidrv4",
@@ -35619,7 +35730,7 @@ function RK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function zK(e, t) {
+function UK(e, t) {
 	return new e({
 		type: "string",
 		format: "cidrv6",
@@ -35629,7 +35740,7 @@ function zK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function BK(e, t) {
+function WK(e, t) {
 	return new e({
 		type: "string",
 		format: "base64",
@@ -35639,7 +35750,7 @@ function BK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function VK(e, t) {
+function GK(e, t) {
 	return new e({
 		type: "string",
 		format: "base64url",
@@ -35649,7 +35760,7 @@ function VK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function HK(e, t) {
+function KK(e, t) {
 	return new e({
 		type: "string",
 		format: "e164",
@@ -35659,7 +35770,7 @@ function HK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function UK(e, t) {
+function qK(e, t) {
 	return new e({
 		type: "string",
 		format: "jwt",
@@ -35669,7 +35780,7 @@ function UK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function WK(e, t) {
+function JK(e, t) {
 	return new e({
 		type: "string",
 		format: "datetime",
@@ -35681,7 +35792,7 @@ function WK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function GK(e, t) {
+function YK(e, t) {
 	return new e({
 		type: "string",
 		format: "date",
@@ -35690,7 +35801,7 @@ function GK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function KK(e, t) {
+function XK(e, t) {
 	return new e({
 		type: "string",
 		format: "time",
@@ -35700,7 +35811,7 @@ function KK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function qK(e, t) {
+function ZK(e, t) {
 	return new e({
 		type: "string",
 		format: "duration",
@@ -35709,15 +35820,15 @@ function qK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function JK(e, t) {
-	return new e(bK({
+function QK(e, t) {
+	return new e(wK({
 		type: "number",
 		checks: [],
 		...Q(t)
 	}));
 }
 // @__NO_SIDE_EFFECTS__
-function YK(e, t) {
+function $K(e, t) {
 	return new e({
 		type: "number",
 		check: "number_format",
@@ -35727,87 +35838,87 @@ function YK(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function XK(e) {
+function eq(e) {
 	return new e({ type: "unknown" });
 }
 // @__NO_SIDE_EFFECTS__
-function ZK(e, t) {
+function tq(e, t) {
 	return new e({
 		type: "never",
 		...Q(t)
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function QK(e, t) {
-	return new aW({
-		check: "less_than",
-		...Q(t),
-		value: e,
-		inclusive: !1
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function $K(e, t) {
-	return new aW({
-		check: "less_than",
-		...Q(t),
-		value: e,
-		inclusive: !0
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function eq(e, t) {
-	return new oW({
-		check: "greater_than",
-		...Q(t),
-		value: e,
-		inclusive: !1
-	});
-}
-// @__NO_SIDE_EFFECTS__
-function tq(e, t) {
-	return new oW({
-		check: "greater_than",
-		...Q(t),
-		value: e,
-		inclusive: !0
-	});
-}
-// @__NO_SIDE_EFFECTS__
 function nq(e, t) {
-	return new sW({
+	return new lW({
+		check: "less_than",
+		...Q(t),
+		value: e,
+		inclusive: !1
+	});
+}
+// @__NO_SIDE_EFFECTS__
+function rq(e, t) {
+	return new lW({
+		check: "less_than",
+		...Q(t),
+		value: e,
+		inclusive: !0
+	});
+}
+// @__NO_SIDE_EFFECTS__
+function iq(e, t) {
+	return new uW({
+		check: "greater_than",
+		...Q(t),
+		value: e,
+		inclusive: !1
+	});
+}
+// @__NO_SIDE_EFFECTS__
+function aq(e, t) {
+	return new uW({
+		check: "greater_than",
+		...Q(t),
+		value: e,
+		inclusive: !0
+	});
+}
+// @__NO_SIDE_EFFECTS__
+function oq(e, t) {
+	return new dW({
 		check: "multiple_of",
 		...Q(t),
 		value: e
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function rq(e, t) {
-	return new lW({
+function sq(e, t) {
+	return new pW({
 		check: "max_length",
 		...Q(t),
 		maximum: e
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function iq(e, t) {
-	return new uW({
+function cq(e, t) {
+	return new mW({
 		check: "min_length",
 		...Q(t),
 		minimum: e
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function aq(e, t) {
-	return new dW({
+function lq(e, t) {
+	return new hW({
 		check: "length_equals",
 		...Q(t),
 		length: e
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function oq(e, t) {
-	return new pW({
+function uq(e, t) {
+	return new _W({
 		check: "string_format",
 		format: "regex",
 		...Q(t),
@@ -35815,24 +35926,24 @@ function oq(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function sq(e) {
-	return new mW({
+function dq(e) {
+	return new vW({
 		check: "string_format",
 		format: "lowercase",
 		...Q(e)
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function cq(e) {
-	return new hW({
+function fq(e) {
+	return new yW({
 		check: "string_format",
 		format: "uppercase",
 		...Q(e)
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function lq(e, t) {
-	return new gW({
+function pq(e, t) {
+	return new bW({
 		check: "string_format",
 		format: "includes",
 		...Q(t),
@@ -35840,8 +35951,8 @@ function lq(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function uq(e, t) {
-	return new _W({
+function mq(e, t) {
+	return new xW({
 		check: "string_format",
 		format: "starts_with",
 		...Q(t),
@@ -35849,8 +35960,8 @@ function uq(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function dq(e, t) {
-	return new vW({
+function hq(e, t) {
+	return new SW({
 		check: "string_format",
 		format: "ends_with",
 		...Q(t),
@@ -35858,34 +35969,34 @@ function dq(e, t) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function fq(e) {
-	return new yW({
+function gq(e) {
+	return new CW({
 		check: "overwrite",
 		tx: e
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function pq(e) {
-	return /* @__PURE__ */ fq((t) => t.normalize(e));
+function _q(e) {
+	return /* @__PURE__ */ gq((t) => t.normalize(e));
 }
 // @__NO_SIDE_EFFECTS__
-function mq() {
-	return /* @__PURE__ */ fq((e) => e.trim());
+function vq() {
+	return /* @__PURE__ */ gq((e) => e.trim());
 }
 // @__NO_SIDE_EFFECTS__
-function hq() {
-	return /* @__PURE__ */ fq((e) => e.toLowerCase());
+function yq() {
+	return /* @__PURE__ */ gq((e) => e.toLowerCase());
 }
 // @__NO_SIDE_EFFECTS__
-function gq() {
-	return /* @__PURE__ */ fq((e) => e.toUpperCase());
+function bq() {
+	return /* @__PURE__ */ gq((e) => e.toUpperCase());
 }
 // @__NO_SIDE_EFFECTS__
-function _q() {
-	return /* @__PURE__ */ fq((e) => XV(e));
+function xq() {
+	return /* @__PURE__ */ gq((e) => eH(e));
 }
 // @__NO_SIDE_EFFECTS__
-function vq(e, t, n) {
+function Sq(e, t, n) {
 	return new e({
 		type: "array",
 		element: t,
@@ -35893,7 +36004,7 @@ function vq(e, t, n) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function yq(e, t, n) {
+function Cq(e, t, n) {
 	return new e({
 		type: "custom",
 		check: "custom",
@@ -35902,34 +36013,34 @@ function yq(e, t, n) {
 	});
 }
 // @__NO_SIDE_EFFECTS__
-function bq(e, t) {
-	let n = /* @__PURE__ */ xq((t) => (t.addIssue = (e) => {
-		if (typeof e == "string") t.issues.push(kH(e, t.value, n._zod.def));
+function wq(e, t) {
+	let n = /* @__PURE__ */ Tq((t) => (t.addIssue = (e) => {
+		if (typeof e == "string") t.issues.push(NH(e, t.value, n._zod.def));
 		else {
 			let r = e;
-			r.fatal && (r.continue = !1), r.code ??= "custom", "input" in r || (r.input = t.value), r.inst ??= n, r.continue ??= !n._zod.def.abort, t.issues.push(kH(r));
+			r.fatal && (r.continue = !1), r.code ??= "custom", "input" in r || (r.input = t.value), r.inst ??= n, r.continue ??= !n._zod.def.abort, t.issues.push(NH(r));
 		}
 	}, e(t.value, t)), t);
 	return n;
 }
 // @__NO_SIDE_EFFECTS__
-function xq(e, t) {
-	let n = new nW({
+function Tq(e, t) {
+	let n = new oW({
 		check: "custom",
 		...Q(t)
 	});
 	return n._zod.check = e, n;
 }
 // node_modules/zod/v4/core/to-json-schema.js
-function Sq(e, ...t) {
-	for (let n of t) for (let t of Reflect.ownKeys(n)) Object.prototype.propertyIsEnumerable.call(n, t) && VV(e, t, n[t]);
+function Eq(e, ...t) {
+	for (let n of t) for (let t of Reflect.ownKeys(n)) Object.prototype.propertyIsEnumerable.call(n, t) && GV(e, t, n[t]);
 	return e;
 }
-function Cq(e) {
+function Dq(e) {
 	let t = e?.target ?? "draft-2020-12";
 	return t === "draft-4" && (t = "draft-04"), t === "draft-7" && (t = "draft-07"), {
 		processors: e.processors ?? {},
-		metadataRegistry: e?.metadata ?? yK,
+		metadataRegistry: e?.metadata ?? CK,
 		target: t,
 		unrepresentable: e?.unrepresentable ?? "throw",
 		override: e?.override ?? (() => {}),
@@ -35945,7 +36056,7 @@ function Cq(e) {
 		external: e?.external ?? void 0
 	};
 }
-function wq(e, t, n, r, i) {
+function Oq(e, t, n, r, i) {
 	let a = typeof t.unrepresentable == "function" ? t.unrepresentable({
 		zodSchema: e,
 		path: r.path,
@@ -35955,7 +36066,7 @@ function wq(e, t, n, r, i) {
 	if (a === void 0 || a === "throw") throw Error(i);
 	return Object.assign(n, a), !0;
 }
-function Tq(e, t, n = {
+function kq(e, t, n = {
 	path: [],
 	schemaPath: []
 }) {
@@ -35984,15 +36095,15 @@ function Tq(e, t, n = {
 			a(e, t, n, r);
 		}
 		let a = e._zod.parent;
-		a && (o.ref ||= a, Tq(a, t, r), t.seen.get(a).isParent = !0);
+		a && (o.ref ||= a, kq(a, t, r), t.seen.get(a).isParent = !0);
 	}
 	let c = t.metadataRegistry.get(e);
-	return c && Sq(o.schema, c), t.io === "input" && Fq(e) && (delete o.schema.examples, delete o.schema.default), t.io === "input" && "_prefault" in o.schema && ((r = o.schema).default ?? (r.default = o.schema._prefault)), delete o.schema._prefault, t.seen.get(e).schema;
+	return c && Eq(o.schema, c), t.io === "input" && zq(e) && (delete o.schema.examples, delete o.schema.default), t.io === "input" && "_prefault" in o.schema && ((r = o.schema).default ?? (r.default = o.schema._prefault)), delete o.schema._prefault, t.seen.get(e).schema;
 }
-function Eq(e) {
+function Aq(e) {
 	return e.replace(/~/g, "~0").replace(/\//g, "~1");
 }
-function Dq(e, t) {
+function jq(e, t) {
 	let n = e.seen.get(t);
 	if (!n) throw Error("Unprocessed schema. This is a bug in Zod.");
 	if (e.external && e.sharedDefsExtractedFor === e.external) return;
@@ -36013,7 +36124,7 @@ function Dq(e, t) {
 			let a = t[1].defId ?? t[1].schema.id ?? `schema${e.counter++}`;
 			return t[1].defId = a, {
 				defId: a,
-				ref: `${i("__shared")}#/${r}/${Eq(a)}`
+				ref: `${i("__shared")}#/${r}/${Aq(a)}`
 			};
 		}
 		let i = `#/${r}/`;
@@ -36021,7 +36132,7 @@ function Dq(e, t) {
 		let a = t[1].schema.id ?? `__schema${e.counter++}`;
 		return {
 			defId: a,
-			ref: i + Eq(a)
+			ref: i + Aq(a)
 		};
 	}, a = (e) => {
 		if (e[1].schema.$ref) return;
@@ -36053,13 +36164,13 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 	}
 	e.external && (e.sharedDefsExtractedFor = e.external);
 }
-function Oq(e) {
+function Mq(e) {
 	let t = e.anyOf;
 	if (!Array.isArray(t) || t.length === 0 || e.type !== void 0) return;
 	let n = [];
 	for (let e of t) {
 		if (!e || typeof e != "object") return;
-		Oq(e);
+		Mq(e);
 		let t = Object.keys(e);
 		if (t.length !== 1 || t[0] !== "type") return;
 		let r = e.type;
@@ -36070,21 +36181,21 @@ function Oq(e) {
 	}
 	delete e.anyOf, e.type = n.length === 1 ? n[0] : n;
 }
-var kq = /* @__PURE__ */ new Set([
+var Nq = /* @__PURE__ */ new Set([
 	"type",
 	"properties",
 	"required",
 	"additionalProperties"
-]), Aq = ["oneOf", "anyOf"];
-function jq(e) {
+]), Pq = ["oneOf", "anyOf"];
+function Fq(e) {
 	let t = e.additionalProperties;
 	return t === void 0 || t === !1 || typeof t != "object" || !t ? null : Object.keys(t).length ? t : null;
 }
-function Mq(e) {
+function Iq(e) {
 	let t = [];
 	for (let n of e) {
 		if (typeof n != "object" || n.type !== "object") return null;
-		for (let e in n) if (!kq.has(e)) return null;
+		for (let e in n) if (!Nq.has(e)) return null;
 		t.push(n);
 	}
 	let n = {}, r = /* @__PURE__ */ new Set();
@@ -36093,10 +36204,10 @@ function Mq(e) {
 			if (Object.prototype.hasOwnProperty.call(n, r)) continue;
 			let e = [];
 			for (let n of t) {
-				let t = n.properties?.[r] ?? jq(n);
+				let t = n.properties?.[r] ?? Fq(n);
 				t != null && (e.some((e) => JSON.stringify(e) === JSON.stringify(t)) || e.push(t));
 			}
-			VV(n, r, e.length === 1 ? e[0] : Mq(e) ?? { allOf: e });
+			GV(n, r, e.length === 1 ? e[0] : Iq(e) ?? { allOf: e });
 		}
 		for (let t of e.required ?? []) r.add(t);
 	}
@@ -36108,29 +36219,29 @@ function Mq(e) {
 	else {
 		let e = [];
 		for (let n of t) {
-			let t = jq(n);
+			let t = Fq(n);
 			t && !e.some((e) => JSON.stringify(e) === JSON.stringify(t)) && e.push(t);
 		}
 		e.length === 1 ? i.additionalProperties = e[0] : e.length > 1 && (i.additionalProperties = { allOf: e });
 	}
 	return i;
 }
-function Nq(e) {
+function Lq(e) {
 	let t = e.allOf;
 	if (!Array.isArray(t) || t.length < 2) return;
-	for (let t of kq) if (t in e) return;
-	let n = t.filter((e) => Aq.some((t) => Array.isArray(e[t]))), r = null;
-	if (!n.length) r = Mq(t);
+	for (let t of Nq) if (t in e) return;
+	let n = t.filter((e) => Pq.some((t) => Array.isArray(e[t]))), r = null;
+	if (!n.length) r = Iq(t);
 	else {
-		let e = n[0], i = Aq.find((t) => Array.isArray(e[t]));
+		let e = n[0], i = Pq.find((t) => Array.isArray(e[t]));
 		if (Object.keys(e).length !== 1) return;
-		let a = t.filter((t) => t !== e), o = e[i].map((e) => Mq([...a, e]));
+		let a = t.filter((t) => t !== e), o = e[i].map((e) => Iq([...a, e]));
 		if (o.some((e) => !e)) return;
 		r = { [i]: o };
 	}
-	r && (delete e.allOf, Sq(e, r));
+	r && (delete e.allOf, Eq(e, r));
 }
-function Pq(e, t) {
+function Rq(e, t) {
 	let n = e.seen.get(t);
 	if (!n) throw Error("Unprocessed schema. This is a bug in Zod.");
 	let r = (t) => {
@@ -36140,7 +36251,7 @@ function Pq(e, t) {
 		if (n.ref = null, o) {
 			r(o);
 			let n = e.seen.get(o), s = n.schema;
-			if (s.$ref && (e.target === "draft-07" || e.target === "draft-04" || e.target === "openapi-3.0") ? (i.allOf = i.allOf ?? [], i.allOf.push(s)) : Sq(i, s), Sq(i, a), t._zod.parent === o) for (let e in i) e !== "$ref" && e !== "allOf" && (e in a || delete i[e]);
+			if (s.$ref && (e.target === "draft-07" || e.target === "draft-04" || e.target === "openapi-3.0") ? (i.allOf = i.allOf ?? [], i.allOf.push(s)) : Eq(i, s), Eq(i, a), t._zod.parent === o) for (let e in i) e !== "$ref" && e !== "allOf" && (e in a || delete i[e]);
 			if (s.$ref && n.def) for (let e in i) e !== "$ref" && e !== "allOf" && e in n.def && JSON.stringify(i[e]) === JSON.stringify(n.def[e]) && delete i[e];
 		}
 		let s = t._zod.parent;
@@ -36157,7 +36268,7 @@ function Pq(e, t) {
 	};
 	if (!e.external || e.sharedEmitDoneFor !== e.external) {
 		for (let t of [...e.seen.entries()].reverse()) r(t[0]);
-		if (e.target !== "openapi-3.0") for (let t of e.seen.entries()) Oq(t[1].def ?? t[1].schema);
+		if (e.target !== "openapi-3.0") for (let t of e.seen.entries()) Mq(t[1].def ?? t[1].schema);
 		for (let t of e.deferred) t();
 		if (e.intersections.length) {
 			let t = /* @__PURE__ */ new Map();
@@ -36167,7 +36278,7 @@ function Pq(e, t) {
 				let r = t.get(n);
 				r ? r.push(e) : t.set(n, [e]);
 			}
-			for (let n of e.intersections) for (let e of t.get(n) ?? []) Nq(e);
+			for (let n of e.intersections) for (let e of t.get(n) ?? []) Lq(e);
 		}
 	}
 	let i = {};
@@ -36176,13 +36287,13 @@ function Pq(e, t) {
 		if (!n) throw Error("Schema is missing an `id` property");
 		i.$id = e.external.uri(n);
 	}
-	Sq(i, n.defId ? n.schema : n.def ?? n.schema);
+	Eq(i, n.defId ? n.schema : n.def ?? n.schema);
 	let a = e.metadataRegistry.get(t)?.id;
 	a !== void 0 && i.id === a && delete i.id;
 	let o = e.external?.defs ?? {};
 	if (!e.external || e.sharedEmitDoneFor !== e.external) for (let t of e.seen.entries()) {
 		let e = t[1];
-		e.def && e.defId && (e.def.id === e.defId && delete e.def.id, VV(o, e.defId, e.def));
+		e.def && e.defId && (e.def.id === e.defId && delete e.def.id, GV(o, e.defId, e.def));
 	}
 	e.external && (e.sharedEmitDoneFor = e.external), e.external || Object.keys(o).length > 0 && (e.target === "draft-2020-12" ? i.$defs = o : i.definitions = o);
 	try {
@@ -36191,8 +36302,8 @@ function Pq(e, t) {
 			value: {
 				...t["~standard"],
 				jsonSchema: {
-					input: Lq(t, "input", e.processors),
-					output: Lq(t, "output", e.processors)
+					input: Vq(t, "input", e.processors),
+					output: Vq(t, "output", e.processors)
 				}
 			},
 			enumerable: !1,
@@ -36202,123 +36313,123 @@ function Pq(e, t) {
 		throw Error("Error converting schema to JSON.");
 	}
 }
-function Fq(e, t) {
+function zq(e, t) {
 	let n = t ?? { seen: /* @__PURE__ */ new Set() };
 	if (n.seen.has(e)) return !1;
 	n.seen.add(e);
 	let r = e._zod.def;
 	if (r.type === "transform") return !0;
-	if (r.type === "array") return Fq(r.element, n);
-	if (r.type === "set") return Fq(r.valueType, n);
-	if (r.type === "lazy") return Fq(r.getter(), n);
-	if (r.type === "promise" || r.type === "optional" || r.type === "nonoptional" || r.type === "nullable" || r.type === "readonly" || r.type === "default" || r.type === "prefault" || r.type === "catch") return Fq(r.innerType, n);
-	if (r.type === "intersection") return Fq(r.left, n) || Fq(r.right, n);
-	if (r.type === "record" || r.type === "map") return Fq(r.keyType, n) || Fq(r.valueType, n);
-	if (r.type === "pipe") return e._zod.traits.has("$ZodCodec") ? !0 : Fq(r.in, n) || Fq(r.out, n);
+	if (r.type === "array") return zq(r.element, n);
+	if (r.type === "set") return zq(r.valueType, n);
+	if (r.type === "lazy") return zq(r.getter(), n);
+	if (r.type === "promise" || r.type === "optional" || r.type === "nonoptional" || r.type === "nullable" || r.type === "readonly" || r.type === "default" || r.type === "prefault" || r.type === "catch") return zq(r.innerType, n);
+	if (r.type === "intersection") return zq(r.left, n) || zq(r.right, n);
+	if (r.type === "record" || r.type === "map") return zq(r.keyType, n) || zq(r.valueType, n);
+	if (r.type === "pipe") return e._zod.traits.has("$ZodCodec") ? !0 : zq(r.in, n) || zq(r.out, n);
 	if (r.type === "object") {
-		for (let e in r.shape) if (Fq(r.shape[e], n)) return !0;
+		for (let e in r.shape) if (zq(r.shape[e], n)) return !0;
 		return !1;
 	}
 	if (r.type === "union") {
-		for (let e of r.options) if (Fq(e, n)) return !0;
+		for (let e of r.options) if (zq(e, n)) return !0;
 		return !1;
 	}
 	if (r.type === "tuple") {
-		for (let e of r.items) if (Fq(e, n)) return !0;
-		return !!(r.rest && Fq(r.rest, n));
+		for (let e of r.items) if (zq(e, n)) return !0;
+		return !!(r.rest && zq(r.rest, n));
 	}
 	return !1;
 }
-var Iq = (e, t = {}) => (n) => {
-	let r = Cq({
+var Bq = (e, t = {}) => (n) => {
+	let r = Dq({
 		...n,
 		processors: t
 	});
-	return Tq(e, r), Dq(r, e), Pq(r, e);
-}, Lq = (e, t, n = {}) => (r) => {
-	let { libraryOptions: i, target: a } = r ?? {}, o = Cq({
+	return kq(e, r), jq(r, e), Rq(r, e);
+}, Vq = (e, t, n = {}) => (r) => {
+	let { libraryOptions: i, target: a } = r ?? {}, o = Dq({
 		...i ?? {},
 		target: a,
 		io: t,
 		processors: n
 	});
-	return Tq(e, o), Dq(o, e), Pq(o, e);
-}, Rq = (e, t, n) => {
+	return kq(e, o), jq(o, e), Rq(o, e);
+}, Hq = (e, t, n) => {
 	(e[t] === void 0 || n > e[t]) && (e[t] = n);
-}, zq = (e, t, n) => {
+}, Uq = (e, t, n) => {
 	(e[t] === void 0 || n < e[t]) && (e[t] = n);
-}, Bq = (e, t) => {
-	Rq(e, "minimum", t), zq(e, "maximum", t);
-}, Vq = (e, t) => {
-	e.multipleOf ??= [], e.multipleOf.includes(t) || e.multipleOf.push(t);
-}, Hq = (e, t) => {
-	e.patterns ??= /* @__PURE__ */ new Set(), e.patterns.add(t);
-}, Uq = (e, t) => {
-	e.mime = e.mime ? e.mime.filter((e) => t.includes(e)) : [...t];
 }, Wq = (e, t) => {
+	Hq(e, "minimum", t), Uq(e, "maximum", t);
+}, Gq = (e, t) => {
+	e.multipleOf ??= [], e.multipleOf.includes(t) || e.multipleOf.push(t);
+}, Kq = (e, t) => {
+	e.patterns ??= /* @__PURE__ */ new Set(), e.patterns.add(t);
+}, qq = (e, t) => {
+	e.mime = e.mime ? e.mime.filter((e) => t.includes(e)) : [...t];
+}, Jq = (e, t) => {
 	e.format = t, t.includes("int") && (e.isInt = !0);
-}, Gq = (e, t) => Rq(e, "minimum", t.minimum), Kq = (e, t) => zq(e, "maximum", t.maximum), qq = (e) => (t, n) => {
-	Wq(t, n.format);
+}, Yq = (e, t) => Hq(e, "minimum", t.minimum), Xq = (e, t) => Uq(e, "maximum", t.maximum), Zq = (e) => (t, n) => {
+	Jq(t, n.format);
 	let [r, i] = e[n.format];
-	Rq(t, "minimum", r), zq(t, "maximum", i);
-}, Jq = {
-	greater_than: (e, t) => Rq(e, t.inclusive ? "minimum" : "exclusiveMinimum", t.value),
-	less_than: (e, t) => zq(e, t.inclusive ? "maximum" : "exclusiveMaximum", t.value),
-	multiple_of: (e, t) => Vq(e, t.value),
-	number_format: qq(sH),
-	bigint_format: qq(cH),
-	min_length: Gq,
-	max_length: Kq,
-	length_equals: (e, t) => Bq(e, t.length),
-	min_size: Gq,
-	max_size: Kq,
-	size_equals: (e, t) => Bq(e, t.size),
+	Hq(t, "minimum", r), Uq(t, "maximum", i);
+}, Qq = {
+	greater_than: (e, t) => Hq(e, t.inclusive ? "minimum" : "exclusiveMinimum", t.value),
+	less_than: (e, t) => Uq(e, t.inclusive ? "maximum" : "exclusiveMaximum", t.value),
+	multiple_of: (e, t) => Gq(e, t.value),
+	number_format: Zq(dH),
+	bigint_format: Zq(fH),
+	min_length: Yq,
+	max_length: Xq,
+	length_equals: (e, t) => Wq(e, t.length),
+	min_size: Yq,
+	max_size: Xq,
+	size_equals: (e, t) => Wq(e, t.size),
 	string_format: (e, t) => {
-		Wq(e, t.format), t.pattern && Hq(e, t.pattern), (t.format === "base64" || t.format === "base64url") && (e.contentEncoding = t.format), (t.local || t.precision === -1) && (e.laxFormat = !0);
+		Jq(e, t.format), t.pattern && Kq(e, t.pattern), (t.format === "base64" || t.format === "base64url") && (e.contentEncoding = t.format), (t.local || t.precision === -1) && (e.laxFormat = !0);
 	},
-	mime_type: (e, t) => Uq(e, t.mime)
+	mime_type: (e, t) => qq(e, t.mime)
 };
-function Yq(e) {
+function $q(e) {
 	let t = {}, n = e._zod.def, r = e._zod.traits.has("$ZodCheck") ? [e, ...n.checks ?? []] : n.checks ?? [];
-	for (let e of r) Jq[e._zod.def.check]?.(t, e._zod.def);
+	for (let e of r) Qq[e._zod.def.check]?.(t, e._zod.def);
 	let i = e._zod.bag;
-	i.minimum !== void 0 && Rq(t, "minimum", i.minimum), i.exclusiveMinimum !== void 0 && Rq(t, "exclusiveMinimum", i.exclusiveMinimum), i.maximum !== void 0 && zq(t, "maximum", i.maximum), i.exclusiveMaximum !== void 0 && zq(t, "exclusiveMaximum", i.exclusiveMaximum), i.multipleOf !== void 0 && Vq(t, i.multipleOf), i.format !== void 0 && (t.format ??= i.format, i.format.includes("int") && (t.isInt = !0)), i.mime && Uq(t, i.mime);
-	for (let e of i.patterns ?? []) Hq(t, e);
+	i.minimum !== void 0 && Hq(t, "minimum", i.minimum), i.exclusiveMinimum !== void 0 && Hq(t, "exclusiveMinimum", i.exclusiveMinimum), i.maximum !== void 0 && Uq(t, "maximum", i.maximum), i.exclusiveMaximum !== void 0 && Uq(t, "exclusiveMaximum", i.exclusiveMaximum), i.multipleOf !== void 0 && Gq(t, i.multipleOf), i.format !== void 0 && (t.format ??= i.format, i.format.includes("int") && (t.isInt = !0)), i.mime && qq(t, i.mime);
+	for (let e of i.patterns ?? []) Kq(t, e);
 	return t;
 }
-var Xq = {
+var eJ = {
 	guid: "uuid",
 	url: "uri",
 	datetime: "date-time",
 	json_string: "json-string",
 	regex: ""
-}, Zq = /* @__PURE__ */ new Map([[iG, HU], [oG, UU]]), Qq = (e) => Zq.get(e) ?? e, $q = (e, t, n, r) => {
+}, tJ = /* @__PURE__ */ new Map([[cG, KU], [uG, qU]]), nJ = (e) => tJ.get(e) ?? e, rJ = (e, t, n, r) => {
 	let i = n;
 	i.type = "string";
-	let { minimum: a, maximum: o, format: s, patterns: c, contentEncoding: l, laxFormat: u } = Yq(e);
-	if (typeof a == "number" && (i.minLength = a), typeof o == "number" && (i.maxLength = o), s && (i.format = Xq[s] ?? s, i.format === "" && delete i.format, (s === "time" || u) && delete i.format), l && (i.contentEncoding = l), c && c.size > 0) {
-		let e = [...c].map(Qq);
+	let { minimum: a, maximum: o, format: s, patterns: c, contentEncoding: l, laxFormat: u } = $q(e);
+	if (typeof a == "number" && (i.minLength = a), typeof o == "number" && (i.maxLength = o), s && (i.format = eJ[s] ?? s, i.format === "" && delete i.format, (s === "time" || u) && delete i.format), l && (i.contentEncoding = l), c && c.size > 0) {
+		let e = [...c].map(nJ);
 		e.length === 1 ? i.pattern = e[0].source : e.length > 1 && (i.allOf = [...e.map((e) => ({
 			...t.target === "draft-07" || t.target === "draft-04" || t.target === "openapi-3.0" ? { type: "string" } : {},
 			pattern: e.source
 		}))]);
 	}
-}, eJ = (e, t, n, r) => {
-	let i = n, { minimum: a, maximum: o, multipleOf: s, exclusiveMaximum: c, exclusiveMinimum: l, isInt: u } = Yq(e);
+}, iJ = (e, t, n, r) => {
+	let i = n, { minimum: a, maximum: o, multipleOf: s, exclusiveMaximum: c, exclusiveMinimum: l, isInt: u } = $q(e);
 	i.type = u ? "integer" : "number";
 	let d = typeof l == "number" && l >= (a ?? -Infinity), f = typeof c == "number" && c <= (o ?? Infinity), p = t.target === "draft-04" || t.target === "openapi-3.0";
 	if (d ? p ? (i.minimum = l, i.exclusiveMinimum = !0) : i.exclusiveMinimum = l : typeof a == "number" && (i.minimum = a), f ? p ? (i.maximum = c, i.exclusiveMaximum = !0) : i.exclusiveMaximum = c : typeof o == "number" && (i.maximum = o), s) {
 		let n = /* @__PURE__ */ new Set();
-		for (let a of s) Number.isFinite(a) && a !== 0 ? n.add(Math.abs(a)) : wq(e, t, i, r, `A multipleOf divisor of ${a} cannot be represented in JSON Schema`);
+		for (let a of s) Number.isFinite(a) && a !== 0 ? n.add(Math.abs(a)) : Oq(e, t, i, r, `A multipleOf divisor of ${a} cannot be represented in JSON Schema`);
 		let [a, ...o] = n;
 		a !== void 0 && (i.multipleOf = a), o.length && (i.allOf = [...i.allOf ?? [], ...o.map((e) => ({ multipleOf: e }))]);
 	}
-}, tJ = (e, t, n, r) => {
+}, aJ = (e, t, n, r) => {
 	n.not = {};
-}, nJ = (e, t, n, r) => {
-	let i = e._zod.def, a = NV(i.entries);
+}, oJ = (e, t, n, r) => {
+	let i = e._zod.def, a = LV(i.entries);
 	a.length === 0 ? n.not = {} : (a.every((e) => typeof e == "number") && (n.type = "number"), a.every((e) => typeof e == "string") && (n.type = "string"), n.enum = a);
-}, rJ = (e, t, n, r) => {
+}, sJ = (e, t, n, r) => {
 	let i = e._zod.def;
 	if (i.values.length === 0) {
 		n.not = {};
@@ -36326,9 +36437,9 @@ var Xq = {
 	}
 	let a = [];
 	for (let o of i.values) if (o === void 0) {
-		if (wq(e, t, n, r, "Literal `undefined` cannot be represented in JSON Schema")) return;
+		if (Oq(e, t, n, r, "Literal `undefined` cannot be represented in JSON Schema")) return;
 	} else if (typeof o == "bigint") {
-		if (wq(e, t, n, r, "BigInt literals cannot be represented in JSON Schema")) return;
+		if (Oq(e, t, n, r, "BigInt literals cannot be represented in JSON Schema")) return;
 		a.push(Number(o));
 	} else a.push(o);
 	if (a.length !== 0) {
@@ -36337,26 +36448,26 @@ var Xq = {
 			n.type = e === null ? "null" : typeof e, t.target === "draft-04" || t.target === "openapi-3.0" ? n.enum = [e] : n.const = e;
 		} else a.every((e) => typeof e == "number") && (n.type = "number"), a.every((e) => typeof e == "string") && (n.type = "string"), a.every((e) => typeof e == "boolean") && (n.type = "boolean"), a.every((e) => e === null) && (n.type = "null"), n.enum = a;
 	}
-}, iJ = (e, t, n, r) => {
-	wq(e, t, n, r, "Custom types cannot be represented in JSON Schema");
-}, aJ = (e, t, n, r) => {
-	wq(e, t, n, r, "Transforms cannot be represented in JSON Schema");
-}, oJ = (e, t, n, r) => {
-	let i = n, a = e._zod.def, { minimum: o, maximum: s } = Yq(e);
-	typeof o == "number" && (i.minItems = o), typeof s == "number" && (i.maxItems = s), i.type = "array", i.items = Tq(a.element, t, {
+}, cJ = (e, t, n, r) => {
+	Oq(e, t, n, r, "Custom types cannot be represented in JSON Schema");
+}, lJ = (e, t, n, r) => {
+	Oq(e, t, n, r, "Transforms cannot be represented in JSON Schema");
+}, uJ = (e, t, n, r) => {
+	let i = n, a = e._zod.def, { minimum: o, maximum: s } = $q(e);
+	typeof o == "number" && (i.minItems = o), typeof s == "number" && (i.maxItems = s), i.type = "array", i.items = kq(a.element, t, {
 		...r,
 		path: [...r.path, "items"]
 	});
 };
-function sJ(e) {
+function dJ(e) {
 	let t = e._zod.def;
-	return t.type === "pipe" && t.in._zod.traits.has("$ZodTransform") ? sJ(t.out) : t.type === "catch" ? sJ(t.innerType) : e._zod.optin;
+	return t.type === "pipe" && t.in._zod.traits.has("$ZodTransform") ? dJ(t.out) : t.type === "catch" ? dJ(t.innerType) : e._zod.optin;
 }
-var cJ = (e, t, n, r) => {
+var fJ = (e, t, n, r) => {
 	let i = n, a = e._zod.def, o = a.shape;
-	if (Object.getOwnPropertySymbols(o).length && wq(e, t, i, r, "Symbol keys cannot be represented in JSON Schema")) return;
+	if (Object.getOwnPropertySymbols(o).length && Oq(e, t, i, r, "Symbol keys cannot be represented in JSON Schema")) return;
 	i.type = "object", i.properties = {};
-	for (let e in o) VV(i.properties, e, Tq(o[e], t, {
+	for (let e in o) GV(i.properties, e, kq(o[e], t, {
 		...r,
 		path: [
 			...r.path,
@@ -36367,14 +36478,14 @@ var cJ = (e, t, n, r) => {
 	let s = [];
 	for (let e of Object.keys(o)) {
 		let n = a.shape[e];
-		(t.io === "input" ? sJ(n) === void 0 : n._zod.optout === void 0) && s.push(e);
+		(t.io === "input" ? dJ(n) === void 0 : n._zod.optout === void 0) && s.push(e);
 	}
-	s.length > 0 && (i.required = s), a.catchall?._zod.def.type === "never" ? i.additionalProperties = !1 : a.catchall ? a.catchall && (i.additionalProperties = Tq(a.catchall, t, {
+	s.length > 0 && (i.required = s), a.catchall?._zod.def.type === "never" ? i.additionalProperties = !1 : a.catchall ? a.catchall && (i.additionalProperties = kq(a.catchall, t, {
 		...r,
 		path: [...r.path, "additionalProperties"]
 	})) : t.io === "output" && (i.additionalProperties = !1);
-}, lJ = (e, t, n, r) => {
-	let i = e._zod.def, a = i.inclusive === !1, o = i.options.map((e, n) => Tq(e, t, {
+}, pJ = (e, t, n, r) => {
+	let i = e._zod.def, a = i.inclusive === !1, o = i.options.map((e, n) => kq(e, t, {
 		...r,
 		path: [
 			...r.path,
@@ -36383,15 +36494,15 @@ var cJ = (e, t, n, r) => {
 		]
 	}));
 	a ? n.oneOf = o : n.anyOf = o;
-}, uJ = (e, t, n, r) => {
-	let i = e._zod.def, a = Tq(i.left, t, {
+}, mJ = (e, t, n, r) => {
+	let i = e._zod.def, a = kq(i.left, t, {
 		...r,
 		path: [
 			...r.path,
 			"allOf",
 			0
 		]
-	}), o = Tq(i.right, t, {
+	}), o = kq(i.right, t, {
 		...r,
 		path: [
 			...r.path,
@@ -36400,63 +36511,63 @@ var cJ = (e, t, n, r) => {
 		]
 	}), s = (e) => "allOf" in e && Object.keys(e).length === 1, c = [...s(a) ? a.allOf : [a], ...s(o) ? o.allOf : [o]];
 	n.allOf = c, t.intersections.push(c);
-}, dJ = (e, t, n, r) => {
-	let i = e._zod.def, a = Tq(i.innerType, t, r), o = t.seen.get(e);
+}, hJ = (e, t, n, r) => {
+	let i = e._zod.def, a = kq(i.innerType, t, r), o = t.seen.get(e);
 	t.target === "openapi-3.0" ? (o.ref = i.innerType, n.nullable = !0) : n.anyOf = [a, { type: "null" }];
-}, fJ = (e, t, n, r) => {
-	let i = e._zod.def;
-	Tq(i.innerType, t, r);
-	let a = t.seen.get(e);
-	a.ref = i.innerType;
-}, pJ = Symbol();
-function mJ(e, t, n, r, i) {
-	let a = !1, o = JSON.stringify(e, (e, t) => typeof t == "bigint" ? (a = !0, null) : t);
-	return a ? (wq(t, n, r, i, "BigInt defaults cannot be represented in JSON Schema"), pJ) : JSON.parse(o);
-}
-var hJ = (e, t, n, r) => {
-	let i = e._zod.def;
-	Tq(i.innerType, t, r);
-	let a = t.seen.get(e);
-	a.ref = i.innerType;
-	let o = mJ(i.defaultValue, e, t, n, r);
-	o !== pJ && (n.default = o);
 }, gJ = (e, t, n, r) => {
 	let i = e._zod.def;
-	Tq(i.innerType, t, r);
+	kq(i.innerType, t, r);
+	let a = t.seen.get(e);
+	a.ref = i.innerType;
+}, _J = Symbol();
+function vJ(e, t, n, r, i) {
+	let a = !1, o = JSON.stringify(e, (e, t) => typeof t == "bigint" ? (a = !0, null) : t);
+	return a ? (Oq(t, n, r, i, "BigInt defaults cannot be represented in JSON Schema"), _J) : JSON.parse(o);
+}
+var yJ = (e, t, n, r) => {
+	let i = e._zod.def;
+	kq(i.innerType, t, r);
+	let a = t.seen.get(e);
+	a.ref = i.innerType;
+	let o = vJ(i.defaultValue, e, t, n, r);
+	o !== _J && (n.default = o);
+}, bJ = (e, t, n, r) => {
+	let i = e._zod.def;
+	kq(i.innerType, t, r);
 	let a = t.seen.get(e);
 	if (a.ref = i.innerType, t.io !== "input") return;
-	let o = mJ(i.defaultValue, e, t, n, r);
-	o !== pJ && (n._prefault = o);
-}, _J = (e, t, n, r) => {
+	let o = vJ(i.defaultValue, e, t, n, r);
+	o !== _J && (n._prefault = o);
+}, xJ = (e, t, n, r) => {
 	let i = e._zod.def;
-	Tq(i.innerType, t, r);
+	kq(i.innerType, t, r);
 	let a = t.seen.get(e);
 	a.ref = i.innerType;
 	let o;
 	try {
 		o = i.catchValue(void 0);
 	} catch {
-		wq(e, t, n, r, "Dynamic catch values are not supported in JSON Schema");
+		Oq(e, t, n, r, "Dynamic catch values are not supported in JSON Schema");
 		return;
 	}
 	n.default = o;
-}, vJ = (e, t, n, r) => {
+}, SJ = (e, t, n, r) => {
 	let i = e._zod.def, a = i.in._zod.traits.has("$ZodTransform"), o = t.io === "input" ? a ? i.out : i.in : i.out;
-	Tq(o, t, r);
+	kq(o, t, r);
 	let s = t.seen.get(e);
 	s.ref = o;
-}, yJ = (e, t, n, r) => {
+}, CJ = (e, t, n, r) => {
 	let i = e._zod.def;
-	Tq(i.innerType, t, r);
+	kq(i.innerType, t, r);
 	let a = t.seen.get(e);
 	a.ref = i.innerType, n.readOnly = !0;
-}, bJ = (e, t, n, r) => {
+}, wJ = (e, t, n, r) => {
 	let i = e._zod.def;
-	Tq(i.innerType, t, r);
+	kq(i.innerType, t, r);
 	let a = t.seen.get(e);
 	a.ref = i.innerType;
-}, xJ = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]);
-function SJ(e, t, n) {
+}, TJ = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]);
+function EJ(e, t, n) {
 	Object.defineProperty(e, t, {
 		configurable: !0,
 		enumerable: !1,
@@ -36477,13 +36588,13 @@ function SJ(e, t, n) {
 		}
 	});
 }
-var CJ = /*@__PURE__*/ $("ZodError", (e, t) => {
-	nU.init(e, t), e.name = "ZodError";
+var DJ = /*@__PURE__*/ $("ZodError", (e, t) => {
+	oU.init(e, t), e.name = "ZodError";
 	let n = Object.getPrototypeOf(e);
-	xJ.has(n) || (xJ.add(n), SJ(n, "format", (e) => (t) => aU(e, t)), SJ(n, "flatten", (e) => (t) => iU(e, t)), SJ(n, "addIssue", (e) => (t) => {
-		e.issues.push(t), e.message = JSON.stringify(e.issues, FV, 2);
-	}), SJ(n, "addIssues", (e) => (t) => {
-		e.issues.push(...t), e.message = JSON.stringify(e.issues, FV, 2);
+	TJ.has(n) || (TJ.add(n), EJ(n, "format", (e) => (t) => lU(e, t)), EJ(n, "flatten", (e) => (t) => cU(e, t)), EJ(n, "addIssue", (e) => (t) => {
+		e.issues.push(t), e.message = JSON.stringify(e.issues, zV, 2);
+	}), EJ(n, "addIssues", (e) => (t) => {
+		e.issues.push(...t), e.message = JSON.stringify(e.issues, zV, 2);
 	}), Object.defineProperty(n, "isEmpty", {
 		configurable: !0,
 		enumerable: !1,
@@ -36491,18 +36602,18 @@ var CJ = /*@__PURE__*/ $("ZodError", (e, t) => {
 			return this.issues.length === 0;
 		}
 	}));
-}, void 0, { Parent: Error }), wJ = /* @__PURE__ */ sU(CJ), TJ = /* @__PURE__ */ cU(CJ), EJ = /* @__PURE__ */ lU(CJ), DJ = /* @__PURE__ */ dU(CJ), OJ = /* @__PURE__ */ _U(CJ), kJ = /* @__PURE__ */ vU(CJ), AJ = /* @__PURE__ */ yU(CJ), jJ = /* @__PURE__ */ bU(CJ), MJ = /* @__PURE__ */ xU(CJ), NJ = /* @__PURE__ */ SU(CJ), PJ = /* @__PURE__ */ CU(CJ), FJ = /* @__PURE__ */ wU(CJ);
+}, void 0, { Parent: Error }), OJ = /* @__PURE__ */ dU(DJ), kJ = /* @__PURE__ */ fU(DJ), AJ = /* @__PURE__ */ pU(DJ), jJ = /* @__PURE__ */ hU(DJ), MJ = /* @__PURE__ */ xU(DJ), NJ = /* @__PURE__ */ SU(DJ), PJ = /* @__PURE__ */ CU(DJ), FJ = /* @__PURE__ */ wU(DJ), IJ = /* @__PURE__ */ TU(DJ), LJ = /* @__PURE__ */ EU(DJ), RJ = /* @__PURE__ */ DU(DJ), zJ = /* @__PURE__ */ OU(DJ);
 // node_modules/zod/v4/classic/schemas.js
-function IJ() {
-	YH.localeError || XH(hK());
+function BJ() {
+	$H.localeError || eU(yK());
 }
-function LJ() {
-	YH.memoizer || XH({ memoizer: fK() });
+function VJ() {
+	$H.memoizer || eU({ memoizer: gK() });
 }
-var RJ = /*@__PURE__*/ $("ZodType", (e, t) => (IJ(), SW.init(e, t), e.def = t, e.type = t.type, e), {
+var HJ = /*@__PURE__*/ $("ZodType", (e, t) => (BJ(), EW.init(e, t), e.def = t, e.type = t.type, e), {
 	check(...e) {
 		let t = this.def;
-		return this.clone(JV(t, { checks: [...t.checks ?? [], ...e.map((e) => typeof e == "function" ? { _zod: {
+		return this.clone(QV(t, { checks: [...t.checks ?? [], ...e.map((e) => typeof e == "function" ? { _zod: {
 			check: e,
 			def: { check: "custom" },
 			onattach: []
@@ -36512,7 +36623,7 @@ var RJ = /*@__PURE__*/ $("ZodType", (e, t) => (IJ(), SW.init(e, t), e.def = t, e
 		return this.check(...e);
 	},
 	clone(e, t) {
-		return iH(this, e, t);
+		return cH(this, e, t);
 	},
 	brand() {
 		return this;
@@ -36521,64 +36632,64 @@ var RJ = /*@__PURE__*/ $("ZodType", (e, t) => (IJ(), SW.init(e, t), e.def = t, e
 		return e.add(this, t), this;
 	},
 	refine(e, t) {
-		return this.check($Y(e, t));
+		return this.check(rX(e, t));
 	},
 	superRefine(e, t) {
-		return this.check(eX(e, t));
+		return this.check(iX(e, t));
 	},
 	overwrite(e) {
-		return this.check(/* @__PURE__ */ fq(e));
+		return this.check(/* @__PURE__ */ gq(e));
 	},
 	optional() {
-		return FY(this);
-	},
-	exactOptional() {
-		return LY(this);
-	},
-	nullable() {
 		return zY(this);
 	},
+	exactOptional() {
+		return VY(this);
+	},
+	nullable() {
+		return UY(this);
+	},
 	nullish() {
-		return FY(zY(this));
+		return zY(UY(this));
 	},
 	nonoptional(e) {
-		return GY(this, e);
-	},
-	array() {
-		return xY(this);
-	},
-	or(e) {
-		return TY([this, e]);
-	},
-	and(e) {
-		return DY(this, e);
-	},
-	transform(e) {
-		return YY(this, NY(e));
-	},
-	default(e) {
-		return VY(this, e);
-	},
-	prefault(e) {
-		return UY(this, e);
-	},
-	catch(e) {
-		return qY(this, e);
-	},
-	pipe(e) {
 		return YY(this, e);
 	},
+	array() {
+		return TY(this);
+	},
+	or(e) {
+		return kY([this, e]);
+	},
+	and(e) {
+		return jY(this, e);
+	},
+	transform(e) {
+		return $Y(this, LY(e));
+	},
+	default(e) {
+		return GY(this, e);
+	},
+	prefault(e) {
+		return qY(this, e);
+	},
+	catch(e) {
+		return ZY(this, e);
+	},
+	pipe(e) {
+		return $Y(this, e);
+	},
 	readonly() {
-		return ZY(this);
+		return tX(this);
 	},
 	describe(e) {
 		let t = this.clone();
-		return yK.add(t, { description: e }), t;
+		return CK.add(t, { description: e }), t;
 	},
 	meta(...e) {
-		if (e.length === 0) return yK.get(this);
+		if (e.length === 0) return CK.get(this);
 		let t = this.clone();
-		return yK.add(t, e[0]), t;
+		return CK.add(t, e[0]), t;
 	},
 	isOptional() {
 		return this.safeParse(void 0).success;
@@ -36590,446 +36701,446 @@ var RJ = /*@__PURE__*/ $("ZodType", (e, t) => (IJ(), SW.init(e, t), e.def = t, e
 		return t.length === 0 ? e(this) : e(this, ...t);
 	},
 	get "~standard"() {
-		return MH(this, "~standard", {
-			...TW(this),
+		return IH(this, "~standard", {
+			...kW(this),
 			jsonSchema: {
-				input: Lq(this, "input"),
-				output: Lq(this, "output")
+				input: Vq(this, "input"),
+				output: Vq(this, "output")
 			}
 		});
 	},
 	set "~standard"(e) {
-		jH(this, "~standard", e);
+		FH(this, "~standard", e);
 	},
 	parse: function e(t, n) {
-		return wJ(this, t, n, { callee: e });
+		return OJ(this, t, n, { callee: e });
 	},
 	parseAsync: async function e(t, n) {
-		return await TJ(this, t, n, { callee: e });
+		return await kJ(this, t, n, { callee: e });
 	},
 	safeParse(e, t) {
-		return EJ(this, e, t);
+		return AJ(this, e, t);
 	},
 	async safeParseAsync(e, t) {
-		return DJ(this, e, t);
+		return jJ(this, e, t);
 	},
 	get spa() {
 		return this?.safeParseAsync;
 	},
 	set spa(e) {
-		jH(this, "spa", e);
+		FH(this, "spa", e);
 	},
 	validate(e, t) {
-		return mU(this, e, t);
+		return vU(this, e, t);
 	},
 	validateAsync(e, t) {
-		return gU(this, e, t);
+		return bU(this, e, t);
 	},
 	encode: function e(t, n) {
-		return OJ(this, t, n, { callee: e });
+		return MJ(this, t, n, { callee: e });
 	},
 	decode: function e(t, n) {
-		return kJ(this, t, n, { callee: e });
+		return NJ(this, t, n, { callee: e });
 	},
 	encodeAsync: async function e(t, n) {
-		return await AJ(this, t, n, { callee: e });
+		return await PJ(this, t, n, { callee: e });
 	},
 	decodeAsync: async function e(t, n) {
-		return await jJ(this, t, n, { callee: e });
+		return await FJ(this, t, n, { callee: e });
 	},
 	safeEncode(e, t) {
-		return MJ(this, e, t);
+		return IJ(this, e, t);
 	},
 	safeDecode(e, t) {
-		return NJ(this, e, t);
+		return LJ(this, e, t);
 	},
 	async safeEncodeAsync(e, t) {
-		return PJ(this, e, t);
+		return RJ(this, e, t);
 	},
 	async safeDecodeAsync(e, t) {
-		return FJ(this, e, t);
+		return zJ(this, e, t);
 	},
 	toJSONSchema(e) {
-		return Iq(this, {})(e);
+		return Bq(this, {})(e);
 	},
 	get description() {
-		return yK.get(this)?.description;
+		return CK.get(this)?.description;
 	},
 	get _def() {
 		return this._zod.def;
 	}
-}), zJ = /*@__PURE__*/ $("_ZodString", (e, t) => {
-	EW.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => $q(e, t, n, r);
-}, /*@__PURE__*/ NH({
-	format: (e) => Yq(e).format ?? null,
-	minLength: (e) => Yq(e).minimum ?? null,
-	maxLength: (e) => Yq(e).maximum ?? null
+}), UJ = /*@__PURE__*/ $("_ZodString", (e, t) => {
+	AW.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => rJ(e, t, n, r);
+}, /*@__PURE__*/ LH({
+	format: (e) => $q(e).format ?? null,
+	minLength: (e) => $q(e).minimum ?? null,
+	maxLength: (e) => $q(e).maximum ?? null
 }, {
 	regex(...e) {
-		return this.check(/* @__PURE__ */ oq(...e));
-	},
-	includes(...e) {
-		return this.check(/* @__PURE__ */ lq(...e));
-	},
-	startsWith(...e) {
 		return this.check(/* @__PURE__ */ uq(...e));
 	},
-	endsWith(...e) {
-		return this.check(/* @__PURE__ */ dq(...e));
-	},
-	min(...e) {
-		return this.check(/* @__PURE__ */ iq(...e));
-	},
-	max(...e) {
-		return this.check(/* @__PURE__ */ rq(...e));
-	},
-	length(...e) {
-		return this.check(/* @__PURE__ */ aq(...e));
-	},
-	nonempty(...e) {
-		return this.check(/* @__PURE__ */ iq(1, ...e));
-	},
-	lowercase(e) {
-		return this.check(/* @__PURE__ */ sq(e));
-	},
-	uppercase(e) {
-		return this.check(/* @__PURE__ */ cq(e));
-	},
-	trim() {
-		return this.check(/* @__PURE__ */ mq());
-	},
-	normalize(...e) {
+	includes(...e) {
 		return this.check(/* @__PURE__ */ pq(...e));
 	},
+	startsWith(...e) {
+		return this.check(/* @__PURE__ */ mq(...e));
+	},
+	endsWith(...e) {
+		return this.check(/* @__PURE__ */ hq(...e));
+	},
+	min(...e) {
+		return this.check(/* @__PURE__ */ cq(...e));
+	},
+	max(...e) {
+		return this.check(/* @__PURE__ */ sq(...e));
+	},
+	length(...e) {
+		return this.check(/* @__PURE__ */ lq(...e));
+	},
+	nonempty(...e) {
+		return this.check(/* @__PURE__ */ cq(1, ...e));
+	},
+	lowercase(e) {
+		return this.check(/* @__PURE__ */ dq(e));
+	},
+	uppercase(e) {
+		return this.check(/* @__PURE__ */ fq(e));
+	},
+	trim() {
+		return this.check(/* @__PURE__ */ vq());
+	},
+	normalize(...e) {
+		return this.check(/* @__PURE__ */ _q(...e));
+	},
 	toLowerCase() {
-		return this.check(/* @__PURE__ */ hq());
+		return this.check(/* @__PURE__ */ yq());
 	},
 	toUpperCase() {
-		return this.check(/* @__PURE__ */ gq());
+		return this.check(/* @__PURE__ */ bq());
 	},
 	slugify() {
-		return this.check(/* @__PURE__ */ _q());
+		return this.check(/* @__PURE__ */ xq());
 	}
-})), BJ = /*@__PURE__*/ $("ZodString", (e, t) => {
-	EW.init(e, t), zJ.init(e, t);
+})), WJ = /*@__PURE__*/ $("ZodString", (e, t) => {
+	AW.init(e, t), UJ.init(e, t);
 }, {
 	email(e) {
-		return this.check(/* @__PURE__ */ SK(qJ, e));
+		return this.check(/* @__PURE__ */ EK(ZJ, e));
 	},
 	url(e) {
-		return this.check(/* @__PURE__ */ OK(XJ, e));
-	},
-	jwt(e) {
-		return this.check(/* @__PURE__ */ UK(dY, e));
-	},
-	emoji(e) {
-		return this.check(/* @__PURE__ */ kK(ZJ, e));
-	},
-	guid(e) {
-		return this.check(/* @__PURE__ */ CK(JJ, e));
-	},
-	uuid(e) {
-		return this.check(/* @__PURE__ */ wK(YJ, e));
-	},
-	uuidv4(e) {
-		return this.check(/* @__PURE__ */ TK(YJ, e));
-	},
-	uuidv6(e) {
-		return this.check(/* @__PURE__ */ EK(YJ, e));
-	},
-	uuidv7(e) {
-		return this.check(/* @__PURE__ */ DK(YJ, e));
-	},
-	nanoid(e) {
-		return this.check(/* @__PURE__ */ AK(QJ, e));
-	},
-	cuid(e) {
-		return this.check(/* @__PURE__ */ jK($J, e));
-	},
-	cuid2(e) {
 		return this.check(/* @__PURE__ */ MK(eY, e));
 	},
-	ulid(e) {
+	jwt(e) {
+		return this.check(/* @__PURE__ */ qK(hY, e));
+	},
+	emoji(e) {
 		return this.check(/* @__PURE__ */ NK(tY, e));
 	},
-	base64(e) {
-		return this.check(/* @__PURE__ */ BK(cY, e));
+	guid(e) {
+		return this.check(/* @__PURE__ */ DK(QJ, e));
 	},
-	base64url(e) {
-		return this.check(/* @__PURE__ */ VK(lY, e));
+	uuid(e) {
+		return this.check(/* @__PURE__ */ OK($J, e));
 	},
-	xid(e) {
+	uuidv4(e) {
+		return this.check(/* @__PURE__ */ kK($J, e));
+	},
+	uuidv6(e) {
+		return this.check(/* @__PURE__ */ AK($J, e));
+	},
+	uuidv7(e) {
+		return this.check(/* @__PURE__ */ jK($J, e));
+	},
+	nanoid(e) {
 		return this.check(/* @__PURE__ */ PK(nY, e));
 	},
-	ksuid(e) {
+	cuid(e) {
 		return this.check(/* @__PURE__ */ FK(rY, e));
 	},
-	ipv4(e) {
+	cuid2(e) {
 		return this.check(/* @__PURE__ */ IK(iY, e));
 	},
-	ipv6(e) {
+	ulid(e) {
 		return this.check(/* @__PURE__ */ LK(aY, e));
 	},
-	cidrv4(e) {
+	base64(e) {
+		return this.check(/* @__PURE__ */ WK(fY, e));
+	},
+	base64url(e) {
+		return this.check(/* @__PURE__ */ GK(pY, e));
+	},
+	xid(e) {
 		return this.check(/* @__PURE__ */ RK(oY, e));
 	},
-	cidrv6(e) {
+	ksuid(e) {
 		return this.check(/* @__PURE__ */ zK(sY, e));
 	},
-	e164(e) {
+	ipv4(e) {
+		return this.check(/* @__PURE__ */ BK(cY, e));
+	},
+	ipv6(e) {
+		return this.check(/* @__PURE__ */ VK(lY, e));
+	},
+	cidrv4(e) {
 		return this.check(/* @__PURE__ */ HK(uY, e));
 	},
+	cidrv6(e) {
+		return this.check(/* @__PURE__ */ UK(dY, e));
+	},
+	e164(e) {
+		return this.check(/* @__PURE__ */ KK(mY, e));
+	},
 	datetime(e) {
-		return this.check(/* @__PURE__ */ WK(UJ, e));
+		return this.check(/* @__PURE__ */ JK(qJ, e));
 	},
 	date(e) {
-		return this.check(/* @__PURE__ */ GK(WJ, e));
+		return this.check(/* @__PURE__ */ YK(JJ, e));
 	},
 	time(e) {
-		return this.check(/* @__PURE__ */ KK(GJ, e));
+		return this.check(/* @__PURE__ */ XK(YJ, e));
 	},
 	duration(e) {
-		return this.check(/* @__PURE__ */ qK(KJ, e));
+		return this.check(/* @__PURE__ */ ZK(XJ, e));
 	}
 });
-function VJ(e) {
-	return /* @__PURE__ */ xK(BJ, e);
+function GJ(e) {
+	return /* @__PURE__ */ TK(WJ, e);
 }
-var HJ = /*@__PURE__*/ $("ZodStringFormat", (e, t) => {
-	DW.init(e, t), zJ.init(e, t);
-}), UJ = /*@__PURE__*/ $("ZodISODateTime", (e, t) => {
-	KW.init(e, t), HJ.init(e, t);
-}), WJ = /*@__PURE__*/ $("ZodISODate", (e, t) => {
-	qW.init(e, t), HJ.init(e, t);
-}), GJ = /*@__PURE__*/ $("ZodISOTime", (e, t) => {
-	JW.init(e, t), HJ.init(e, t);
-}), KJ = /*@__PURE__*/ $("ZodISODuration", (e, t) => {
-	YW.init(e, t), HJ.init(e, t);
-}), qJ = /*@__PURE__*/ $("ZodEmail", (e, t) => {
-	AW.init(e, t), HJ.init(e, t);
-}), JJ = /*@__PURE__*/ $("ZodGUID", (e, t) => {
-	OW.init(e, t), HJ.init(e, t);
-}), YJ = /*@__PURE__*/ $("ZodUUID", (e, t) => {
-	kW.init(e, t), HJ.init(e, t);
-}), XJ = /*@__PURE__*/ $("ZodURL", (e, t) => {
-	RW.init(e, t), HJ.init(e, t);
-}), ZJ = /*@__PURE__*/ $("ZodEmoji", (e, t) => {
-	zW.init(e, t), HJ.init(e, t);
-}), QJ = /*@__PURE__*/ $("ZodNanoID", (e, t) => {
-	BW.init(e, t), HJ.init(e, t);
-}), $J = /*@__PURE__*/ $("ZodCUID", (e, t) => {
-	VW.init(e, t), HJ.init(e, t);
-}), eY = /*@__PURE__*/ $("ZodCUID2", (e, t) => {
-	HW.init(e, t), HJ.init(e, t);
-}), tY = /*@__PURE__*/ $("ZodULID", (e, t) => {
-	UW.init(e, t), HJ.init(e, t);
-}), nY = /*@__PURE__*/ $("ZodXID", (e, t) => {
-	WW.init(e, t), HJ.init(e, t);
-}), rY = /*@__PURE__*/ $("ZodKSUID", (e, t) => {
-	GW.init(e, t), HJ.init(e, t);
-}), iY = /*@__PURE__*/ $("ZodIPv4", (e, t) => {
-	XW.init(e, t), HJ.init(e, t);
-}), aY = /*@__PURE__*/ $("ZodIPv6", (e, t) => {
-	$W.init(e, t), HJ.init(e, t);
-}), oY = /*@__PURE__*/ $("ZodCIDRv4", (e, t) => {
-	eG.init(e, t), HJ.init(e, t);
-}), sY = /*@__PURE__*/ $("ZodCIDRv6", (e, t) => {
-	nG.init(e, t), HJ.init(e, t);
-}), cY = /*@__PURE__*/ $("ZodBase64", (e, t) => {
-	aG.init(e, t), HJ.init(e, t);
-}), lY = /*@__PURE__*/ $("ZodBase64URL", (e, t) => {
-	cG.init(e, t), HJ.init(e, t);
-}), uY = /*@__PURE__*/ $("ZodE164", (e, t) => {
-	lG.init(e, t), HJ.init(e, t);
-}), dY = /*@__PURE__*/ $("ZodJWT", (e, t) => {
-	dG.init(e, t), HJ.init(e, t);
-}), fY = /*@__PURE__*/ $("ZodNumber", (e, t) => {
-	fG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => eJ(e, t, n, r), e.isFinite = !0;
-}, /*@__PURE__*/ NH({
+var KJ = /*@__PURE__*/ $("ZodStringFormat", (e, t) => {
+	jW.init(e, t), UJ.init(e, t);
+}), qJ = /*@__PURE__*/ $("ZodISODateTime", (e, t) => {
+	XW.init(e, t), KJ.init(e, t);
+}), JJ = /*@__PURE__*/ $("ZodISODate", (e, t) => {
+	ZW.init(e, t), KJ.init(e, t);
+}), YJ = /*@__PURE__*/ $("ZodISOTime", (e, t) => {
+	QW.init(e, t), KJ.init(e, t);
+}), XJ = /*@__PURE__*/ $("ZodISODuration", (e, t) => {
+	$W.init(e, t), KJ.init(e, t);
+}), ZJ = /*@__PURE__*/ $("ZodEmail", (e, t) => {
+	PW.init(e, t), KJ.init(e, t);
+}), QJ = /*@__PURE__*/ $("ZodGUID", (e, t) => {
+	MW.init(e, t), KJ.init(e, t);
+}), $J = /*@__PURE__*/ $("ZodUUID", (e, t) => {
+	NW.init(e, t), KJ.init(e, t);
+}), eY = /*@__PURE__*/ $("ZodURL", (e, t) => {
+	HW.init(e, t), KJ.init(e, t);
+}), tY = /*@__PURE__*/ $("ZodEmoji", (e, t) => {
+	UW.init(e, t), KJ.init(e, t);
+}), nY = /*@__PURE__*/ $("ZodNanoID", (e, t) => {
+	WW.init(e, t), KJ.init(e, t);
+}), rY = /*@__PURE__*/ $("ZodCUID", (e, t) => {
+	GW.init(e, t), KJ.init(e, t);
+}), iY = /*@__PURE__*/ $("ZodCUID2", (e, t) => {
+	KW.init(e, t), KJ.init(e, t);
+}), aY = /*@__PURE__*/ $("ZodULID", (e, t) => {
+	qW.init(e, t), KJ.init(e, t);
+}), oY = /*@__PURE__*/ $("ZodXID", (e, t) => {
+	JW.init(e, t), KJ.init(e, t);
+}), sY = /*@__PURE__*/ $("ZodKSUID", (e, t) => {
+	YW.init(e, t), KJ.init(e, t);
+}), cY = /*@__PURE__*/ $("ZodIPv4", (e, t) => {
+	eG.init(e, t), KJ.init(e, t);
+}), lY = /*@__PURE__*/ $("ZodIPv6", (e, t) => {
+	rG.init(e, t), KJ.init(e, t);
+}), uY = /*@__PURE__*/ $("ZodCIDRv4", (e, t) => {
+	iG.init(e, t), KJ.init(e, t);
+}), dY = /*@__PURE__*/ $("ZodCIDRv6", (e, t) => {
+	oG.init(e, t), KJ.init(e, t);
+}), fY = /*@__PURE__*/ $("ZodBase64", (e, t) => {
+	lG.init(e, t), KJ.init(e, t);
+}), pY = /*@__PURE__*/ $("ZodBase64URL", (e, t) => {
+	fG.init(e, t), KJ.init(e, t);
+}), mY = /*@__PURE__*/ $("ZodE164", (e, t) => {
+	pG.init(e, t), KJ.init(e, t);
+}), hY = /*@__PURE__*/ $("ZodJWT", (e, t) => {
+	hG.init(e, t), KJ.init(e, t);
+}), gY = /*@__PURE__*/ $("ZodNumber", (e, t) => {
+	gG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => iJ(e, t, n, r), e.isFinite = !0;
+}, /*@__PURE__*/ LH({
 	minValue: (e) => {
-		let { minimum: t, exclusiveMinimum: n } = Yq(e);
+		let { minimum: t, exclusiveMinimum: n } = $q(e);
 		return Math.max(t ?? -Infinity, n ?? -Infinity);
 	},
 	maxValue: (e) => {
-		let { maximum: t, exclusiveMaximum: n } = Yq(e);
+		let { maximum: t, exclusiveMaximum: n } = $q(e);
 		return Math.min(t ?? Infinity, n ?? Infinity);
 	},
 	isInt: (e) => {
-		let { isInt: t, multipleOf: n } = Yq(e);
+		let { isInt: t, multipleOf: n } = $q(e);
 		return !!t || !!n?.some(Number.isSafeInteger);
 	},
-	format: (e) => Yq(e).format ?? null
+	format: (e) => $q(e).format ?? null
 }, {
 	gt(e, t) {
-		return this.check(/* @__PURE__ */ eq(e, t));
+		return this.check(/* @__PURE__ */ iq(e, t));
 	},
 	gte(e, t) {
-		return this.check(/* @__PURE__ */ tq(e, t));
+		return this.check(/* @__PURE__ */ aq(e, t));
 	},
 	min(e, t) {
-		return this.check(/* @__PURE__ */ tq(e, t));
+		return this.check(/* @__PURE__ */ aq(e, t));
 	},
 	lt(e, t) {
-		return this.check(/* @__PURE__ */ QK(e, t));
+		return this.check(/* @__PURE__ */ nq(e, t));
 	},
 	lte(e, t) {
-		return this.check(/* @__PURE__ */ $K(e, t));
+		return this.check(/* @__PURE__ */ rq(e, t));
 	},
 	max(e, t) {
-		return this.check(/* @__PURE__ */ $K(e, t));
+		return this.check(/* @__PURE__ */ rq(e, t));
 	},
 	int(e) {
-		return this.check(hY(e));
+		return this.check(yY(e));
 	},
 	safe(e) {
-		return this.check(hY(e));
+		return this.check(yY(e));
 	},
 	positive(e) {
-		return this.check(/* @__PURE__ */ eq(0, e));
+		return this.check(/* @__PURE__ */ iq(0, e));
 	},
 	nonnegative(e) {
-		return this.check(/* @__PURE__ */ tq(0, e));
+		return this.check(/* @__PURE__ */ aq(0, e));
 	},
 	negative(e) {
-		return this.check(/* @__PURE__ */ QK(0, e));
+		return this.check(/* @__PURE__ */ nq(0, e));
 	},
 	nonpositive(e) {
-		return this.check(/* @__PURE__ */ $K(0, e));
+		return this.check(/* @__PURE__ */ rq(0, e));
 	},
 	multipleOf(e, t) {
-		return this.check(/* @__PURE__ */ nq(e, t));
+		return this.check(/* @__PURE__ */ oq(e, t));
 	},
 	step(e, t) {
-		return this.check(/* @__PURE__ */ nq(e, t));
+		return this.check(/* @__PURE__ */ oq(e, t));
 	},
 	finite() {
 		return this;
 	}
 }));
-function pY(e) {
-	return /* @__PURE__ */ JK(fY, e);
+function _Y(e) {
+	return /* @__PURE__ */ QK(gY, e);
 }
-var mY = /*@__PURE__*/ $("ZodNumberFormat", (e, t) => {
-	pG.init(e, t), fY.init(e, t);
-});
-function hY(e) {
-	return /* @__PURE__ */ YK(mY, e);
-}
-var gY = /*@__PURE__*/ $("ZodUnknown", (e, t) => {
-	mG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (e, t, n) => void 0;
-});
-function _Y() {
-	return /* @__PURE__ */ XK(gY);
-}
-var vY = /*@__PURE__*/ $("ZodNever", (e, t) => {
-	hG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => tJ(e, t, n, r);
+var vY = /*@__PURE__*/ $("ZodNumberFormat", (e, t) => {
+	_G.init(e, t), gY.init(e, t);
 });
 function yY(e) {
-	return /* @__PURE__ */ ZK(vY, e);
+	return /* @__PURE__ */ $K(vY, e);
 }
-var bY = /*@__PURE__*/ $("ZodArray", (e, t) => {
-	LJ(), yG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => oJ(e, t, n, r), e.element = t.element;
+var bY = /*@__PURE__*/ $("ZodUnknown", (e, t) => {
+	vG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (e, t, n) => void 0;
+});
+function xY() {
+	return /* @__PURE__ */ eq(bY);
+}
+var SY = /*@__PURE__*/ $("ZodNever", (e, t) => {
+	yG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => aJ(e, t, n, r);
+});
+function CY(e) {
+	return /* @__PURE__ */ tq(SY, e);
+}
+var wY = /*@__PURE__*/ $("ZodArray", (e, t) => {
+	VJ(), CG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => uJ(e, t, n, r), e.element = t.element;
 }, {
 	min(e, t) {
-		return this.check(/* @__PURE__ */ iq(e, t));
+		return this.check(/* @__PURE__ */ cq(e, t));
 	},
 	nonempty(e) {
-		return this.check(/* @__PURE__ */ iq(1, e));
+		return this.check(/* @__PURE__ */ cq(1, e));
 	},
 	max(e, t) {
-		return this.check(/* @__PURE__ */ rq(e, t));
+		return this.check(/* @__PURE__ */ sq(e, t));
 	},
 	length(e, t) {
-		return this.check(/* @__PURE__ */ aq(e, t));
+		return this.check(/* @__PURE__ */ lq(e, t));
 	},
 	unwrap() {
 		return this.element;
 	}
 });
-function xY(e, t) {
-	return /* @__PURE__ */ vq(bY, e, t);
+function TY(e, t) {
+	return /* @__PURE__ */ Sq(wY, e, t);
 }
-var SY = /*@__PURE__*/ $("ZodObject", (e, t) => {
-	LJ(), TG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => cJ(e, t, n, r), BH(e, "shape", (e) => e._zod.def.shape, !1);
+var EY = /*@__PURE__*/ $("ZodObject", (e, t) => {
+	VJ(), kG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => fJ(e, t, n, r), WH(e, "shape", (e) => e._zod.def.shape, !1);
 }, {
 	keyof() {
-		return kY(Object.keys(this._zod.def.shape));
+		return NY(Object.keys(this._zod.def.shape));
 	},
 	catchall(e) {
-		return this.clone(JV(this._zod.def, { catchall: e }));
+		return this.clone(QV(this._zod.def, { catchall: e }));
 	},
 	passthrough() {
-		return this.clone(JV(this._zod.def, { catchall: _Y() }));
+		return this.clone(QV(this._zod.def, { catchall: xY() }));
 	},
 	loose() {
-		return this.clone(JV(this._zod.def, { catchall: _Y() }));
+		return this.clone(QV(this._zod.def, { catchall: xY() }));
 	},
 	strict() {
-		return this.clone(JV(this._zod.def, { catchall: yY() }));
+		return this.clone(QV(this._zod.def, { catchall: CY() }));
 	},
 	strip() {
-		return this.clone(JV(this._zod.def, { catchall: void 0 }));
+		return this.clone(QV(this._zod.def, { catchall: void 0 }));
 	},
 	extend(e) {
-		return fH(this, e);
+		return gH(this, e);
 	},
 	safeExtend(e) {
-		return mH(this, e);
+		return vH(this, e);
 	},
 	merge(e) {
-		return hH(this, e);
+		return yH(this, e);
 	},
 	pick(e) {
-		return lH(this, e);
+		return pH(this, e);
 	},
 	omit(e) {
-		return dH(this, e);
+		return hH(this, e);
 	},
 	partial(...e) {
-		return gH(PY, this, e[0]);
+		return bH(RY, this, e[0]);
 	},
 	exactPartial(...e) {
-		return gH(IY, this, e[0], "exactPartial");
+		return bH(BY, this, e[0], "exactPartial");
 	},
 	required(...e) {
-		return _H(WY, this, e[0]);
+		return xH(JY, this, e[0]);
 	}
 });
-function CY(e, t) {
-	return new SY({
+function DY(e, t) {
+	return new EY({
 		type: "object",
 		shape: e ?? {},
 		...Q(t)
 	});
 }
-var wY = /*@__PURE__*/ $("ZodUnion", (e, t) => {
-	DG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => lJ(e, t, n, r), e.options = t.options;
+var OY = /*@__PURE__*/ $("ZodUnion", (e, t) => {
+	jG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => pJ(e, t, n, r), e.options = t.options;
 });
-function TY(e, t) {
-	return new wY({
+function kY(e, t) {
+	return new OY({
 		type: "union",
 		options: e,
 		...Q(t)
 	});
 }
-var EY = /*@__PURE__*/ $("ZodIntersection", (e, t) => {
-	OG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => uJ(e, t, n, r);
+var AY = /*@__PURE__*/ $("ZodIntersection", (e, t) => {
+	MG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => mJ(e, t, n, r);
 });
-function DY(e, t) {
-	return new EY({
+function jY(e, t) {
+	return new AY({
 		type: "intersection",
 		left: e,
 		right: t
 	});
 }
-var OY = /*@__PURE__*/ $("ZodEnum", (e, t) => {
-	jG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => nJ(e, t, n, r), e.enum = t.entries, e.options = [...e._zod.values];
+var MY = /*@__PURE__*/ $("ZodEnum", (e, t) => {
+	FG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => oJ(e, t, n, r), e.enum = t.entries, e.options = [...e._zod.values];
 	let n = new Set(Object.keys(t.entries));
 	e.extract = (e, r) => {
 		let i = {};
 		for (let r of e) if (n.has(r)) i[r] = t.entries[r];
 		else throw Error(`Key ${r} not found in enum`);
-		return new OY({
+		return new MY({
 			...t,
 			checks: [],
 			...Q(r),
@@ -37039,7 +37150,7 @@ var OY = /*@__PURE__*/ $("ZodEnum", (e, t) => {
 		let i = { ...t.entries };
 		for (let t of e) if (n.has(t)) delete i[t];
 		else throw Error(`Key ${t} not found in enum`);
-		return new OY({
+		return new MY({
 			...t,
 			checks: [],
 			...Q(r),
@@ -37047,177 +37158,177 @@ var OY = /*@__PURE__*/ $("ZodEnum", (e, t) => {
 		});
 	};
 });
-function kY(e, t) {
-	return new OY({
+function NY(e, t) {
+	return new MY({
 		type: "enum",
 		entries: Array.isArray(e) ? Object.fromEntries(e.map((e) => [e, e])) : e,
 		...Q(t)
 	});
 }
-var AY = /*@__PURE__*/ $("ZodLiteral", (e, t) => {
-	MG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => rJ(e, t, n, r), e.values = new Set(t.values), Object.defineProperty(e, "value", { get() {
+var PY = /*@__PURE__*/ $("ZodLiteral", (e, t) => {
+	IG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => sJ(e, t, n, r), e.values = new Set(t.values), Object.defineProperty(e, "value", { get() {
 		if (t.values.length > 1) throw Error("This schema contains multiple valid literal values. Use `.values` instead.");
 		return t.values[0];
 	} });
 });
-function jY(e, t) {
-	return new AY({
+function FY(e, t) {
+	return new PY({
 		type: "literal",
 		values: Array.isArray(e) ? e : [e],
 		...Q(t)
 	});
 }
-var MY = /*@__PURE__*/ $("ZodTransform", (e, t) => {
-	LJ(), NG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => aJ(e, t, n, r), e._zod.parse = (n, r) => {
-		if (r.direction === "backward") throw new JH(e.constructor.name);
+var IY = /*@__PURE__*/ $("ZodTransform", (e, t) => {
+	VJ(), LG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => lJ(e, t, n, r), e._zod.parse = (n, r) => {
+		if (r.direction === "backward") throw new QH(e.constructor.name);
 		n.addIssue = (r) => {
-			if (typeof r == "string") n.issues.push(kH(r, n.value, t));
+			if (typeof r == "string") n.issues.push(NH(r, n.value, t));
 			else {
 				let t = r;
-				t.fatal && (t.continue = !1), t.code ??= "custom", "input" in t || (t.input = n.value), t.inst ??= e, n.issues.push(kH(t));
+				t.fatal && (t.continue = !1), t.code ??= "custom", "input" in t || (t.input = n.value), t.inst ??= e, n.issues.push(NH(t));
 			}
 		};
 		let i = t.transform(n.value, n);
 		return i instanceof Promise ? i.then((e) => (n.value = e, n)) : (n.value = i, n);
 	};
 });
-function NY(e) {
-	return new MY({
+function LY(e) {
+	return new IY({
 		type: "transform",
 		transform: e
 	});
 }
-var PY = /*@__PURE__*/ $("ZodOptional", (e, t) => {
-	FG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => bJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
-});
-function FY(e) {
-	return new PY({
-		type: "optional",
-		innerType: e
-	});
-}
-var IY = /*@__PURE__*/ $("ZodExactOptional", (e, t) => {
-	IG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => bJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
-});
-function LY(e) {
-	return new IY({
-		type: "optional",
-		innerType: e
-	});
-}
-var RY = /*@__PURE__*/ $("ZodNullable", (e, t) => {
-	LG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => dJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
+var RY = /*@__PURE__*/ $("ZodOptional", (e, t) => {
+	zG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => wJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
 });
 function zY(e) {
 	return new RY({
+		type: "optional",
+		innerType: e
+	});
+}
+var BY = /*@__PURE__*/ $("ZodExactOptional", (e, t) => {
+	BG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => wJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
+});
+function VY(e) {
+	return new BY({
+		type: "optional",
+		innerType: e
+	});
+}
+var HY = /*@__PURE__*/ $("ZodNullable", (e, t) => {
+	VG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => hJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
+});
+function UY(e) {
+	return new HY({
 		type: "nullable",
 		innerType: e
 	});
 }
-var BY = /*@__PURE__*/ $("ZodDefault", (e, t) => {
-	RG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => hJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType, e.removeDefault = e.unwrap;
-});
-function VY(e, t) {
-	return new BY({
-		type: "default",
-		innerType: e,
-		get defaultValue() {
-			return typeof t == "function" ? t() : tH(t);
-		}
-	});
-}
-var HY = /*@__PURE__*/ $("ZodPrefault", (e, t) => {
-	BG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => gJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
-});
-function UY(e, t) {
-	return new HY({
-		type: "prefault",
-		innerType: e,
-		get defaultValue() {
-			return typeof t == "function" ? t() : tH(t);
-		}
-	});
-}
-var WY = /*@__PURE__*/ $("ZodNonOptional", (e, t) => {
-	VG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => fJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
+var WY = /*@__PURE__*/ $("ZodDefault", (e, t) => {
+	HG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => yJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType, e.removeDefault = e.unwrap;
 });
 function GY(e, t) {
 	return new WY({
+		type: "default",
+		innerType: e,
+		get defaultValue() {
+			return typeof t == "function" ? t() : aH(t);
+		}
+	});
+}
+var KY = /*@__PURE__*/ $("ZodPrefault", (e, t) => {
+	WG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => bJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
+});
+function qY(e, t) {
+	return new KY({
+		type: "prefault",
+		innerType: e,
+		get defaultValue() {
+			return typeof t == "function" ? t() : aH(t);
+		}
+	});
+}
+var JY = /*@__PURE__*/ $("ZodNonOptional", (e, t) => {
+	GG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => gJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
+});
+function YY(e, t) {
+	return new JY({
 		type: "nonoptional",
 		innerType: e,
 		...Q(t)
 	});
 }
-var KY = /*@__PURE__*/ $("ZodCatch", (e, t) => {
-	WG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => _J(e, t, n, r), e.unwrap = () => e._zod.def.innerType, e.removeCatch = e.unwrap;
+var XY = /*@__PURE__*/ $("ZodCatch", (e, t) => {
+	JG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => xJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType, e.removeCatch = e.unwrap;
 });
-function qY(e, t) {
-	return new KY({
+function ZY(e, t) {
+	return new XY({
 		type: "catch",
 		innerType: e,
-		catchValue: typeof t == "function" ? t : HH(t)
+		catchValue: typeof t == "function" ? t : KH(t)
 	});
 }
-var JY = /*@__PURE__*/ $("ZodPipe", (e, t) => {
-	GG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => vJ(e, t, n, r), e.in = t.in, e.out = t.out;
+var QY = /*@__PURE__*/ $("ZodPipe", (e, t) => {
+	YG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => SJ(e, t, n, r), e.in = t.in, e.out = t.out;
 });
-function YY(e, t) {
-	return new JY({
+function $Y(e, t) {
+	return new QY({
 		type: "pipe",
 		in: e,
 		out: t
 	});
 }
-var XY = /*@__PURE__*/ $("ZodReadonly", (e, t) => {
-	qG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => yJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
+var eX = /*@__PURE__*/ $("ZodReadonly", (e, t) => {
+	ZG.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => CJ(e, t, n, r), e.unwrap = () => e._zod.def.innerType;
 });
-function ZY(e) {
-	return new XY({
+function tX(e) {
+	return new eX({
 		type: "readonly",
 		innerType: e
 	});
 }
-var QY = /*@__PURE__*/ $("ZodCustom", (e, t) => {
-	YG.init(e, t), RJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => iJ(e, t, n, r);
+var nX = /*@__PURE__*/ $("ZodCustom", (e, t) => {
+	$G.init(e, t), HJ.init(e, t), e._zod.processJSONSchema = (t, n, r) => cJ(e, t, n, r);
 });
-function $Y(e, t = {}) {
-	return /* @__PURE__ */ yq(QY, e, t);
+function rX(e, t = {}) {
+	return /* @__PURE__ */ Cq(nX, e, t);
 }
-function eX(e, t) {
-	return /* @__PURE__ */ bq(e, t);
+function iX(e, t) {
+	return /* @__PURE__ */ wq(e, t);
 }
 // manual/forecasts.ts
-var tX = VJ().regex(/^\d{4}-\d{2}-\d{2}$/).refine((e) => {
+var aX = GJ().regex(/^\d{4}-\d{2}-\d{2}$/).refine((e) => {
 	let t = /* @__PURE__ */ new Date(e + "T12:00:00Z");
 	return Number.isFinite(t.getTime()) && t.toISOString().slice(0, 10) === e;
-}), nX = pY().int().nonnegative().max(2 ** 53 - 1).nullable(), rX = {
-	gross: nX,
-	net: nX,
-	sales: nX,
-	spend: nX,
-	purchases: nX
-}, iX = CY({
-	type: jY("figueroa-board-forecasts-v1"),
-	forecasts: xY(CY({
-		version: jY(1),
-		organizationId: VJ().min(1).max(200),
-		currency: VJ().regex(/^[A-Z]{3}$/),
-		target: VJ().regex(/^\d{4}-(0[1-9]|1[0-2])$/),
-		createdOn: tX,
-		method: jY("daily-rate-v1"),
-		months: xY(CY({
-			start: tX,
-			end: tX,
-			days: pY().int().min(28).max(31),
-			...rX
+}), oX = _Y().int().nonnegative().max(2 ** 53 - 1).nullable(), sX = {
+	gross: oX,
+	net: oX,
+	sales: oX,
+	spend: oX,
+	purchases: oX
+}, cX = DY({
+	type: FY("figueroa-board-forecasts-v1"),
+	forecasts: TY(DY({
+		version: FY(1),
+		organizationId: GJ().min(1).max(200),
+		currency: GJ().regex(/^[A-Z]{3}$/),
+		target: GJ().regex(/^\d{4}-(0[1-9]|1[0-2])$/),
+		createdOn: aX,
+		method: FY("daily-rate-v1"),
+		months: TY(DY({
+			start: aX,
+			end: aX,
+			days: _Y().int().min(28).max(31),
+			...sX
 		})).min(1).max(3),
-		base: CY(rX)
+		base: DY(sX)
 	})).max(240)
 });
-function aX(e) {
-	let { forecasts: t } = iX.parse(e), n = /* @__PURE__ */ new Set();
+function lX(e) {
+	let { forecasts: t } = cX.parse(e), n = /* @__PURE__ */ new Set();
 	for (let e of t) {
-		let t = ZB(e);
+		let t = tV(e);
 		if (n.has(t) || e.createdOn.slice(0, 7) > e.target) throw Error("INVALID_FORECAST");
 		new Intl.NumberFormat("pt-BR", {
 			style: "currency",
@@ -37225,51 +37336,51 @@ function aX(e) {
 		}), n.add(t);
 		let r = "";
 		for (let t of e.months) {
-			let n = YB(t.start.slice(0, 7));
+			let n = $B(t.start.slice(0, 7));
 			if (t.start !== n.start || t.end !== n.end || t.days !== rz(t.start, t.end) || t.end >= e.createdOn || t.end >= e.target + "-01" || t.start <= r) throw Error("INVALID_BASELINE");
 			r = t.end;
 		}
 	}
 	return t;
 }
-function oX(e, t, n) {
+function uX(e, t, n) {
 	let r = "figueroa-board-forecasts-v1:" + t, i = (e) => ({
 		type: "figueroa-board-forecasts-v1",
 		forecasts: e
 	}), a = (e) => {
-		let n = aX(e);
+		let n = lX(e);
 		if (n.some((e) => e.organizationId !== t)) throw Error("ORGANIZATION");
 		return n;
 	}, o = async () => {
 		n();
 		let t = localStorage.getItem(r);
-		return t ? a(await jV(JSON.parse(t), e)) : [];
+		return t ? a(await FV(JSON.parse(t), e)) : [];
 	}, s = async (t) => {
 		a(i(t)), n();
-		let o = await MV(i(t), e);
+		let o = await IV(i(t), e);
 		return n(), localStorage.setItem(r, JSON.stringify(o)), t;
 	};
 	return {
 		load: o,
 		save: async (e) => {
 			let t = await o();
-			return t.some((t) => ZB(t) === ZB(e)) ? t : s([...t, e]);
+			return t.some((t) => tV(t) === tV(e)) ? t : s([...t, e]);
 		},
 		download: async () => {
-			let t = await o(), r = await MV(i(t), e);
+			let t = await o(), r = await IV(i(t), e);
 			n();
 			let a = URL.createObjectURL(new Blob([JSON.stringify(r)], { type: "application/json" })), s = document.createElement("a");
 			s.href = a, s.download = "painel-projecoes.enc.json", s.click(), setTimeout(() => URL.revokeObjectURL(a), 1e3);
 		},
 		restore: async (t) => {
 			if (n(), t.size > 2e6) throw Error("FILE_SIZE");
-			let r = a(await jV(JSON.parse(await t.text()), e)), i = await o(), c = new Set(i.map(ZB));
-			return s([...i, ...r.filter((e) => !c.has(ZB(e)))]);
+			let r = a(await FV(JSON.parse(await t.text()), e)), i = await o(), c = new Set(i.map(tV));
+			return s([...i, ...r.filter((e) => !c.has(tV(e)))]);
 		}
 	};
 }
 // manual/operations.json
-var sX = [{
+var dX = [{
 	id: "mvave-br",
 	name: "MVAVE BR",
 	cadence: "daily",
@@ -37281,8 +37392,8 @@ var sX = [{
 	objective: "Resultados do negócio"
 }];
 // manual/workspace.tsx
-function cX({ data: e, clients: t = {}, render: n }) {
-	let [r, i] = (0, b.useState)(""), a = sX.find((e) => e.id === r), o = r === "mvave-br" ? e : t[r], s = /* @__PURE__ */ (0, S.jsxs)("label", {
+function fX({ data: e, clients: t = {}, render: n }) {
+	let [r, i] = (0, b.useState)(""), a = dX.find((e) => e.id === r), o = r === "mvave-br" ? e : t[r], s = /* @__PURE__ */ (0, S.jsxs)("label", {
 		className: "operation-control",
 		children: ["Cliente / operação", /* @__PURE__ */ (0, S.jsxs)("select", {
 			"aria-label": "Cliente / operação",
@@ -37291,7 +37402,7 @@ function cX({ data: e, clients: t = {}, render: n }) {
 			children: [/* @__PURE__ */ (0, S.jsx)("option", {
 				value: "",
 				children: "Selecione uma operação"
-			}), sX.map((e) => /* @__PURE__ */ (0, S.jsx)("option", {
+			}), dX.map((e) => /* @__PURE__ */ (0, S.jsx)("option", {
 				value: e.id,
 				children: e.name
 			}, e.id))]
@@ -37313,7 +37424,7 @@ function cX({ data: e, clients: t = {}, render: n }) {
 			})
 		]
 	});
-	return r ? o ? /* @__PURE__ */ (0, S.jsx)("div", { children: n(r === "mvave-br" ? Lz(o).data : o, s) }, r) : /* @__PURE__ */ (0, S.jsxs)("main", {
+	return r ? o ? /* @__PURE__ */ (0, S.jsx)("div", { children: n(r === "mvave-br" ? Vz(o).data : o, s) }, r) : /* @__PURE__ */ (0, S.jsxs)("main", {
 		className: "operation-gate",
 		children: [
 			s,
@@ -37333,7 +37444,7 @@ function cX({ data: e, clients: t = {}, render: n }) {
 			s,
 			/* @__PURE__ */ (0, S.jsx)("div", {
 				className: "operation-cards",
-				children: sX.map((e) => /* @__PURE__ */ (0, S.jsxs)("button", {
+				children: dX.map((e) => /* @__PURE__ */ (0, S.jsxs)("button", {
 					onClick: () => i(e.id),
 					children: [
 						/* @__PURE__ */ (0, S.jsx)("strong", { children: e.name }),
@@ -37348,13 +37459,13 @@ function cX({ data: e, clients: t = {}, render: n }) {
 	});
 }
 // manual/analysis-history.ts
-function lX(e, t, n) {
+function pX(e, t, n) {
 	let r = "figueroa-strategic-history-v1:" + t;
 	async function i() {
 		n();
 		let i = localStorage.getItem(r);
 		if (!i) return [];
-		let a = await jV(JSON.parse(i), e);
+		let a = await FV(JSON.parse(i), e);
 		if (a.type !== "strategic-history-v1" || a.organizationId !== t || !Array.isArray(a.entries)) throw Error("INVALID_ANALYSIS_HISTORY");
 		return a.entries;
 	}
@@ -37374,7 +37485,7 @@ function lX(e, t, n) {
 				if (e.type === "execution-reported" && !e.evidence?.trim()) throw Error("EVIDENCE_REQUIRED");
 				s.add(e.id);
 			}
-			let c = [...o, ...a], l = await MV({
+			let c = [...o, ...a], l = await IV({
 				type: "strategic-history-v1",
 				organizationId: t,
 				entries: c
@@ -37382,7 +37493,7 @@ function lX(e, t, n) {
 			return n(), localStorage.setItem(r, JSON.stringify(l)), c;
 		},
 		download: async () => {
-			let r = await MV({
+			let r = await IV({
 				type: "strategic-history-v1",
 				organizationId: t,
 				entries: await i()
@@ -37394,8 +37505,8 @@ function lX(e, t, n) {
 	};
 }
 // manual/entry.tsx
-var uX = (e) => document.getElementById(e), dX = "figueroa-analytics-followers-v1", fX = (0, x.createRoot)(uX("dashboard")), pX;
-function mX(e) {
+var mX = (e) => document.getElementById(e), hX = "figueroa-analytics-followers-v1", gX = (0, x.createRoot)(mX("dashboard")), _X;
+function vX(e) {
 	let t = e;
 	if (t?.type !== "figueroa-manual-followers-v1" || !Array.isArray(t.followers) || t.followers.length > 1e4) throw Error("INVALID_FOLLOWERS");
 	let n = /* @__PURE__ */ new Set();
@@ -37407,15 +37518,15 @@ function mX(e) {
 	}
 	return t.followers;
 }
-async function hX(e) {
+async function yX(e) {
 	if (gz()?.role !== "master") throw Error("SESSION");
 	let t = await fetch(new URL("assets/reports/manual-analytics.enc.json", document.baseURI), { cache: "no-store" });
 	if (!t.ok) throw Error("NETWORK");
-	let n = await jV(await t.json(), e);
+	let n = await FV(await t.json(), e);
 	if (n.dataset?.mode !== "manual" || !n.dataset.manualPeriods?.length) throw Error("INVALID_REPORT");
-	let r = n.dataset, i = localStorage.getItem(dX), a = "";
+	let r = n.dataset, i = localStorage.getItem(hX), a = "";
 	if (i) try {
-		r.followers = mX(await jV(JSON.parse(i), e));
+		r.followers = vX(await FV(JSON.parse(i), e));
 	} catch {
 		a = "O relatório foi aberto, mas os registros locais de seguidores não puderam ser lidos. Restaure sua cópia de registros na aba Instagram. Salvar novos registros substituirá a cópia local.";
 	}
@@ -37424,35 +37535,35 @@ async function hX(e) {
 		if (gz()?.role !== "master") throw _z(), Error("SESSION");
 	}, s = async (t) => {
 		o();
-		let n = await MV({
+		let n = await IV({
 			type: "figueroa-manual-followers-v1",
 			followers: t
 		}, e);
-		o(), localStorage.setItem(dX, JSON.stringify(n)), r.followers = t;
+		o(), localStorage.setItem(hX, JSON.stringify(n)), r.followers = t;
 	}, c = async () => {
 		o();
-		let t = await MV({
+		let t = await IV({
 			type: "figueroa-manual-followers-v1",
 			followers: r.followers ?? []
 		}, e), n = URL.createObjectURL(new Blob([JSON.stringify(t)], { type: "application/json" })), i = document.createElement("a");
 		i.href = n, i.download = "analytics-seguidores.enc.json", i.click(), setTimeout(() => URL.revokeObjectURL(n), 1e3);
 	}, l = async (t) => {
 		if (o(), t.size > 5e6) throw Error("FILE_SIZE");
-		return mX(await jV(JSON.parse(await t.text()), e));
+		return vX(await FV(JSON.parse(await t.text()), e));
 	}, u = r.manualPeriods;
-	o(), fX.render(/* @__PURE__ */ (0, S.jsx)(cX, {
+	o(), gX.render(/* @__PURE__ */ (0, S.jsx)(fX, {
 		data: r,
 		clients: n.clients,
-		render: (t, n) => document.body.hasAttribute("data-operation-board") ? /* @__PURE__ */ (0, S.jsx)(DV, {
+		render: (t, n) => document.body.hasAttribute("data-operation-board") ? /* @__PURE__ */ (0, S.jsx)(jV, {
 			data: t,
-			analysisActions: lX(e, t.organizationId, o),
+			analysisActions: pX(e, t.organizationId, o),
 			clientControl: n,
-			onRefresh: () => hX(e),
+			onRefresh: () => yX(e),
 			onLogout: _z,
-			forecastActions: oX(e, t.organizationId, o)
-		}) : /* @__PURE__ */ (0, S.jsx)(HB, {
+			forecastActions: uX(e, t.organizationId, o)
+		}) : /* @__PURE__ */ (0, S.jsx)(KB, {
 			initialData: t,
-			analysisActions: lX(e, t.organizationId, o),
+			analysisActions: pX(e, t.organizationId, o),
 			clientControl: n,
 			initialStart: t.manualPeriods?.[0].start ?? u[0].start,
 			initialEnd: t.manualPeriods?.at(-1)?.end ?? u.at(-1).end,
@@ -37463,18 +37574,18 @@ async function hX(e) {
 			} : void 0,
 			manualNotice: a
 		})
-	})), uX("access-gate").hidden = !0, uX("dashboard").hidden = !1;
+	})), mX("access-gate").hidden = !0, mX("dashboard").hidden = !1;
 }
-async function gX(e) {
+async function bX(e) {
 	if (e.role !== "master") throw Error("ROLE");
-	e.analyticsKey ? (clearTimeout(pX), pX = setTimeout(() => {
-		fX.unmount(), _z();
-	}, Math.max(0, e.expires - Date.now())), await hX(e.analyticsKey)) : (uX("access-gate").hidden = !1, document.querySelector("[data-login-feedback]").textContent = "Entre novamente com sua senha para abrir o Analytics.");
+	e.analyticsKey ? (clearTimeout(_X), _X = setTimeout(() => {
+		gX.unmount(), _z();
+	}, Math.max(0, e.expires - Date.now())), await yX(e.analyticsKey)) : (mX("access-gate").hidden = !1, document.querySelector("[data-login-feedback]").textContent = "Entre novamente com sua senha para abrir o Analytics.");
 }
-xz(gX, { requiredRole: "master" });
-var _X = gz();
-_X && gX(_X).catch(() => {
-	uX("access-gate").hidden = !1, document.querySelector("[data-login-feedback]").textContent = "Não foi possível carregar o relatório. Confira a conexão e tente entrar novamente.";
+xz(bX, { requiredRole: "master" });
+var xX = gz();
+xX && bX(xX).catch(() => {
+	mX("access-gate").hidden = !1, document.querySelector("[data-login-feedback]").textContent = "Não foi possível carregar o relatório. Confira a conexão e tente entrar novamente.";
 }), window.addEventListener("pageshow", () => {
-	!uX("dashboard").hidden && !gz() && (fX.unmount(), _z());
+	!mX("dashboard").hidden && !gz() && (gX.unmount(), _z());
 });
