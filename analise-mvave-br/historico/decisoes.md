@@ -76,3 +76,13 @@
 - Período de 21/08 a 11/11: mídia R$13.501,66, 679 compras Meta, ROAS Meta 1,37x e CPA Meta R$19,88. Valores verificados pela mesma função do Painel e pela renderização estrutural dos cards com o pacote real.
 - O complemento filtrado anterior foi marcado como substituído pelo SHA256 do novo export; permanece no histórico e nos snapshots, mas o aviso parcial deixa de aparecer. Histórico financeiro, mídia anterior a 11/11 e Instagram preservados, incluindo 62 novos seguidores de 10/11. Reimportação sem duplicação.
 - IDs ainda arredondados: atribuição SCK exata continua indisponível. Atualizados relatórios locais, pacote criptografado e build manual; testes Node, Analytics e typecheck aprovados. Nenhuma publicação remota executada.
+
+## 13/11/2026 — atualização dos dados de 12/11
+
+- Importados os cinco arquivos fornecidos: Hotmart, Meta e três métricas Instagram. Todos contêm a data de 12/11/2026, agora a última data operacional. Originais, SHA256, snapshots e auditoria privada preservados.
+- Hotmart: dez pedidos principais aprovados e dez compradores únicos, R$299,00 bruto e R$244,50 líquido, sem bumps ou upgrades. Mídia de R$98,32; contribuição após mídia de R$146,18, não lucro final. CPA consolidado de R$9,83 e ROAS bruto de 3,04x.
+- Instagram: 65 novos seguidores, 7.136 visualizações e 36 interações. Novos seguidores não representam o saldo total da conta.
+- Meta: 68 linhas, 24 ativas, cinco inativas e 39 sem entrega; 10.834 impressões. O arquivo não contém IDs de anúncios nem as colunas de compras, valor de conversão, cliques, LPV ou checkouts. Métricas ausentes permanecem indisponíveis; não inferida atribuição por nome. Filtros das plataformas não certificados.
+- Históricos financeiro, de mídia e de Instagram anteriores a 12/11 preservados integralmente, incluindo as duas vendas confirmadas de 10/11 e o reexport completo de 11/11. Complementos anteriores preservados. Conferidos hashes, integridade do pacote criptografado e reimportação sem duplicação.
+- Base, relatórios locais e pacote criptografado atualizados. Nenhuma campanha ou publicação remota foi alterada.
+- Validação concluída: 31 testes Node, 127 testes do Analytics, typecheck e build manual aprovados.
